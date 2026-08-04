@@ -19,6 +19,8 @@
   <div class="card" id="cardContent"></div>
 </div>
 <script src="data/spells.js"></script>
+<script src="data/species/tiferino.js"></script>
+<script src="data/species/pequenino.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -183,41 +185,6 @@ const ALL_CANTRIPS = ["Acudir os Moribundos","Amigos","Arremesso Telecinético",
 const ALL_1ST_RITUAL = ["Alarme","Compreender Idiomas","Convocar Familiar","Detectar Magia","Detectar Veneno e Doença","Disco Flutuante de Tenser","Escrita Ilusória","Falar com Animais","Identificar","Purificar Alimentos e Bebidas","Servo Invisível"];
 
 
-const TIEFLING = {
-  flavor: "Tiferinos carregam em suas veias um legado ínfero — um vínculo de sangue com um diabo, demônio ou outra entidade dos Planos Inferiores, herdado ou nascido diretamente lá. Esse laço concede poder, mas não determina o caráter ou a moral de quem o carrega: cada tiferino escolhe abraçar ou lamentar essa herança.",
-  tipo: "Humanoide",
-  deslocamento: "9 metros",
-  visaoNoEscuro: "18 metros",
-  tamanhoOpcoes: {
-    "Médio": "cerca de 1,20 a 2,10 metros de altura",
-    "Pequeno": "cerca de 0,90 a 1,20 metro de altura"
-  },
-  legados: {
-    "Abissal": {l1:"Resistência a dano Venenoso + truque Rajada de Veneno", l3:"Raio Nauseante (sempre preparada)", l5:"Paralisar Pessoa (sempre preparada)", cantripConcedido:"Rajada de Veneno"},
-    "Ctônico": {l1:"Resistência a dano Necrótico + truque Toque Necrótico", l3:"Vitalidade Vazia (sempre preparada)", l5:"Raio do Enfraquecimento (sempre preparada)", cantripConcedido:"Toque Necrótico"},
-    "Infernal": {l1:"Resistência a dano Ígneo + truque Raio de Fogo", l3:"Repreensão Diabólica (sempre preparada)", l5:"Escuridão (sempre preparada)", cantripConcedido:"Raio de Fogo"}
-  }
-};
-
-/* Pequenino (Halfling) — PHB 2024, pág. 195/200 (impresso/PDF). Diferente do
-   Tiferino, não tem nenhuma escolha própria: todos os traços são fixos,
-   INCLUSIVE o tamanho (só existe uma opção, "Pequeno"). O passo de detalhe
-   serve só pra exibição/confirmação (canAdvance sempre true pra essa espécie).
-   TAMANHO CONFERIDO DIRETO NO TEXTO DO LIVRO (extração com layout preservado,
-   pág. impressa 195): "Tamanho: Pequeno (cerca de 0,60-0,90 metro de altura)"
-   — não é 0,50-1m, é 0,60-0,90m mesmo. Confira a pág. 195 se tiver dúvida. */
-const PEQUENINO = {
-  flavor: "Devotados a deuses que valorizam o lar, a família e a comunidade, os pequeninos costumam sonhar com uma vida tranquila — mas muitos sentem o chamado da aventura. Seu tamanho discreto, parecido com o de uma criança humana, os ajuda a passar despercebidos e a se espremer em espaços que outros povos não conseguem.",
-  tipo: "Humanoide",
-  tamanho: "cerca de 0,60 a 0,90 metro de altura",
-  deslocamento: "9 metros",
-  tracos: [
-    {nome:"Corajoso", desc:"Você tem Vantagem nas salvaguardas que realizar para evitar ou encerrar a condição Amedrontado."},
-    {nome:"Agilidade Pequenina", desc:"Você pode se mover pelo espaço de qualquer criatura que seja um tamanho maior que você, mas não pode parar no mesmo espaço."},
-    {nome:"Sorte", desc:"Ao tirar 1 no d20 de um Teste de d20, você pode jogar novamente o dado e deve usar a nova jogada."},
-    {nome:"Furtividade Natural", desc:"Você pode executar a ação Esconder mesmo quando estiver encoberto apenas por uma criatura que seja pelo menos um tamanho maior que você."}
-  ]
-};
 
 const CHARLATAO = {
   suggestedAbilities: ["Destreza","Constituição","Carisma"],
@@ -575,6 +542,29 @@ function spellChoiceList(items, selectedList, maxTotal, toggleFn){
   }).join('')}</div>`;
 }
 
+let expandedTraitInfo = null;
+function toggleTraitInfo(name){
+  expandedTraitInfo = (expandedTraitInfo===name) ? null : name;
+  render();
+}
+
+/* Lista de traços/magias CONCEDIDOS de graça pela espécie (não são uma escolha
+   do jogador) — aparecem como pill já "selecionada" e travada (sem opção de
+   desmarcar), com botão "ⓘ" que expande o detalhe. Se o nome existir no banco
+   de magias (SPELL_DETAILS), mostra a ficha completa da magia; senão, mostra
+   o resumo textual do próprio traço. */
+function grantedTraitList(traits){
+  return `<div class="check-list" style="margin-bottom:6px;">${traits.map(t=>{
+    const isExpanded = expandedTraitInfo===t.nome;
+    const spellDetail = SPELL_DETAILS[t.nome];
+    return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
+      <span class="check-pill selected">${t.nome}</span>
+      <button class="info-btn ${isExpanded?'active':''}" data-pick="${t.nome}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>
+      ${isExpanded ? (spellDetail ? renderSpellDetailCard(spellDetail) : `<div class="spell-detail">${t.resumo}</div>`) : ''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
 function choiceGrid(list, enabledList, selected, onClickName){
   return `<div class="choice-grid">${list.map(n=>{
     const enabled = enabledList.includes(n);
@@ -618,16 +608,23 @@ function renderTieflingDetail(){
     <div class="fact"><b>Tamanho:</b></div>
   </div>
   <div id="grp-1-tamanho" class="check-list" style="margin-bottom:20px;">
-    ${Object.entries(TIEFLING.tamanhoOpcoes).map(([s,desc])=>`
-      <div class="check-pill ${t.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanho">${s} <span style="opacity:0.65;font-size:0.85em;">(${desc})</span></div>
+    ${TIEFLING.tamanho.opcoes.map(s=>`
+      <div class="check-pill ${t.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanho">${s} <span style="opacity:0.65;font-size:0.85em;">(${TIEFLING.tamanho.alturas[s]})</span></div>
     `).join('')}
   </div>
-  <h3 id="grp-1-legado">Legado Ínfero</h3>
-  ${Object.entries(TIEFLING.legados).map(([name,info])=>`
-    <div class="option-block ${t.legado===name?'selected':''}">
-      <h3 style="color:var(--gold);margin-top:0;">${name}</h3>
-      <p><b>Nível 1:</b> ${info.l1}<br><b>Nível 3:</b> ${info.l3}<br><b>Nível 5:</b> ${info.l5}</p>
-      <button class="pick-btn" data-pick="${name}" data-fn="pickLegado">${t.legado===name?'Selecionado':'Escolher'}</button>
+  <h3>Traços Natos</h3>
+  ${grantedTraitList(TIEFLING.tracosFixos)}
+  <h3 id="grp-1-legado">${TIEFLING.subespecie.nome}</h3>
+  ${TIEFLING.subespecie.opcoes.map(opt=>`
+    <div class="option-block ${t.legado===opt.nome?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
+      <p>${opt.nivel1.resumo}</p>
+      ${grantedTraitList([
+        {nome: opt.nivel1.truqueConcedido},
+        {nome: opt.nivel3.magiaConcedida},
+        {nome: opt.nivel5.magiaConcedida}
+      ])}
+      <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLegado">${t.legado===opt.nome?'Selecionado':'Escolher'}</button>
     </div>
   `).join('')}
   <h3 id="grp-1-atributo">Atributo de Conjuração do Legado</h3>
@@ -644,15 +641,10 @@ function renderPequeninoDetail(){
   <div class="species-facts">
     <div class="fact"><b>Tipo:</b> ${PEQUENINO.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${PEQUENINO.deslocamento}</div>
-    <div class="fact"><b>Tamanho:</b> Pequeno (${PEQUENINO.tamanho}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b> Pequeno (${PEQUENINO.tamanho.alturas['Pequeno']}) — única opção, sem escolha nesta espécie.</div>
   </div>
   <h3>Traços Natos</h3>
-  ${PEQUENINO.tracos.map(t=>`
-    <div class="option-block">
-      <h3 style="color:var(--gold);margin-top:0;">${t.nome}</h3>
-      <p>${t.desc}</p>
-    </div>
-  `).join('')}
+  ${grantedTraitList(PEQUENINO.tracosFixos)}
   ${nav(canAdvance())}`;
 }
 
@@ -1079,7 +1071,8 @@ function pickClass(v){ data.classe=v; persist(); render(); }
 function pickTamanho(v){ data.tiefling.tamanho=v; persist(); render(); }
 function pickLegado(v){
   data.tiefling.legado=v;
-  const granted = TIEFLING.legados[v] && TIEFLING.legados[v].cantripConcedido;
+  const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===v);
+  const granted = opt && opt.nivel1.truqueConcedido;
   if(granted){
     // Remove o truque da lista da classe/Tomo se já tinha sido escolhido antes
     // de mudar de legado — senão sobra uma escolha redundante sem efeito.
@@ -1105,8 +1098,8 @@ function pickBruxoEquip(v){ data.bruxo.equipment=v; persist(); render(); }
    sempre um array (vazio se a espécie não concede nenhum). */
 function speciesGrantedCantrips(){
   if(data.especie==='Tiferino' && data.tiefling.legado){
-    const legado = TIEFLING.legados[data.tiefling.legado];
-    if(legado && legado.cantripConcedido) return [legado.cantripConcedido];
+    const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
+    if(opt && opt.nivel1.truqueConcedido) return [opt.nivel1.truqueConcedido];
   }
   return [];
 }
