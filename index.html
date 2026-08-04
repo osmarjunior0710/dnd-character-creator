@@ -24,6 +24,7 @@
 <script src="data/spells.js"></script>
 <script src="data/feats.js"></script>
 <script src="data/skills.js"></script>
+<script src="data/classes/bardo.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -58,14 +59,34 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
-   ESCOPO ATUAL (funcionando): Bruxo e Bárbaro (nível 1 apenas), todas as
-   10 espécies do PHB 2024, os 16 antecedentes do PHB 2024.
-   FALTAM: as outras 10 classes (Bardo, Clérigo, Druida, Feiticeiro,
-   Guardião, Guerreiro, Ladino, Mago, Monge, Paladino — nível 1 primeiro,
-   igual foi combinado pro Bárbaro). Todas as 12 do PHB + o Psiônico (UA
-   2025) já estão mapeadas na planilha classes_phb2024.xlsx (Visão Geral +
-   Traços Básicos e Nível 1 + Maestria — Propriedades/Armas), então NÃO
-   precisa voltar no PDF pra extrair de novo — só usar a planilha.
+   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro e Bardo (nível 1 apenas),
+   todas as 10 espécies do PHB 2024, os 16 antecedentes do PHB 2024.
+   FALTAM: as outras 9 classes (Clérigo, Druida, Feiticeiro, Guardião,
+   Guerreiro, Ladino, Mago, Monge, Paladino). Todas já mapeadas na
+   planilha classes_phb2024.xlsx — não precisa voltar ao PDF.
+
+   ✅ BARDO (nível 1) — CONCLUÍDO. Dados em data/classes/bardo.js.
+   Particularidades registradas:
+   - Perícias: Bardo escolhe 3 QUAISQUER, sem lista restrita (BARDO.skillsAll
+     = true, BARDO.skillsCount = 3). renderBardoDetail() usa ALL_SKILLS
+     (data/skills.js) direto em vez de um pool fixo tipo BARBARO.skills —
+     por isso data/classes/bardo.js foi carregado DEPOIS de
+     data/skills.js no <script>, mas mesmo se a ordem mudasse funcionaria
+     igual, já que ALL_SKILLS só é lido dentro do corpo da função de
+     render (chamada bem depois de todo script já ter carregado), nunca
+     no top-level do bardo.js.
+   - Truques/magias de 1º círculo: extraídos da planilha
+     D_D_5_5_-_Magias_e_Talentos.xlsx (coluna "Bardo"=Sim), NÃO do PDF —
+     13 truques, 23 magias de 1º círculo.
+   - Ferramentas (Instrumento Musical ×3): registrado só como texto
+     informativo (BARDO.toolsNote), SEM seletor de instrumentos
+     específicos ainda — decisão combinada com o usuário, mesma pendência
+     que já existia no antecedente Artista (e existirá em Guarda/Soldado
+     quando entrarem). Revisar tudo isso junto numa leva própria de
+     "ferramentas de verdade" quando o usuário pedir.
+   - Inspiração de Bardo não tem escolha do jogador no nível 1 (é sempre
+     concedida) — só texto informativo, igual Fúria/Defesa sem Armadura
+     do Bárbaro.
 
    ✅ BÁRBARO (nível 1) — CONCLUÍDO. Dados em data/classes/barbaro.js
    (BARBARO const). Maestria em Arma (transversal, também usada por
@@ -310,7 +331,7 @@
    ========================================================================== */
 
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
-const ENABLED_CLASSES = ["Bruxo","Bárbaro"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo"];
 
 /* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
    NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
@@ -319,8 +340,8 @@ const ENABLED_CLASSES = ["Bruxo","Bárbaro"];
    se ramificando por nome de classe (if/else), porque cada classe nível 1
    tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
    proficiências de arma/armadura, perícias) usam esses mapas. */
-const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro" };
-const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO };
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO };
 function activeClassData(){
   const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
   return data[key];
@@ -513,6 +534,10 @@ const CLASS_INFO = {
   "Bárbaro": {
     descricao: "Guerreiro que canaliza uma fúria primitiva — mais que raiva, uma força ancestral que aumenta sua resistência e ferocidade em combate.",
     fields: [["Atributo Principal","Força"],["Dado de Vida","d12"],["Complexidade","Média"]]
+  },
+  "Bardo": {
+    descricao: "Artista que tece magia através de música, palavras e performance, acreditando que o multiverso nasceu de palavras de criação que ainda ressoam.",
+    fields: [["Atributo Principal","Carisma"],["Dado de Vida","d8"],["Complexidade","Alta"]]
   }
 };
 
@@ -622,6 +647,7 @@ let data = {
   sabio: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   barbaro: { skills: [], maestria: [], equipment: null },
+  bardo: { skills: [], cantrips: [], spells1: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -712,6 +738,14 @@ function findFirstMissingGroup(){
         if(bb.skills.length!==2) return 'grp-1-skills';
         if(bb.maestria.length!==BARBARO.maestriaCount) return 'grp-1-maestria';
         if(!bb.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Bardo'){
+        const bd = data.bardo;
+        if(bd.skills.length!==BARDO.skillsCount) return 'grp-1-skills';
+        if(bd.cantrips.length!==2) return 'grp-1-cantrips';
+        if(bd.spells1.length!==4) return 'grp-1-spells1';
+        if(!bd.equipment) return 'grp-1-equipment';
         return null;
       }
       const b = data.bruxo;
@@ -810,6 +844,10 @@ function canAdvance(){
         const bb = data.barbaro;
         return bb.skills.length===2 && bb.maestria.length===BARBARO.maestriaCount && !!bb.equipment;
       }
+      if(data.classe==='Bardo'){
+        const bd = data.bardo;
+        return bd.skills.length===BARDO.skillsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -842,7 +880,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
@@ -1483,6 +1521,51 @@ function renderBarbaroDetail(){
   ${nav(canAdvance())}`;
 }
 
+function renderBardoDetail(){
+  const bd = data.bardo;
+  return `<h2>Bardo — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Carisma · Dado de Vida: d8 · Salvaguardas: Destreza e Carisma · Armas Simples · Armadura Leve · ${BARDO.toolsNote}</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha ${BARDO.skillsCount}, QUAISQUER — sem lista restrita)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${(()=>{
+      const bgConst = activeBgConst();
+      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+      const available = ALL_SKILLS.filter(s=>!alreadyHave.includes(s));
+      return available.map(s=>{
+        const sel = bd.skills.includes(s);
+        const disabled = !sel && bd.skills.length>=BARDO.skillsCount;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBardoSkill"`}>${s}</div>`;
+      }).join('');
+    })()}
+  </div>
+  <div class="counter ${bd.skills.length===BARDO.skillsCount?'ok':''}">${bd.skills.length}/${BARDO.skillsCount} escolhidas</div>
+
+  <h3>Inspiração de Bardo</h3>
+  <div class="option-block">${BARDO.inspiracao}</div>
+
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha 2, da lista de Bardo)</h3>
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(BARDO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), bd.cantrips, 2, 'toggleBardoCantrip')}
+  <div class="counter ${bd.cantrips.length===2?'ok':''}">${bd.cantrips.length}/2 escolhidos</div>
+
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha 4, da lista de Bardo)</h3>
+  ${spellChoiceList(BARDO.spells1, bd.spells1, 4, 'toggleBardoSpell1')}
+  <div class="counter ${bd.spells1.length===4?'ok':''}">${bd.spells1.length}/4 escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${bd.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...BARDO.equipmentA, BARDO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickBardoEquip">${bd.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${bd.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${BARDO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickBardoEquip">${bd.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
 function getBonusFor(ability){
   const plan = activeBgData().abilityPlan;
   if(!plan) return 0;
@@ -1593,6 +1676,7 @@ function renderShop(){
 
 function renderSummary(){
   const isBarbaro = data.classe==='Bárbaro';
+  const isBardo = data.classe==='Bardo';
   const cls = activeClassData();
   const clsConst = activeClassConst();
   const t = data.tiefling;
@@ -1619,6 +1703,11 @@ function renderSummary(){
   <div class="summary-section"><h3>Fúria, Defesa sem Armadura e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
     Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
+  </div></div>` : isBardo ? `
+  <div class="summary-section"><h3>Inspiração de Bardo, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
+    Magias: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>` : `
   <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
@@ -1684,6 +1773,7 @@ function resetWizard(){
     pequenino:{},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
+    bardo:{skills:[],cantrips:[],spells1:[],equipment:null},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -1747,6 +1837,10 @@ function pickBruxoEquip(v){ data.bruxo.equipment=v; persist(); render(); }
 function toggleBarbaroSkill(v){ const s=data.barbaro.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleBarbaroMaestria(v){ const s=data.barbaro.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<BARBARO.maestriaCount)s.push(v); persist(); render(); }
 function pickBarbaroEquip(v){ data.barbaro.equipment=v; persist(); render(); }
+function toggleBardoSkill(v){ const s=data.bardo.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<BARDO.skillsCount)s.push(v); persist(); render(); }
+function toggleBardoCantrip(v){ const s=data.bardo.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleBardoSpell1(v){ const s=data.bardo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<4)s.push(v); persist(); render(); }
+function pickBardoEquip(v){ data.bardo.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
