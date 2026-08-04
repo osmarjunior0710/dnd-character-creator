@@ -9,7 +9,11 @@ const TIEFLING = {
   deslocamento: "9 metros",
   visaoNoEscuro: "18 metros",
   tracosFixos: [
-    { nome: "Presença Sobrenatural", resumo: "Você conhece o truque Taumaturgia. Ao conjurá-lo com este traço, a magia usa o mesmo atributo de conjuração escolhido para o seu Legado Ínfero." }
+    {
+      nome: "Presença Sobrenatural",
+      resumo: "Ao conjurar o truque abaixo com este traço, a magia usa o mesmo atributo de conjuração escolhido para o seu Legado Ínfero.",
+      concede: [ {tipo:"truque", nome:"Taumaturgia"} ]
+    }
   ],
   subespecie: {
     nome: "Legado Ínfero",
@@ -17,21 +21,21 @@ const TIEFLING = {
     opcoes: [
       {
         nome: "Abissal",
-        nivel1: { resumo: "Você tem Resistência a dano Venenoso.", truqueConcedido: "Rajada de Veneno" },
-        nivel3: { magiaConcedida: "Raio Nauseante" },
-        nivel5: { magiaConcedida: "Paralisar Pessoa" }
+        nivel1: { resumo: "Você tem Resistência a dano Venenoso.", concede: [{tipo:"truque", nome:"Rajada de Veneno"}] },
+        nivel3: { resumo: "", concede: [{tipo:"magia", nome:"Raio Nauseante"}] },
+        nivel5: { resumo: "", concede: [{tipo:"magia", nome:"Paralisar Pessoa"}] }
       },
       {
         nome: "Ctônico",
-        nivel1: { resumo: "Você tem Resistência a dano Necrótico.", truqueConcedido: "Toque Necrótico" },
-        nivel3: { magiaConcedida: "Vitalidade Vazia" },
-        nivel5: { magiaConcedida: "Raio do Enfraquecimento" }
+        nivel1: { resumo: "Você tem Resistência a dano Necrótico.", concede: [{tipo:"truque", nome:"Toque Necrótico"}] },
+        nivel3: { resumo: "", concede: [{tipo:"magia", nome:"Vitalidade Vazia"}] },
+        nivel5: { resumo: "", concede: [{tipo:"magia", nome:"Raio do Enfraquecimento"}] }
       },
       {
         nome: "Infernal",
-        nivel1: { resumo: "Você tem Resistência a dano Ígneo.", truqueConcedido: "Raio de Fogo" },
-        nivel3: { magiaConcedida: "Repreensão Diabólica" },
-        nivel5: { magiaConcedida: "Escuridão" }
+        nivel1: { resumo: "Você tem Resistência a dano Ígneo.", concede: [{tipo:"truque", nome:"Raio de Fogo"}] },
+        nivel3: { resumo: "", concede: [{tipo:"magia", nome:"Repreensão Diabólica"}] },
+        nivel5: { resumo: "", concede: [{tipo:"magia", nome:"Escuridão"}] }
       }
     ]
   }

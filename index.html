@@ -21,6 +21,7 @@
 <script src="data/spells.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
+<script src="data/species/aasimar.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -112,7 +113,7 @@
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
 const ENABLED_CLASSES = ["Bruxo"];
 const SPECIES = ["Aasimar","Anão","Draconato","Elfo","Gnomo","Golias","Humano","Orc","Pequenino","Tiferino"];
-const ENABLED_SPECIES = ["Tiferino","Pequenino"];
+const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar"];
 /* CORRIGIDO: o array original tinha "Órfão" (não existe como antecedente no PHB
    2024) e estava faltando "Andarilho" e "Escriba" (existem). Lista abaixo
    conferida contra o Sumário do livro — são os 16 antecedentes oficiais. */
@@ -332,6 +333,7 @@ let data = {
   especie: null, antecedente: null, classe: null,
   tiefling: { tamanho: null, legado: null, atributoLegado: null },
   pequenino: {},
+  aasimar: { tamanho: null },
   charlatao: { abilityPlan: null, equipment: null, habilidoso: [] },
   nobre: { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
@@ -368,6 +370,7 @@ async function restore(){
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
       if(!data.pequenino) data.pequenino = {};
+      if(!data.aasimar) data.aasimar = { tamanho: null };
       if(!data.nobre) data.nobre = { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null };
       if(!data.charlatao.habilidoso) data.charlatao.habilidoso = [];
       if(!data.nobre.habilidoso) data.nobre.habilidoso = [];
@@ -398,6 +401,7 @@ function findFirstMissingGroup(){
     case 0: return data.especie ? null : 'grp-0-especie';
     case 1:
       if(data.especie==='Pequenino') return null;
+      if(data.especie==='Aasimar') return data.aasimar.tamanho ? null : 'grp-1-tamanho';
       if(!data.tiefling.tamanho) return 'grp-1-tamanho';
       if(!data.tiefling.legado) return 'grp-1-legado';
       if(!data.tiefling.atributoLegado) return 'grp-1-atributo';
@@ -463,7 +467,7 @@ function returnToSummaryNow(){
 function canAdvance(){
   switch(step){
     case 0: return !!data.especie;
-    case 1: return data.especie==='Pequenino' ? true : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado);
+    case 1: return data.especie==='Pequenino' ? true : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado));
     case 2: return !!data.antecedente;
     case 3: {
       const bg = activeBgData();
@@ -494,7 +498,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderSpeciesStep();
-  else if(step===1) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : renderTieflingDetail();
+  else if(step===1) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = (data.antecedente==='Nobre') ? renderNobreDetail() : renderCharlatanDetail();
   else if(step===4) html = renderClassStep();
@@ -548,21 +552,33 @@ function toggleTraitInfo(name){
   render();
 }
 
-/* Lista de traços/magias CONCEDIDOS de graça pela espécie (não são uma escolha
-   do jogador) — aparecem como pill já "selecionada" e travada (sem opção de
-   desmarcar), com botão "ⓘ" que expande o detalhe. Se o nome existir no banco
-   de magias (SPELL_DETAILS), mostra a ficha completa da magia; senão, mostra
-   o resumo textual do próprio traço. */
-function grantedTraitList(traits){
-  return `<div class="check-list" style="margin-bottom:6px;">${traits.map(t=>{
-    const isExpanded = expandedTraitInfo===t.nome;
-    const spellDetail = SPELL_DETAILS[t.nome];
+/* Pills para itens ESPECÍFICOS concedidos de graça que existem numa lista
+   nossa (magia/truque hoje — perícia/talento quando tivermos os bancos
+   correspondentes). NÃO usar para o traço inteiro — só para o nome exato
+   do item (ex: "Taumaturgia", "Rajada de Veneno"). O botão "ⓘ" só aparece
+   se houver detalhe pra mostrar (hoje: banco de magias). */
+function grantedItemList(items){
+  if(!items || items.length===0) return '';
+  return `<div class="check-list" style="margin:8px 0 2px;">${items.map(it=>{
+    const isExpanded = expandedTraitInfo===it.nome;
+    const spellDetail = SPELL_DETAILS[it.nome];
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill selected">${t.nome}</span>
-      <button class="info-btn ${isExpanded?'active':''}" data-pick="${t.nome}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>
-      ${isExpanded ? (spellDetail ? renderSpellDetailCard(spellDetail) : `<div class="spell-detail">${t.resumo}</div>`) : ''}
+      <span class="check-pill selected">${it.nome}</span>
+      ${spellDetail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${it.nome}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>`:''}
+      ${isExpanded && spellDetail ? renderSpellDetailCard(spellDetail) : ''}
     </div>`;
   }).join('')}</div>`;
+}
+
+/* Caixa de traço concedido (texto completo + pills dos itens específicos que
+   ele concede, se houver). Usada tanto pros traços fixos quanto, dentro da
+   escolha de subespécie, pra cada bloco de nível. */
+function traitBox(nome, resumo, concede){
+  return `<div class="option-block">
+    <h3 style="color:var(--gold);margin-top:0;">${nome}</h3>
+    ${resumo?`<p>${resumo}</p>`:''}
+    ${grantedItemList(concede)}
+  </div>`;
 }
 
 function choiceGrid(list, enabledList, selected, onClickName){
@@ -613,18 +629,19 @@ function renderTieflingDetail(){
     `).join('')}
   </div>
   <h3>Traços Natos</h3>
-  ${grantedTraitList(TIEFLING.tracosFixos)}
+  ${TIEFLING.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-1-legado">${TIEFLING.subespecie.nome}</h3>
   ${TIEFLING.subespecie.opcoes.map(opt=>`
     <div class="option-block ${t.legado===opt.nome?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
+      <div class="group-label">Nível 1</div>
       <p>${opt.nivel1.resumo}</p>
-      ${grantedTraitList([
-        {nome: opt.nivel1.truqueConcedido},
-        {nome: opt.nivel3.magiaConcedida},
-        {nome: opt.nivel5.magiaConcedida}
-      ])}
-      <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLegado">${t.legado===opt.nome?'Selecionado':'Escolher'}</button>
+      ${grantedItemList(opt.nivel1.concede)}
+      <div class="group-label">Nível 3</div>
+      ${grantedItemList(opt.nivel3.concede)}
+      <div class="group-label">Nível 5</div>
+      ${grantedItemList(opt.nivel5.concede)}
+      <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLegado" style="margin-top:10px;">${t.legado===opt.nome?'Selecionado':'Escolher'}</button>
     </div>
   `).join('')}
   <h3 id="grp-1-atributo">Atributo de Conjuração do Legado</h3>
@@ -644,7 +661,30 @@ function renderPequeninoDetail(){
     <div class="fact"><b>Tamanho:</b> Pequeno (${PEQUENINO.tamanho.alturas['Pequeno']}) — única opção, sem escolha nesta espécie.</div>
   </div>
   <h3>Traços Natos</h3>
-  ${grantedTraitList(PEQUENINO.tracosFixos)}
+  ${PEQUENINO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
+  ${nav(canAdvance())}`;
+}
+
+function renderAasimarDetail(){
+  const a = data.aasimar;
+  return `<h2>Aasimar</h2>
+  <p class="species-flavor">${AASIMAR.flavor}</p>
+  <div class="species-facts">
+    <div class="fact"><b>Tipo:</b> ${AASIMAR.tipo}</div>
+    <div class="fact"><b>Deslocamento:</b> ${AASIMAR.deslocamento}</div>
+    <div class="fact"><b>Visão no Escuro:</b> ${AASIMAR.visaoNoEscuro}</div>
+    <div class="fact"><b>Tamanho:</b></div>
+  </div>
+  <div id="grp-1-tamanho" class="check-list" style="margin-bottom:20px;">
+    ${AASIMAR.tamanho.opcoes.map(s=>`
+      <div class="check-pill ${a.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanhoAasimar">${s} <span style="opacity:0.65;font-size:0.85em;">(${AASIMAR.tamanho.alturas[s]})</span></div>
+    `).join('')}
+  </div>
+  <h3>Traços Natos</h3>
+  ${AASIMAR.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
+  <h3>${AASIMAR.revelacaoCelestial.nome} <span style="font-family:'Spectral',serif;font-weight:400;font-size:0.7em;color:var(--parchment-dim);">(nível ${AASIMAR.revelacaoCelestial.nivelConcedido}+, escolhida em jogo — não faz parte da ficha inicial)</span></h3>
+  <div class="intro" style="margin-bottom:12px;">${AASIMAR.revelacaoCelestial.aviso}</div>
+  ${AASIMAR.revelacaoCelestial.opcoes.map(opt=>traitBox(opt.nome, opt.resumo, opt.concede)).join('')}
   ${nav(canAdvance())}`;
 }
 
@@ -993,7 +1033,7 @@ function renderSummary(){
   <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto.</div>
 
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
-  <div class="content">${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''} · Antecedente ${data.antecedente}</div></div>
+  <div class="content">${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente}</div></div>
 
   <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
   <div class="content">${ABILITIES.map(a=>`<span class="pill-static">${a} ${finalScore(a)} (${fmt(mod(finalScore(a)))})</span>`).join('')}</div></div>
@@ -1069,10 +1109,12 @@ function pickBackground(v){ data.antecedente=v; persist(); render(); }
 function pickClass(v){ data.classe=v; persist(); render(); }
 
 function pickTamanho(v){ data.tiefling.tamanho=v; persist(); render(); }
+function pickTamanhoAasimar(v){ data.aasimar.tamanho=v; persist(); render(); }
 function pickLegado(v){
   data.tiefling.legado=v;
   const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===v);
-  const granted = opt && opt.nivel1.truqueConcedido;
+  const grantedItem = opt && opt.nivel1.concede && opt.nivel1.concede[0];
+  const granted = grantedItem && grantedItem.nome;
   if(granted){
     // Remove o truque da lista da classe/Tomo se já tinha sido escolhido antes
     // de mudar de legado — senão sobra uma escolha redundante sem efeito.
@@ -1099,7 +1141,8 @@ function pickBruxoEquip(v){ data.bruxo.equipment=v; persist(); render(); }
 function speciesGrantedCantrips(){
   if(data.especie==='Tiferino' && data.tiefling.legado){
     const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
-    if(opt && opt.nivel1.truqueConcedido) return [opt.nivel1.truqueConcedido];
+    const item = opt && opt.nivel1.concede && opt.nivel1.concede[0];
+    if(item) return [item.nome];
   }
   return [];
 }
