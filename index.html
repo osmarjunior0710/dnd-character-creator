@@ -29,6 +29,8 @@
 <script src="data/species/humano.js"></script>
 <script src="data/species/draconato.js"></script>
 <script src="data/species/elfo.js"></script>
+<script src="data/species/gnomo.js"></script>
+<script src="data/species/golias.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -139,7 +141,7 @@
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
 const ENABLED_CLASSES = ["Bruxo"];
 const SPECIES = ["Aasimar","Anão","Draconato","Elfo","Gnomo","Golias","Humano","Orc","Pequenino","Tiferino"];
-const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano","Draconato","Elfo"];
+const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano","Draconato","Elfo","Gnomo","Golias"];
 /* CORRIGIDO: o array original tinha "Órfão" (não existe como antecedente no PHB
    2024) e estava faltando "Andarilho" e "Escriba" (existem). Lista abaixo
    conferida contra o Sumário do livro — são os 16 antecedentes oficiais. */
@@ -363,6 +365,8 @@ let data = {
   humano: { tamanho: null, pericia: null, talento: null },
   draconato: { heranca: null },
   elfo: { pericia: null, linhagem: null },
+  gnomo: { linhagem: null, atributoLinhagem: null },
+  golias: { ancestralidade: null },
   aasimar: { tamanho: null },
   charlatao: { abilityPlan: null, equipment: null, habilidoso: [] },
   nobre: { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null },
@@ -406,6 +410,8 @@ async function restore(){
       if(!data.humano) data.humano = { tamanho: null, pericia: null, talento: null };
       if(!data.draconato) data.draconato = { heranca: null };
       if(!data.elfo) data.elfo = { pericia: null, linhagem: null };
+      if(!data.gnomo) data.gnomo = { linhagem: null, atributoLinhagem: null };
+      if(!data.golias) data.golias = { ancestralidade: null };
       if(!data.nobre) data.nobre = { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null };
       if(!data.charlatao.habilidoso) data.charlatao.habilidoso = [];
       if(!data.nobre.habilidoso) data.nobre.habilidoso = [];
@@ -450,6 +456,12 @@ function findFirstMissingGroup(){
         if(!data.elfo.linhagem) return 'grp-1-linhagem';
         return null;
       }
+      if(data.especie==='Gnomo'){
+        if(!data.gnomo.linhagem) return 'grp-1-linhagem';
+        if(!data.gnomo.atributoLinhagem) return 'grp-1-atributo';
+        return null;
+      }
+      if(data.especie==='Golias') return data.golias.ancestralidade ? null : 'grp-1-ancestralidade';
       if(data.especie==='Aasimar') return data.aasimar.tamanho ? null : 'grp-1-tamanho';
       if(!data.tiefling.tamanho) return 'grp-1-tamanho';
       if(!data.tiefling.legado) return 'grp-1-legado';
@@ -516,7 +528,7 @@ function returnToSummaryNow(){
 function canAdvance(){
   switch(step){
     case 0: return !!data.especie;
-    case 1: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))));
+    case 1: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
     case 2: return !!data.antecedente;
     case 3: {
       const bg = activeBgData();
@@ -547,7 +559,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderSpeciesStep();
-  else if(step===1) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
+  else if(step===1) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = (data.antecedente==='Nobre') ? renderNobreDetail() : renderCharlatanDetail();
   else if(step===4) html = renderClassStep();
@@ -674,8 +686,8 @@ function choiceGrid(list, enabledList, selected, onClickName){
    (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem. */
 function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
   return groups.filter(g=>g.items.length>0).map(g=>`
-    <div class="group-label">${g.label}</div>
-    <div class="check-list" style="margin-bottom:10px;">
+    <div class="check-list" style="margin-bottom:10px; align-items:center;">
+      <span class="group-label" style="margin:0 2px 0 0;">${g.label}:</span>
       ${g.items.map(item=>{
         const sel = selectedList.includes(item);
         const disabled = !sel && selectedList.length>=maxTotal;
@@ -736,8 +748,9 @@ function renderPequeninoDetail(){
   <div class="species-facts">
     <div class="fact"><b>Tipo:</b> ${PEQUENINO.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${PEQUENINO.deslocamento}</div>
-    <div class="fact"><b>Tamanho:</b> Pequeno (${PEQUENINO.tamanho.alturas['Pequeno']}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b></div>
   </div>
+  ${tamanhoPickList(PEQUENINO.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${PEQUENINO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   ${nav(canAdvance())}`;
@@ -750,8 +763,9 @@ function renderAnaoDetail(){
     <div class="fact"><b>Tipo:</b> ${ANAO.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${ANAO.deslocamento}</div>
     <div class="fact"><b>Visão no Escuro:</b> ${ANAO.visaoNoEscuro}</div>
-    <div class="fact"><b>Tamanho:</b> Médio (${ANAO.tamanho.alturas['Médio']}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b></div>
   </div>
+  ${tamanhoPickList(ANAO.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${ANAO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   ${nav(canAdvance())}`;
@@ -764,8 +778,9 @@ function renderOrcDetail(){
     <div class="fact"><b>Tipo:</b> ${ORC.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${ORC.deslocamento}</div>
     <div class="fact"><b>Visão no Escuro:</b> ${ORC.visaoNoEscuro}</div>
-    <div class="fact"><b>Tamanho:</b> Médio (${ORC.tamanho.alturas['Médio']}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b></div>
   </div>
+  ${tamanhoPickList(ORC.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${ORC.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   ${nav(canAdvance())}`;
@@ -814,8 +829,9 @@ function renderDraconatoDetail(){
     <div class="fact"><b>Tipo:</b> ${DRACONATO.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${DRACONATO.deslocamento}</div>
     <div class="fact"><b>Visão no Escuro:</b> ${DRACONATO.visaoNoEscuro}</div>
-    <div class="fact"><b>Tamanho:</b> Médio (${DRACONATO.tamanho.alturas['Médio']}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b></div>
   </div>
+  ${tamanhoPickList(DRACONATO.tamanho, null, null)}
   <h3 id="grp-1-heranca">${DRACONATO.subespecie.nome}</h3>
   <div class="intro" style="margin-bottom:8px;">Define o tipo de dano do seu Ataque de Sopro e da sua Resistência a Dano — sem conceder magia nenhuma (diferente do Legado do Tiferino).</div>
   <div class="choice-grid" style="margin-bottom:20px;">
@@ -834,14 +850,13 @@ function renderElfoDetail(){
     <div class="fact"><b>Tipo:</b> ${ELFO.tipo}</div>
     <div class="fact"><b>Deslocamento:</b> ${ELFO.deslocamento}</div>
     <div class="fact"><b>Visão no Escuro:</b> ${ELFO.visaoNoEscuro}</div>
-    <div class="fact"><b>Tamanho:</b> Médio (${ELFO.tamanho.alturas['Médio']}) — única opção, sem escolha nesta espécie.</div>
+    <div class="fact"><b>Tamanho:</b></div>
   </div>
+  ${tamanhoPickList(ELFO.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${ELFO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-1-pericia">${ELFO.sentidosAgucados.nome} — escolha 1 perícia</h3>
-  <div class="check-list" style="margin-bottom:20px;">
-    ${ELFO.sentidosAgucados.opcoes.map(s=>`<div class="check-pill ${e.pericia===s?'selected':''}" data-pick="${s}" data-fn="pickElfoPericia">${s}</div>`).join('')}
-  </div>
+  ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes), e.pericia, 'pickElfoPericia')}
   <h3 id="grp-1-linhagem">${ELFO.subespecie.nome}</h3>
   ${ELFO.subespecie.opcoes.map(opt=>`
     <div class="option-block ${e.linhagem===opt.nome?'selected':''}">
@@ -854,6 +869,59 @@ function renderElfoDetail(){
       <div class="group-label">Nível 5</div>
       ${grantedItemList(opt.nivel5.concede)}
       <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLinhagemElfica" style="margin-top:10px;">${e.linhagem===opt.nome?'Selecionado':'Escolher'}</button>
+    </div>
+  `).join('')}
+  ${nav(canAdvance())}`;
+}
+
+function renderGnomoDetail(){
+  const g = data.gnomo;
+  return `<h2>Gnomo</h2>
+  <p class="species-flavor">${GNOMO.flavor}</p>
+  <div class="species-facts">
+    <div class="fact"><b>Tipo:</b> ${GNOMO.tipo}</div>
+    <div class="fact"><b>Deslocamento:</b> ${GNOMO.deslocamento}</div>
+    <div class="fact"><b>Visão no Escuro:</b> ${GNOMO.visaoNoEscuro}</div>
+    <div class="fact"><b>Tamanho:</b></div>
+  </div>
+  ${tamanhoPickList(GNOMO.tamanho, null, null)}
+  <h3>Traços Natos</h3>
+  ${GNOMO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
+  <h3 id="grp-1-linhagem">${GNOMO.subespecie.nome}</h3>
+  ${GNOMO.subespecie.opcoes.map(opt=>`
+    <div class="option-block ${g.linhagem===opt.nome?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
+      <p>${opt.nivel1.resumo}</p>
+      ${grantedItemList(opt.nivel1.concede)}
+      <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLinhagemGnomica" style="margin-top:10px;">${g.linhagem===opt.nome?'Selecionado':'Escolher'}</button>
+    </div>
+  `).join('')}
+  <h3 id="grp-1-atributo">Atributo de Conjuração da Linhagem</h3>
+  <div class="intro" style="margin-bottom:8px;">Usado para a CD/ataque dos truques e magias concedidos pela sua Linhagem Gnômica.</div>
+  <div class="check-list">
+    ${['Inteligência','Sabedoria','Carisma'].map(a=>`<div class="check-pill ${g.atributoLinhagem===a?'selected':''}" data-pick="${a}" data-fn="pickAtributoLinhagemGnomica">${a}</div>`).join('')}
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderGoliasDetail(){
+  const gl = data.golias;
+  return `<h2>Golias</h2>
+  <p class="species-flavor">${GOLIAS.flavor}</p>
+  <div class="species-facts">
+    <div class="fact"><b>Tipo:</b> ${GOLIAS.tipo}</div>
+    <div class="fact"><b>Deslocamento:</b> ${GOLIAS.deslocamento}</div>
+    <div class="fact"><b>Tamanho:</b></div>
+  </div>
+  ${tamanhoPickList(GOLIAS.tamanho, null, null)}
+  <h3>Traços Natos</h3>
+  ${GOLIAS.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
+  <h3 id="grp-1-ancestralidade">${GOLIAS.subespecie.nome} — escolha 1</h3>
+  ${GOLIAS.subespecie.opcoes.map(opt=>`
+    <div class="option-block ${gl.ancestralidade===opt.nome?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
+      <p>${opt.nivel1.resumo}</p>
+      <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickAncestralidadeGigante" style="margin-top:10px;">${gl.ancestralidade===opt.nome?'Selecionado':'Escolher'}</button>
     </div>
   `).join('')}
   ${nav(canAdvance())}`;
@@ -922,10 +990,26 @@ function skillGroupsByAbility(skillList){
    usado quando só se pode marcar 1 item no total, como o Hábil do Humano. */
 function groupedSinglePick(groups, selected, pickFn){
   return groups.filter(g=>g.items.length>0).map(g=>`
-    <div class="group-label">${g.label}</div>
-    <div class="check-list" style="margin-bottom:10px;">
+    <div class="check-list" style="margin-bottom:10px; align-items:center;">
+      <span class="group-label" style="margin:0 2px 0 0;">${g.label}:</span>
       ${g.items.map(item=>`<div class="check-pill ${selected===item?'selected':''}" data-pick="${item}" data-fn="${pickFn}">${item}</div>`).join('')}
     </div>`).join('');
+}
+
+/* Mostra as opções de tamanho de uma espécie. Se só existe UMA opção, ela
+   aparece já pré-selecionada e travada (mesmo padrão de "traço concedido"
+   que usamos em outros lugares) — sem texto avisando que é única. Se
+   existirem 2+ opções, vira a lista interativa normal. */
+function tamanhoPickList(tamanho, selected, pickFn){
+  if(tamanho.opcoes.length===1){
+    const unica = tamanho.opcoes[0];
+    return `<div class="check-list" style="margin-bottom:20px;">
+      <div class="check-pill selected">${unica} <span style="opacity:0.65;font-size:0.85em;">(${tamanho.alturas[unica]})</span></div>
+    </div>`;
+  }
+  return `<div class="check-list" style="margin-bottom:20px;">
+    ${tamanho.opcoes.map(s=>`<div class="check-pill ${selected===s?'selected':''}" data-pick="${s}" data-fn="${pickFn}">${s} <span style="opacity:0.65;font-size:0.85em;">(${tamanho.alturas[s]})</span></div>`).join('')}
+  </div>`;
 }
 
 function renderBackgroundStep(){
@@ -1328,6 +1412,9 @@ function pickHumanoTalento(v){ data.humano.talento=v; persist(); render(); }
 function pickHerancaDraconica(v){ data.draconato.heranca=v; persist(); render(); }
 function pickElfoPericia(v){ data.elfo.pericia=v; persist(); render(); }
 function pickLinhagemElfica(v){ data.elfo.linhagem=v; persist(); render(); }
+function pickLinhagemGnomica(v){ data.gnomo.linhagem=v; persist(); render(); }
+function pickAtributoLinhagemGnomica(v){ data.gnomo.atributoLinhagem=v; persist(); render(); }
+function pickAncestralidadeGigante(v){ data.golias.ancestralidade=v; persist(); render(); }
 function pickLegado(v){
   data.tiefling.legado=v;
   const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===v);

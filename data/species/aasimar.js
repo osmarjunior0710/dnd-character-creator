@@ -16,7 +16,7 @@ const AASIMAR = {
     },
     {
       nome: "Mãos Curativas",
-      resumo: "Você executa uma ação Usar Magia, toca uma criatura e joga um número de d4s igual ao seu Bônus de Proficiência. A criatura restaura Pontos de Vida iguais ao total jogado. Depois de usar esse traço, você não pode usá-lo novamente até completar um Descanso Longo.",
+      resumo: "Você executa uma ação Usar Magia, toca uma criatura e joga um número de d4s igual ao seu Bônus de Proficiência. <br>A criatura restaura Pontos de Vida iguais ao total jogado. <br>Depois de usar esse traço, você não pode usá-lo novamente até completar um Descanso Longo.",
       concede: []
     },
     {

@@ -21,7 +21,7 @@ const ANAO = {
     },
     {
       nome: "Conhecimento de Pedras",
-      resumo: "Como uma Ação Bônus, você adquire Sismiconsciência com um alcance de 18 metros por 10 minutos — precisa estar em, ou tocar, uma superfície de pedra (natural ou trabalhada) para usar. Você pode usar essa Ação Bônus um número de vezes igual ao seu Bônus de Proficiência, recuperando todos os usos ao completar um Descanso Longo.",
+      resumo: "Como uma Ação Bônus, você adquire Sismiconsciência com um alcance de 18 metros por 10 minutos — precisa estar em, ou tocar, uma superfície de pedra (natural ou trabalhada) para usar. <br>Você pode usar essa Ação Bônus um número de vezes igual ao seu Bônus de Proficiência, recuperando todos os usos ao completar um Descanso Longo.",
       concede: []
     }
   ],
