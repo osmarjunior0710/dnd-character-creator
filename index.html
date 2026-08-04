@@ -18,6 +18,9 @@
   <div class="progress" id="progressBar"></div>
   <div class="card" id="cardContent"></div>
 </div>
+<script src="data/weapon-mastery.js"></script>
+<script src="data/classes/bruxo.js"></script>
+<script src="data/classes/barbaro.js"></script>
 <script src="data/spells.js"></script>
 <script src="data/feats.js"></script>
 <script src="data/skills.js"></script>
@@ -55,8 +58,82 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
-   ESCOPO ATUAL (funcionando): Bruxo, Tiferino, Pequenino, Charlatão.
-   FALTAM: as outras 11 classes, 8 espécies, 15 antecedentes do PHB 2024.
+   ESCOPO ATUAL (funcionando): Bruxo e Bárbaro (nível 1 apenas), todas as
+   10 espécies do PHB 2024, os 16 antecedentes do PHB 2024.
+   FALTAM: as outras 10 classes (Bardo, Clérigo, Druida, Feiticeiro,
+   Guardião, Guerreiro, Ladino, Mago, Monge, Paladino — nível 1 primeiro,
+   igual foi combinado pro Bárbaro). Todas as 12 do PHB + o Psiônico (UA
+   2025) já estão mapeadas na planilha classes_phb2024.xlsx (Visão Geral +
+   Traços Básicos e Nível 1 + Maestria — Propriedades/Armas), então NÃO
+   precisa voltar no PDF pra extrair de novo — só usar a planilha.
+
+   ✅ BÁRBARO (nível 1) — CONCLUÍDO. Dados em data/classes/barbaro.js
+   (BARBARO const). Maestria em Arma (transversal, também usada por
+   Paladino/Guardião/Guerreiro/Ladino quando entrarem) ficou em
+   data/weapon-mastery.js (MASTERY_PROPERTIES + WEAPON_MASTERY). Fúria e
+   Defesa sem Armadura não têm escolha do jogador nível 1, então aparecem
+   só como texto informativo em renderBarbaroDetail() (sem grp- id, não
+   entram em canAdvance/findFirstMissingGroup). Maestria em Arma tem
+   escolha (2 armas Corpo a Corpo, Simples ou Marcial) — a lista mostra
+   TODAS as armas Corpo a Corpo de WEAPON_MASTERY, mesmo as Marciais que
+   ainda não estão no SHOP (ver PENDÊNCIA do SHOP mais abaixo), com aviso
+   na tela sobre isso.
+   - Classe do Bruxo, weaponProf/armorProf agora são ARRAY em vez de
+     string (BRUXO.weaponProf era "simples", virou ["simples"]) — decisão
+     combinada com o usuário quando o Bárbaro entrou, porque cada classe
+     pode ter mais de uma categoria de arma/armadura (Bárbaro tem Simples+
+     Marcial, Leve+Média+Escudo). renderShop() usa .includes() nesse array
+     via activeClassConst(), não mais comparação direta de string.
+   - equipmentA_gold também é campo novo em ambos os CONST de classe
+     (antes o "15 PO" do Bruxo tava hardcoded dentro do array equipmentA
+     como string solta — foi extraído pra campo próprio, mesmo padrão que
+     os antecedentes já usavam com bgConst.equipmentA_gold).
+
+   ✅ ETAPA 2 (generalizar) — CONCLUÍDA junto com o Bárbaro: CLASS_DATA_KEY
+   (nome->chave em `data`, ex. "Bárbaro"->"barbaro") e CLASS_CONST
+   (nome->objeto de dados fixos, ex. "Bárbaro"->BARBARO), com
+   activeClassData()/activeClassConst() — mesmo padrão do
+   BACKGROUND_DATA_KEY/BACKGROUND_CONST. Usados em startingGold(),
+   renderShop() e renderSummary(). IMPORTANTE: render()/canAdvance()/
+   findFirstMissingGroup() do PASSO 1 (detalhe da classe) continuam
+   ramificando por if/else de nome de classe (`data.classe==='Bárbaro' ?
+   ... : ...`), NÃO viraram um mapa de funções — isso foi decisão
+   consciente, não descuido: com só 2 classes de nível 1 muito diferentes
+   entre si (uma conjuradora com pactos, outra marcial com Fúria/Maestria)
+   ainda não dá pra ver um padrão comum o suficiente pra generalizar sem
+   forçar. Mesmo estilo que já era usado no passo 5 (detalhe da espécie,
+   também se ramifica por if/else). Reavaliar quando tivermos 3-4 classes
+   nível 1 prontas — pode ser que dê pra extrair um "renderClassChoiceList"
+   genérico pra perícias e outro pra equipamento A/B, já que essas duas
+   partes SÃO idênticas em formato entre Bruxo e Bárbaro.
+   - LIÇÃO APRENDIDA (antecedentes, ainda válida): não gaste tempo
+     pesquisando no PDF de 397 páginas se já existir um arquivo
+     estruturado (planilha, .js, etc) anexado na conversa com os mesmos
+     dados prontos.
+
+   🔜 PENDÊNCIA DO SHOP (registrada, não é bug, é escopo adiado com o
+   usuário): SHOP só tem Armas Simples e Armadura Leve. Bárbaro (e toda
+   futura classe marcial) tem proficiência com Armas Marciais e Armadura
+   Média/Escudo/Pesada que não aparecem pra comprar — só dá pra pegar via
+   equipamento inicial fixo (opção A). Expandir SHOP com Armas Marciais +
+   Armadura Média/Pesada + Escudos fica pra quando o usuário pedir
+   explicitamente (ele já disse "resolvemos loja depois" duas vezes).
+   - Quando houver 2+ classes, generalizar render()/canAdvance()/
+     findFirstMissingGroup() pra classe do mesmo jeito que já foi feito pra
+     antecedente: um CLASS_DATA_KEY / CLASS_CONST mapeando nome->chave em
+     `data` e nome->objeto de dados fixos, ativado por algo tipo
+     activeClassData()/activeClassConst(), em vez de if/else hardcoded
+     "data.classe==='Bruxo' ? ...". Aprendemos isso do jeito difícil com
+     Charlatão/Nobre — comece já generalizado dessa vez, não espere ter 13
+     classes pra perceber que precisa generalizar.
+
+   PENDÊNCIA CONHECIDA (não é sobre classes, mas fica registrada pra não
+   esquecer): resetWizard() ("Criar Outro Personagem") só zera
+   data.tiefling/data.pequenino entre as espécies — as outras 8 (anao, orc,
+   humano, draconato, elfo, gnomo, golias, aasimar) não são resetadas.
+   Resolver quando for a vez de revisar espécies de novo, ou aproveitar
+   quando mexer no resetWizard() pra classes (mesmo tipo de bug pode já
+   nascer ali se não for generalizado desde o início).
 
    NOTA SOBRE PEQUENINO (Halfling): diferente do Tiferino, essa espécie NÃO
    tem nenhuma escolha própria no PHB 2024 (sem subraça, sem legado, sem
@@ -233,7 +310,24 @@
    ========================================================================== */
 
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
-const ENABLED_CLASSES = ["Bruxo"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro"];
+
+/* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
+   NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
+   lugar nenhum novo — adicionar aqui em vez disso. Funções de RENDER e de
+   validação (canAdvance/findFirstMissingGroup) do passo 1 continuam
+   se ramificando por nome de classe (if/else), porque cada classe nível 1
+   tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
+   proficiências de arma/armadura, perícias) usam esses mapas. */
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO };
+function activeClassData(){
+  const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
+  return data[key];
+}
+function activeClassConst(){
+  return CLASS_CONST[data.classe] || BRUXO;
+}
 const SPECIES = ["Aasimar","Anão","Draconato","Elfo","Gnomo","Golias","Humano","Orc","Pequenino","Tiferino"];
 const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano","Draconato","Elfo","Gnomo","Golias"];
 /* CORRIGIDO: o array original tinha "Órfão" (não existe como antecedente no PHB
@@ -307,26 +401,6 @@ const BACKGROUND_CONST = {
    MAGIAS (Capítulo 7, pág. 234+): use a planilha condensada em vez de
    vasculhar aqui — é só pra casos em que a planilha não bater com o livro.
    ========================================================================== */
-
-
-const BRUXO = {
-  skills: ["Arcanismo","Enganação","História","Intimidação","Investigação","Natureza","Religião"],
-  pactBoons: {
-    "Pacto do Tomo": "Ao final de um Descanso Curto ou Longo, você conjura um Livro das Sombras (aparência à sua escolha) na mão. Escolha 3 truques e 2 magias de 1º círculo com o marcador Ritual, de qualquer lista de classe (que você ainda não tenha preparadas). Enquanto tiver o livro, essas magias ficam sempre preparadas e funcionam como magias de Bruxo. O livro também serve como Foco de Conjuração.",
-    "Pacto da Lâmina": "Como Ação Bônus, conjura uma arma de pacto na mão (Corpo a Corpo Simples ou Marcial à escolha) ou vincula-se a uma arma mágica tocada. Tem proficiência com ela e pode usá-la como Foco de Conjuração. Ao atacar com ela, pode usar Carisma no ataque/dano em vez de Força/Destreza, e causar dano Necrótico, Psíquico ou Radiante em vez do tipo normal.",
-    "Pacto da Corrente": "Aprende Convocar Familiar e pode conjurá-la sem gastar espaço de magia. Pode escolher formas especiais de familiar (Cobra Peçonhenta, Diabrete, Esfinge Maravilhosa, Esqueleto, Pseudodragão, Quasit, Slaad Girino, Sprite). Ao executar a ação Atacar, pode abrir mão de um ataque seu para o familiar atacar como Reação dele."
-  },
-  cantrips: ["Amigos","Badalar Fúnebre","Golpe Certeiro","Ilusão Menor","Mãos Mágicas","Prestidigitação Arcana","Proteção Contra Lâminas","Raio Místico","Rajada de Veneno","Talho Mental","Toque Necrótico","Trovão"],
-  spells1: ["Armadura de Agathys","Braços de Hadar","Compreender Idiomas","Danação","Detectar Magia","Enfeitiçar Pessoa","Escrita Ilusória","Falar com Animais","Gargalhada Nefasta de Tasha","Perdição","Proteção Contra o Bem e o Mal","Raio de Bruxa","Repreensão Diabólica","Retirada Acelerada","Servo Invisível"],
-  equipmentA: ["Armadura de Couro", "Foice", "2 Adagas", "Foco Arcano (orbe)", "Livro (conhecimento oculto)", "Kit de Erudito", "15 PO"],
-  equipmentB_gold: 100,
-  weaponProf: "simples",
-  armorProf: "leve"
-};
-
-const ALL_CANTRIPS = ["Acudir os Moribundos","Amigos","Arremesso Telecinético","Arte Druídica","Badalar Fúnebre","Bolha Ácida","Bordão Místico","Chama Sagrada","Chicote de Espinhos","Criar Chamas","Elementalismo","Explosão Elemental","Fagulha Estelar","Golpe Certeiro","Ilusão Menor","Luz","Luzes Dançantes","Mensagem","Mãos Mágicas","Orientação","Palavra de Radiância","Prestidigitação Arcana","Proteção Contra Lâminas","Raio Místico","Raio de Fogo","Raio de Gelo","Rajada de Veneno","Reparar","Resistência","Talho Mental","Taumaturgia","Toque Chocante","Toque Necrótico","Trovão","Zombaria Perversa"];
-const ALL_1ST_RITUAL = ["Alarme","Compreender Idiomas","Convocar Familiar","Detectar Magia","Detectar Veneno e Doença","Disco Flutuante de Tenser","Escrita Ilusória","Falar com Animais","Identificar","Purificar Alimentos e Bebidas","Servo Invisível"];
-
 
 
 const STANDARD_ARRAY = [15,14,13,12,10,8];
@@ -435,6 +509,10 @@ const CLASS_INFO = {
   "Bruxo": {
     descricao: "Firma um pacto com uma entidade sobrenatural, trocando serviço por magia e poderes.",
     fields: [["Atributo Principal","Carisma"],["Dado de Vida","d8"],["Complexidade","Alta"]]
+  },
+  "Bárbaro": {
+    descricao: "Guerreiro que canaliza uma fúria primitiva — mais que raiva, uma força ancestral que aumenta sua resistência e ferocidade em combate.",
+    fields: [["Atributo Principal","Força"],["Dado de Vida","d12"],["Complexidade","Média"]]
   }
 };
 
@@ -543,6 +621,7 @@ let data = {
   guia: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
   sabio: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
+  barbaro: { skills: [], maestria: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -628,6 +707,13 @@ function findFirstMissingGroup(){
   switch(step){
     case 0: return data.classe ? null : 'grp-0-classe';
     case 1: {
+      if(data.classe==='Bárbaro'){
+        const bb = data.barbaro;
+        if(bb.skills.length!==2) return 'grp-1-skills';
+        if(bb.maestria.length!==BARBARO.maestriaCount) return 'grp-1-maestria';
+        if(!bb.equipment) return 'grp-1-equipment';
+        return null;
+      }
       const b = data.bruxo;
       if(b.skills.length!==2) return 'grp-1-skills';
       if(!b.pactBoon) return 'grp-1-pact';
@@ -720,6 +806,10 @@ function canAdvance(){
   switch(step){
     case 0: return !!data.classe;
     case 1: {
+      if(data.classe==='Bárbaro'){
+        const bb = data.barbaro;
+        return bb.skills.length===2 && bb.maestria.length===BARBARO.maestriaCount && !!bb.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -752,7 +842,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
@@ -1276,7 +1366,7 @@ function renderSimpleBackgroundDetail(bgConst){
 
 function renderClassStep(){
   return `<h2>Passo 1 — Escolha sua Classe</h2>
-  <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia. Só o Bruxo está disponível neste protótipo.</div>
+  <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia. Bruxo e Bárbaro estão disponíveis neste protótipo; as demais chegam em breve.</div>
   <div id="grp-0-classe">${choiceGridWithInfo(CLASSES, ENABLED_CLASSES, data.classe, 'pickClass', CLASS_INFO)}</div>
   ${nav(canAdvance())}`;
 }
@@ -1333,12 +1423,62 @@ function renderBruxoDetail(){
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
   <div class="option-block ${b.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${BRUXO.equipmentA.join(', ')}</p>
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...BRUXO.equipmentA, BRUXO.equipmentA_gold+' PO'].join(', ')}</p>
     <button class="pick-btn" data-pick="A" data-fn="pickBruxoEquip">${b.equipment==='A'?'Selecionado':'Escolher'}</button>
   </div>
   <div class="option-block ${b.equipment==='B'?'selected':''}">
     <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${BRUXO.equipmentB_gold} PO</p>
     <button class="pick-btn" data-pick="B" data-fn="pickBruxoEquip">${b.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderBarbaroDetail(){
+  const bb = data.barbaro;
+  return `<h2>Bárbaro — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Força · Dado de Vida: d12 · Salvaguardas: Força e Constituição · Armas Simples e Marciais · Armadura Leve, Média e Escudo</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${(()=>{
+      const bgConst = activeBgConst();
+      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+      const available = BARBARO.skills.filter(s=>!alreadyHave.includes(s));
+      return available.map(s=>{
+        const sel = bb.skills.includes(s);
+        const disabled = !sel && bb.skills.length>=2;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBarbaroSkill"`}>${s}</div>`;
+      }).join('');
+    })()}
+  </div>
+  <div class="counter ${bb.skills.length===2?'ok':''}">${bb.skills.length}/2 escolhidas</div>
+
+  <h3>Fúria</h3>
+  <div class="option-block">${BARBARO.furia}</div>
+
+  <h3>Defesa sem Armadura</h3>
+  <div class="option-block">${BARBARO.defesaSemArmadura}</div>
+
+  <h3 id="grp-1-maestria">Maestria em Arma (escolha ${BARBARO.maestriaCount}, armas Corpo a Corpo Simples ou Marciais)</h3>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim (você pode conseguir a arma depois em jogo).</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${Object.entries(WEAPON_MASTERY).filter(([,w])=>w.tipo==='Corpo a Corpo').map(([name,w])=>{
+      const sel = bb.maestria.includes(name);
+      const disabled = !sel && bb.maestria.length>=BARBARO.maestriaCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="toggleBarbaroMaestria"`} title="${w.mastery}: ${MASTERY_PROPERTIES[w.mastery]}">${name} (${w.mastery})</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${bb.maestria.length===BARBARO.maestriaCount?'ok':''}">${bb.maestria.length}/${BARBARO.maestriaCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${bb.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...BARBARO.equipmentA, BARBARO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickBarbaroEquip">${bb.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${bb.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${BARBARO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickBarbaroEquip">${bb.equipment==='B'?'Selecionado':'Escolher'}</button>
   </div>
   ${nav(canAdvance())}`;
 }
@@ -1383,12 +1523,13 @@ function renderAttrs(){
 }
 
 function startingGold(){
-  const bGold = data.bruxo.equipment==='B' ? BRUXO.equipmentB_gold : 0;
+  const clsConst = activeClassConst();
+  const cls = activeClassData();
+  const clsGold = cls.equipment==='B' ? clsConst.equipmentB_gold : (cls.equipment==='A' ? clsConst.equipmentA_gold : 0);
   const bgConst = activeBgConst();
   const bg = activeBgData();
   const bgGold = bg.equipment==='B' ? bgConst.equipmentB_gold : (bg.equipment==='A' ? bgConst.equipmentA_gold : 0);
-  const bAGold = data.bruxo.equipment==='A' ? 15 : 0;
-  return bGold + bgGold + bAGold;
+  return clsGold + bgGold;
 }
 function spentGold(){
   let total = 0;
@@ -1408,15 +1549,16 @@ function findShopItem(name){
 function renderShop(){
   const remaining = startingGold() - spentGold();
   const purchases = data.shop.purchases||{};
+  const clsConst = activeClassConst();
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
-  <div class="intro">Itens filtrados pelo que o Bruxo pode usar: só Armas Simples e Armadura Leve aparecem (sem proficiência com armas Marciais ou armaduras Média/Pesada). Equipamento de aventura vale pra qualquer um.</div>
+  <div class="intro">Itens filtrados pelo que ${data.classe} pode usar (proficiências de arma e armadura da classe). Equipamento de aventura vale pra qualquer um. Armas Marciais e Armadura Média/Pesada ainda não estão na loja deste protótipo, mesmo se a classe tiver proficiência com elas.</div>
   <div class="wallet">
     <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
     <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
   </div>`;
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
-    if(cat.filterProf && cat.filterProf!==BRUXO.weaponProf && cat.filterProf!==BRUXO.armorProf) return;
+    if(cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
     html += `<h3>${catName}</h3>
     <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
     ${cat.items.map(it=>{
@@ -1450,7 +1592,10 @@ function renderShop(){
 }
 
 function renderSummary(){
-  const b = data.bruxo, t = data.tiefling;
+  const isBarbaro = data.classe==='Bárbaro';
+  const cls = activeClassData();
+  const clsConst = activeClassConst();
+  const t = data.tiefling;
   const bg = activeBgData();
   const bgConst = activeBgConst();
   const bgEquipA = resolvedEquipmentA(bgConst, bg);
@@ -1459,12 +1604,28 @@ function renderSummary(){
   const carMod = mod(finalScore('Carisma'));
   const conMod = mod(finalScore('Constituição'));
   const dexMod = mod(finalScore('Destreza'));
-  const hp = 8 + conMod;
-  const ac = 11 + dexMod;
+  const hp = isBarbaro ? (12 + conMod) : (8 + conMod);
+  const ac = isBarbaro ? (10 + dexMod + conMod) : (11 + dexMod);
   const dc = 8 + prof + carMod;
   const atkMagic = prof + carMod;
   const remaining = startingGold() - spentGold();
   const purchases = Object.entries(data.shop.purchases||{}).filter(([,q])=>q>0);
+
+  const combateContent = isBarbaro
+    ? `PV: ${hp} (1d12) · CA: ${ac} (sem armadura: 10 + Destreza + Constituição, ou o que for comprado na Loja)`
+    : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
+
+  const classFeatureBlock = isBarbaro ? `
+  <div class="summary-section"><h3>Fúria, Defesa sem Armadura e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
+  </div></div>` : `
+  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    <b>${cls.pactBoon}</b><br>
+    Truques: ${[...cls.cantrips, ...cls.tomoCantrips].map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 2 da classe">${s} (espécie)</span>`).join('')}<br>
+    Magias: ${[...cls.spells1, ...cls.tomoRituals.map(r=>r+' (ritual)')].map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>`;
 
   return `<h2>Ficha Concluída</h2>
   <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto.</div>
@@ -1476,17 +1637,12 @@ function renderSummary(){
   <div class="content">${ABILITIES.map(a=>`<span class="pill-static">${a} ${finalScore(a)} (${fmt(mod(finalScore(a)))})</span>`).join('')}</div></div>
 
   <div class="summary-section"><h3>Combate</h3>
-  <div class="content">PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}</div></div>
+  <div class="content">${combateContent}</div></div>
 
   <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">${b.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}${bgConst.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
+  <div class="content">${cls.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}${bgConst.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
 
-  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    <b>${b.pactBoon}</b><br>
-    Truques: ${[...b.cantrips, ...b.tomoCantrips].map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 2 da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias: ${[...b.spells1, ...b.tomoRituals.map(r=>r+' (ritual)')].map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>
+  ${classFeatureBlock}
 
   ${bgConst.feat.startsWith('Habilidoso') ? `
   <div class="summary-section"><h3>Talento — Habilidoso <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
@@ -1498,7 +1654,7 @@ function renderSummary(){
 
   <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
   <div class="content">
-    ${(b.equipment==='A'?BRUXO.equipmentA:[BRUXO.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    ${(cls.equipment==='A'?[...clsConst.equipmentA, clsConst.equipmentA_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
     ${(bg.equipment==='A'?[...bgEquipA, bgConst.equipmentA_gold+' PO']:[bgConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>
 
@@ -1527,6 +1683,7 @@ function resetWizard(){
     tiefling:{tamanho:null,legado:null,atributoLegado:null},
     pequenino:{},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
+    barbaro:{skills:[],maestria:[],equipment:null},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -1587,6 +1744,9 @@ function toggleTomoCantrip(v){ const s=data.bruxo.tomoCantrips; const i=s.indexO
 function toggleSpell1(v){ const s=data.bruxo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleTomoRitual(v){ const s=data.bruxo.tomoRituals; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function pickBruxoEquip(v){ data.bruxo.equipment=v; persist(); render(); }
+function toggleBarbaroSkill(v){ const s=data.barbaro.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleBarbaroMaestria(v){ const s=data.barbaro.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<BARBARO.maestriaCount)s.push(v); persist(); render(); }
+function pickBarbaroEquip(v){ data.barbaro.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
