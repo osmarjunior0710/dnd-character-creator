@@ -39,6 +39,11 @@
 <script src="data/backgrounds/fazendeiro.js"></script>
 <script src="data/backgrounds/marinheiro.js"></script>
 <script src="data/backgrounds/escriba.js"></script>
+<script src="data/backgrounds/mercador.js"></script>
+<script src="data/backgrounds/artesao.js"></script>
+<script src="data/backgrounds/artista.js"></script>
+<script src="data/backgrounds/guarda.js"></script>
+<script src="data/backgrounds/soldado.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -178,34 +183,47 @@
      lugares também.
 
    🔜 PRÓXIMA FRENTE — ANTECEDENTES (Origens/Backgrounds), em andamento:
-   - ✅ CONCLUÍDO (etapa 1 de 2): CHARLATAO e NOBRE foram movidos, SEM
-     mudar nenhum campo, para data/backgrounds/charlatao.js e
-     data/backgrounds/nobre.js (mesmo padrão de pasta usado pras espécies),
-     carregados via <script src="..."> antes deste script principal. Todo
-     o resto do código (BACKGROUND_INFO, ENABLED_BACKGROUNDS, templates que
-     leem CHARLATAO.tool / .equipmentA / .feat etc.) continua igual, porque
-     os nomes de campo não mudaram nessa etapa — só a localização do
-     arquivo.
-   - 16 antecedentes já foram extraídos e conferidos numa planilha .xlsx
-     (antecedentes_completo.xlsx, abas "Visão Geral" + "Notas de Design").
-     Achados relevantes pra próxima etapa (2 de 2, criar os 13 que faltam):
-     estrutura é bem mais uniforme que a das espécies (sempre: 3 atributos
-     sugeridos, 1 talento fixo — nunca escolha —, 2 perícias fixas, 1
-     ferramenta, equipamento A ou B). Duas exceções reais: (a) 5 dos 16
-     antecedentes (Artesão, Artista, Guarda, Nobre, Soldado) não têm
-     ferramenta fixa, e sim uma categoria a escolher (Ferramentas de
-     Artesão / Instrumento Musical / Kit de Jogos) — o Nobre já resolve
-     isso hoje com o campo solto kitJogosOpcoes, esse padrão precisa virar
-     algo reutilizável pros outros 4; (b) 3 antecedentes (Acólito, Guia,
-     Sábio) concedem o talento "Iniciado em Magia", que por si só exige
-     escolher truque + magia de 1º círculo de uma classe específica — mais
-     complexo que o Habilidoso, tratar com cuidado extra quando chegar a
-     vez desses 3.
-   - Falta decidir/aplicar o refactor de estrutura de dados pra suportar
-     essas exceções (ex.: campo "tool" virar objeto {tipo:'fixa'|'escolha',
-     ...} em vez de string solta) ANTES de criar os 13 novos — combinado
-     com o usuário fazer isso numa etapa separada, só depois de testar essa
-     migração pura do Charlatão/Nobre.
+   - ✅ CONCLUÍDO (13 de 16 antecedentes prontos): faltam só Acólito, Guia
+     e Sábio (categoria "Iniciado em Magia" — ver abaixo). Os outros 13 já
+     têm data/backgrounds/*.js: Charlatão, Nobre, Andarilho, Criminoso,
+     Eremita, Fazendeiro, Marinheiro, Escriba, Mercador, Artesão, Artista,
+     Guarda, Soldado.
+   - O código que só sabia lidar com Charlatão/Nobre foi generalizado:
+     BACKGROUND_DATA_KEY mapeia nome->chave em `data`, BACKGROUND_CONST
+     mapeia nome->objeto de dados fixos, activeBgData()/activeBgConst()
+     usam esses mapas. Toda função de antecedente (renderSimpleBackgroundDetail,
+     canAdvance/findFirstMissingGroup case 3, renderSummary, resetWizard)
+     passa por esses mapas — NUNCA hardcodar "data.antecedente==='X' ? ..."
+     de novo, só adicionar a entrada nos mapas.
+   - Ferramenta por escolha (Nobre, Artesão, Artista, Guarda, Soldado) usa
+     bgConst.ferramentaCategoria (nome da categoria, ex. "Kit de Jogos") +
+     bgConst.ferramentaOpcoes (array de variantes) em vez de bgConst.tool
+     fixo. O valor escolhido fica em bg.ferramentaEscolhida (era kitJogos
+     só pro Nobre antes; há migração em restore() pra saves antigos). O
+     placeholder literal "{ferramenta}" dentro de bgConst.equipmentA marca
+     onde a ferramenta escolhida entra na lista de equipamento — resolvido
+     por resolvedEquipmentA(bgConst, bg), reutilizada tanto no detalhe do
+     antecedente quanto no resumo final.
+   - Talento é sempre string única (bgConst.feat), tipo "Nome — descrição
+     curta". O bloco de "Talento Habilidoso — escolha 3 perícias" só
+     aparece quando bgConst.feat.startsWith('Habilidoso') — os outros
+     talentos fixos (Sortudo, Alerta, Curandeiro, Vigoroso, Valentão de
+     Taverna, Artifista, Músico, Atacante Selvagem) não têm escolha
+     nenhuma, só o texto informativo.
+   - PENDÊNCIA (não é sobre antecedentes, achada de bônus ao mexer no
+     resetWizard): "Criar Outro Personagem" só zera data.tiefling/
+     data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
+     draconato, elfo, gnomo, golias, aasimar) não são resetadas. Não é bug
+     introduzido agora, já existia; resolver quando for a vez de revisar
+     espécies de novo, não misturar com antecedentes.
+   - FALTAM (categoria "Iniciado em Magia", mais complexa): Acólito
+     (Clérigo), Guia (Druida), Sábio (Mago). O talento em si exige
+     escolher 1 truque + 1 magia de 1º círculo da lista daquela classe
+     específica — precisa extrair o texto exato do talento no PDF (cap. 5,
+     Talentos de Origem) antes de implementar, pra saber exatamente que
+     truques/magias cada versão permite escolher. Provavelmente precisa de
+     um novo tipo de escolha na UI (picker de truque + magia), não só
+     reaproveitar renderSimpleBackgroundDetail como está.
    - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
      pode virar data/shop.js separado depois, sem relação direta com os
      antecedentes — não misturar as duas tarefas.
@@ -219,7 +237,7 @@ const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano"
    2024) e estava faltando "Andarilho" e "Escriba" (existem). Lista abaixo
    conferida contra o Sumário do livro — são os 16 antecedentes oficiais. */
 const BACKGROUNDS = ["Acólito","Andarilho","Artesão","Artista","Charlatão","Criminoso","Eremita","Escriba","Fazendeiro","Guarda","Guia","Marinheiro","Mercador","Nobre","Sábio","Soldado"];
-const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremita","Fazendeiro","Marinheiro","Escriba"];
+const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremita","Fazendeiro","Marinheiro","Escriba","Mercador","Artesão","Artista","Guarda","Soldado"];
 
 /* Mapeia o nome oficial do antecedente (data.antecedente) pra sua chave em
    `data` (data.charlatao, data.andarilho etc.) e pro objeto de dados fixos
@@ -229,12 +247,14 @@ const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremi
 const BACKGROUND_DATA_KEY = {
   "Charlatão":"charlatao", "Nobre":"nobre", "Andarilho":"andarilho",
   "Criminoso":"criminoso", "Eremita":"eremita", "Fazendeiro":"fazendeiro",
-  "Marinheiro":"marinheiro", "Escriba":"escriba"
+  "Marinheiro":"marinheiro", "Escriba":"escriba", "Mercador":"mercador",
+  "Artesão":"artesao", "Artista":"artista", "Guarda":"guarda", "Soldado":"soldado"
 };
 const BACKGROUND_CONST = {
   "Charlatão":CHARLATAO, "Nobre":NOBRE, "Andarilho":ANDARILHO,
   "Criminoso":CRIMINOSO, "Eremita":EREMITA, "Fazendeiro":FAZENDEIRO,
-  "Marinheiro":MARINHEIRO, "Escriba":ESCRIBA
+  "Marinheiro":MARINHEIRO, "Escriba":ESCRIBA, "Mercador":MERCADOR,
+  "Artesão":ARTESAO, "Artista":ARTISTA, "Guarda":GUARDA, "Soldado":SOLDADO
 };
 
 /* ==========================================================================
@@ -347,6 +367,31 @@ const BACKGROUND_INFO = {
     talentoNome: "Habilidoso",
     talentoDesc: "ganha proficiência em 3 perícias ou ferramentas à sua escolha",
     fields: [["Perícias","Investigação, Percepção"],["Ferramenta","Suprimentos de Calígrafo"]]
+  },
+  "Mercador": {
+    talentoNome: "Sortudo",
+    talentoDesc: "ganha pontos de sorte pra dar Vantagem, impor Desvantagem, ou anular um crítico sofrido",
+    fields: [["Perícias","Lidar com Animais, Persuasão"],["Ferramenta","Ferramentas de Navegador"]]
+  },
+  "Artesão": {
+    talentoNome: "Artifista",
+    talentoDesc: "ganha proficiência com 3 Ferramentas de Artesão e desconto em itens não-mágicos",
+    fields: [["Perícias","Investigação, Persuasão"],["Ferramenta","Ferramentas de Artesão (escolha o tipo)"]]
+  },
+  "Artista": {
+    talentoNome: "Músico",
+    talentoDesc: "ganha proficiência com 3 Instrumentos Musicais e pode dar Inspiração Heroica",
+    fields: [["Perícias","Acrobacia, Atuação"],["Ferramenta","Instrumento Musical (escolha o tipo)"]]
+  },
+  "Guarda": {
+    talentoNome: "Alerta",
+    talentoDesc: "soma o bônus de proficiência na Iniciativa e pode trocá-la com a de um aliado",
+    fields: [["Perícias","Atletismo, Percepção"],["Ferramenta","Kit de Jogos (escolha o tipo)"]]
+  },
+  "Soldado": {
+    talentoNome: "Atacante Selvagem",
+    talentoDesc: "rola o dano da arma duas vezes e usa o melhor resultado, 1x por turno",
+    fields: [["Perícias","Atletismo, Intimidação"],["Ferramenta","Kit de Jogos (escolha o tipo)"]]
   }
 };
 
@@ -461,14 +506,19 @@ let data = {
   gnomo: { linhagem: null, atributoLinhagem: null },
   golias: { ancestralidade: null },
   aasimar: { tamanho: null },
-  charlatao: { abilityPlan: null, equipment: null, habilidoso: [] },
-  nobre: { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null },
-  andarilho: { abilityPlan: null, equipment: null, habilidoso: [] },
-  criminoso: { abilityPlan: null, equipment: null, habilidoso: [] },
-  eremita: { abilityPlan: null, equipment: null, habilidoso: [] },
-  fazendeiro: { abilityPlan: null, equipment: null, habilidoso: [] },
-  marinheiro: { abilityPlan: null, equipment: null, habilidoso: [] },
-  escriba: { abilityPlan: null, equipment: null, habilidoso: [] },
+  charlatao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  nobre: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  andarilho: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  criminoso: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  eremita: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  fazendeiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  marinheiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  escriba: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  mercador: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  artesao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  artista: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  guarda: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  soldado: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
@@ -512,15 +562,20 @@ async function restore(){
       if(!data.elfo) data.elfo = { pericia: null, linhagem: null };
       if(!data.gnomo) data.gnomo = { linhagem: null, atributoLinhagem: null };
       if(!data.golias) data.golias = { ancestralidade: null };
-      if(!data.nobre) data.nobre = { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null };
-      if(!data.andarilho) data.andarilho = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.criminoso) data.criminoso = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.eremita) data.eremita = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.fazendeiro) data.fazendeiro = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.marinheiro) data.marinheiro = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.escriba) data.escriba = { abilityPlan: null, equipment: null, habilidoso: [] };
-      if(!data.charlatao.habilidoso) data.charlatao.habilidoso = [];
-      if(!data.nobre.habilidoso) data.nobre.habilidoso = [];
+      /* Antecedentes: garante que TODA chave de BACKGROUND_DATA_KEY exista
+         em data (evita crash se um save antigo do navegador não tiver o
+         antecedente mais recente que a gente adicionou depois). */
+      Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
+        if(!data[key]) data[key] = { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null };
+        if(!data[key].habilidoso) data[key].habilidoso = [];
+        if(data[key].ferramentaEscolhida===undefined) data[key].ferramentaEscolhida = null;
+      });
+      /* Migração de saves antigos: o Nobre usava um campo próprio kitJogos
+         antes de virar o padrão genérico ferramentaEscolhida. */
+      if(data.nobre.kitJogos && !data.nobre.ferramentaEscolhida){
+        data.nobre.ferramentaEscolhida = data.nobre.kitJogos;
+        delete data.nobre.kitJogos;
+      }
       if(data.returnToSummary===undefined) data.returnToSummary = false;
       if(data.freeAbilityRule===undefined) data.freeAbilityRule = false;
     }
@@ -564,7 +619,7 @@ function findFirstMissingGroup(){
       const plan = bg.abilityPlan;
       const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
       if(!planOk) return 'grp-3-abilityplan';
-      if(data.antecedente==='Nobre' && !data.nobre.kitJogos) return 'grp-3-kitjogos';
+      if(activeBgConst().ferramentaOpcoes && !bg.ferramentaEscolhida) return 'grp-3-ferramenta';
       if(activeBgConst().feat.startsWith('Habilidoso') && bg.habilidoso.length!==3) return 'grp-3-habilidoso';
       if(!bg.equipment) return 'grp-3-equipment';
       return null;
@@ -649,9 +704,9 @@ function canAdvance(){
       const bg = activeBgData();
       const plan = bg.abilityPlan;
       const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
-      const kitOk = data.antecedente!=='Nobre' || !!data.nobre.kitJogos;
+      const ferramentaOk = !activeBgConst().ferramentaOpcoes || !!bg.ferramentaEscolhida;
       const habilidosoOk = !activeBgConst().feat.startsWith('Habilidoso') || bg.habilidoso.length===3;
-      return planOk && kitOk && !!bg.equipment && habilidosoOk;
+      return planOk && ferramentaOk && !!bg.equipment && habilidosoOk;
     }
     case 4: return !!data.especie;
     case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
@@ -669,7 +724,7 @@ function render(){
   if(step===0) html = renderClassStep();
   else if(step===1) html = renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
-  else if(step===3) html = (data.antecedente==='Nobre') ? renderNobreDetail() : renderSimpleBackgroundDetail(activeBgConst());
+  else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
   else if(step===5) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
   else if(step===6) html = renderAttrs();
@@ -1127,68 +1182,49 @@ function renderBackgroundStep(){
   ${nav(canAdvance())}`;
 }
 
-function renderNobreDetail(){
-  const nb = data.nobre;
-  const plan = nb.abilityPlan;
-  return `<h2>Nobre — Detalhes do Antecedente</h2>
-  <div class="intro">Talento: ${NOBRE.feat}<br>Perícias: ${NOBRE.skills.join(', ')}<br>Ferramenta: Kit de Jogos (escolha o tipo abaixo)</div>
-  ${renderAbilityPlanBlock(NOBRE, plan)}
-
-  <h3 id="grp-3-kitjogos">Ferramenta — escolha o tipo de Kit de Jogos</h3>
-  <div class="intro" style="margin-bottom:8px;">O livro deixa livre entre as variantes vendidas no capítulo de Equipamento.</div>
-  <div class="check-list" style="margin-bottom:20px;">
-    ${NOBRE.kitJogosOpcoes.map(k=>`<div class="check-pill ${nb.kitJogos===k?'selected':''}" data-pick="${k}" data-fn="pickKitJogos">${k}</div>`).join('')}
-  </div>
-
-  <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
-  <div class="intro" style="margin-bottom:8px;">História e Persuasão (perícias) e o Kit de Jogos escolhido acima (ferramenta) já vêm do Nobre e não aparecem aqui.</div>
-  ${groupedChoiceList([
-    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!NOBRE.skills.includes(s))),
-    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!=='Kit de Jogos (à escolha)')}
-  ], nb.habilidoso, 3, 'toggleHabilidoso')}
-  <div class="counter ${nb.habilidoso.length===3?'ok':''}">${nb.habilidoso.length}/3 escolhidos</div>
-
-  <h3 id="grp-3-equipment">Equipamento Inicial</h3>
-  <div class="option-block ${nb.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${(nb.kitJogos?[nb.kitJogos]:['Kit de Jogos']).concat(NOBRE.equipmentA.slice(1)).join(', ')}, ${NOBRE.equipmentA_gold} PO</p>
-    <button class="pick-btn" data-pick="A" data-fn="pickBgEquip">${nb.equipment==='A'?'Selecionado':'Escolher'}</button>
-  </div>
-  <div class="option-block ${nb.equipment==='B'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${NOBRE.equipmentB_gold} PO</p>
-    <button class="pick-btn" data-pick="B" data-fn="pickBgEquip">${nb.equipment==='B'?'Selecionado':'Escolher'}</button>
-  </div>
-  ${nav(canAdvance())}`;
+/* Antecedente "genérico": cobre TODO antecedente, incluindo os de
+   ferramenta-por-escolha (Nobre, Artesão, Artista, Guarda, Soldado — via
+   bgConst.ferramentaCategoria/ferramentaOpcoes) e os de talento fixo sem
+   escolha nenhuma (Sortudo, Alerta, Curandeiro, Vigoroso, Valentão de
+   Taverna etc. — nesse caso o bloco de Habilidoso simplesmente não
+   aparece). O placeholder "{ferramenta}" dentro de bgConst.equipmentA é
+   substituído pelo tipo escolhido (ou pelo nome da categoria, se ainda não
+   escolheu) — ver resolvedEquipmentA(). */
+function resolvedEquipmentA(bgConst, bg){
+  if(!bgConst.ferramentaOpcoes) return bgConst.equipmentA;
+  const chosen = bg.ferramentaEscolhida || bgConst.ferramentaCategoria;
+  return bgConst.equipmentA.map(item => item==='{ferramenta}' ? chosen : item);
 }
-
-/* Antecedente "genérico": cobre todo antecedente que NÃO precisa de um
-   passo extra pra escolher o TIPO de ferramenta (isso ainda é só o Nobre,
-   com renderNobreDetail() logo abaixo — os próximos antecedentes de
-   ferramenta-por-escolha, tipo Artesão/Artista/Guarda/Soldado, vão herdar
-   desse mesmo padrão numa etapa futura). Serve tanto pra quem tem o
-   talento Habilidoso (mostra a lista de escolha de 3 perícias/ferramentas)
-   quanto pra quem tem talento fixo sem escolha nenhuma (Sortudo, Alerta,
-   Curandeiro, Vigoroso, Valentão de Taverna etc.) — nesse caso o bloco de
-   Habilidoso simplesmente não aparece. */
 function renderSimpleBackgroundDetail(bgConst){
   const bg = activeBgData();
   const plan = bg.abilityPlan;
   const isHabilidoso = bgConst.feat.startsWith('Habilidoso');
+  const hasToolChoice = !!bgConst.ferramentaOpcoes;
+  const excludedTool = hasToolChoice ? (bg.ferramentaEscolhida || bgConst.ferramentaCategoria) : bgConst.tool;
+  const equipA = resolvedEquipmentA(bgConst, bg);
   return `<h2>${bgConst.nome} — Detalhes do Antecedente</h2>
-  <div class="intro">Talento: ${bgConst.feat}<br>Perícias: ${bgConst.skills.join(', ')}<br>Ferramenta: ${bgConst.tool}</div>
+  <div class="intro">Talento: ${bgConst.feat}<br>Perícias: ${bgConst.skills.join(', ')}<br>Ferramenta: ${hasToolChoice ? bgConst.ferramentaCategoria+' (escolha o tipo abaixo)' : bgConst.tool}</div>
   ${renderAbilityPlanBlock(bgConst, plan)}
+
+  ${hasToolChoice ? `
+  <h3 id="grp-3-ferramenta">Ferramenta — escolha o tipo de ${bgConst.ferramentaCategoria}</h3>
+  <div class="intro" style="margin-bottom:8px;">O livro deixa livre entre as variantes vendidas no capítulo de Equipamento.</div>
+  <div class="check-list" style="margin-bottom:20px;">
+    ${bgConst.ferramentaOpcoes.map(k=>`<div class="check-pill ${bg.ferramentaEscolhida===k?'selected':''}" data-pick="${k}" data-fn="pickFerramentaEscolhida">${k}</div>`).join('')}
+  </div>` : ''}
 
   ${isHabilidoso ? `
   <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
-  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${bgConst.tool} (ferramenta) já vêm do ${bgConst.nome} e não aparecem aqui.</div>
+  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome} e não aparecem aqui.</div>
   ${groupedChoiceList([
     ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!bgConst.skills.includes(s))),
-    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==bgConst.tool)}
+    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==excludedTool)}
   ], bg.habilidoso, 3, 'toggleHabilidoso')}
   <div class="counter ${bg.habilidoso.length===3?'ok':''}">${bg.habilidoso.length}/3 escolhidos</div>` : ''}
 
   <h3 id="grp-3-equipment">Equipamento Inicial</h3>
   <div class="option-block ${bg.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${bgConst.equipmentA.join(', ')}, ${bgConst.equipmentA_gold} PO</p>
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${equipA.join(', ')}, ${bgConst.equipmentA_gold} PO</p>
     <button class="pick-btn" data-pick="A" data-fn="pickBgEquip">${bg.equipment==='A'?'Selecionado':'Escolher'}</button>
   </div>
   <div class="option-block ${bg.equipment==='B'?'selected':''}">
@@ -1377,9 +1413,7 @@ function renderSummary(){
   const b = data.bruxo, t = data.tiefling;
   const bg = activeBgData();
   const bgConst = activeBgConst();
-  const bgEquipA = data.antecedente==='Nobre'
-    ? [data.nobre.kitJogos || 'Kit de Jogos', ...NOBRE.equipmentA.slice(1)]
-    : bgConst.equipmentA;
+  const bgEquipA = resolvedEquipmentA(bgConst, bg);
   const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
   const prof = 2;
   const carMod = mod(finalScore('Carisma'));
@@ -1441,13 +1475,17 @@ function renderSummary(){
 function resetWizard(){
   if(!confirm('Isso apaga o personagem atual e começa do zero. Continuar?')) return;
   step = 0;
-  data = { especie:null, antecedente:null, classe:null,
+  const bgDataInit = {};
+  Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
+    bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null };
+  });
+  // NOTA: igual antes, esse reset só zera tiefling/pequenino entre as espécies
+  // (pendência antiga, não introduzida agora — revisar quando mexer em espécies).
+  data = Object.assign({ especie:null, antecedente:null, classe:null,
     tiefling:{tamanho:null,legado:null,atributoLegado:null},
     pequenino:{},
-    charlatao:{abilityPlan:null,equipment:null,habilidoso:[]},
-    nobre:{abilityPlan:null,equipment:null,habilidoso:[],kitJogos:null},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
-    attrs:{}, shop:{purchases:{}}, returnToSummary:false };
+    attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
 
@@ -1613,7 +1651,7 @@ function pickPlus2(v){ const bg=activeBgData(); bg.abilityPlan.plus2=v; if(bg.ab
 function pickPlus1(v){ activeBgData().abilityPlan.plus1=v; persist(); render(); }
 function pickBgEquip(v){ activeBgData().equipment=v; persist(); render(); }
 function toggleHabilidoso(v){ const s=activeBgData().habilidoso; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<3)s.push(v); persist(); render(); }
-function pickKitJogos(v){ data.nobre.kitJogos=v; persist(); render(); }
+function pickFerramentaEscolhida(v){ activeBgData().ferramentaEscolhida=v; persist(); render(); }
 
 
 function setAttr(ability, value){
