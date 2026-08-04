@@ -31,6 +31,14 @@
 <script src="data/species/elfo.js"></script>
 <script src="data/species/gnomo.js"></script>
 <script src="data/species/golias.js"></script>
+<script src="data/backgrounds/charlatao.js"></script>
+<script src="data/backgrounds/nobre.js"></script>
+<script src="data/backgrounds/andarilho.js"></script>
+<script src="data/backgrounds/criminoso.js"></script>
+<script src="data/backgrounds/eremita.js"></script>
+<script src="data/backgrounds/fazendeiro.js"></script>
+<script src="data/backgrounds/marinheiro.js"></script>
+<script src="data/backgrounds/escriba.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -85,10 +93,20 @@
      o campo "cont" pra listar o conteúdo (evita duplicar comprando 2 kits
      parecidos, tipo Aventureiro + Explorador de Masmorras).
    - Ordem das etapas (mudar com cuidado, tudo sincronizado):
-     0 Espécie -> 1 detalhe espécie -> 2 Antecedente -> 3 detalhe antecedente
-     -> 4 Classe -> 5 detalhe classe -> 6 Atributos -> 7 Loja -> 8 Resumo.
-     Se adicionar/mudar etapa, atualizar TOTAL_STEPS, render(), canAdvance()
-     E findFirstMissingGroup() juntos (os 3 têm um switch/case por step).
+     0 Classe -> 1 detalhe classe -> 2 Antecedente -> 3 detalhe antecedente
+     -> 4 Espécie -> 5 detalhe espécie -> 6 Atributos -> 7 Loja -> 8 Resumo.
+     ATENÇÃO: essa ordem foi TROCADA (era Espécie->Antecedente->Classe) pra
+     bater com a ordem do livro (Classe->Antecedente->Espécie) — o motivo é
+     evitar duplicação de perícias/talentos/proficiências entre as 3 etapas
+     (o livro assume que você já sabe a classe e o antecedente antes de
+     escolher a espécie, pra não repetir escolha de algo que a espécie
+     também poderia dar). Os grupos de campo (id="grp-N-nome") também foram
+     renumerados nessa troca: prefixo grp-0- e grp-1- agora são da Classe,
+     e prefixo grp-4- e grp-5- agora são da Espécie (Antecedente ficou nos
+     prefixos grp-2- e grp-3-, não mudou de posição). Se adicionar/mudar
+     etapa, atualizar
+     TOTAL_STEPS, render(), canAdvance() E findFirstMissingGroup() juntos
+     (os 3 têm um switch/case por step).
    - findFirstMissingGroup(): cada grupo de escolha tem id="grp-{step}-nome"
      pra permitir o scroll+destaque automático. Grupo novo = id novo.
    - editSection(idx) / returnToSummary: sistema de "editar e voltar pro
@@ -107,23 +125,49 @@
      qualquer edição, antes de entregar — erro de sintaxe JS às vezes só
      aparece assim, o resto do app quebra silenciosamente.
 
+   REGRA DA CASA — Sem Restrição de Antecedente (data.freeAbilityRule,
+   default FALSE = comportamento oficial do livro, onde os bônus de
+   atributo do antecedente ficam travados nos 3 "suggestedAbilities"
+   daquele antecedente específico). Se o jogador MARCAR o checkbox na etapa
+   de atributos do antecedente, libera escolher entre qualquer um dos 6
+   atributos — é uma regra da casa, não a oficial. Lógica centralizada em
+   allowedAbilitiesFor()/sanitizeAbilityPlans()/toggleFreeAbilityRule(), e a
+   UI (bloco de +2/+1 ou +1/+1/+1) foi extraída pra
+   renderAbilityPlanBlock(bgConst, plan) — usada por Charlatão e Nobre, que
+   antes tinham esse bloco inteiro duplicado. Qualquer antecedente novo deve
+   reusar essa mesma função, não duplicar de novo.
+   ATENÇÃO CSS pra qualquer <input> novo (checkbox, radio etc.) que a gente
+   adicionar: css/styles.css tem a regra global "select, input{ width:100%;
+   ... }" (pensada pros campos de texto/atributo da Loja/Atributos). Isso
+   estica QUALQUER input pra 100% do container, inclusive checkbox — sempre
+   sobrescrever com width fixo em px (e idealmente height igual) no style
+   inline desse input específico, tipo o que renderAbilityPlanBlock faz.
+   Foi exatamente isso que causou o bug visual do checkbox "Regra da casa"
+   (texto aparecendo longe, como se tivesse "pulado de coluna") — não era
+   nada relacionado a .intro, label ou colunas, só o width:100% herdado.
+
    ATUALIZAÇÃO DE ARQUITETURA (reorganização em andamento, um arquivo por
    vez, com o usuário testando cada passo):
    - CSS já foi extraído para css/styles.css (linkado no <head>).
    - SPELL_DETAILS já foi extraído para data/spells.js (carregado via
      <script src="data/spells.js"> ANTES deste <script> principal, então a
      const SPELL_DETAILS já existe globalmente quando este arquivo roda).
-   - Todas as 10 espécies do PHB 2024 já têm data/species/*.js: Tiferino,
-     Pequenino, Aasimar, Anão, Orc, Humano (feitas) — Draconato, Elfo, Gnomo,
-     Golias ainda faltam (têm "subespécie" com escalonamento por nível,
-     seguir o molde do Tiferino). Padrão de dados: {nome, flavor, tipo,
-     tamanho:{opcoes,alturas}, deslocamento, visaoNoEscuro, tracosFixos:
-     [{nome,resumo,concede:[{tipo,nome}]}], subespecie:{nome,
-     escolhidaNaCriacao,opcoes:[{nome,nivel1,nivel3,nivel5}]} ou null}.
-   - data/feats.js (86 talentos) e data/skills.js (perícia->atributo) também
+   - ✅ CONCLUÍDO: as 10 espécies do PHB 2024 têm data/species/*.js: Tiferino,
+     Pequenino, Aasimar, Anão, Orc, Humano, Draconato, Elfo, Gnomo, Golias.
+     Padrão de dados: {nome, flavor, tipo, tamanho:{opcoes,alturas},
+     deslocamento, visaoNoEscuro, tracosFixos:[{nome,resumo,
+     concede:[{tipo,nome}]}], subespecie:{nome, escolhidaNaCriacao,
+     semEscalonamento?, opcoes:[{nome,nivel1,nivel3,nivel5}]} ou null}. Uso
+     de "concede" é só pra item que existe numa lista nossa (magia/truque
+     hoje) — vira pill com ⓘ; texto solto (resistência, PV extra etc.) fica
+     só em `resumo`, sem pill. Tamanho com 1 opção só = pill pré-selecionada
+     e travada (tamanhoPickList cuida disso sozinho, sem texto de aviso).
+   - data/feats.js (85 talentos) e data/skills.js (perícia->atributo) também
      já existem — usados pelo Humano (Hábil/Versátil) e pelo Habilidoso dos
-     antecedentes, que agora agrupam perícias por atributo via
-     skillGroupsByAbility()/groupedSinglePick().
+     antecedentes, que agrupam perícias por atributo via
+     skillGroupsByAbility()/groupedSinglePick() — rótulo do atributo e as
+     pills ficam na MESMA linha (ex: "Força: Atletismo Acrobacia"), sem
+     cabeçalho separado.
    - PENDÊNCIA (avisada pelo usuário, resolver só quando revisarmos CLASSES,
      não mexer nisso fora dessa fase): a escolha de perícias do Bruxo
      (renderBruxoDetail) e a lista de perícias na Ficha Concluída
@@ -132,10 +176,39 @@
      revisar o Bruxo, aplicar groupedSinglePick/skillGroupsByAbility (ou
      uma variante multi-select, já que o Bruxo escolhe 2) nesses dois
      lugares também.
-   - Próximos candidatos a extrair para data/: CHARLATAO, NOBRE, SHOP (cada
-     um vira um <script src="data/nome.js"> adicional, na mesma ordem,
-     antes deste script principal). Ainda não fazer isso sem confirmar com
-     o usuário — está sendo feito devagar, um arquivo por vez.
+
+   🔜 PRÓXIMA FRENTE — ANTECEDENTES (Origens/Backgrounds), em andamento:
+   - ✅ CONCLUÍDO (etapa 1 de 2): CHARLATAO e NOBRE foram movidos, SEM
+     mudar nenhum campo, para data/backgrounds/charlatao.js e
+     data/backgrounds/nobre.js (mesmo padrão de pasta usado pras espécies),
+     carregados via <script src="..."> antes deste script principal. Todo
+     o resto do código (BACKGROUND_INFO, ENABLED_BACKGROUNDS, templates que
+     leem CHARLATAO.tool / .equipmentA / .feat etc.) continua igual, porque
+     os nomes de campo não mudaram nessa etapa — só a localização do
+     arquivo.
+   - 16 antecedentes já foram extraídos e conferidos numa planilha .xlsx
+     (antecedentes_completo.xlsx, abas "Visão Geral" + "Notas de Design").
+     Achados relevantes pra próxima etapa (2 de 2, criar os 13 que faltam):
+     estrutura é bem mais uniforme que a das espécies (sempre: 3 atributos
+     sugeridos, 1 talento fixo — nunca escolha —, 2 perícias fixas, 1
+     ferramenta, equipamento A ou B). Duas exceções reais: (a) 5 dos 16
+     antecedentes (Artesão, Artista, Guarda, Nobre, Soldado) não têm
+     ferramenta fixa, e sim uma categoria a escolher (Ferramentas de
+     Artesão / Instrumento Musical / Kit de Jogos) — o Nobre já resolve
+     isso hoje com o campo solto kitJogosOpcoes, esse padrão precisa virar
+     algo reutilizável pros outros 4; (b) 3 antecedentes (Acólito, Guia,
+     Sábio) concedem o talento "Iniciado em Magia", que por si só exige
+     escolher truque + magia de 1º círculo de uma classe específica — mais
+     complexo que o Habilidoso, tratar com cuidado extra quando chegar a
+     vez desses 3.
+   - Falta decidir/aplicar o refactor de estrutura de dados pra suportar
+     essas exceções (ex.: campo "tool" virar objeto {tipo:'fixa'|'escolha',
+     ...} em vez de string solta) ANTES de criar os 13 novos — combinado
+     com o usuário fazer isso numa etapa separada, só depois de testar essa
+     migração pura do Charlatão/Nobre.
+   - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
+     pode virar data/shop.js separado depois, sem relação direta com os
+     antecedentes — não misturar as duas tarefas.
    ========================================================================== */
 
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
@@ -146,7 +219,23 @@ const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano"
    2024) e estava faltando "Andarilho" e "Escriba" (existem). Lista abaixo
    conferida contra o Sumário do livro — são os 16 antecedentes oficiais. */
 const BACKGROUNDS = ["Acólito","Andarilho","Artesão","Artista","Charlatão","Criminoso","Eremita","Escriba","Fazendeiro","Guarda","Guia","Marinheiro","Mercador","Nobre","Sábio","Soldado"];
-const ENABLED_BACKGROUNDS = ["Charlatão","Nobre"];
+const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremita","Fazendeiro","Marinheiro","Escriba"];
+
+/* Mapeia o nome oficial do antecedente (data.antecedente) pra sua chave em
+   `data` (data.charlatao, data.andarilho etc.) e pro objeto de dados fixos
+   (CHARLATAO, ANDARILHO etc.). Toda função genérica de antecedente usa
+   esses 2 mapas — NUNCA hardcodar "data.antecedente==='Nobre' ? NOBRE :
+   CHARLATAO" de novo em lugar nenhum; adicionar aqui em vez disso. */
+const BACKGROUND_DATA_KEY = {
+  "Charlatão":"charlatao", "Nobre":"nobre", "Andarilho":"andarilho",
+  "Criminoso":"criminoso", "Eremita":"eremita", "Fazendeiro":"fazendeiro",
+  "Marinheiro":"marinheiro", "Escriba":"escriba"
+};
+const BACKGROUND_CONST = {
+  "Charlatão":CHARLATAO, "Nobre":NOBRE, "Andarilho":ANDARILHO,
+  "Criminoso":CRIMINOSO, "Eremita":EREMITA, "Fazendeiro":FAZENDEIRO,
+  "Marinheiro":MARINHEIRO, "Escriba":ESCRIBA
+};
 
 /* ==========================================================================
    ÍNDICE DE PÁGINAS DO LIVRO (PHB 2024, tradução PT-BR) — só pra acelerar a
@@ -215,32 +304,6 @@ const ALL_1ST_RITUAL = ["Alarme","Compreender Idiomas","Convocar Familiar","Dete
 
 
 
-const CHARLATAO = {
-  suggestedAbilities: ["Destreza","Constituição","Carisma"],
-  feat: "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
-  skills: ["Enganação","Prestidigitação"],
-  tool: "Kit de Falsificação",
-  equipmentA: ["Kit de Falsificação","Fantasia","Roupas Finas"],
-  equipmentA_gold: 15,
-  equipmentB_gold: 50
-};
-
-/* Nobre — PHB 2024, pág. 184 (impresso). Diferente do Charlatão, a
-   ferramenta não é fixa: o livro manda "Escolha um tipo de Kit de Jogos"
-   (pág. 221 lista as variantes: Dados, Xadrez-do-Dragão, Baralho, Conjunto
-   do Jogo dos Três Dragões). Por isso tem um campo extra kitJogos com sua
-   própria escolha, além do plano de atributos/Habilidoso/equipamento que
-   já existiam pro Charlatão (reaproveitados via activeBgData()). */
-const NOBRE = {
-  suggestedAbilities: ["Força","Inteligência","Carisma"],
-  feat: "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
-  skills: ["História","Persuasão"],
-  kitJogosOpcoes: ["Dados","Xadrez-do-Dragão","Baralho","Conjunto do Jogo dos Três Dragões"],
-  equipmentA: ["Kit de Jogos (o escolhido)","Perfume","Roupas Finas"],
-  equipmentA_gold: 29,
-  equipmentB_gold: 50
-};
-
 const STANDARD_ARRAY = [15,14,13,12,10,8];
 const ABILITIES = ["Força","Destreza","Constituição","Inteligência","Sabedoria","Carisma"];
 
@@ -254,6 +317,36 @@ const BACKGROUND_INFO = {
     talentoNome: "Habilidoso",
     talentoDesc: "ganha proficiência em 3 perícias ou ferramentas à sua escolha",
     fields: [["Perícias","História, Persuasão"],["Ferramenta","Kit de Jogos (escolha o tipo)"]]
+  },
+  "Andarilho": {
+    talentoNome: "Sortudo",
+    talentoDesc: "ganha pontos de sorte pra dar Vantagem, impor Desvantagem, ou anular um crítico sofrido",
+    fields: [["Perícias","Furtividade, Intuição"],["Ferramenta","Ferramentas de Ladrão"]]
+  },
+  "Criminoso": {
+    talentoNome: "Alerta",
+    talentoDesc: "soma o bônus de proficiência na Iniciativa e pode trocá-la com a de um aliado",
+    fields: [["Perícias","Furtividade, Prestidigitação"],["Ferramenta","Ferramentas de Ladrão"]]
+  },
+  "Eremita": {
+    talentoNome: "Curandeiro",
+    talentoDesc: "usa o Kit de Curandeiro pra tratar aliados, curando Dados de Vida extras",
+    fields: [["Perícias","Medicina, Religião"],["Ferramenta","Kit de Herbalismo"]]
+  },
+  "Fazendeiro": {
+    talentoNome: "Vigoroso",
+    talentoDesc: "ganha PV máximo extra ao pegar o talento e a cada nível seguinte",
+    fields: [["Perícias","Lidar com Animais, Natureza"],["Ferramenta","Ferramentas de Carpinteiro"]]
+  },
+  "Marinheiro": {
+    talentoNome: "Valentão de Taverna",
+    talentoDesc: "Ataque Desarmado mais forte, com proficiência em armas improvisadas",
+    fields: [["Perícias","Acrobacia, Percepção"],["Ferramenta","Ferramentas de Navegador"]]
+  },
+  "Escriba": {
+    talentoNome: "Habilidoso",
+    talentoDesc: "ganha proficiência em 3 perícias ou ferramentas à sua escolha",
+    fields: [["Perícias","Investigação, Percepção"],["Ferramenta","Suprimentos de Calígrafo"]]
   }
 };
 
@@ -370,10 +463,17 @@ let data = {
   aasimar: { tamanho: null },
   charlatao: { abilityPlan: null, equipment: null, habilidoso: [] },
   nobre: { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null },
+  andarilho: { abilityPlan: null, equipment: null, habilidoso: [] },
+  criminoso: { abilityPlan: null, equipment: null, habilidoso: [] },
+  eremita: { abilityPlan: null, equipment: null, habilidoso: [] },
+  fazendeiro: { abilityPlan: null, equipment: null, habilidoso: [] },
+  marinheiro: { abilityPlan: null, equipment: null, habilidoso: [] },
+  escriba: { abilityPlan: null, equipment: null, habilidoso: [] },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
-  returnToSummary: false
+  returnToSummary: false,
+  freeAbilityRule: false
 };
 
 function mod(score){ return Math.floor((score-10)/2); }
@@ -413,9 +513,16 @@ async function restore(){
       if(!data.gnomo) data.gnomo = { linhagem: null, atributoLinhagem: null };
       if(!data.golias) data.golias = { ancestralidade: null };
       if(!data.nobre) data.nobre = { abilityPlan: null, equipment: null, habilidoso: [], kitJogos: null };
+      if(!data.andarilho) data.andarilho = { abilityPlan: null, equipment: null, habilidoso: [] };
+      if(!data.criminoso) data.criminoso = { abilityPlan: null, equipment: null, habilidoso: [] };
+      if(!data.eremita) data.eremita = { abilityPlan: null, equipment: null, habilidoso: [] };
+      if(!data.fazendeiro) data.fazendeiro = { abilityPlan: null, equipment: null, habilidoso: [] };
+      if(!data.marinheiro) data.marinheiro = { abilityPlan: null, equipment: null, habilidoso: [] };
+      if(!data.escriba) data.escriba = { abilityPlan: null, equipment: null, habilidoso: [] };
       if(!data.charlatao.habilidoso) data.charlatao.habilidoso = [];
       if(!data.nobre.habilidoso) data.nobre.habilidoso = [];
       if(data.returnToSummary===undefined) data.returnToSummary = false;
+      if(data.freeAbilityRule===undefined) data.freeAbilityRule = false;
     }
   }catch(e){}
 }
@@ -439,34 +546,18 @@ function back(){ if(step>0) goTo(step-1); }
 
 function findFirstMissingGroup(){
   switch(step){
-    case 0: return data.especie ? null : 'grp-0-especie';
-    case 1:
-      if(data.especie==='Pequenino') return null;
-      if(data.especie==='Anão') return null;
-      if(data.especie==='Orc') return null;
-      if(data.especie==='Humano'){
-        if(!data.humano.tamanho) return 'grp-1-tamanho';
-        if(!data.humano.pericia) return 'grp-1-pericia';
-        if(!data.humano.talento) return 'grp-1-talento';
-        return null;
-      }
-      if(data.especie==='Draconato') return data.draconato.heranca ? null : 'grp-1-heranca';
-      if(data.especie==='Elfo'){
-        if(!data.elfo.pericia) return 'grp-1-pericia';
-        if(!data.elfo.linhagem) return 'grp-1-linhagem';
-        return null;
-      }
-      if(data.especie==='Gnomo'){
-        if(!data.gnomo.linhagem) return 'grp-1-linhagem';
-        if(!data.gnomo.atributoLinhagem) return 'grp-1-atributo';
-        return null;
-      }
-      if(data.especie==='Golias') return data.golias.ancestralidade ? null : 'grp-1-ancestralidade';
-      if(data.especie==='Aasimar') return data.aasimar.tamanho ? null : 'grp-1-tamanho';
-      if(!data.tiefling.tamanho) return 'grp-1-tamanho';
-      if(!data.tiefling.legado) return 'grp-1-legado';
-      if(!data.tiefling.atributoLegado) return 'grp-1-atributo';
+    case 0: return data.classe ? null : 'grp-0-classe';
+    case 1: {
+      const b = data.bruxo;
+      if(b.skills.length!==2) return 'grp-1-skills';
+      if(!b.pactBoon) return 'grp-1-pact';
+      if(b.cantrips.length!==2) return 'grp-1-cantrips';
+      if(b.pactBoon==='Pacto do Tomo' && b.tomoCantrips.length!==3) return 'grp-1-tomocantrips';
+      if(b.spells1.length!==2) return 'grp-1-spells1';
+      if(b.pactBoon==='Pacto do Tomo' && b.tomoRituals.length!==2) return 'grp-1-tomorituals';
+      if(!b.equipment) return 'grp-1-equipment';
       return null;
+    }
     case 2: return data.antecedente ? null : 'grp-2-antecedente';
     case 3: {
       const bg = activeBgData();
@@ -474,22 +565,38 @@ function findFirstMissingGroup(){
       const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
       if(!planOk) return 'grp-3-abilityplan';
       if(data.antecedente==='Nobre' && !data.nobre.kitJogos) return 'grp-3-kitjogos';
-      if(bg.habilidoso.length!==3) return 'grp-3-habilidoso';
+      if(activeBgConst().feat.startsWith('Habilidoso') && bg.habilidoso.length!==3) return 'grp-3-habilidoso';
       if(!bg.equipment) return 'grp-3-equipment';
       return null;
     }
-    case 4: return data.classe ? null : 'grp-4-classe';
-    case 5: {
-      const b = data.bruxo;
-      if(b.skills.length!==2) return 'grp-5-skills';
-      if(!b.pactBoon) return 'grp-5-pact';
-      if(b.cantrips.length!==2) return 'grp-5-cantrips';
-      if(b.pactBoon==='Pacto do Tomo' && b.tomoCantrips.length!==3) return 'grp-5-tomocantrips';
-      if(b.spells1.length!==2) return 'grp-5-spells1';
-      if(b.pactBoon==='Pacto do Tomo' && b.tomoRituals.length!==2) return 'grp-5-tomorituals';
-      if(!b.equipment) return 'grp-5-equipment';
+    case 4: return data.especie ? null : 'grp-4-especie';
+    case 5:
+      if(data.especie==='Pequenino') return null;
+      if(data.especie==='Anão') return null;
+      if(data.especie==='Orc') return null;
+      if(data.especie==='Humano'){
+        if(!data.humano.tamanho) return 'grp-5-tamanho';
+        if(!data.humano.pericia) return 'grp-5-pericia';
+        if(!data.humano.talento) return 'grp-5-talento';
+        return null;
+      }
+      if(data.especie==='Draconato') return data.draconato.heranca ? null : 'grp-5-heranca';
+      if(data.especie==='Elfo'){
+        if(!data.elfo.pericia) return 'grp-5-pericia';
+        if(!data.elfo.linhagem) return 'grp-5-linhagem';
+        return null;
+      }
+      if(data.especie==='Gnomo'){
+        if(!data.gnomo.linhagem) return 'grp-5-linhagem';
+        if(!data.gnomo.atributoLinhagem) return 'grp-5-atributo';
+        return null;
+      }
+      if(data.especie==='Golias') return data.golias.ancestralidade ? null : 'grp-5-ancestralidade';
+      if(data.especie==='Aasimar') return data.aasimar.tamanho ? null : 'grp-5-tamanho';
+      if(!data.tiefling.tamanho) return 'grp-5-tamanho';
+      if(!data.tiefling.legado) return 'grp-5-legado';
+      if(!data.tiefling.atributoLegado) return 'grp-5-atributo';
       return null;
-    }
     case 6: {
       const missingAbility = ABILITIES.find(a=>data.attrs[a]===undefined);
       return missingAbility ? 'grp-6-attr-'+missingAbility : null;
@@ -527,18 +634,8 @@ function returnToSummaryNow(){
 
 function canAdvance(){
   switch(step){
-    case 0: return !!data.especie;
-    case 1: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
-    case 2: return !!data.antecedente;
-    case 3: {
-      const bg = activeBgData();
-      const plan = bg.abilityPlan;
-      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
-      const kitOk = data.antecedente!=='Nobre' || !!data.nobre.kitJogos;
-      return planOk && kitOk && !!bg.equipment && bg.habilidoso.length===3;
-    }
-    case 4: return !!data.classe;
-    case 5: {
+    case 0: return !!data.classe;
+    case 1: {
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -547,6 +644,17 @@ function canAdvance(){
         (b.pactBoon!=='Pacto do Tomo' || b.tomoRituals.length===2) &&
         !!b.equipment;
     }
+    case 2: return !!data.antecedente;
+    case 3: {
+      const bg = activeBgData();
+      const plan = bg.abilityPlan;
+      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
+      const kitOk = data.antecedente!=='Nobre' || !!data.nobre.kitJogos;
+      const habilidosoOk = !activeBgConst().feat.startsWith('Habilidoso') || bg.habilidoso.length===3;
+      return planOk && kitOk && !!bg.equipment && habilidosoOk;
+    }
+    case 4: return !!data.especie;
+    case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
     case 6: return ABILITIES.every(a=>data.attrs[a]!==undefined);
     case 7: return true;
     case 8: return true;
@@ -558,12 +666,12 @@ function render(){
   renderProgress();
   const c = document.getElementById('cardContent');
   let html = '';
-  if(step===0) html = renderSpeciesStep();
-  else if(step===1) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
+  if(step===0) html = renderClassStep();
+  else if(step===1) html = renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
-  else if(step===3) html = (data.antecedente==='Nobre') ? renderNobreDetail() : renderCharlatanDetail();
-  else if(step===4) html = renderClassStep();
-  else if(step===5) html = renderBruxoDetail();
+  else if(step===3) html = (data.antecedente==='Nobre') ? renderNobreDetail() : renderSimpleBackgroundDetail(activeBgConst());
+  else if(step===4) html = renderSpeciesStep();
+  else if(step===5) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
   else if(step===6) html = renderAttrs();
   else if(step===7) html = renderShop();
   else if(step===8) html = renderSummary();
@@ -697,9 +805,9 @@ function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
 }
 
 function renderSpeciesStep(){
-  return `<h2>Passo 1 — Escolha sua Espécie</h2>
+  return `<h2>Passo 3 — Escolha sua Espécie</h2>
   <div class="intro">Sua espécie define traços físicos e sobrenaturais natos — visão no escuro, resistências, truques grátis. Tiferino e Pequenino estão disponíveis neste protótipo.</div>
-  <div id="grp-0-especie">${choiceGrid(SPECIES, ENABLED_SPECIES, data.especie, 'pickSpecies')}</div>
+  <div id="grp-4-especie">${choiceGrid(SPECIES, ENABLED_SPECIES, data.especie, 'pickSpecies')}</div>
   ${nav(canAdvance())}`;
 }
 
@@ -713,14 +821,14 @@ function renderTieflingDetail(){
     <div class="fact"><b>Visão no Escuro:</b> ${TIEFLING.visaoNoEscuro}</div>
     <div class="fact"><b>Tamanho:</b></div>
   </div>
-  <div id="grp-1-tamanho" class="check-list" style="margin-bottom:20px;">
+  <div id="grp-5-tamanho" class="check-list" style="margin-bottom:20px;">
     ${TIEFLING.tamanho.opcoes.map(s=>`
       <div class="check-pill ${t.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanho">${s} <span style="opacity:0.65;font-size:0.85em;">(${TIEFLING.tamanho.alturas[s]})</span></div>
     `).join('')}
   </div>
   <h3>Traços Natos</h3>
   ${TIEFLING.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
-  <h3 id="grp-1-legado">${TIEFLING.subespecie.nome}</h3>
+  <h3 id="grp-5-legado">${TIEFLING.subespecie.nome}</h3>
   ${TIEFLING.subespecie.opcoes.map(opt=>`
     <div class="option-block ${t.legado===opt.nome?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
@@ -734,7 +842,7 @@ function renderTieflingDetail(){
       <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLegado" style="margin-top:10px;">${t.legado===opt.nome?'Selecionado':'Escolher'}</button>
     </div>
   `).join('')}
-  <h3 id="grp-1-atributo">Atributo de Conjuração do Legado</h3>
+  <h3 id="grp-5-atributo">Atributo de Conjuração do Legado</h3>
   <div class="intro" style="margin-bottom:8px;">Usado para a CD/ataque das magias do legado e da Presença Sobrenatural (Taumaturgia).</div>
   <div class="check-list">
     ${['Inteligência','Sabedoria','Carisma'].map(a=>`<div class="check-pill ${t.atributoLegado===a?'selected':''}" data-pick="${a}" data-fn="pickAtributoLegado">${a}</div>`).join('')}
@@ -796,16 +904,16 @@ function renderHumanoDetail(){
     <div class="fact"><b>Deslocamento:</b> ${HUMANO.deslocamento}</div>
     <div class="fact"><b>Tamanho:</b></div>
   </div>
-  <div id="grp-1-tamanho" class="check-list" style="margin-bottom:20px;">
+  <div id="grp-5-tamanho" class="check-list" style="margin-bottom:20px;">
     ${HUMANO.tamanho.opcoes.map(s=>`
       <div class="check-pill ${h.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanhoHumano">${s} <span style="opacity:0.65;font-size:0.85em;">(${HUMANO.tamanho.alturas[s]})</span></div>
     `).join('')}
   </div>
   <h3>Traços Natos</h3>
   ${HUMANO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
-  <h3 id="grp-1-pericia">Hábil — escolha 1 perícia</h3>
+  <h3 id="grp-5-pericia">Hábil — escolha 1 perícia</h3>
   ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS), h.pericia, 'pickHumanoPericia')}
-  <h3 id="grp-1-talento">Versátil — escolha 1 talento de Origem</h3>
+  <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
   ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento')}
   ${nav(canAdvance())}`;
 }
@@ -832,7 +940,7 @@ function renderDraconatoDetail(){
     <div class="fact"><b>Tamanho:</b></div>
   </div>
   ${tamanhoPickList(DRACONATO.tamanho, null, null)}
-  <h3 id="grp-1-heranca">${DRACONATO.subespecie.nome}</h3>
+  <h3 id="grp-5-heranca">${DRACONATO.subespecie.nome}</h3>
   <div class="intro" style="margin-bottom:8px;">Define o tipo de dano do seu Ataque de Sopro e da sua Resistência a Dano — sem conceder magia nenhuma (diferente do Legado do Tiferino).</div>
   <div class="choice-grid" style="margin-bottom:20px;">
     ${DRACONATO.subespecie.opcoes.map(o=>`<div class="choice ${d.heranca===o.nome?'selected':''}" data-pick="${o.nome}" data-fn="pickHerancaDraconica">${o.nome}<span class="note">${o.tipoDano}</span></div>`).join('')}
@@ -855,9 +963,9 @@ function renderElfoDetail(){
   ${tamanhoPickList(ELFO.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${ELFO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
-  <h3 id="grp-1-pericia">${ELFO.sentidosAgucados.nome} — escolha 1 perícia</h3>
+  <h3 id="grp-5-pericia">${ELFO.sentidosAgucados.nome} — escolha 1 perícia</h3>
   ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes), e.pericia, 'pickElfoPericia')}
-  <h3 id="grp-1-linhagem">${ELFO.subespecie.nome}</h3>
+  <h3 id="grp-5-linhagem">${ELFO.subespecie.nome}</h3>
   ${ELFO.subespecie.opcoes.map(opt=>`
     <div class="option-block ${e.linhagem===opt.nome?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
@@ -887,7 +995,7 @@ function renderGnomoDetail(){
   ${tamanhoPickList(GNOMO.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${GNOMO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
-  <h3 id="grp-1-linhagem">${GNOMO.subespecie.nome}</h3>
+  <h3 id="grp-5-linhagem">${GNOMO.subespecie.nome}</h3>
   ${GNOMO.subespecie.opcoes.map(opt=>`
     <div class="option-block ${g.linhagem===opt.nome?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
@@ -896,7 +1004,7 @@ function renderGnomoDetail(){
       <button class="pick-btn" data-pick="${opt.nome}" data-fn="pickLinhagemGnomica" style="margin-top:10px;">${g.linhagem===opt.nome?'Selecionado':'Escolher'}</button>
     </div>
   `).join('')}
-  <h3 id="grp-1-atributo">Atributo de Conjuração da Linhagem</h3>
+  <h3 id="grp-5-atributo">Atributo de Conjuração da Linhagem</h3>
   <div class="intro" style="margin-bottom:8px;">Usado para a CD/ataque dos truques e magias concedidos pela sua Linhagem Gnômica.</div>
   <div class="check-list">
     ${['Inteligência','Sabedoria','Carisma'].map(a=>`<div class="check-pill ${g.atributoLinhagem===a?'selected':''}" data-pick="${a}" data-fn="pickAtributoLinhagemGnomica">${a}</div>`).join('')}
@@ -916,7 +1024,7 @@ function renderGoliasDetail(){
   ${tamanhoPickList(GOLIAS.tamanho, null, null)}
   <h3>Traços Natos</h3>
   ${GOLIAS.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
-  <h3 id="grp-1-ancestralidade">${GOLIAS.subespecie.nome} — escolha 1</h3>
+  <h3 id="grp-5-ancestralidade">${GOLIAS.subespecie.nome} — escolha 1</h3>
   ${GOLIAS.subespecie.opcoes.map(opt=>`
     <div class="option-block ${gl.ancestralidade===opt.nome?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${opt.nome}</h3>
@@ -937,7 +1045,7 @@ function renderAasimarDetail(){
     <div class="fact"><b>Visão no Escuro:</b> ${AASIMAR.visaoNoEscuro}</div>
     <div class="fact"><b>Tamanho:</b></div>
   </div>
-  <div id="grp-1-tamanho" class="check-list" style="margin-bottom:20px;">
+  <div id="grp-5-tamanho" class="check-list" style="margin-bottom:20px;">
     ${AASIMAR.tamanho.opcoes.map(s=>`
       <div class="check-pill ${a.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanhoAasimar">${s} <span style="opacity:0.65;font-size:0.85em;">(${AASIMAR.tamanho.alturas[s]})</span></div>
     `).join('')}
@@ -1024,33 +1132,7 @@ function renderNobreDetail(){
   const plan = nb.abilityPlan;
   return `<h2>Nobre — Detalhes do Antecedente</h2>
   <div class="intro">Talento: ${NOBRE.feat}<br>Perícias: ${NOBRE.skills.join(', ')}<br>Ferramenta: Kit de Jogos (escolha o tipo abaixo)</div>
-  <h3 id="grp-3-abilityplan">Distribuição de Atributos</h3>
-  <div class="intro" style="margin-bottom:8px;">Atributos sugeridos pelo livro: <b>${NOBRE.suggestedAbilities.join(', ')}</b> — mas seu mestre liberou colocar os bônus em qualquer um dos 6 atributos. Escolha +2 em um e +1 em outro, OU +1 em três.</div>
-  <div class="check-list" style="margin-bottom:10px;">
-    <div class="check-pill ${plan && plan.type==='2-1'?'selected':''}" data-pick="2-1" data-fn="pickAbilityPlanType">+2 / +1</div>
-    <div class="check-pill ${plan && plan.type==='1-1-1'?'selected':''}" data-pick="1-1-1" data-fn="pickAbilityPlanType">+1 / +1 / +1</div>
-  </div>
-  ${plan && plan.type==='2-1' ? `
-    <div style="display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap;">
-      <div>
-        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+2 em:</div>
-        <div class="check-list">${ABILITIES.map(a=>`<div class="check-pill ${plan.plus2===a?'selected':''}" data-pick="${a}" data-fn="pickPlus2">${a}</div>`).join('')}</div>
-      </div>
-      <div>
-        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em:</div>
-        <div class="check-list">${ABILITIES.filter(a=>a!==plan.plus2).map(a=>`<div class="check-pill ${plan.plus1===a?'selected':''}" data-pick="${a}" data-fn="pickPlus1">${a}</div>`).join('')}</div>
-      </div>
-    </div>` : ''}
-  ${plan && plan.type==='1-1-1' ? `
-    <div style="margin-bottom:16px;">
-      <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em (escolha 3):</div>
-      <div class="check-list">${ABILITIES.map(a=>{
-        const sel = (plan.plusOnes||[]).includes(a);
-        const disabled = !sel && (plan.plusOnes||[]).length>=3;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${a}" data-fn="pickPlusOneOf3"`}>${a}</div>`;
-      }).join('')}</div>
-      <div class="counter ${(plan.plusOnes||[]).length===3?'ok':''}">${(plan.plusOnes||[]).length}/3 escolhidos</div>
-    </div>` : ''}
+  ${renderAbilityPlanBlock(NOBRE, plan)}
 
   <h3 id="grp-3-kitjogos">Ferramenta — escolha o tipo de Kit de Jogos</h3>
   <div class="intro" style="margin-bottom:8px;">O livro deixa livre entre as variantes vendidas no capítulo de Equipamento.</div>
@@ -1078,63 +1160,48 @@ function renderNobreDetail(){
   ${nav(canAdvance())}`;
 }
 
-function renderCharlatanDetail(){
-  const ch = data.charlatao;
-  const plan = ch.abilityPlan;
-  return `<h2>Charlatão — Detalhes do Antecedente</h2>
-  <div class="intro">Talento: ${CHARLATAO.feat}<br>Perícias: ${CHARLATAO.skills.join(', ')}<br>Ferramenta: ${CHARLATAO.tool}</div>
-  <h3 id="grp-3-abilityplan">Distribuição de Atributos</h3>
-  <div class="intro" style="margin-bottom:8px;">Atributos sugeridos pelo livro: <b>${CHARLATAO.suggestedAbilities.join(', ')}</b> — mas seu mestre liberou colocar os bônus em qualquer um dos 6 atributos. Escolha +2 em um e +1 em outro, OU +1 em três.</div>
-  <div class="check-list" style="margin-bottom:10px;">
-    <div class="check-pill ${plan && plan.type==='2-1'?'selected':''}" data-pick="2-1" data-fn="pickAbilityPlanType">+2 / +1</div>
-    <div class="check-pill ${plan && plan.type==='1-1-1'?'selected':''}" data-pick="1-1-1" data-fn="pickAbilityPlanType">+1 / +1 / +1</div>
-  </div>
-  ${plan && plan.type==='2-1' ? `
-    <div style="display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap;">
-      <div>
-        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+2 em:</div>
-        <div class="check-list">${ABILITIES.map(a=>`<div class="check-pill ${plan.plus2===a?'selected':''}" data-pick="${a}" data-fn="pickPlus2">${a}</div>`).join('')}</div>
-      </div>
-      <div>
-        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em:</div>
-        <div class="check-list">${ABILITIES.filter(a=>a!==plan.plus2).map(a=>`<div class="check-pill ${plan.plus1===a?'selected':''}" data-pick="${a}" data-fn="pickPlus1">${a}</div>`).join('')}</div>
-      </div>
-    </div>` : ''}
-  ${plan && plan.type==='1-1-1' ? `
-    <div style="margin-bottom:16px;">
-      <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em (escolha 3):</div>
-      <div class="check-list">${ABILITIES.map(a=>{
-        const sel = (plan.plusOnes||[]).includes(a);
-        const disabled = !sel && (plan.plusOnes||[]).length>=3;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${a}" data-fn="pickPlusOneOf3"`}>${a}</div>`;
-      }).join('')}</div>
-      <div class="counter ${(plan.plusOnes||[]).length===3?'ok':''}">${(plan.plusOnes||[]).length}/3 escolhidos</div>
-    </div>` : ''}
+/* Antecedente "genérico": cobre todo antecedente que NÃO precisa de um
+   passo extra pra escolher o TIPO de ferramenta (isso ainda é só o Nobre,
+   com renderNobreDetail() logo abaixo — os próximos antecedentes de
+   ferramenta-por-escolha, tipo Artesão/Artista/Guarda/Soldado, vão herdar
+   desse mesmo padrão numa etapa futura). Serve tanto pra quem tem o
+   talento Habilidoso (mostra a lista de escolha de 3 perícias/ferramentas)
+   quanto pra quem tem talento fixo sem escolha nenhuma (Sortudo, Alerta,
+   Curandeiro, Vigoroso, Valentão de Taverna etc.) — nesse caso o bloco de
+   Habilidoso simplesmente não aparece. */
+function renderSimpleBackgroundDetail(bgConst){
+  const bg = activeBgData();
+  const plan = bg.abilityPlan;
+  const isHabilidoso = bgConst.feat.startsWith('Habilidoso');
+  return `<h2>${bgConst.nome} — Detalhes do Antecedente</h2>
+  <div class="intro">Talento: ${bgConst.feat}<br>Perícias: ${bgConst.skills.join(', ')}<br>Ferramenta: ${bgConst.tool}</div>
+  ${renderAbilityPlanBlock(bgConst, plan)}
 
+  ${isHabilidoso ? `
   <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
-  <div class="intro" style="margin-bottom:8px;">Enganação e Prestidigitação (perícias) e Kit de Falsificação (ferramenta) já vêm do Charlatão e não aparecem aqui.</div>
+  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${bgConst.tool} (ferramenta) já vêm do ${bgConst.nome} e não aparecem aqui.</div>
   ${groupedChoiceList([
-    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!CHARLATAO.skills.includes(s))),
-    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==CHARLATAO.tool)}
-  ], ch.habilidoso, 3, 'toggleHabilidoso')}
-  <div class="counter ${ch.habilidoso.length===3?'ok':''}">${ch.habilidoso.length}/3 escolhidos</div>
+    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!bgConst.skills.includes(s))),
+    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==bgConst.tool)}
+  ], bg.habilidoso, 3, 'toggleHabilidoso')}
+  <div class="counter ${bg.habilidoso.length===3?'ok':''}">${bg.habilidoso.length}/3 escolhidos</div>` : ''}
 
   <h3 id="grp-3-equipment">Equipamento Inicial</h3>
-  <div class="option-block ${ch.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${CHARLATAO.equipmentA.join(', ')}, ${CHARLATAO.equipmentA_gold} PO</p>
-    <button class="pick-btn" data-pick="A" data-fn="pickBgEquip">${ch.equipment==='A'?'Selecionado':'Escolher'}</button>
+  <div class="option-block ${bg.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${bgConst.equipmentA.join(', ')}, ${bgConst.equipmentA_gold} PO</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickBgEquip">${bg.equipment==='A'?'Selecionado':'Escolher'}</button>
   </div>
-  <div class="option-block ${ch.equipment==='B'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${CHARLATAO.equipmentB_gold} PO</p>
-    <button class="pick-btn" data-pick="B" data-fn="pickBgEquip">${ch.equipment==='B'?'Selecionado':'Escolher'}</button>
+  <div class="option-block ${bg.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${bgConst.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickBgEquip">${bg.equipment==='B'?'Selecionado':'Escolher'}</button>
   </div>
   ${nav(canAdvance())}`;
 }
 
 function renderClassStep(){
-  return `<h2>Passo 3 — Escolha sua Classe</h2>
+  return `<h2>Passo 1 — Escolha sua Classe</h2>
   <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia. Só o Bruxo está disponível neste protótipo.</div>
-  <div id="grp-4-classe">${choiceGridWithInfo(CLASSES, ENABLED_CLASSES, data.classe, 'pickClass', CLASS_INFO)}</div>
+  <div id="grp-0-classe">${choiceGridWithInfo(CLASSES, ENABLED_CLASSES, data.classe, 'pickClass', CLASS_INFO)}</div>
   ${nav(canAdvance())}`;
 }
 
@@ -1143,11 +1210,11 @@ function renderBruxoDetail(){
   return `<h2>Bruxo — Detalhes da Classe</h2>
   <div class="intro">Atributo Primário: Carisma · Dado de Vida: d8 · Salvaguardas: Sabedoria e Carisma · Armas Simples · Armadura Leve</div>
 
-  <h3 id="grp-5-skills">Perícias (escolha 2)</h3>
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   <div class="check-list" style="margin-bottom:6px;">
     ${(()=>{
-      const bgConst = data.antecedente==='Nobre' ? NOBRE : CHARLATAO;
+      const bgConst = activeBgConst();
       const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
       const available = BRUXO.skills.filter(s=>!alreadyHave.includes(s));
       return available.map(s=>{
@@ -1159,7 +1226,7 @@ function renderBruxoDetail(){
   </div>
   <div class="counter ${b.skills.length===2?'ok':''}">${b.skills.length}/2 escolhidas</div>
 
-  <h3 id="grp-5-pact">Vínculo de Pacto</h3>
+  <h3 id="grp-1-pact">Vínculo de Pacto</h3>
   ${Object.entries(BRUXO.pactBoons).map(([name,desc])=>`
     <div class="option-block ${b.pactBoon===name?'selected':''}">
       <h3 style="color:var(--gold);margin-top:0;">${name}</h3><p>${desc}</p>
@@ -1167,28 +1234,28 @@ function renderBruxoDetail(){
     </div>
   `).join('')}
 
-  <h3 id="grp-5-cantrips">Truques da Classe (escolha 2, da lista de Bruxo)</h3>
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha 2, da lista de Bruxo)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
   ${spellChoiceList(BRUXO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), b.cantrips, 2, 'toggleCantrip')}
   <div class="counter ${b.cantrips.length===2?'ok':''}">${b.cantrips.length}/2 escolhidos</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
-  <h3 id="grp-5-tomocantrips">Truques do Pacto do Tomo (escolha 3, de qualquer classe)</h3>
+  <h3 id="grp-1-tomocantrips">Truques do Pacto do Tomo (escolha 3, de qualquer classe)</h3>
   ${spellChoiceList(ALL_CANTRIPS.filter(c=>!b.cantrips.includes(c) && !speciesGrantedCantrips().includes(c)), b.tomoCantrips, 3, 'toggleTomoCantrip')}
   <div class="counter ${b.tomoCantrips.length===3?'ok':''}">${b.tomoCantrips.length}/3 escolhidos</div>
   `:''}
 
-  <h3 id="grp-5-spells1">Magias Preparadas de 1º Círculo (escolha 2, da lista de Bruxo)</h3>
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha 2, da lista de Bruxo)</h3>
   ${spellChoiceList(BRUXO.spells1, b.spells1, 2, 'toggleSpell1')}
   <div class="counter ${b.spells1.length===2?'ok':''}">${b.spells1.length}/2 escolhidas</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
-  <h3 id="grp-5-tomorituals">Magias Rituais do Pacto do Tomo (escolha 2, 1º círculo, de qualquer classe)</h3>
+  <h3 id="grp-1-tomorituals">Magias Rituais do Pacto do Tomo (escolha 2, 1º círculo, de qualquer classe)</h3>
   ${spellChoiceList(ALL_1ST_RITUAL.filter(r=>!b.spells1.includes(r)), b.tomoRituals, 2, 'toggleTomoRitual')}
   <div class="counter ${b.tomoRituals.length===2?'ok':''}">${b.tomoRituals.length}/2 escolhidas</div>
   `:''}
 
-  <h3 id="grp-5-equipment">Equipamento Inicial</h3>
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
   <div class="option-block ${b.equipment==='A'?'selected':''}">
     <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${BRUXO.equipmentA.join(', ')}</p>
     <button class="pick-btn" data-pick="A" data-fn="pickBruxoEquip">${b.equipment==='A'?'Selecionado':'Escolher'}</button>
@@ -1241,7 +1308,7 @@ function renderAttrs(){
 
 function startingGold(){
   const bGold = data.bruxo.equipment==='B' ? BRUXO.equipmentB_gold : 0;
-  const bgConst = data.antecedente==='Nobre' ? NOBRE : CHARLATAO;
+  const bgConst = activeBgConst();
   const bg = activeBgData();
   const bgGold = bg.equipment==='B' ? bgConst.equipmentB_gold : (bg.equipment==='A' ? bgConst.equipmentA_gold : 0);
   const bAGold = data.bruxo.equipment==='A' ? 15 : 0;
@@ -1309,10 +1376,10 @@ function renderShop(){
 function renderSummary(){
   const b = data.bruxo, t = data.tiefling;
   const bg = activeBgData();
-  const bgConst = data.antecedente==='Nobre' ? NOBRE : CHARLATAO;
+  const bgConst = activeBgConst();
   const bgEquipA = data.antecedente==='Nobre'
     ? [data.nobre.kitJogos || 'Kit de Jogos', ...NOBRE.equipmentA.slice(1)]
-    : CHARLATAO.equipmentA;
+    : bgConst.equipmentA;
   const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
   const prof = 2;
   const carMod = mod(finalScore('Carisma'));
@@ -1337,18 +1404,21 @@ function renderSummary(){
   <div class="summary-section"><h3>Combate</h3>
   <div class="content">PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}</div></div>
 
-  <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
+  <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">${b.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}${bgConst.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
 
-  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
+  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
     <b>${b.pactBoon}</b><br>
     Truques: ${[...b.cantrips, ...b.tomoCantrips].map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 2 da classe">${s} (espécie)</span>`).join('')}<br>
     Magias: ${[...b.spells1, ...b.tomoRituals.map(r=>r+' (ritual)')].map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>
 
+  ${bgConst.feat.startsWith('Habilidoso') ? `
   <div class="summary-section"><h3>Talento — Habilidoso <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
-  <div class="content">${bg.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
+  <div class="content">${bg.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : `
+  <div class="summary-section"><h3>Talento do Antecedente</h3>
+  <div class="content">${bgConst.feat}</div></div>`}
 
   <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
   <div class="content">
@@ -1453,11 +1523,82 @@ function speciesGrantedCantrips(){
 }
 
 /* Retorna o objeto de dados do antecedente ativo (data.charlatao, data.nobre,
-   etc.) — os handlers abaixo (plano de atributos, Habilidoso, equipamento)
-   são compartilhados entre antecedentes que usam essa mesma estrutura. */
+   data.andarilho etc.) — os handlers abaixo (plano de atributos, Habilidoso,
+   equipamento) são compartilhados entre TODOS os antecedentes, via o mapa
+   BACKGROUND_DATA_KEY. Se data.antecedente ainda não tiver sido escolhido,
+   cai no charlatao só pra nunca retornar undefined. */
 function activeBgData(){
-  if(data.antecedente==='Nobre') return data.nobre;
-  return data.charlatao;
+  const key = BACKGROUND_DATA_KEY[data.antecedente] || 'charlatao';
+  return data[key];
+}
+/* Mesma ideia, mas retorna o objeto de dados FIXOS (CHARLATAO, NOBRE,
+   ANDARILHO etc.), via BACKGROUND_CONST. */
+function activeBgConst(){
+  return BACKGROUND_CONST[data.antecedente] || CHARLATAO;
+}
+
+/* Regra da casa: por padrão (freeAbilityRule=true) os bônus de atributo do
+   antecedente podem ir em qualquer um dos 6 atributos (como o livro já
+   permite oficialmente). Se o jogador desmarcar o checkbox, trava a escolha
+   só nos 3 atributos sugeridos daquele antecedente específico — uma
+   restrição EXTRA, mais dura que a regra oficial. */
+function allowedAbilitiesFor(bgConst){ return data.freeAbilityRule ? ABILITIES : bgConst.suggestedAbilities; }
+
+function sanitizeAbilityPlans(){
+  Object.keys(BACKGROUND_CONST).map(nome=>[data[BACKGROUND_DATA_KEY[nome]], BACKGROUND_CONST[nome]]).forEach(([bgData, bgConst])=>{
+    const plan = bgData.abilityPlan;
+    if(!plan) return;
+    const allowed = allowedAbilitiesFor(bgConst);
+    if(plan.type==='2-1'){
+      if(plan.plus2 && !allowed.includes(plan.plus2)) plan.plus2=null;
+      if(plan.plus1 && (!allowed.includes(plan.plus1) || plan.plus1===plan.plus2)) plan.plus1=null;
+    } else if(plan.type==='1-1-1'){
+      plan.plusOnes = (plan.plusOnes||[]).filter(a=>allowed.includes(a));
+    }
+  });
+}
+function toggleFreeAbilityRule(){ data.freeAbilityRule = !data.freeAbilityRule; sanitizeAbilityPlans(); persist(); render(); }
+
+/* Bloco de UI "Distribuição de Atributos", compartilhado entre Charlatão e
+   Nobre (era duplicado igual nos dois antes desta função existir). */
+function renderAbilityPlanBlock(bgConst, plan){
+  const allowed = allowedAbilitiesFor(bgConst);
+  return `<h3 id="grp-3-abilityplan">Distribuição de Atributos</h3>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:10px;" onclick="toggleFreeAbilityRule()">
+    <input type="checkbox" style="width:16px;height:16px;flex:none;margin:0;pointer-events:none;" ${data.freeAbilityRule?'checked':''}>
+    <span>Regra da casa: Sem restrição de antecedente</span>
+  </div>
+  <div class="intro" style="margin-bottom:8px;">
+    ${data.freeAbilityRule
+      ? `Com a regra da casa marcada, você pode colocar os bônus em qualquer um dos 6 atributos.`
+      : `Regra oficial do livro: os bônus ficam travados nos atributos sugeridos pra este antecedente — <b>${bgConst.suggestedAbilities.join(', ')}</b>. Marque a regra da casa acima pra liberar todos os 6.`}
+    Escolha +2 em um e +1 em outro, OU +1 em três.
+  </div>
+  <div class="check-list" style="margin-bottom:10px;">
+    <div class="check-pill ${plan && plan.type==='2-1'?'selected':''}" data-pick="2-1" data-fn="pickAbilityPlanType">+2 / +1</div>
+    <div class="check-pill ${plan && plan.type==='1-1-1'?'selected':''}" data-pick="1-1-1" data-fn="pickAbilityPlanType">+1 / +1 / +1</div>
+  </div>
+  ${plan && plan.type==='2-1' ? `
+    <div style="display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+2 em:</div>
+        <div class="check-list">${allowed.map(a=>`<div class="check-pill ${plan.plus2===a?'selected':''}" data-pick="${a}" data-fn="pickPlus2">${a}</div>`).join('')}</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em:</div>
+        <div class="check-list">${allowed.filter(a=>a!==plan.plus2).map(a=>`<div class="check-pill ${plan.plus1===a?'selected':''}" data-pick="${a}" data-fn="pickPlus1">${a}</div>`).join('')}</div>
+      </div>
+    </div>` : ''}
+  ${plan && plan.type==='1-1-1' ? `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em (escolha 3):</div>
+      <div class="check-list">${allowed.map(a=>{
+        const sel = (plan.plusOnes||[]).includes(a);
+        const disabled = !sel && (plan.plusOnes||[]).length>=3;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${a}" data-fn="pickPlusOneOf3"`}>${a}</div>`;
+      }).join('')}</div>
+      <div class="counter ${(plan.plusOnes||[]).length===3?'ok':''}">${(plan.plusOnes||[]).length}/3 escolhidos</div>
+    </div>` : ''}`;
 }
 
 function pickAbilityPlanType(v){ activeBgData().abilityPlan = v==='1-1-1' ? {type:'1-1-1', plusOnes:[]} : {type:'2-1', plus2:null, plus1:null}; persist(); render(); }
