@@ -44,6 +44,9 @@
 <script src="data/backgrounds/artista.js"></script>
 <script src="data/backgrounds/guarda.js"></script>
 <script src="data/backgrounds/soldado.js"></script>
+<script src="data/backgrounds/acolito.js"></script>
+<script src="data/backgrounds/guia.js"></script>
+<script src="data/backgrounds/sabio.js"></script>
 <script>
 /* ==========================================================================
    NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
@@ -182,12 +185,10 @@
      uma variante multi-select, já que o Bruxo escolhe 2) nesses dois
      lugares também.
 
-   🔜 PRÓXIMA FRENTE — ANTECEDENTES (Origens/Backgrounds), em andamento:
-   - ✅ CONCLUÍDO (13 de 16 antecedentes prontos): faltam só Acólito, Guia
-     e Sábio (categoria "Iniciado em Magia" — ver abaixo). Os outros 13 já
-     têm data/backgrounds/*.js: Charlatão, Nobre, Andarilho, Criminoso,
-     Eremita, Fazendeiro, Marinheiro, Escriba, Mercador, Artesão, Artista,
-     Guarda, Soldado.
+   ✅ ANTECEDENTES (Origens/Backgrounds) — CONCLUÍDO, os 16 do PHB 2024:
+   - Charlatão, Nobre, Andarilho, Criminoso, Eremita, Fazendeiro,
+     Marinheiro, Escriba, Mercador, Artesão, Artista, Guarda, Soldado,
+     Acólito, Guia, Sábio. Todos em data/backgrounds/*.js.
    - O código que só sabia lidar com Charlatão/Nobre foi generalizado:
      BACKGROUND_DATA_KEY mapeia nome->chave em `data`, BACKGROUND_CONST
      mapeia nome->objeto de dados fixos, activeBgData()/activeBgConst()
@@ -204,26 +205,28 @@
      onde a ferramenta escolhida entra na lista de equipamento — resolvido
      por resolvedEquipmentA(bgConst, bg), reutilizada tanto no detalhe do
      antecedente quanto no resumo final.
+   - Iniciado em Magia (Acólito=Clérigo, Guia=Druida, Sábio=Mago) usa
+     bgConst.iniciadoEmMagia = {classe, cantrips:[...], spells1:[...]} —
+     listas fixas extraídas direto do PDF (cap. 3, Lista de Magias de cada
+     classe), NÃO reaproveitadas de nenhum outro arquivo de dados. O
+     jogador escolhe 2 truques (bg.iniciadoCantrips, máx 2) + 1 magia de
+     1º círculo (bg.iniciadoSpell1, máx 1) usando o mesmo spellChoiceList()
+     já usado pro Bruxo. A classe do "Iniciado em Magia" é FIXA pelo
+     antecedente (não é escolha do jogador) — confirmado na planilha
+     original, cada um desses 3 antecedentes só permite uma classe.
    - Talento é sempre string única (bgConst.feat), tipo "Nome — descrição
      curta". O bloco de "Talento Habilidoso — escolha 3 perícias" só
-     aparece quando bgConst.feat.startsWith('Habilidoso') — os outros
-     talentos fixos (Sortudo, Alerta, Curandeiro, Vigoroso, Valentão de
-     Taverna, Artifista, Músico, Atacante Selvagem) não têm escolha
-     nenhuma, só o texto informativo.
+     aparece quando bgConst.feat.startsWith('Habilidoso'); o bloco de
+     Iniciado em Magia só aparece quando bgConst.iniciadoEmMagia existe —
+     os outros talentos fixos (Sortudo, Alerta, Curandeiro, Vigoroso,
+     Valentão de Taverna, Artifista, Músico, Atacante Selvagem) não têm
+     escolha nenhuma, só o texto informativo.
    - PENDÊNCIA (não é sobre antecedentes, achada de bônus ao mexer no
      resetWizard): "Criar Outro Personagem" só zera data.tiefling/
      data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
      draconato, elfo, gnomo, golias, aasimar) não são resetadas. Não é bug
      introduzido agora, já existia; resolver quando for a vez de revisar
      espécies de novo, não misturar com antecedentes.
-   - FALTAM (categoria "Iniciado em Magia", mais complexa): Acólito
-     (Clérigo), Guia (Druida), Sábio (Mago). O talento em si exige
-     escolher 1 truque + 1 magia de 1º círculo da lista daquela classe
-     específica — precisa extrair o texto exato do talento no PDF (cap. 5,
-     Talentos de Origem) antes de implementar, pra saber exatamente que
-     truques/magias cada versão permite escolher. Provavelmente precisa de
-     um novo tipo de escolha na UI (picker de truque + magia), não só
-     reaproveitar renderSimpleBackgroundDetail como está.
    - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
      pode virar data/shop.js separado depois, sem relação direta com os
      antecedentes — não misturar as duas tarefas.
@@ -237,7 +240,7 @@ const ENABLED_SPECIES = ["Tiferino","Pequenino","Aasimar","Anão","Orc","Humano"
    2024) e estava faltando "Andarilho" e "Escriba" (existem). Lista abaixo
    conferida contra o Sumário do livro — são os 16 antecedentes oficiais. */
 const BACKGROUNDS = ["Acólito","Andarilho","Artesão","Artista","Charlatão","Criminoso","Eremita","Escriba","Fazendeiro","Guarda","Guia","Marinheiro","Mercador","Nobre","Sábio","Soldado"];
-const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremita","Fazendeiro","Marinheiro","Escriba","Mercador","Artesão","Artista","Guarda","Soldado"];
+const ENABLED_BACKGROUNDS = ["Charlatão","Nobre","Andarilho","Criminoso","Eremita","Fazendeiro","Marinheiro","Escriba","Mercador","Artesão","Artista","Guarda","Soldado","Acólito","Guia","Sábio"];
 
 /* Mapeia o nome oficial do antecedente (data.antecedente) pra sua chave em
    `data` (data.charlatao, data.andarilho etc.) e pro objeto de dados fixos
@@ -248,13 +251,15 @@ const BACKGROUND_DATA_KEY = {
   "Charlatão":"charlatao", "Nobre":"nobre", "Andarilho":"andarilho",
   "Criminoso":"criminoso", "Eremita":"eremita", "Fazendeiro":"fazendeiro",
   "Marinheiro":"marinheiro", "Escriba":"escriba", "Mercador":"mercador",
-  "Artesão":"artesao", "Artista":"artista", "Guarda":"guarda", "Soldado":"soldado"
+  "Artesão":"artesao", "Artista":"artista", "Guarda":"guarda", "Soldado":"soldado",
+  "Acólito":"acolito", "Guia":"guia", "Sábio":"sabio"
 };
 const BACKGROUND_CONST = {
   "Charlatão":CHARLATAO, "Nobre":NOBRE, "Andarilho":ANDARILHO,
   "Criminoso":CRIMINOSO, "Eremita":EREMITA, "Fazendeiro":FAZENDEIRO,
   "Marinheiro":MARINHEIRO, "Escriba":ESCRIBA, "Mercador":MERCADOR,
-  "Artesão":ARTESAO, "Artista":ARTISTA, "Guarda":GUARDA, "Soldado":SOLDADO
+  "Artesão":ARTESAO, "Artista":ARTISTA, "Guarda":GUARDA, "Soldado":SOLDADO,
+  "Acólito":ACOLITO, "Guia":GUIA, "Sábio":SABIO
 };
 
 /* ==========================================================================
@@ -392,6 +397,21 @@ const BACKGROUND_INFO = {
     talentoNome: "Atacante Selvagem",
     talentoDesc: "rola o dano da arma duas vezes e usa o melhor resultado, 1x por turno",
     fields: [["Perícias","Atletismo, Intimidação"],["Ferramenta","Kit de Jogos (escolha o tipo)"]]
+  },
+  "Acólito": {
+    talentoNome: "Iniciado em Magia (Clérigo)",
+    talentoDesc: "aprende 2 truques e 1 magia de 1º círculo da lista de Clérigo",
+    fields: [["Perícias","Intuição, Religião"],["Ferramenta","Suprimentos de Calígrafo"]]
+  },
+  "Guia": {
+    talentoNome: "Iniciado em Magia (Druida)",
+    talentoDesc: "aprende 2 truques e 1 magia de 1º círculo da lista de Druida",
+    fields: [["Perícias","Furtividade, Sobrevivência"],["Ferramenta","Ferramentas de Cartógrafo"]]
+  },
+  "Sábio": {
+    talentoNome: "Iniciado em Magia (Mago)",
+    talentoDesc: "aprende 2 truques e 1 magia de 1º círculo da lista de Mago",
+    fields: [["Perícias","Arcanismo, História"],["Ferramenta","Suprimentos de Calígrafo"]]
   }
 };
 
@@ -506,19 +526,22 @@ let data = {
   gnomo: { linhagem: null, atributoLinhagem: null },
   golias: { ancestralidade: null },
   aasimar: { tamanho: null },
-  charlatao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  nobre: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  andarilho: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  criminoso: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  eremita: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  fazendeiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  marinheiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  escriba: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  mercador: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  artesao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  artista: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  guarda: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
-  soldado: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null },
+  charlatao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  nobre: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  andarilho: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  criminoso: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  eremita: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  fazendeiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  marinheiro: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  escriba: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  mercador: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  artesao: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  artista: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  guarda: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  soldado: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  acolito: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  guia: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
+  sabio: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
@@ -566,9 +589,11 @@ async function restore(){
          em data (evita crash se um save antigo do navegador não tiver o
          antecedente mais recente que a gente adicionou depois). */
       Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
-        if(!data[key]) data[key] = { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null };
+        if(!data[key]) data[key] = { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] };
         if(!data[key].habilidoso) data[key].habilidoso = [];
         if(data[key].ferramentaEscolhida===undefined) data[key].ferramentaEscolhida = null;
+        if(!data[key].iniciadoCantrips) data[key].iniciadoCantrips = [];
+        if(!data[key].iniciadoSpell1) data[key].iniciadoSpell1 = [];
       });
       /* Migração de saves antigos: o Nobre usava um campo próprio kitJogos
          antes de virar o padrão genérico ferramentaEscolhida. */
@@ -620,6 +645,10 @@ function findFirstMissingGroup(){
       const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
       if(!planOk) return 'grp-3-abilityplan';
       if(activeBgConst().ferramentaOpcoes && !bg.ferramentaEscolhida) return 'grp-3-ferramenta';
+      if(activeBgConst().iniciadoEmMagia){
+        if(bg.iniciadoCantrips.length!==2) return 'grp-3-iniciado-truques';
+        if(bg.iniciadoSpell1.length!==1) return 'grp-3-iniciado-magia1';
+      }
       if(activeBgConst().feat.startsWith('Habilidoso') && bg.habilidoso.length!==3) return 'grp-3-habilidoso';
       if(!bg.equipment) return 'grp-3-equipment';
       return null;
@@ -705,8 +734,9 @@ function canAdvance(){
       const plan = bg.abilityPlan;
       const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
       const ferramentaOk = !activeBgConst().ferramentaOpcoes || !!bg.ferramentaEscolhida;
+      const iniciadoOk = !activeBgConst().iniciadoEmMagia || (bg.iniciadoCantrips.length===2 && bg.iniciadoSpell1.length===1);
       const habilidosoOk = !activeBgConst().feat.startsWith('Habilidoso') || bg.habilidoso.length===3;
-      return planOk && ferramentaOk && !!bg.equipment && habilidosoOk;
+      return planOk && ferramentaOk && iniciadoOk && !!bg.equipment && habilidosoOk;
     }
     case 4: return !!data.especie;
     case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
@@ -1213,6 +1243,16 @@ function renderSimpleBackgroundDetail(bgConst){
     ${bgConst.ferramentaOpcoes.map(k=>`<div class="check-pill ${bg.ferramentaEscolhida===k?'selected':''}" data-pick="${k}" data-fn="pickFerramentaEscolhida">${k}</div>`).join('')}
   </div>` : ''}
 
+  ${bgConst.iniciadoEmMagia ? `
+  <h3 id="grp-3-iniciado-truques">Iniciado em Magia — 2 truques de ${bgConst.iniciadoEmMagia.classe}</h3>
+  ${spellChoiceList(bgConst.iniciadoEmMagia.cantrips, bg.iniciadoCantrips, 2, 'toggleIniciadoCantrip')}
+  <div class="counter ${bg.iniciadoCantrips.length===2?'ok':''}">${bg.iniciadoCantrips.length}/2 escolhidos</div>
+
+  <h3 id="grp-3-iniciado-magia1">Iniciado em Magia — 1 magia de 1º círculo de ${bgConst.iniciadoEmMagia.classe}</h3>
+  <div class="intro" style="margin-bottom:8px;">Essa magia fica sempre preparada e pode ser conjurada 1x grátis por Descanso Longo (ou com espaço de magia depois).</div>
+  ${spellChoiceList(bgConst.iniciadoEmMagia.spells1, bg.iniciadoSpell1, 1, 'toggleIniciadoSpell1')}
+  <div class="counter ${bg.iniciadoSpell1.length===1?'ok':''}">${bg.iniciadoSpell1.length}/1 escolhida</div>` : ''}
+
   ${isHabilidoso ? `
   <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
   <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome} e não aparecem aqui.</div>
@@ -1450,7 +1490,9 @@ function renderSummary(){
 
   ${bgConst.feat.startsWith('Habilidoso') ? `
   <div class="summary-section"><h3>Talento — Habilidoso <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
-  <div class="content">${bg.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : `
+  <div class="content">${bg.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : bgConst.iniciadoEmMagia ? `
+  <div class="summary-section"><h3>Talento — Iniciado em Magia (${bgConst.iniciadoEmMagia.classe}) <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
+  <div class="content">Truques: ${bg.iniciadoCantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>Magia de 1º círculo: ${bg.iniciadoSpell1.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : `
   <div class="summary-section"><h3>Talento do Antecedente</h3>
   <div class="content">${bgConst.feat}</div></div>`}
 
@@ -1477,7 +1519,7 @@ function resetWizard(){
   step = 0;
   const bgDataInit = {};
   Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
-    bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null };
+    bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
   // NOTA: igual antes, esse reset só zera tiefling/pequenino entre as espécies
   // (pendência antiga, não introduzida agora — revisar quando mexer em espécies).
@@ -1651,6 +1693,8 @@ function pickPlus2(v){ const bg=activeBgData(); bg.abilityPlan.plus2=v; if(bg.ab
 function pickPlus1(v){ activeBgData().abilityPlan.plus1=v; persist(); render(); }
 function pickBgEquip(v){ activeBgData().equipment=v; persist(); render(); }
 function toggleHabilidoso(v){ const s=activeBgData().habilidoso; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<3)s.push(v); persist(); render(); }
+function toggleIniciadoCantrip(v){ const s=activeBgData().iniciadoCantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleIniciadoSpell1(v){ const s=activeBgData().iniciadoSpell1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<1)s.push(v); persist(); render(); }
 function pickFerramentaEscolhida(v){ activeBgData().ferramentaEscolhida=v; persist(); render(); }
 
 
