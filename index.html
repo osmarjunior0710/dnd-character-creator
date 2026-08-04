@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criador de Personagens — D&D 2024</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Spectral:ital,wght@0,500,600;1,400&family=Cormorant+Garamond:wght@500;600&display=swap');
+  :root{
+    --ink:#1b1512; --panel:#241c17; --panel2:#2c2119; --line:#5a4632;
+    --parchment:#e8dcc4; --parchment-dim:#b9ac91;
+    --wax:#7a1f2b; --wax-bright:#a53040;
+    --gold:#c9a15a; --gold-dim:#8a6f3d;
+    --green:#5c7a52;
+    --disabled:#3a322c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh;
+    background:
+      radial-gradient(ellipse at top left, rgba(90,70,50,0.25), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(90,30,40,0.18), transparent 60%),
+      var(--ink);
+    color:var(--parchment); font-family:'Spectral',serif;
+    padding:20px 14px 60px;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+  header{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--gold-dim); padding-bottom:12px; margin-bottom:18px;}
+  header h1{font-family:'Cinzel',serif; font-weight:900; font-size:1.5rem; letter-spacing:0.03em; color:var(--gold); margin:0;}
+  header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--parchment-dim); font-size:0.95rem;}
+  .progress{display:flex; gap:4px; margin-bottom:22px;}
+  .progress .seg{flex:1; height:4px; border-radius:2px; background:var(--disabled);}
+  .progress .seg.done{background:var(--gold-dim);}
+  .progress .seg.current{background:var(--wax-bright);}
+  .card{background:linear-gradient(180deg, var(--panel), var(--panel2)); border:1px solid var(--line); border-radius:5px; padding:22px 24px; position:relative;}
+  .card::before{content:"";position:absolute;inset:4px;border:1px solid rgba(201,161,90,0.12);border-radius:3px;pointer-events:none;}
+  .card h2{font-family:'Cinzel',serif; font-size:1.05rem; letter-spacing:0.06em; color:var(--gold); margin:0 0 6px;}
+  .card h3{font-family:'Cinzel',serif;font-size:0.85rem;color:var(--gold-dim);margin:16px 0 8px;}
+  .card .intro{color:var(--parchment-dim); font-size:0.9rem; margin-bottom:18px; line-height:1.5;}
+  .choice-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; margin-bottom:6px;}
+  .choice{border:1px solid var(--line); border-radius:4px; padding:12px 10px; text-align:center; cursor:pointer; background:rgba(0,0,0,0.2); transition:all .15s; font-family:'Cinzel',serif; font-size:0.82rem; letter-spacing:0.03em;}
+  .choice:hover:not(.disabled){border-color:var(--gold-dim); background:rgba(201,161,90,0.08);}
+  .choice.selected{border-color:var(--wax-bright); background:rgba(165,48,64,0.18); color:var(--gold);}
+  .choice.disabled{color:#5a5148; cursor:not-allowed; opacity:0.45;}
+  .choice .note{display:block; font-family:'Spectral',serif; font-size:0.68rem; color:var(--parchment-dim); margin-top:4px; letter-spacing:0;}
+  .option-block{border:1px solid var(--line); border-radius:4px; padding:14px; margin-bottom:12px; background:rgba(0,0,0,0.15);}
+  .option-block.selected{border-color:var(--gold-dim); background:rgba(201,161,90,0.06);}
+  .option-block h3{margin:0 0 6px; font-size:0.85rem;}
+  .option-block p{font-size:0.85rem; color:var(--parchment); margin:0; line-height:1.55;}
+  .option-block .pick-btn{margin-top:10px; background:none; border:1px solid var(--gold-dim); color:var(--gold-dim); font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; padding:5px 12px; border-radius:3px; cursor:pointer;}
+  .option-block.selected .pick-btn{background:var(--wax); border-color:var(--wax-bright); color:#f0dcc0;}
+  .check-list{display:flex; flex-wrap:wrap; gap:8px;}
+  .check-pill{border:1px solid var(--line); border-radius:14px; padding:6px 14px; cursor:pointer; font-size:0.85rem; background:rgba(0,0,0,0.2); user-select:none;}
+  .check-pill.selected{border-color:var(--wax-bright); background:rgba(165,48,64,0.25); color:var(--gold);}
+  .check-pill.disabled{opacity:0.35; cursor:not-allowed;}
+  .counter{font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold-dim); margin:10px 0 14px;}
+  .counter.ok{color:var(--green);}
+  .group-label{
+    font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--parchment); background:rgba(201,161,90,0.12); border-left:3px solid var(--gold-dim);
+    padding:4px 10px; margin:10px 0 8px; border-radius:0 3px 3px 0;
+  }
+  @keyframes pulseMissing{
+    0%,100%{ box-shadow:0 0 0 0 rgba(165,48,64,0); }
+    50%{ box-shadow:0 0 0 6px rgba(165,48,64,0.35); }
+  }
+  .highlight-missing{
+    outline:2px solid var(--wax-bright) !important;
+    border-radius:4px;
+    animation:pulseMissing 0.5s ease-in-out 3;
+  }
+  .spell-pill-wrap{display:inline-flex; align-items:center; gap:2px; vertical-align:top;}
+  .spell-pill-wrap.expanded{display:block; width:100%; margin-bottom:6px;}
+  .info-btn{
+    background:none; border:1px solid var(--line); color:var(--gold-dim); cursor:pointer;
+    font-size:0.75rem; width:20px; height:20px; border-radius:50%; line-height:1; padding:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .info-btn:hover{color:var(--gold); border-color:var(--gold-dim);}
+  .info-btn.active{background:var(--wax); border-color:var(--wax-bright); color:#f0dcc0;}
+  .spell-detail{
+    margin-top:6px; margin-bottom:6px; padding:10px 12px; border:1px solid var(--gold-dim);
+    border-radius:4px; background:rgba(0,0,0,0.28); font-size:0.82rem; line-height:1.55;
+  }
+  .spell-detail .stats{display:flex; flex-wrap:wrap; gap:4px 14px; margin-bottom:8px; font-size:0.72rem; color:var(--parchment-dim);}
+  .spell-detail .stats b{color:var(--gold); font-family:'Cinzel',serif; font-weight:700;}
+  .spell-detail .escala{margin-top:8px; color:var(--gold-dim); font-style:italic; font-size:0.78rem;}
+  .nav{display:flex; justify-content:space-between; margin-top:22px;}
+  .btn{font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:10px 22px; border-radius:4px; cursor:pointer; border:1px solid var(--gold-dim); background:transparent; color:var(--gold-dim);}
+  .btn.primary{background:var(--wax); border-color:var(--wax-bright); color:#f5e6d0;}
+  .btn.primary:disabled{background:var(--disabled); border-color:var(--disabled); color:#6a6259; cursor:not-allowed;}
+  .btn:hover:not(:disabled){filter:brightness(1.15);}
+  .btn.small{padding:3px 10px; font-size:0.68rem;}
+  .attr-row{display:grid; grid-template-columns: 140px 90px 90px 1fr; gap:12px; align-items:center; margin-bottom:10px;}
+  .attr-row .name{font-family:'Cinzel',serif; color:var(--gold); font-size:0.85rem;}
+  select, input{background:rgba(0,0,0,0.28); border:1px solid var(--line); border-radius:3px; color:var(--parchment); font-family:'Spectral',serif; font-size:0.9rem; padding:6px 8px; width:100%;}
+  .attr-row .bonus-tag{font-size:0.78rem; color:var(--green); font-family:'Cinzel',serif;}
+  .attr-row .final{font-family:'Cinzel',serif; color:var(--gold); font-weight:700;}
+  .save-indicator{font-family:'Cormorant Garamond',serif; font-size:0.8rem; color:var(--gold-dim); display:flex; align-items:center; gap:6px;}
+  .seal-dot{width:7px;height:7px;border-radius:50%;background:var(--wax-bright);opacity:0.3;}
+  .summary-section{margin-bottom:16px;}
+  .summary-section h3{font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dim); border-bottom:1px solid var(--line); padding-bottom:4px; margin-bottom:8px; margin-top:0;}
+  .summary-section .content{font-size:0.88rem; line-height:1.6; color:var(--parchment);}
+  .pill-static{display:inline-block; border:1px solid var(--line); border-radius:12px; padding:3px 10px; margin:2px 4px 2px 0; font-size:0.8rem; background:rgba(0,0,0,0.2);}
+  .edit-link{float:right; font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--gold-dim); cursor:pointer; border:none; background:none; text-decoration:underline; text-underline-offset:2px;}
+  .edit-link:hover{color:var(--gold);}
+  .wallet{position:sticky; top:8px; z-index:5; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(180deg, #2c2119, #1f1712); border:1px solid var(--gold-dim); border-radius:6px; padding:10px 16px; margin-bottom:16px;}
+  .wallet .label{font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--parchment-dim);}
+  .wallet .value{font-family:'Cinzel',serif; font-size:1.3rem; color:var(--gold); font-weight:900;}
+  .wallet .value.negative{color:var(--wax-bright);}
+  .shop-table{width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:18px;}
+  .shop-table th{font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-dim); text-align:left; border-bottom:1px solid var(--line); padding:5px 6px;}
+  .shop-table td{padding:5px 6px; border-bottom:1px solid rgba(255,255,255,0.06); vertical-align:middle;}
+  .shop-table .qty-cell{display:flex; align-items:center; gap:6px;}
+  .shop-table .qty-cell input{width:44px; text-align:center; padding:3px;}
+  .cart-list{font-size:0.85rem; margin-top:6px;}
+  .cart-item{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px dashed rgba(255,255,255,0.08);}
+  @media (max-width:700px){
+    .attr-row{grid-template-columns:100px 1fr 1fr; row-gap:4px;}
+    .attr-row .final{grid-column:1/-1;}
+    .shop-table{font-size:0.75rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Criador de Personagens</h1>
+      <div class="sub">D&D 2024 — Livro do Jogador + Unearthed Arcana</div>
+    </div>
+    <div class="save-indicator"><span class="seal-dot" id="saveDot"></span><span id="saveText">—</span></div>
+  </header>
+  <div class="progress" id="progressBar"></div>
+  <div class="card" id="cardContent"></div>
+</div>
+<script>
+/* ==========================================================================
+   NOTA PARA A PRÓXIMA INSTÂNCIA DO CLAUDE — leia antes de editar este arquivo
+   ==========================================================================
+   Este é um assistente de criação de personagem D&D 2024 (estilo Roll20):
+   passo a passo, só libera "Avançar" quando a etapa está completa, com foco
+   automático (scroll + destaque) na primeira seleção faltante.
+
+   ESCOPO ATUAL (funcionando): Bruxo, Tiferino, Charlatão.
+   FALTAM: as outras 11 classes, 9 espécies, 14 antecedentes do PHB 2024.
+
+   O usuário provavelmente vai subir de novo, neste novo chat:
+   1. O PDF do Livro do Jogador D&D 5e 2024
+   2. A planilha "Magias_PHB2024_Completo.xlsx" (abas "Magias PHB 2024 + UA
+      Psion" e "Talentos") — já tem TODAS as magias/truques/talentos do
+      livro condensados (efeito + escalonamento em português, parafraseado,
+      não copiado cru do livro). É a fonte mais rápida pra alimentar
+      SPELL_DETAILS de qualquer classe nova.
+   3. (Só se for mexer em Psiônico) o PDF do Unearthed Arcana Psiônico 2025
+
+   ONDE MEXER PRA ADICIONAR CONTEÚDO NOVO:
+   - CLASSES / SPECIES / BACKGROUNDS: arrays com os nomes oficiais (12/10/15).
+     ENABLED_CLASSES / ENABLED_SPECIES / ENABLED_BACKGROUNDS controlam o que
+     já é clicável na tela de seleção (resto fica cinza, "em breve").
+   - Nova classe: criar objeto tipo BRUXO (skills, cantrips, spells1,
+     equipmentA/B, weaponProf, armorProf...) + função renderXDetail() +
+     handlers de toggle, no mesmo padrão do Bruxo. Adicionar entrada em
+     CLASS_INFO (descrição + Atributo Principal + Dado de Vida + Complexidade
+     — tirado da tabela "Visão Geral das Classes", página 33 do livro).
+   - Nova espécie: objeto tipo TIEFLING com os traços/escolhas próprias.
+   - Novo antecedente: objeto tipo CHARLATAO + entrada em BACKGROUND_INFO
+     (nome do talento + descrição curta do QUE O TALENTO FAZ, não da
+     "personalidade" do antecedente + perícias/ferramenta).
+   - SPELL_DETAILS: nome -> {tempo, alcance, componentes, duracao, efeito,
+     escalonamento}. Usado pelo botão "ⓘ" (spellChoiceList) nas listas de
+     magia/truque. Puxar direto da planilha, mesmo texto já condensado.
+   - SHOP: itens da loja final, filtrados por proficiência (campo filterProf
+     bate com weaponProf/armorProf da classe). Kits com múltiplos itens usam
+     o campo "cont" pra listar o conteúdo (evita duplicar comprando 2 kits
+     parecidos, tipo Aventureiro + Explorador de Masmorras).
+   - Ordem das etapas (mudar com cuidado, tudo sincronizado):
+     0 Espécie -> 1 detalhe espécie -> 2 Antecedente -> 3 detalhe antecedente
+     -> 4 Classe -> 5 detalhe classe -> 6 Atributos -> 7 Loja -> 8 Resumo.
+     Se adicionar/mudar etapa, atualizar TOTAL_STEPS, render(), canAdvance()
+     E findFirstMissingGroup() juntos (os 3 têm um switch/case por step).
+   - findFirstMissingGroup(): cada grupo de escolha tem id="grp-{step}-nome"
+     pra permitir o scroll+destaque automático. Grupo novo = id novo.
+   - editSection(idx) / returnToSummary: sistema de "editar e voltar pro
+     resumo" (usado nos links "Editar" da tela final).
+   - ALL_SKILLS / ALL_TOOLS: catálogo oficial de perícias e FERRAMENTAS DE
+     VERDADE (as que têm ficha de Atributo+Usar Objeto no livro). Cuidado:
+     "Kit de Aventureiro", "Kit de Diplomata" etc. NÃO são ferramentas, são
+     só pacotes de equipamento — não confundir na hora de montar talentos
+     tipo Habilidoso pra outros antecedentes.
+
+   PADRÕES A MANTER:
+   - Nunca copiar parágrafo cru do livro — sempre parafrasear (mesma regra
+     de direitos autorais usada nas outras conversas/planilha).
+   - Todo texto em português, mesmo tom já usado no resto do arquivo.
+   - Testar com Playwright headless (clicando o fluxo inteiro) depois de
+     qualquer edição, antes de entregar — erro de sintaxe JS às vezes só
+     aparece assim, o resto do app quebra silenciosamente.
+   ========================================================================== */
+
+const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
+const ENABLED_CLASSES = ["Bruxo"];
+const SPECIES = ["Aasimar","Anão","Draconato","Elfo","Gnomo","Golias","Humano","Orc","Pequenino","Tiferino"];
+const ENABLED_SPECIES = ["Tiferino"];
+const BACKGROUNDS = ["Acólito","Artesão","Artista","Charlatão","Criminoso","Eremita","Fazendeiro","Guarda","Guia","Marinheiro","Mercador","Nobre","Órfão","Sábio","Soldado"];
+const ENABLED_BACKGROUNDS = ["Charlatão"];
+
+const BRUXO = {
+  skills: ["Arcanismo","Enganação","História","Intimidação","Investigação","Natureza","Religião"],
+  pactBoons: {
+    "Pacto do Tomo": "Ao final de um Descanso Curto ou Longo, você conjura um Livro das Sombras (aparência à sua escolha) na mão. Escolha 3 truques e 2 magias de 1º círculo com o marcador Ritual, de qualquer lista de classe (que você ainda não tenha preparadas). Enquanto tiver o livro, essas magias ficam sempre preparadas e funcionam como magias de Bruxo. O livro também serve como Foco de Conjuração.",
+    "Pacto da Lâmina": "Como Ação Bônus, conjura uma arma de pacto na mão (Corpo a Corpo Simples ou Marcial à escolha) ou vincula-se a uma arma mágica tocada. Tem proficiência com ela e pode usá-la como Foco de Conjuração. Ao atacar com ela, pode usar Carisma no ataque/dano em vez de Força/Destreza, e causar dano Necrótico, Psíquico ou Radiante em vez do tipo normal.",
+    "Pacto da Corrente": "Aprende Convocar Familiar e pode conjurá-la sem gastar espaço de magia. Pode escolher formas especiais de familiar (Cobra Peçonhenta, Diabrete, Esfinge Maravilhosa, Esqueleto, Pseudodragão, Quasit, Slaad Girino, Sprite). Ao executar a ação Atacar, pode abrir mão de um ataque seu para o familiar atacar como Reação dele."
+  },
+  cantrips: ["Amigos","Badalar Fúnebre","Golpe Certeiro","Ilusão Menor","Mãos Mágicas","Prestidigitação Arcana","Proteção Contra Lâminas","Raio Místico","Rajada de Veneno","Talho Mental","Toque Necrótico","Trovão"],
+  spells1: ["Armadura de Agathys","Braços de Hadar","Compreender Idiomas","Danação","Detectar Magia","Enfeitiçar Pessoa","Escrita Ilusória","Falar com Animais","Gargalhada Nefasta de Tasha","Perdição","Proteção Contra o Bem e o Mal","Raio de Bruxa","Repreensão Diabólica","Retirada Acelerada","Servo Invisível"],
+  equipmentA: ["Armadura de Couro", "Foice", "2 Adagas", "Foco Arcano (orbe)", "Livro (conhecimento oculto)", "Kit de Erudito", "15 PO"],
+  equipmentB_gold: 100,
+  weaponProf: "simples",
+  armorProf: "leve"
+};
+
+const ALL_CANTRIPS = ["Acudir os Moribundos","Amigos","Arremesso Telecinético","Arte Druídica","Badalar Fúnebre","Bolha Ácida","Bordão Místico","Chama Sagrada","Chicote de Espinhos","Criar Chamas","Elementalismo","Explosão Elemental","Fagulha Estelar","Golpe Certeiro","Ilusão Menor","Luz","Luzes Dançantes","Mensagem","Mãos Mágicas","Orientação","Palavra de Radiância","Prestidigitação Arcana","Proteção Contra Lâminas","Raio Místico","Raio de Fogo","Raio de Gelo","Rajada de Veneno","Reparar","Resistência","Talho Mental","Taumaturgia","Toque Chocante","Toque Necrótico","Trovão","Zombaria Perversa"];
+const ALL_1ST_RITUAL = ["Alarme","Compreender Idiomas","Convocar Familiar","Detectar Magia","Detectar Veneno e Doença","Disco Flutuante de Tenser","Escrita Ilusória","Falar com Animais","Identificar","Purificar Alimentos e Bebidas","Servo Invisível"];
+
+const SPELL_DETAILS = {
+"Acudir os Moribundos": {tempo:"Ação", alcance:"4,5 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Você estabiliza à distância uma criatura caída a 0 PV (sem curar). Alcance dobra nos níveis 5/11/17.", escalonamento:"—"},
+"Alarme": {tempo:"1 minuto ou Ritual", alcance:"9 metros", componentes:"V, S, M (um sino e um fio de prata)", duracao:"8 horas", efeito:"Define um alarme de intrusão numa porta/janela/área (até cubo de 6m). Escolha: alarme mental (acorda você a até 1,5km) ou sonoro (sino audível 18m por 10s). Pode isentar criaturas específicas.", escalonamento:"—"},
+"Amigos": {tempo:"Ação", alcance:"3 metros", componentes:"S, M (um pouco de maquiagem)", duracao:"Concentração, até 1 minuto", efeito:"Você emana um sentimento mágico de amizade. Salv. Sabedoria ou fica Enfeitiçado pela duração (falha automática se não for Humanoide, já estiver lutando com você, ou já sofreu essa magia sua nas últimas 24h). Encerra se sofrer dano ou você atacar/causar dano/forçar salvaguarda. Ao acabar, o alvo sabe que foi enfeitiçado — risco de criar um inimigo.", escalonamento:"—"},
+"Armadura de Agathys": {tempo:"Ação Bônus", alcance:"Pessoal", componentes:"V, S, M (um caco de vidro azul)", duracao:"1 hora", efeito:"Frio mágico te envolve: +5 PV temporários; quem te acertar corpo a corpo sofre 5 dano Gélido. Encerra ao perder os PV temp.", escalonamento:"Upcast: +5 PV temp e +5 dano por círculo."},
+"Arremesso Telecinético": {tempo:"1 ação", alcance:"18 metros", componentes:"S", duracao:"Instantânea", efeito:"Você arremessa um objeto não mágico solto (0,5-2,5 kg, a até 3m de você) contra uma criatura no alcance — ataque mágico à distância: 1d10 dano de Força; o objeto cai intacto (acerto ou erro).", escalonamento:"Escala: 2d10 (nível 5), 3d10 (nível 11), 4d10 (nível 17)."},
+"Arte Druídica": {tempo:"Ação", alcance:"9 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Sussurra aos espíritos da natureza pra um efeito pequeno à escolha: acender/apagar chama; efeito sensorial inofensivo (folhas, brisa, som, cheiro); flor desabrochando; ou previsão do clima nas próximas 24h (efeito visual dura 1 rodada).", escalonamento:"—"},
+"Badalar Fúnebre": {tempo:"Ação", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Um sino sombrio soa perto do alvo. Salv. Sabedoria ou 1d8 dano Necrótico (1d12 se o alvo já estiver ferido).", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Bolha Ácida": {tempo:"Ação", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Uma bolha de ácido explode numa esfera de 1,5m. Salv. Destreza (área) ou 1d6 dano Ácido.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+"Bordão Místico": {tempo:"Ação Bônus", alcance:"Pessoal", componentes:"V, S, M (um ramo de visco)", duracao:"1 minuto", efeito:"Imbui um Cajado/Clava com poder natural: usa seu atributo de conjuração no ataque/dano corpo a corpo, dado vira d8 (evolui pra d10/d12/2d6 nos níveis 5/11/17), dano pode ser Energético ou o normal da arma. Encerra se reconjurar ou soltar a arma.", escalonamento:"—"},
+"Braços de Hadar": {tempo:"Ação", alcance:"Pessoal", componentes:"V, S", duracao:"Instantânea", efeito:"Tentáculos irrompem de você (emanação 3m). Salv. Força ou 2d6 dano Necrótico + sem Reação até o próximo turno do alvo (sucesso=metade do dano).", escalonamento:"Upcast: +1d6."},
+"Chama Sagrada": {tempo:"Ação", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Um brilho ardente cai sobre o alvo. Salv. Destreza (ignora Cobertura Parcial/¾) ou 1d8 dano Radiante.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Chicote de Espinhos": {tempo:"Ação", alcance:"9 metros", componentes:"V, S, M (o caule de uma planta espinhosa)", duracao:"Instantânea", efeito:"Um chicote de videira espinhosa ataca a distância curta. Ataque corpo a corpo: 1d6 dano Perfurante; se Grande ou menor, puxa o alvo até 3m mais perto.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+"Compreender Idiomas": {tempo:"Ação ou Ritual", alcance:"Pessoal", componentes:"V, S, M (uma pitada de fuligem e sal)", duracao:"1 hora", efeito:"Entende qualquer idioma ouvido ou escrito que toque, pela duração. Não decodifica códigos/mensagens secretas.", escalonamento:"—"},
+"Convocar Familiar": {tempo:"1 hora ou Ritual", alcance:"3 metros", componentes:"V, S, M (incenso queimando no valor de 10 ou mais PO, que a magia consome)", duracao:"Instantânea", efeito:"Invoca um familiar espiritual (forma de animal pequeno à escolha, tipo Celestial/Feérico/Ínfero). Comunicação telepática a 30m; Ação Bônus pra ver/ouvir por ele; pode entregar toques de magia. Some ao chegar a 0 PV, só reaparece reconjurando. Só 1 familiar por vez.", escalonamento:"—"},
+"Criar Chamas": {tempo:"Ação Bônus", alcance:"Pessoal", componentes:"V, S", duracao:"10 minutos", efeito:"Uma chama fria (sem calor, não queima nada) surge na sua mão, luz plena 6m + meia-luz 6m. Pode ser arremessada à distância (18m) como ataque: 1d8 dano Ígneo.", escalonamento:"Escala 5/11/17. Encerra se reconjurar."},
+"Danação": {tempo:"Ação Bônus", alcance:"27 metros", componentes:"V, S, M (o olho petrificado de uma salamandra)", duracao:"Concentração, até 1 hora", efeito:"Amaldiçoa um alvo à vista: +1d6 dano Necrótico em cada acerto contra ele; escolha 1 atributo — o alvo tem Desvantagem em testes desse atributo. Se o alvo morre antes de acabar, você pode (Ação Bônus depois) amaldiçoar outro alvo.", escalonamento:"Upcast: Concentração dura mais (2º:4h / 3-4º:8h / 5º+:24h)."},
+"Detectar Magia": {tempo:"Ação ou Ritual", alcance:"Pessoal", componentes:"V, S", duracao:"Concentração, até 10 minutos", efeito:"Sente magia num raio de 9m; pode ver aura e escola da magia. Bloqueada por pedra/metal/chumbo.", escalonamento:"—"},
+"Detectar Veneno e Doença": {tempo:"Ação ou Ritual", alcance:"Pessoal", componentes:"V, S, M (uma folha de teixo)", duracao:"Concentração, até 10 minutos", efeito:"Sente venenos, criaturas venenosas e doenças mágicas num raio de 9m, identificando o tipo. Bloqueado por pedra/metal/chumbo.", escalonamento:"—"},
+"Disco Flutuante de Tenser": {tempo:"Ação ou Ritual", alcance:"9 metros", componentes:"V, S, M (uma gota de mercúrio)", duracao:"1 hora", efeito:"Cria um disco flutuante que carrega até 225kg e te segue automaticamente (até 6m de distância). Não sobe/desce mudanças de elevação de 3m+. Encerra se você se afastar mais de 30m dele.", escalonamento:"—"},
+"Elementalismo": {tempo:"Ação", alcance:"9 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Controle sutil sobre os elementos — escolha: névoa d'água leve ou 1 xícara de água limpa; brisa que mexe objetos leves; fumaça colorida/perfumada que acende pavios; poeira/areia decorativa ou escrita; ou esculpir água/terra/fumaça numa forma rudimentar por 1h. Puro utilidade, sem dano.", escalonamento:"—"},
+"Enfeitiçar Pessoa": {tempo:"Ação", alcance:"9 metros", componentes:"V, S", duracao:"1 hora", efeito:"Um Humanoide à vista faz Salv. Sabedoria (Vantagem se já em combate com você) ou fica Enfeitiçado/amigável até acabar ou você/aliados causarem dano nele. Ao acabar, ele sabe que foi enfeitiçado.", escalonamento:"Upcast: +1 alvo/círculo."},
+"Escrita Ilusória": {tempo:"1 minuto ou Ritual", alcance:"Toque", componentes:"S, M (tinta no valor de 10 ou mais PO, que a magia consome)", duracao:"10 dias", efeito:"Texto escrito parece dizer uma coisa pra quem você escolher, e outra (ou ilegível) pra qualquer outro — pode até mudar idioma/caligrafia. Dura 10 dias. Visão Verdadeira revela a mensagem real.", escalonamento:"—"},
+"Explosão Elemental": {tempo:"Ação", alcance:"36 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Energia arcana à distância, tipo elemental à escolha (Ácido/Elétrico/Gélido/Ígneo/Psíquico/Trovejante/Venenoso). Ataque à distância: 1d8 dano; se tirar 8 no dado, rola outro d8 extra (até o limite do seu mod. de atributo).", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Fagulha Estelar": {tempo:"Ação", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Faísca de luz à distância. Ataque: 1d8 dano Radiante; alvo emite Meia-luz 3m e perde benefício de Invisível até o fim do seu próximo turno.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Falar com Animais": {tempo:"Ação ou Ritual", alcance:"Pessoal", componentes:"V, S", duracao:"10 minutos", efeito:"Compreende e conversa com Feras por 10 min; pode usar ação Influenciar nelas. A maioria só sabe sobre sobrevivência/território, mas pode informar sobre a área e o que viu no último dia.", escalonamento:"—"},
+"Gargalhada Nefasta de Tasha": {tempo:"Ação", alcance:"9 metros", componentes:"V, S, M (uma torta e uma pena)", duracao:"Concentração, até 1 minuto", efeito:"Salv. Sabedoria ou fica Caído e Incapacitado, rindo sem controle. Repete a salvaguarda ao sofrer dano ou no fim de cada turno (Vantagem se foi por dano).", escalonamento:"Upcast: +1 alvo/círculo."},
+"Golpe Certeiro": {tempo:"Ação", alcance:"Pessoal", componentes:"S, M (uma arma com a qual você tem proficiência e que vale 1 ou mais PC)", duracao:"Instantânea", efeito:"Ataque com arma guiado por intuição mágica — usa seu atributo de conjuração em vez de Força/Destreza; dano pode ser Radiante ou o normal da arma.", escalonamento:"Ganha +1d6/2d6/3d6 Radiante extra nos níveis 5/11/17."},
+"Identificar": {tempo:"1 minuto ou Ritual", alcance:"Toque", componentes:"V, S, M (uma pérola no valor de 100 ou mais PO)", duracao:"Instantânea", efeito:"Toca um item mágico: revela propriedades, uso, necessidade de Sintonização, cargas restantes, e quais magias o afetam (e o nome da magia que o criou). Em criatura: revela quais magias a afetam.", escalonamento:"—"},
+"Ilusão Menor": {tempo:"Ação", alcance:"9 metros", componentes:"S, M (um pouco de lã)", duracao:"1 minuto", efeito:"Cria um SOM (voz, grito, som de animal, tambores) OU uma IMAGEM de objeto pequeno (até 1,5m). Dura pela duração; encerra se reconjurar. Investigação vs sua CD revela a farsa; imagem não gera som/luz/cheiro e some ao ser tocada.", escalonamento:"—"},
+"Luz": {tempo:"Ação", alcance:"Toque", componentes:"V, M (um vaga-lume ou musgo fosforescente)", duracao:"1 hora", efeito:"Toca um objeto (Grande ou menor); ele emite Luz Plena 6m + Meia-luz 6m, cor à escolha, até cobrir com algo opaco ou reconjurar.", escalonamento:"—"},
+"Luzes Dançantes": {tempo:"Ação", alcance:"36 metros", componentes:"V, S, M (um pouco de fósforo)", duracao:"Concentração, até 1 minuto", efeito:"Cria até 4 luzes-tocha flutuantes (ou 1 forma humanoide brilhante combinando as 4), Meia-luz 3m cada. Move até 18m como Ação Bônus; luzes precisam ficar a até 6m umas das outras.", escalonamento:"—"},
+"Mensagem": {tempo:"Ação", alcance:"36 metros", componentes:"S, M (um fio de cobre)", duracao:"1 rodada", efeito:"Sussurro mágico dirigido — só o alvo ouve e pode responder em sussurro só pra você. Atravessa paredes finas (bloqueado por 30cm de pedra/metal/madeira, folha de chumbo, ou Silêncio).", escalonamento:"—"},
+"Mãos Mágicas": {tempo:"Ação", alcance:"9 metros", componentes:"V, S", duracao:"1 minuto", efeito:"Mão espectral manipula objetos, abre portas/recipientes destrancados, guarda ou pega itens, despeja frascos — até 5kg, sem atacar. Some se afastar 9m ou reconjurar; controla de novo com Ação de Usar Magia.", escalonamento:"—"},
+"Orientação": {tempo:"Ação", alcance:"Toque", componentes:"V, S", duracao:"Concentração, até 1 minuto", efeito:"Toca uma criatura voluntária; ela soma 1d4 num teste de perícia à escolha, enquanto durar.", escalonamento:"—"},
+"Palavra de Radiância": {tempo:"Ação", alcance:"Pessoal", componentes:"V, M (um símbolo com um raio de sol)", duracao:"Instantânea", efeito:"Explosão de luz ardente ao seu redor (1,5m). Cada criatura escolhida à vista: Salv. Constituição ou 1d6 dano Radiante.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+"Perdição": {tempo:"Ação", alcance:"9 metros", componentes:"V, S, M (uma gota de sangue)", duracao:"Concentração, até 1 minuto", efeito:"Até 3 criaturas: Salv. Carisma ou -1d4 em ataques/salvaguardas enquanto durar.", escalonamento:"Upcast: +1 alvo/círculo."},
+"Prestidigitação Arcana": {tempo:"Ação", alcance:"3 metros", componentes:"V, S", duracao:"Até 1 hora", efeito:"Pequeno truque mágico à escolha: acender/apagar chama; bugiganga sem valor ou imagem ilusória na mão (até seu próximo turno); efeito sensorial instantâneo inofensivo; limpar/sujar objeto pequeno; marca/símbolo colorido por 1h; esquentar/esfriar/temperar material pequeno por 1h. Até 3 efeitos duradouros simultâneos.", escalonamento:"—"},
+"Proteção Contra Lâminas": {tempo:"Ação", alcance:"Pessoal", componentes:"V, S", duracao:"Concentração, até 1 minuto", efeito:"Enquanto durar, qualquer ataque contra você tem -1d4 na jogada.", escalonamento:"—"},
+"Proteção Contra o Bem e o Mal": {tempo:"Ação", alcance:"Toque", componentes:"V, S, M (um pote de Água Benta no valor de 25 ou mais PO, que a magia consome)", duracao:"Concentração, até 10 minutos", efeito:"Toca aliado voluntário: proteção contra Aberrações/Celestiais/Elementais/Feéricos/Ínferos/Mortos-Vivos — Desvantagem no ataque deles contra o alvo; imunidade a possessão/Amedrontado/Enfeitiçado vindo deles (ou Vantagem pra remover se já afetado).", escalonamento:"—"},
+"Purificar Alimentos e Bebidas": {tempo:"Ação ou Ritual", alcance:"3 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Remove veneno e podridão de comida/bebida não-mágica numa esfera de 1,5m.", escalonamento:"—"},
+"Raio Místico": {tempo:"Ação", alcance:"36 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Feixe de energia crepitante à distância. Ataque: 1d10 dano de Força.", escalonamento:"Ganha raio extra nos níveis 5(2)/11(3)/17(4), cada um mirando alvo igual ou diferente."},
+"Raio de Bruxa": {tempo:"Ação", alcance:"18 metros", componentes:"V, S, M (um galho atingido por um raio)", duracao:"Concentração, até 1 minuto", efeito:"Arco elétrico sustentado. Ataque à distância: 2d12 dano Elétrico. Em turnos seguintes, Ação Bônus = +1d12 automático (mesmo sem novo ataque), enquanto o alvo estiver no alcance/à vista.", escalonamento:"Upcast: +1d12 inicial."},
+"Raio de Fogo": {tempo:"Ação", alcance:"36 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Partícula de fogo dispara da mão. Ataque à distância: 1d10 dano Ígneo; incendeia objeto inflamável desprotegido.", escalonamento:"Escala 5(2d10)/11(3d10)/17(4d10)."},
+"Raio de Gelo": {tempo:"Ação", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Feixe congelante azul-esbranquiçado. Ataque à distância: 1d8 dano Gélido; reduz Deslocamento em 3m até o início do próximo turno do alvo.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Rajada de Veneno": {tempo:"Ação", alcance:"9 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Névoa tóxica projetada à distância. Ataque: 1d12 dano Venenoso.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d12, 3d12 e 4d12 respectivamente."},
+"Reparar": {tempo:"1 minuto", alcance:"Toque", componentes:"V, S, M (duas pedras-ímã)", duracao:"Instantânea", efeito:"Conserta uma quebra/rasgo pequeno (até 30cm) num objeto tocado, sem deixar vestígio — inclusive item mágico fisicamente, mas não restaura a magia dele.", escalonamento:"—"},
+"Repreensão Diabólica": {tempo:"Reação, que você realiza ao receber dano de uma criatura à sua vista e a até 18 metros de você", alcance:"18 metros", componentes:"V, S", duracao:"Instantânea", efeito:"Reação ao sofrer dano de alguém à vista (até 18m): chamas verdes o cercam. Salv. Destreza ou 2d10 dano Ígneo (sucesso=metade).", escalonamento:"Upcast: +1d10."},
+"Resistência": {tempo:"Ação", alcance:"Toque", componentes:"V, S", duracao:"Concentração, até 1 minuto", efeito:"Toca criatura voluntária, escolhe 1 tipo de dano; reduz esse dano em 1d4 quando sofrido, uma vez por turno, enquanto durar.", escalonamento:"—"},
+"Retirada Acelerada": {tempo:"Ação Bônus", alcance:"Pessoal", componentes:"V, S", duracao:"Concentração, até 10 minutos", efeito:"Usa Correr; pode repetir Correr como Ação Bônus enquanto durar.", escalonamento:"—"},
+"Servo Invisível": {tempo:"Ação ou Ritual", alcance:"18 metros", componentes:"V, S, M (um pedaço de barbante e de madeira)", duracao:"1 hora", efeito:"Cria uma força invisível (CA10, 1 PV, Força 2) que faz tarefas simples por comando mental (buscar, limpar, consertar, servir) — move 4,5m por Ação Bônus. Não ataca. Encerra a mais de 18m de você ou se reduzida a 0 PV.", escalonamento:"—"},
+"Talho Mental": {tempo:"Ação", alcance:"18 metros", componentes:"V", duracao:"1 rodada", efeito:"Ataque mental à distância. Salv. Inteligência ou 1d6 dano Psíquico e -1d4 na próxima salvaguarda antes do fim do próximo turno do alvo.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+"Taumaturgia": {tempo:"Ação", alcance:"9 metros", componentes:"V", duracao:"Até 1 minuto", efeito:"Pequenos 'milagres' à escolha: chamas piscando/mudando de cor; porta/janela destrancada abrindo/fechando sozinha; alterar aparência dos próprios olhos; som instantâneo à distância (trovão, corvo, sussurros); voz ecoando 3x mais alto (Vantagem em Intimidação) por 1 min; tremores leves no chão. Até 3 efeitos de 1 min simultâneos.", escalonamento:"—"},
+"Toque Chocante": {tempo:"Ação", alcance:"Toque", componentes:"V, S", duracao:"Instantânea", efeito:"Raios saltam da sua mão. Ataque corpo a corpo: 1d8 dano Elétrico; alvo não pode fazer Ataque de Oportunidade até o início do próximo turno dele.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d8, 3d8 e 4d8 respectivamente."},
+"Toque Necrótico": {tempo:"Ação", alcance:"Toque", componentes:"V, S", duracao:"Instantânea", efeito:"Frio da sepultura num toque. Ataque corpo a corpo: 1d10 dano Necrótico; alvo não recupera PV até o fim do próximo turno dele.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d10, 3d10 e 4d10 respectivamente."},
+"Trovão": {tempo:"Ação", alcance:"Pessoal", componentes:"S", duracao:"Instantânea", efeito:"Estrondo sônico ao seu redor (1,5m), audível a 30m. Cada criatura na área: Salv. Constituição ou 1d6 dano Trovejante.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+"Zombaria Perversa": {tempo:"Ação", alcance:"18 metros", componentes:"V", duracao:"Instantânea", efeito:"Insultos com encantamento sutil. Salv. Sabedoria ou 1d6 dano Psíquico e Desvantagem no próximo ataque do alvo antes do fim do turno seguinte dele.", escalonamento:"Escala nos níveis de personagem 5, 11 e 17: dano sobe pra 2d6, 3d6 e 4d6 respectivamente."},
+};
+
+const TIEFLING = {
+  legados: {
+    "Abissal": {l1:"Resistência a dano Venenoso + truque Rajada de Veneno", l3:"Raio Nauseante (sempre preparada)", l5:"Paralisar Pessoa (sempre preparada)"},
+    "Ctônico": {l1:"Resistência a dano Necrótico + truque Toque Necrótico", l3:"Vitalidade Vazia (sempre preparada)", l5:"Raio do Enfraquecimento (sempre preparada)"},
+    "Infernal": {l1:"Resistência a dano Ígneo + truque Raio de Fogo", l3:"Repreensão Diabólica (sempre preparada)", l5:"Escuridão (sempre preparada)"}
+  }
+};
+
+const CHARLATAO = {
+  suggestedAbilities: ["Destreza","Constituição","Carisma"],
+  feat: "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
+  skills: ["Enganação","Prestidigitação"],
+  tool: "Kit de Falsificação",
+  equipmentA: ["Kit de Falsificação","Fantasia","Roupas Finas"],
+  equipmentA_gold: 15,
+  equipmentB_gold: 50
+};
+
+const STANDARD_ARRAY = [15,14,13,12,10,8];
+const ABILITIES = ["Força","Destreza","Constituição","Inteligência","Sabedoria","Carisma"];
+
+const BACKGROUND_INFO = {
+  "Charlatão": {
+    talentoNome: "Habilidoso",
+    talentoDesc: "ganha proficiência em 3 perícias ou ferramentas à sua escolha",
+    fields: [["Perícias","Enganação, Prestidigitação"],["Ferramenta","Kit de Falsificação"]]
+  }
+};
+
+/* Tabela "Visão Geral das Classes", página 33 do livro — Interesse, Atributo Primário, Complexidade */
+const CLASS_OVERVIEW_TABLE = {
+  "Bárbaro": {interesse:"Batalha", atributo:"Força", complexidade:"Média"},
+  "Bardo": {interesse:"Atuação", atributo:"Carisma", complexidade:"Alta"},
+  "Bruxo": {interesse:"Conhecimento obscuro", atributo:"Carisma", complexidade:"Alta"},
+  "Clérigo": {interesse:"Deuses", atributo:"Sabedoria", complexidade:"Média"},
+  "Druida": {interesse:"Natureza", atributo:"Sabedoria", complexidade:"Alta"},
+  "Feiticeiro": {interesse:"Poder", atributo:"Carisma", complexidade:"Alta"},
+  "Guardião": {interesse:"Sobrevivência", atributo:"Destreza e Sabedoria", complexidade:"Média"},
+  "Guerreiro": {interesse:"Armas", atributo:"Força ou Destreza", complexidade:"Baixa"},
+  "Ladino": {interesse:"Furtividade", atributo:"Destreza", complexidade:"Baixa"},
+  "Mago": {interesse:"Livros de magia", atributo:"Inteligência", complexidade:"Média"},
+  "Monge": {interesse:"Combate desarmado", atributo:"Destreza e Sabedoria", complexidade:"Alta"},
+  "Paladino": {interesse:"Proteção", atributo:"Força e Carisma", complexidade:"Média"},
+};
+
+const CLASS_INFO = {
+  "Bruxo": {
+    descricao: "Firma um pacto com uma entidade sobrenatural, trocando serviço por magia e poderes.",
+    fields: [["Atributo Principal","Carisma"],["Dado de Vida","d8"],["Complexidade","Alta"]]
+  }
+};
+
+const ALL_SKILLS = ["Acrobacia","Arcanismo","Atletismo","Atuação","Enganação","Furtividade","História","Intimidação","Intuição","Investigação","Lidar com Animais","Medicina","Natureza","Percepção","Persuasão","Prestidigitação","Religião","Sobrevivência"];
+const ALL_TOOLS = ["Ferramentas de Carpinteiro","Ferramentas de Cartógrafo","Ferramentas de Coureiro","Ferramentas de Tecelão","Ferramentas de Vidreiro","Suprimentos de Alquimista","Suprimentos de Calígrafo","Suprimentos de Cervejeiro","Suprimentos de Pintor","Utensílios de Cozinheiro","Ferramentas de Ladrão","Ferramentas de Navegador","Instrumento Musical (à escolha)","Kit de Disfarce","Kit de Herbalismo","Kit de Jogos (à escolha)","Kit de Veneno"];
+
+const SHOP = {
+  "Armas Simples — Corpo a Corpo": { filterProf: "simples", items: [
+      {n:"Adaga", d:"1d4 Perfurante", p:"Acuidade, Arremesso, Leve", c:2},
+      {n:"Azagaia", d:"1d6 Perfurante", p:"Arremesso", c:0.5},
+      {n:"Cajado", d:"1d6 Contundente", p:"Versátil (1d8)", c:0.2},
+      {n:"Clava", d:"1d4 Contundente", p:"Leve", c:0.1},
+      {n:"Clava Grande", d:"1d8 Contundente", p:"Duas Mãos", c:0.2},
+      {n:"Foice", d:"1d4 Cortante", p:"Leve", c:1},
+      {n:"Lança", d:"1d6 Perfurante", p:"Arremesso, Versátil (1d8)", c:1},
+      {n:"Maça", d:"1d6 Contundente", p:"—", c:5},
+      {n:"Machadinha", d:"1d6 Cortante", p:"Arremesso, Leve", c:5},
+      {n:"Martelo Leve", d:"1d4 Contundente", p:"Arremesso, Leve", c:2},
+  ]},
+  "Armas Simples — À Distância": { filterProf: "simples", items: [
+      {n:"Arco Curto", d:"1d6 Perfurante", p:"Duas Mãos, Munição (24/96)", c:25},
+      {n:"Besta Leve", d:"1d8 Perfurante", p:"Duas Mãos, Munição, Recarga", c:25},
+      {n:"Dardo", d:"1d4 Perfurante", p:"Acuidade, Arremesso", c:0.05},
+      {n:"Funda", d:"1d4 Contundente", p:"Munição", c:0.1},
+  ]},
+  "Armadura Leve": { filterProf: "leve", items: [
+      {n:"Armadura Acolchoada", d:"CA 11 + Destreza", p:"Desvantagem em Furtividade", c:5},
+      {n:"Armadura de Couro", d:"CA 11 + Destreza", p:"—", c:10},
+      {n:"Armadura de Couro Batido", d:"CA 12 + Destreza", p:"Desvantagem em Furtividade", c:45},
+  ]},
+  "Equipamento de Aventura": { filterProf: null, items: [
+      {n:"Ácido (frasco)", d:"", p:"2d6 dano Ácido ao arremessar", c:25},
+      {n:"Água Benta (frasco)", d:"", p:"2d8 Radiante vs Ínfero/Morto-vivo", c:25},
+      {n:"Algibeira", d:"", p:"Carrega até 3kg", c:0.5},
+      {n:"Aljava", d:"", p:"Guarda até 20 flechas", c:1},
+      {n:"Antitoxina", d:"", p:"Vantagem contra Envenenado, 1h", c:50},
+      {n:"Arpéu", d:"", p:"—", c:2},
+      {n:"Baú", d:"", p:"—", c:5},
+      {n:"Bolsa de Componentes", d:"", p:"Substitui componentes materiais sem custo", c:25},
+      {n:"Cadeado", d:"", p:"—", c:10},
+      {n:"Caixa para Fogo", d:"", p:"—", c:0.5},
+      {n:"Cantil", d:"", p:"2 litros", c:0.2},
+      {n:"Corda (15m)", d:"", p:"—", c:1},
+      {n:"Espelho de Mão", d:"", p:"—", c:5},
+      {n:"Estojo (Mapa/Pergaminho)", d:"", p:"—", c:1},
+      {n:"Foco Arcano — Cajado", d:"", p:"—", c:5},
+      {n:"Foco Arcano — Cetro", d:"", p:"—", c:10},
+      {n:"Foco Arcano — Cristal", d:"", p:"—", c:10},
+      {n:"Foco Arcano — Orbe", d:"", p:"—", c:20},
+      {n:"Foco Arcano — Varinha", d:"", p:"—", c:10},
+      {n:"Frasco", d:"", p:"150ml", c:1},
+      {n:"Grilhões", d:"", p:"—", c:2},
+      {n:"Kit de Artista", d:"", p:"—", c:40, cont:"Caixa para Fogo, Cantil, Espelho, 3 Fantasias, Lanterna Foca-Facho, Mochila, 8 potes de Óleo, 9 dias de Rações, Saco de Dormir, Sino"},
+      {n:"Kit de Assaltante", d:"", p:"—", c:16, cont:"Caixa para Fogo, Cantil, Corda, Esferas de Metal, Lanterna Coberta, Mochila, 7 potes de Óleo, Pé de Cabra, 5 dias de Rações, Sino, 10 Velas"},
+      {n:"Kit de Aventureiro", d:"", p:"—", c:10, cont:"Caixa para Fogo, Cantil, Corda, Mochila, 2 potes de Óleo, 10 dias de Rações, Saco de Dormir, 10 Tochas"},
+      {n:"Kit de Curandeiro", d:"", p:"—", c:5},
+      {n:"Kit de Diplomata", d:"", p:"—", c:39, cont:"Baú, Caixa para Fogo, 5 Canetas Tinteiro, 2 Estojos de Mapa/Pergaminho, Lâmpada, 4 potes de Óleo, Perfume, 5 folhas de Papel, 5 folhas de Pergaminho, Roupas Finas, Tinta"},
+      {n:"Kit de Erudito", d:"", p:"—", c:40, cont:"Caixa para Fogo, Caneta Tinteiro, Lâmpada, Livro, Mochila, 10 potes de Óleo, 10 folhas de Pergaminho, Tinta"},
+      {n:"Kit de Escalada", d:"", p:"—", c:25},
+      {n:"Kit de Explorador de Masmorras", d:"", p:"—", c:12, cont:"Caixa para Fogo, Cantil, Corda, Estrepes, Mochila, 2 potes de Óleo, Pé de Cabra, 10 dias de Rações, 10 Tochas"},
+      {n:"Kit de Falsificação", d:"", p:"—", c:15},
+      {n:"Lâmpada", d:"", p:"—", c:0.5},
+      {n:"Lanterna Coberta", d:"", p:"—", c:5},
+      {n:"Lanterna Foca-facho", d:"", p:"—", c:10},
+      {n:"Livro", d:"", p:"—", c:25},
+      {n:"Mochila", d:"", p:"—", c:2},
+      {n:"Óleo (frasco)", d:"", p:"—", c:0.1},
+      {n:"Pá", d:"", p:"—", c:2},
+      {n:"Pé de Cabra", d:"", p:"Vantagem em Atletismo pra forçar", c:2},
+      {n:"Perfume", d:"", p:"—", c:5},
+      {n:"Poção de Cura", d:"", p:"Cura 2d4+2 PV", c:50},
+      {n:"Rações (1 dia)", d:"", p:"—", c:0.5},
+      {n:"Roupas Finas", d:"", p:"—", c:15},
+      {n:"Roupas de Viagem", d:"", p:"—", c:2},
+      {n:"Suprimentos de Pintor", d:"", p:"Ferramenta de Artesão", c:10},
+  ]}
+};
+
+let step = 0;
+const TOTAL_STEPS = 9;
+let data = {
+  especie: null, antecedente: null, classe: null,
+  tiefling: { tamanho: null, legado: null, atributoLegado: null },
+  charlatao: { abilityPlan: null, equipment: null, habilidoso: [] },
+  bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
+  attrs: {},
+  shop: { purchases: {} },
+  returnToSummary: false
+};
+
+function mod(score){ return Math.floor((score-10)/2); }
+function fmt(n){ return (n>=0?'+':'')+n; }
+function fmtGold(n){ return (Math.round(n*100)/100).toString().replace('.',','); }
+
+let saveTimer;
+function persist(){
+  clearTimeout(saveTimer);
+  document.getElementById('saveText').textContent = 'salvando…';
+  document.getElementById('saveDot').style.opacity='1';
+  saveTimer = setTimeout(async ()=>{
+    try{
+      await window.storage.set('char_wizard_state', JSON.stringify({step, data}));
+      document.getElementById('saveText').textContent='salvo';
+      document.getElementById('saveDot').style.opacity='0.3';
+    }catch(e){
+      document.getElementById('saveText').textContent='—';
+    }
+  }, 400);
+}
+async function restore(){
+  try{
+    const r = await window.storage.get('char_wizard_state');
+    if(r && r.value){
+      const parsed = JSON.parse(r.value);
+      step = parsed.step || 0;
+      data = Object.assign(data, parsed.data);
+      if(!data.shop) data.shop = {purchases:{}};
+      if(!data.charlatao.habilidoso) data.charlatao.habilidoso = [];
+      if(data.returnToSummary===undefined) data.returnToSummary = false;
+    }
+  }catch(e){}
+}
+
+function renderProgress(){
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML='';
+  for(let i=0;i<TOTAL_STEPS;i++){
+    const seg = document.createElement('div');
+    seg.className = 'seg' + (i<step?' done':'') + (i===step?' current':'');
+    bar.appendChild(seg);
+  }
+}
+function goTo(newStep){ step = newStep; persist(); render(); }
+function next(){
+  const missing = findFirstMissingGroup();
+  if(!missing){ goTo(step+1); return; }
+  scrollToMissing(missing);
+}
+function back(){ if(step>0) goTo(step-1); }
+
+function findFirstMissingGroup(){
+  switch(step){
+    case 0: return data.especie ? null : 'grp-0-especie';
+    case 1:
+      if(!data.tiefling.tamanho) return 'grp-1-tamanho';
+      if(!data.tiefling.legado) return 'grp-1-legado';
+      if(!data.tiefling.atributoLegado) return 'grp-1-atributo';
+      return null;
+    case 2: return data.antecedente ? null : 'grp-2-antecedente';
+    case 3: {
+      const plan = data.charlatao.abilityPlan;
+      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
+      if(!planOk) return 'grp-3-abilityplan';
+      if(data.charlatao.habilidoso.length!==3) return 'grp-3-habilidoso';
+      if(!data.charlatao.equipment) return 'grp-3-equipment';
+      return null;
+    }
+    case 4: return data.classe ? null : 'grp-4-classe';
+    case 5: {
+      const b = data.bruxo;
+      if(b.skills.length!==2) return 'grp-5-skills';
+      if(!b.pactBoon) return 'grp-5-pact';
+      if(b.cantrips.length!==2) return 'grp-5-cantrips';
+      if(b.pactBoon==='Pacto do Tomo' && b.tomoCantrips.length!==3) return 'grp-5-tomocantrips';
+      if(b.spells1.length!==2) return 'grp-5-spells1';
+      if(b.pactBoon==='Pacto do Tomo' && b.tomoRituals.length!==2) return 'grp-5-tomorituals';
+      if(!b.equipment) return 'grp-5-equipment';
+      return null;
+    }
+    case 6: {
+      const missingAbility = ABILITIES.find(a=>data.attrs[a]===undefined);
+      return missingAbility ? 'grp-6-attr-'+missingAbility : null;
+    }
+    default: return null;
+  }
+}
+
+function scrollToMissing(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+  el.classList.remove('highlight-missing');
+  void el.offsetWidth; // força reflow pra reiniciar a animação se já tiver rodado
+  el.classList.add('highlight-missing');
+  setTimeout(()=>el.classList.remove('highlight-missing'), 1600);
+}
+
+function nav(canNext){
+  const summaryBtn = data.returnToSummary ? `<button class="btn primary" onclick="returnToSummaryNow()" style="margin-left:8px;">Voltar ao Resumo ✓</button>` : '';
+  return `<div class="nav">
+    <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
+    <div>
+      <button class="btn primary" id="nextBtn" onclick="next()">${step===TOTAL_STEPS-1?'Concluir':'Avançar →'}</button>
+      ${summaryBtn}
+    </div>
+  </div>`;
+}
+function editSection(idx){ data.returnToSummary=true; goTo(idx); }
+function returnToSummaryNow(){
+  const missing = findFirstMissingGroup();
+  if(missing){ scrollToMissing(missing); return; }
+  data.returnToSummary=false; goTo(8);
+}
+
+function canAdvance(){
+  switch(step){
+    case 0: return !!data.especie;
+    case 1: return !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado);
+    case 2: return !!data.antecedente;
+    case 3: {
+      const plan = data.charlatao.abilityPlan;
+      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
+      return planOk && !!data.charlatao.equipment && data.charlatao.habilidoso.length===3;
+    }
+    case 4: return !!data.classe;
+    case 5: {
+      const b = data.bruxo;
+      return b.skills.length===2 && !!b.pactBoon &&
+        b.cantrips.length===2 &&
+        (b.pactBoon!=='Pacto do Tomo' || b.tomoCantrips.length===3) &&
+        b.spells1.length===2 &&
+        (b.pactBoon!=='Pacto do Tomo' || b.tomoRituals.length===2) &&
+        !!b.equipment;
+    }
+    case 6: return ABILITIES.every(a=>data.attrs[a]!==undefined);
+    case 7: return true;
+    case 8: return true;
+    default: return false;
+  }
+}
+
+function render(){
+  renderProgress();
+  const c = document.getElementById('cardContent');
+  let html = '';
+  if(step===0) html = renderSpeciesStep();
+  else if(step===1) html = renderTieflingDetail();
+  else if(step===2) html = renderBackgroundStep();
+  else if(step===3) html = renderCharlatanDetail();
+  else if(step===4) html = renderClassStep();
+  else if(step===5) html = renderBruxoDetail();
+  else if(step===6) html = renderAttrs();
+  else if(step===7) html = renderShop();
+  else if(step===8) html = renderSummary();
+  c.innerHTML = html;
+  attachStepHandlers();
+}
+
+let expandedSpellInfo = null;
+
+function toggleSpellInfo(name){
+  expandedSpellInfo = (expandedSpellInfo===name) ? null : name;
+  render();
+}
+
+function renderSpellDetailCard(d){
+  return `<div class="spell-detail">
+    <div class="stats">
+      <span><b>Tempo:</b> ${d.tempo}</span>
+      <span><b>Alcance:</b> ${d.alcance}</span>
+      <span><b>Componentes:</b> ${d.componentes}</span>
+      <span><b>Duração:</b> ${d.duracao}</span>
+    </div>
+    <div>${d.efeito}</div>
+    ${d.escalonamento && d.escalonamento!=='—' ? `<div class="escala">${d.escalonamento}</div>` : ''}
+  </div>`;
+}
+
+/* Lista de escolha de truques/magias, com botão "ⓘ" que expande um card de detalhe
+   (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção. */
+function spellChoiceList(items, selectedList, maxTotal, toggleFn){
+  return `<div class="check-list" style="margin-bottom:6px;">${items.map(name=>{
+    const sel = selectedList.includes(name);
+    const disabled = !sel && selectedList.length>=maxTotal;
+    const detail = SPELL_DETAILS[name];
+    const isExpanded = expandedSpellInfo===name;
+    return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`}>${name}</span>
+      ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleSpellInfo" title="Ver detalhes">ⓘ</button>`:''}
+      ${isExpanded && detail ? renderSpellDetailCard(detail) : ''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function choiceGrid(list, enabledList, selected, onClickName){
+  return `<div class="choice-grid">${list.map(n=>{
+    const enabled = enabledList.includes(n);
+    const sel = selected===n;
+    return `<div class="choice ${enabled?'':'disabled'} ${sel?'selected':''}" ${enabled?`data-pick="${n}" data-fn="${onClickName}"`:''}>
+      ${n}${enabled?'':'<span class="note">em breve</span>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* Renderiza uma lista de escolha (checkbox-pill) separada em mini-grupos com cabeçalho,
+   pra quando o talento/recurso permite escolher entre categorias diferentes
+   (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem. */
+function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
+  return groups.filter(g=>g.items.length>0).map(g=>`
+    <div class="group-label">${g.label}</div>
+    <div class="check-list" style="margin-bottom:10px;">
+      ${g.items.map(item=>{
+        const sel = selectedList.includes(item);
+        const disabled = !sel && selectedList.length>=maxTotal;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`}>${item}</div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function renderSpeciesStep(){
+  return `<h2>Passo 1 — Escolha sua Espécie</h2>
+  <div class="intro">Sua espécie define traços físicos e sobrenaturais natos — visão no escuro, resistências, truques grátis. Só o Tiferino está disponível neste protótipo.</div>
+  <div id="grp-0-especie">${choiceGrid(SPECIES, ENABLED_SPECIES, data.especie, 'pickSpecies')}</div>
+  ${nav(canAdvance())}`;
+}
+
+function renderTieflingDetail(){
+  const t = data.tiefling;
+  return `<h2>Tiferino — Detalhes da Espécie</h2>
+  <div class="intro">Tipo: Humanoide · Deslocamento: 9m · Visão no Escuro 18m (traços fixos, sem escolha).</div>
+  <h3 id="grp-1-tamanho">Tamanho</h3>
+  <div class="check-list" style="margin-bottom:20px;">
+    ${['Médio','Pequeno'].map(s=>`<div class="check-pill ${t.tamanho===s?'selected':''}" data-pick="${s}" data-fn="pickTamanho">${s}</div>`).join('')}
+  </div>
+  <h3 id="grp-1-legado">Legado Ínfero</h3>
+  ${Object.entries(TIEFLING.legados).map(([name,info])=>`
+    <div class="option-block ${t.legado===name?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${name}</h3>
+      <p><b>Nível 1:</b> ${info.l1}<br><b>Nível 3:</b> ${info.l3}<br><b>Nível 5:</b> ${info.l5}</p>
+      <button class="pick-btn" data-pick="${name}" data-fn="pickLegado">${t.legado===name?'Selecionado':'Escolher'}</button>
+    </div>
+  `).join('')}
+  <h3 id="grp-1-atributo">Atributo de Conjuração do Legado</h3>
+  <div class="intro" style="margin-bottom:8px;">Usado para a CD/ataque das magias do legado e da Presença Sobrenatural (Taumaturgia).</div>
+  <div class="check-list">
+    ${['Inteligência','Sabedoria','Carisma'].map(a=>`<div class="check-pill ${t.atributoLegado===a?'selected':''}" data-pick="${a}" data-fn="pickAtributoLegado">${a}</div>`).join('')}
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function choiceGridWithInfo(list, enabledList, selected, onClickName, infoMap){
+  return `<div class="choice-grid">${list.map(n=>{
+    const enabled = enabledList.includes(n);
+    const sel = selected===n;
+    const info = infoMap && infoMap[n];
+    let infoHtml = '';
+    if(info){
+      const fields = [...(info.fields||[])];
+      if(info.talentoNome){
+        fields.unshift(["Talento", `${info.talentoNome} <i style="color:var(--parchment-dim);">(${info.talentoDesc})</i>`]);
+      }
+      if(info.descricao){
+        infoHtml += `<span class="note" style="display:block;font-style:italic;text-align:left;margin-top:6px;">${info.descricao}</span>`;
+      }
+      infoHtml += `<span class="note" style="display:block;text-align:left;line-height:1.4;margin-top:6px;">
+        ${fields.map(([label,val])=>`<b>${label}:</b> ${val}`).join('<br>')}
+      </span>`;
+    } else if(!enabled){
+      infoHtml = '<span class="note">em breve</span>';
+    }
+    return `<div class="choice ${enabled?'':'disabled'} ${sel?'selected':''}" ${enabled?`data-pick="${n}" data-fn="${onClickName}"`:''}>
+      ${n}${infoHtml}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderBackgroundStep(){
+  return `<h2>Passo 2 — Escolha seu Antecedente</h2>
+  <div class="intro">O antecedente representa a vida do seu personagem antes da aventura: concede um talento, duas perícias, uma ferramenta e ajuda a definir os atributos. Só Charlatão está disponível neste protótipo.</div>
+  <div id="grp-2-antecedente">${choiceGridWithInfo(BACKGROUNDS, ENABLED_BACKGROUNDS, data.antecedente, 'pickBackground', BACKGROUND_INFO)}</div>
+  ${nav(canAdvance())}`;
+}
+
+function renderCharlatanDetail(){
+  const ch = data.charlatao;
+  const plan = ch.abilityPlan;
+  return `<h2>Charlatão — Detalhes do Antecedente</h2>
+  <div class="intro">Talento: ${CHARLATAO.feat}<br>Perícias: ${CHARLATAO.skills.join(', ')}<br>Ferramenta: ${CHARLATAO.tool}</div>
+  <h3 id="grp-3-abilityplan">Distribuição de Atributos</h3>
+  <div class="intro" style="margin-bottom:8px;">Atributos sugeridos pelo livro: <b>${CHARLATAO.suggestedAbilities.join(', ')}</b> — mas seu mestre liberou colocar os bônus em qualquer um dos 6 atributos. Escolha +2 em um e +1 em outro, OU +1 em três.</div>
+  <div class="check-list" style="margin-bottom:10px;">
+    <div class="check-pill ${plan && plan.type==='2-1'?'selected':''}" data-pick="2-1" data-fn="pickAbilityPlanType">+2 / +1</div>
+    <div class="check-pill ${plan && plan.type==='1-1-1'?'selected':''}" data-pick="1-1-1" data-fn="pickAbilityPlanType">+1 / +1 / +1</div>
+  </div>
+  ${plan && plan.type==='2-1' ? `
+    <div style="display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+2 em:</div>
+        <div class="check-list">${ABILITIES.map(a=>`<div class="check-pill ${plan.plus2===a?'selected':''}" data-pick="${a}" data-fn="pickPlus2">${a}</div>`).join('')}</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em:</div>
+        <div class="check-list">${ABILITIES.filter(a=>a!==plan.plus2).map(a=>`<div class="check-pill ${plan.plus1===a?'selected':''}" data-pick="${a}" data-fn="pickPlus1">${a}</div>`).join('')}</div>
+      </div>
+    </div>` : ''}
+  ${plan && plan.type==='1-1-1' ? `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:0.75rem;color:var(--parchment-dim);margin-bottom:6px;">+1 em (escolha 3):</div>
+      <div class="check-list">${ABILITIES.map(a=>{
+        const sel = (plan.plusOnes||[]).includes(a);
+        const disabled = !sel && (plan.plusOnes||[]).length>=3;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${a}" data-fn="pickPlusOneOf3"`}>${a}</div>`;
+      }).join('')}</div>
+      <div class="counter ${(plan.plusOnes||[]).length===3?'ok':''}">${(plan.plusOnes||[]).length}/3 escolhidos</div>
+    </div>` : ''}
+
+  <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
+  <div class="intro" style="margin-bottom:8px;">Enganação e Prestidigitação (perícias) e Kit de Falsificação (ferramenta) já vêm do Charlatão e não aparecem aqui.</div>
+  ${groupedChoiceList([
+    {label:'Atributos', items:[]},
+    {label:'Perícias', items: ALL_SKILLS.filter(s=>!CHARLATAO.skills.includes(s))},
+    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==CHARLATAO.tool)}
+  ], ch.habilidoso, 3, 'toggleHabilidoso')}
+  <div class="counter ${ch.habilidoso.length===3?'ok':''}">${ch.habilidoso.length}/3 escolhidos</div>
+
+  <h3 id="grp-3-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${ch.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${CHARLATAO.equipmentA.join(', ')}, ${CHARLATAO.equipmentA_gold} PO</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickCharEquip">${ch.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${ch.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${CHARLATAO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickCharEquip">${ch.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderClassStep(){
+  return `<h2>Passo 3 — Escolha sua Classe</h2>
+  <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia. Só o Bruxo está disponível neste protótipo.</div>
+  <div id="grp-4-classe">${choiceGridWithInfo(CLASSES, ENABLED_CLASSES, data.classe, 'pickClass', CLASS_INFO)}</div>
+  ${nav(canAdvance())}`;
+}
+
+function renderBruxoDetail(){
+  const b = data.bruxo;
+  return `<h2>Bruxo — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Carisma · Dado de Vida: d8 · Salvaguardas: Sabedoria e Carisma · Armas Simples · Armadura Leve</div>
+
+  <h3 id="grp-5-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${(()=>{
+      const alreadyHave = [...CHARLATAO.skills, ...data.charlatao.habilidoso];
+      const available = BRUXO.skills.filter(s=>!alreadyHave.includes(s));
+      return available.map(s=>{
+        const sel = b.skills.includes(s);
+        const disabled = !sel && b.skills.length>=2;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBruxoSkill"`}>${s}</div>`;
+      }).join('');
+    })()}
+  </div>
+  <div class="counter ${b.skills.length===2?'ok':''}">${b.skills.length}/2 escolhidas</div>
+
+  <h3 id="grp-5-pact">Vínculo de Pacto</h3>
+  ${Object.entries(BRUXO.pactBoons).map(([name,desc])=>`
+    <div class="option-block ${b.pactBoon===name?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${name}</h3><p>${desc}</p>
+      <button class="pick-btn" data-pick="${name}" data-fn="pickPactBoon">${b.pactBoon===name?'Selecionado':'Escolher'}</button>
+    </div>
+  `).join('')}
+
+  <h3 id="grp-5-cantrips">Truques da Classe (escolha 2, da lista de Bruxo)</h3>
+  ${spellChoiceList(BRUXO.cantrips, b.cantrips, 2, 'toggleCantrip')}
+  <div class="counter ${b.cantrips.length===2?'ok':''}">${b.cantrips.length}/2 escolhidos</div>
+
+  ${b.pactBoon==='Pacto do Tomo' ? `
+  <h3 id="grp-5-tomocantrips">Truques do Pacto do Tomo (escolha 3, de qualquer classe)</h3>
+  ${spellChoiceList(ALL_CANTRIPS.filter(c=>!b.cantrips.includes(c)), b.tomoCantrips, 3, 'toggleTomoCantrip')}
+  <div class="counter ${b.tomoCantrips.length===3?'ok':''}">${b.tomoCantrips.length}/3 escolhidos</div>
+  `:''}
+
+  <h3 id="grp-5-spells1">Magias Preparadas de 1º Círculo (escolha 2, da lista de Bruxo)</h3>
+  ${spellChoiceList(BRUXO.spells1, b.spells1, 2, 'toggleSpell1')}
+  <div class="counter ${b.spells1.length===2?'ok':''}">${b.spells1.length}/2 escolhidas</div>
+
+  ${b.pactBoon==='Pacto do Tomo' ? `
+  <h3 id="grp-5-tomorituals">Magias Rituais do Pacto do Tomo (escolha 2, 1º círculo, de qualquer classe)</h3>
+  ${spellChoiceList(ALL_1ST_RITUAL.filter(r=>!b.spells1.includes(r)), b.tomoRituals, 2, 'toggleTomoRitual')}
+  <div class="counter ${b.tomoRituals.length===2?'ok':''}">${b.tomoRituals.length}/2 escolhidas</div>
+  `:''}
+
+  <h3 id="grp-5-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${b.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${BRUXO.equipmentA.join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickBruxoEquip">${b.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${b.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${BRUXO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickBruxoEquip">${b.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function getBonusFor(ability){
+  const plan = data.charlatao.abilityPlan;
+  if(!plan) return 0;
+  if(plan.type==='1-1-1'){
+    return (plan.plusOnes||[]).includes(ability) ? 1 : 0;
+  }
+  if(plan.type==='2-1'){
+    if(plan.plus2===ability) return 2;
+    if(plan.plus1===ability) return 1;
+  }
+  return 0;
+}
+
+function renderAttrs(){
+  const used = Object.values(data.attrs);
+  return `<h2>Passo — Atributos (Array Padrão)</h2>
+  <div class="intro">Distribua 15, 14, 13, 12, 10, 8 entre os seis atributos. Valores já usados aparecem em laranja — se você escolher um deles, ele é retirado de onde estava antes e movido pra cá. O bônus do antecedente (Charlatão) é somado automaticamente.</div>
+  ${ABILITIES.map(a=>{
+    const chosen = data.attrs[a];
+    const bonus = getBonusFor(a);
+    const final = chosen!==undefined ? chosen+bonus : null;
+    return `<div class="attr-row" id="grp-6-attr-${a}">
+      <div class="name">${a}</div>
+      <select data-ability="${a}" onchange="setAttr('${a}', this.value)">
+        <option value="">—</option>
+        ${STANDARD_ARRAY.map(v=>{
+          const usedElsewhere = used.includes(v) && chosen!==v;
+          const label = usedElsewhere ? `${v} (em uso)` : `${v}`;
+          const style = usedElsewhere ? 'style="color:#c98a5a;"' : '';
+          return `<option value="${v}" ${chosen===v?'selected':''} ${style}>${label}</option>`;
+        }).join('')}
+      </select>
+      <div class="bonus-tag">${bonus?('antecedente '+fmt(bonus)):''}</div>
+      <div class="final">${final!==null?`Total ${final} (mod ${fmt(mod(final))})`:''}</div>
+    </div>`;
+  }).join('')}
+  ${nav(canAdvance())}`;
+}
+
+function startingGold(){
+  const bGold = data.bruxo.equipment==='B' ? BRUXO.equipmentB_gold : 0;
+  const chGold = data.charlatao.equipment==='B' ? CHARLATAO.equipmentB_gold : (data.charlatao.equipment==='A' ? CHARLATAO.equipmentA_gold : 0);
+  const bAGold = data.bruxo.equipment==='A' ? 15 : 0;
+  return bGold + chGold + bAGold;
+}
+function spentGold(){
+  let total = 0;
+  for(const [name, qty] of Object.entries(data.shop.purchases||{})){
+    const item = findShopItem(name);
+    if(item) total += item.c * qty;
+  }
+  return total;
+}
+function findShopItem(name){
+  for(const cat of Object.values(SHOP)){
+    const found = cat.items.find(i=>i.n===name);
+    if(found) return found;
+  }
+  return null;
+}
+function renderShop(){
+  const remaining = startingGold() - spentGold();
+  const purchases = data.shop.purchases||{};
+  let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
+  <div class="intro">Itens filtrados pelo que o Bruxo pode usar: só Armas Simples e Armadura Leve aparecem (sem proficiência com armas Marciais ou armaduras Média/Pesada). Equipamento de aventura vale pra qualquer um.</div>
+  <div class="wallet">
+    <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
+    <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
+  </div>`;
+
+  Object.entries(SHOP).forEach(([catName, cat])=>{
+    if(cat.filterProf && cat.filterProf!==BRUXO.weaponProf && cat.filterProf!==BRUXO.armorProf) return;
+    html += `<h3>${catName}</h3>
+    <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
+    ${cat.items.map(it=>{
+      const qty = purchases[it.n]||0;
+      const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px; max-width:220px;">${it.cont}</div>` : '';
+      return `<tr>
+        <td>${it.n}${contHtml}</td><td>${it.d}</td><td style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
+        <td>${fmtGold(it.c)} PO</td>
+        <td><div class="qty-cell">
+          <button class="btn small" data-fn="shopDec" data-pick="${it.n}">−</button>
+          <input type="number" min="0" value="${qty}" data-fn="shopSet" data-item="${it.n}">
+          <button class="btn small" data-fn="shopInc" data-pick="${it.n}">+</button>
+        </div></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>`;
+  });
+
+  const cartEntries = Object.entries(purchases).filter(([,q])=>q>0);
+  if(cartEntries.length){
+    html += `<h3>Carrinho</h3><div class="cart-list">${cartEntries.map(([n,q])=>{
+      const item = findShopItem(n);
+      return `<div class="cart-item"><span>${n} ×${q}</span><span>${fmtGold(item.c*q)} PO</span></div>`;
+    }).join('')}</div>`;
+  }
+
+  html += nav(canAdvance());
+  return html;
+}
+
+function renderSummary(){
+  const b = data.bruxo, t = data.tiefling, ch = data.charlatao;
+  const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
+  const prof = 2;
+  const carMod = mod(finalScore('Carisma'));
+  const conMod = mod(finalScore('Constituição'));
+  const dexMod = mod(finalScore('Destreza'));
+  const hp = 8 + conMod;
+  const ac = 11 + dexMod;
+  const dc = 8 + prof + carMod;
+  const atkMagic = prof + carMod;
+  const remaining = startingGold() - spentGold();
+  const purchases = Object.entries(data.shop.purchases||{}).filter(([,q])=>q>0);
+
+  return `<h2>Ficha Concluída</h2>
+  <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto.</div>
+
+  <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
+  <div class="content">${data.classe} 1 · ${data.especie} (${t.tamanho}, Legado ${t.legado}) · Antecedente ${data.antecedente}</div></div>
+
+  <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
+  <div class="content">${ABILITIES.map(a=>`<span class="pill-static">${a} ${finalScore(a)} (${fmt(mod(finalScore(a)))})</span>`).join('')}</div></div>
+
+  <div class="summary-section"><h3>Combate</h3>
+  <div class="content">PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}</div></div>
+
+  <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
+  <div class="content">${b.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}${CHARLATAO.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
+
+  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
+  <div class="content">
+    <b>${b.pactBoon}</b><br>
+    Truques: ${[...b.cantrips, ...b.tomoCantrips].map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
+    Magias: ${[...b.spells1, ...b.tomoRituals.map(r=>r+' (ritual)')].map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>
+
+  <div class="summary-section"><h3>Talento — Habilidoso <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
+  <div class="content">${ch.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
+
+  <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
+  <div class="content">
+    ${(b.equipment==='A'?BRUXO.equipmentA:[BRUXO.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    ${(ch.equipment==='A'?[...CHARLATAO.equipmentA, CHARLATAO.equipmentA_gold+' PO']:[CHARLATAO.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>
+
+  <div class="summary-section"><h3>Compras na Loja <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
+  <div class="content">
+    ${purchases.length ? purchases.map(([n,q])=>`<span class="pill-static">${n} ×${q}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhuma compra.</span>'}
+    <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(remaining)} PO</div>
+  </div></div>
+
+  <div class="nav">
+    <button class="btn" onclick="back()">← Voltar</button>
+    <button class="btn primary" onclick="resetWizard()">Criar Outro Personagem</button>
+  </div>`;
+}
+
+function resetWizard(){
+  if(!confirm('Isso apaga o personagem atual e começa do zero. Continuar?')) return;
+  step = 0;
+  data = { especie:null, antecedente:null, classe:null,
+    tiefling:{tamanho:null,legado:null,atributoLegado:null},
+    charlatao:{abilityPlan:null,equipment:null,habilidoso:[]},
+    bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
+    attrs:{}, shop:{purchases:{}}, returnToSummary:false };
+  persist(); render();
+}
+
+function attachStepHandlers(){
+  document.querySelectorAll('[data-fn]').forEach(el=>{
+    if(el.tagName==='INPUT'){
+      el.addEventListener('input', ()=>{
+        const item = el.getAttribute('data-item');
+        let v = parseInt(el.value)||0;
+        if(v<0) v=0;
+        shopSetQty(item, v);
+      });
+    } else {
+      el.addEventListener('click', ()=>{
+        const fn = el.getAttribute('data-fn');
+        const val = el.getAttribute('data-pick');
+        window[fn](val);
+      });
+    }
+  });
+}
+
+function pickSpecies(v){ data.especie=v; persist(); render(); }
+function pickBackground(v){ data.antecedente=v; persist(); render(); }
+function pickClass(v){ data.classe=v; persist(); render(); }
+
+function pickTamanho(v){ data.tiefling.tamanho=v; persist(); render(); }
+function pickLegado(v){ data.tiefling.legado=v; persist(); render(); }
+function pickAtributoLegado(v){ data.tiefling.atributoLegado=v; persist(); render(); }
+
+function toggleBruxoSkill(v){ const s=data.bruxo.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickPactBoon(v){ data.bruxo.pactBoon=v; if(v!=='Pacto do Tomo'){data.bruxo.tomoCantrips=[];data.bruxo.tomoRituals=[];} persist(); render(); }
+function toggleCantrip(v){ const s=data.bruxo.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleTomoCantrip(v){ const s=data.bruxo.tomoCantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<3)s.push(v); persist(); render(); }
+function toggleSpell1(v){ const s=data.bruxo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleTomoRitual(v){ const s=data.bruxo.tomoRituals; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickBruxoEquip(v){ data.bruxo.equipment=v; persist(); render(); }
+
+function pickAbilityPlanType(v){ data.charlatao.abilityPlan = v==='1-1-1' ? {type:'1-1-1', plusOnes:[]} : {type:'2-1', plus2:null, plus1:null}; persist(); render(); }
+function pickPlusOneOf3(v){
+  const plan = data.charlatao.abilityPlan;
+  if(!plan.plusOnes) plan.plusOnes=[];
+  const i = plan.plusOnes.indexOf(v);
+  if(i>=0) plan.plusOnes.splice(i,1); else if(plan.plusOnes.length<3) plan.plusOnes.push(v);
+  persist(); render();
+}
+function pickPlus2(v){ data.charlatao.abilityPlan.plus2=v; if(data.charlatao.abilityPlan.plus1===v) data.charlatao.abilityPlan.plus1=null; persist(); render(); }
+function pickPlus1(v){ data.charlatao.abilityPlan.plus1=v; persist(); render(); }
+function pickCharEquip(v){ data.charlatao.equipment=v; persist(); render(); }
+function toggleHabilidoso(v){ const s=data.charlatao.habilidoso; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<3)s.push(v); persist(); render(); }
+
+function setAttr(ability, value){
+  if(value===''){
+    delete data.attrs[ability];
+  } else {
+    const v = parseInt(value);
+    // se outro atributo já tem esse valor, tira de lá (rouba/troca) antes de atribuir aqui
+    for(const other of ABILITIES){
+      if(other!==ability && data.attrs[other]===v){
+        delete data.attrs[other];
+        break;
+      }
+    }
+    data.attrs[ability] = v;
+  }
+  persist(); render();
+}
+
+function shopSetQty(name, qty){
+  if(!data.shop.purchases) data.shop.purchases={};
+  if(qty<=0) delete data.shop.purchases[name];
+  else data.shop.purchases[name]=qty;
+  persist(); render();
+}
+function shopInc(name){ shopSetQty(name, (data.shop.purchases[name]||0)+1); }
+function shopDec(name){ shopSetQty(name, Math.max(0,(data.shop.purchases[name]||0)-1)); }
+
+async function init(){
+  await restore();
+  render();
+}
+init();
+</script>
+</body>
+</html>
