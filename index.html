@@ -37,6 +37,7 @@
 <script src="data/classes/guardiao.js"></script>
 <script src="data/languages.js"></script>
 <script src="data/instruments.js"></script>
+<script src="data/shop-items.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -129,27 +130,34 @@
 
    🔜 PRÓXIMA FRENTE — LOJA/SHOP (o usuário vai abrir uma conversa
    separada pra isso; se você é essa conversa, comece por aqui):
-   1. Olhar no PDF as páginas do capítulo 6 (Equipamento) — mas ANTES
-      disso, perguntar ao usuário se ele já tem algo exportado (planilha,
-      lista) pros itens da loja, seguindo o AVISO lá em cima. Só abrir o
-      PDF se não tiver nada pronto.
-   2. Mapear TODOS os itens comprável num banco de dados: armas simples e
-      marciais, armaduras leve/média/pesada, escudos, equipamento de
-      aventura, ferramentas — hoje o SHOP (dentro do index.html, ~linha
-      520+) só tem uma fração disso (Armas Simples + Armadura Leve +
-      alguns itens de aventura).
-   3. Fazer um filtro de proficiência POR CLASSE, generalizado pras 13
-      classes — hoje existe uma versão em renderShop() que usa
-      activeClassConst().weaponProf/armorProf via .includes(), pensada
-      originalmente só pro Bruxo mas já preparada pra ser genérica (ver
-      CLASS_CONST). Conferir se cobre bem os casos de proficiência
-      FILTRADA por propriedade (Ladino: só Acuidade/Leve; Monge: só
-      Corpo a Corpo com Leve) — hoje o filtro é só por categoria
-      (simples/marcial/leve/media/pesada/escudo), não por propriedade de
-      arma individual, então provavelmente vai precisar de ajuste.
-   4. MANTER a calculadora de ouro atual (startingGold(), spentGold(), a
-      lógica de troco em renderShop()) — já funciona bem, não reinventar
-      do zero, só estender pros itens novos.
+   1. ✅ FEITO nesta mesma sessão: banco de itens completo mapeado em
+      shop_phb2024.xlsx (7 abas: Armaduras, Ferramentas, Equipamento de
+      Aventura, Kits — Conteúdo, Focos e Símbolos, Munição, Montarias e
+      Veículos — mais uma aba "Notas" com a pendência do teto de ouro,
+      ver ponto 7). Pedir esse arquivo ao usuário antes de reabrir o PDF
+      do capítulo 6 — ele já cobre tudo que foi extraído. Armas já
+      tinham sido mapeadas antes em WEAPON_MASTERY (data/weapon-mastery.js)
+      e na aba "Maestria — Armas" de classes_phb2024.xlsx.
+   2. ✅ FEITO: SHOP expandido de ~35 pra 179 itens, mantendo EXATAMENTE o
+      mesmo schema que já existia ({n,d,p,c,cont opcional} por categoria
+      com filterProf), e EXTRAÍDO pra data/shop-items.js (padrão que
+      todo o resto do projeto usa — inicialmente deixei inline no
+      index.html por menor risco, o usuário perguntou por que não tinha
+      virado arquivo próprio, e fez sentido migrar; carregado via
+      <script src="data/instruments.js"> ANTES de shop-items.js).
+   3. ✅ FEITO: filtro de proficiência por categoria já cobre as 13
+      classes automaticamente (usa clsConst.weaponProf/armorProf.includes,
+      testado que os valores batem: simples/marcial/leve/media/pesada/
+      escudo). AINDA NÃO cobre filtro por PROPRIEDADE individual da arma
+      (Ladino só Acuidade/Leve, Monge só Corpo a Corpo com Leve) — hoje
+      se o Ladino tiver proficiência "marcial" ele veria TODAS as armas
+      marciais na loja, não só as com Acuidade/Leve. Isso é uma
+      simplificação aceita por ora (fica mais permissivo, não menos) —
+      resolver se o usuário pedir, usando o campo "propriedades" que já
+      existe em WEAPON_MASTERY.
+   4. ✅ Calculadora de ouro mantida (startingGold(), spentGold(),
+      maxAffordableQty(), a lógica de troco em renderShop()) — não foi
+      mexida, só reaproveitada pros itens novos.
    5. PENDENTE (registrar, não necessariamente resolver na mesma leva):
       um floater/painel fixo mostrando o inventário atual do personagem —
       o que já foi concedido pela classe + antecedente (equipamento
@@ -159,6 +167,19 @@
       ANCORADOS NA TELA (sticky/fixed), não rolando junto com a página —
       principalmente importante no mobile, pra não precisar rolar até o
       fim toda vez que quiser avançar.
+   7. ✅ FEITO: teto de ouro dinâmico implementado —
+      computeMaxPossibleGold() (perto de const SHOP) calcula
+      classMax + bgMax a partir de CLASS_CONST/BACKGROUND_CONST, sem
+      número fixo no código. renderShop() já usa isso pra esconder (não
+      apagar dos dados) itens acima do teto. ATENÇÃO: BACKGROUND_CONST
+      referencia os 16 consts de antecedente (CHARLATAO, NOBRE, etc.) que
+      só existem de verdade quando os respectivos data/backgrounds/*.js
+      estão carregados via <script> — nesta sessão eu só tinha
+      artista.js e acolito.js, então NÃO CONSEGUI TESTAR
+      computeMaxPossibleGold() em runtime (só sintaxe com node --check,
+      que não executa). Testar de verdade no ambiente real do usuário,
+      com todos os 16 antecedentes carregados, antes de confiar 100%
+      nisso — funciona no papel, mas nunca rodou de fato ainda.
    - Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
      Depois da Loja, outras frentes possíveis: progressão de nível 2+,
      Talentos de Talento Selvagem do UA, arquivos de Guarda/Soldado/Nobre
@@ -929,77 +950,18 @@ const CLASS_INFO = {
 
 const ALL_TOOLS = ["Ferramentas de Carpinteiro","Ferramentas de Cartógrafo","Ferramentas de Coureiro","Ferramentas de Tecelão","Ferramentas de Vidreiro","Suprimentos de Alquimista","Suprimentos de Calígrafo","Suprimentos de Cervejeiro","Suprimentos de Pintor","Utensílios de Cozinheiro","Ferramentas de Ladrão","Ferramentas de Navegador","Instrumento Musical (à escolha)","Kit de Disfarce","Kit de Herbalismo","Kit de Jogos (à escolha)","Kit de Veneno"];
 
-const SHOP = {
-  "Armas Simples — Corpo a Corpo": { filterProf: "simples", items: [
-      {n:"Adaga", d:"1d4 Perfurante", p:"Acuidade, Arremesso, Leve", c:2},
-      {n:"Azagaia", d:"1d6 Perfurante", p:"Arremesso", c:0.5},
-      {n:"Cajado", d:"1d6 Contundente", p:"Versátil (1d8)", c:0.2},
-      {n:"Clava", d:"1d4 Contundente", p:"Leve", c:0.1},
-      {n:"Clava Grande", d:"1d8 Contundente", p:"Duas Mãos", c:0.2},
-      {n:"Foice", d:"1d4 Cortante", p:"Leve", c:1},
-      {n:"Lança", d:"1d6 Perfurante", p:"Arremesso, Versátil (1d8)", c:1},
-      {n:"Maça", d:"1d6 Contundente", p:"—", c:5},
-      {n:"Machadinha", d:"1d6 Cortante", p:"Arremesso, Leve", c:5},
-      {n:"Martelo Leve", d:"1d4 Contundente", p:"Arremesso, Leve", c:2},
-  ]},
-  "Armas Simples — À Distância": { filterProf: "simples", items: [
-      {n:"Arco Curto", d:"1d6 Perfurante", p:"Duas Mãos, Munição (24/96)", c:25},
-      {n:"Besta Leve", d:"1d8 Perfurante", p:"Duas Mãos, Munição, Recarga", c:25},
-      {n:"Dardo", d:"1d4 Perfurante", p:"Acuidade, Arremesso", c:0.05},
-      {n:"Funda", d:"1d4 Contundente", p:"Munição", c:0.1},
-  ]},
-  "Armadura Leve": { filterProf: "leve", items: [
-      {n:"Armadura Acolchoada", d:"CA 11 + Destreza", p:"Desvantagem em Furtividade", c:5},
-      {n:"Armadura de Couro", d:"CA 11 + Destreza", p:"—", c:10},
-      {n:"Armadura de Couro Batido", d:"CA 12 + Destreza", p:"Desvantagem em Furtividade", c:45},
-  ]},
-  "Equipamento de Aventura": { filterProf: null, items: [
-      {n:"Ácido (frasco)", d:"", p:"2d6 dano Ácido ao arremessar", c:25},
-      {n:"Água Benta (frasco)", d:"", p:"2d8 Radiante vs Ínfero/Morto-vivo", c:25},
-      {n:"Algibeira", d:"", p:"Carrega até 3kg", c:0.5},
-      {n:"Aljava", d:"", p:"Guarda até 20 flechas", c:1},
-      {n:"Antitoxina", d:"", p:"Vantagem contra Envenenado, 1h", c:50},
-      {n:"Arpéu", d:"", p:"—", c:2},
-      {n:"Baú", d:"", p:"—", c:5},
-      {n:"Bolsa de Componentes", d:"", p:"Substitui componentes materiais sem custo", c:25},
-      {n:"Cadeado", d:"", p:"—", c:10},
-      {n:"Caixa para Fogo", d:"", p:"—", c:0.5},
-      {n:"Cantil", d:"", p:"2 litros", c:0.2},
-      {n:"Corda (15m)", d:"", p:"—", c:1},
-      {n:"Espelho de Mão", d:"", p:"—", c:5},
-      {n:"Estojo (Mapa/Pergaminho)", d:"", p:"—", c:1},
-      {n:"Foco Arcano — Cajado", d:"", p:"—", c:5},
-      {n:"Foco Arcano — Cetro", d:"", p:"—", c:10},
-      {n:"Foco Arcano — Cristal", d:"", p:"—", c:10},
-      {n:"Foco Arcano — Orbe", d:"", p:"—", c:20},
-      {n:"Foco Arcano — Varinha", d:"", p:"—", c:10},
-      {n:"Frasco", d:"", p:"150ml", c:1},
-      {n:"Grilhões", d:"", p:"—", c:2},
-      {n:"Kit de Artista", d:"", p:"—", c:40, cont:"Caixa para Fogo, Cantil, Espelho, 3 Fantasias, Lanterna Foca-Facho, Mochila, 8 potes de Óleo, 9 dias de Rações, Saco de Dormir, Sino"},
-      {n:"Kit de Assaltante", d:"", p:"—", c:16, cont:"Caixa para Fogo, Cantil, Corda, Esferas de Metal, Lanterna Coberta, Mochila, 7 potes de Óleo, Pé de Cabra, 5 dias de Rações, Sino, 10 Velas"},
-      {n:"Kit de Aventureiro", d:"", p:"—", c:10, cont:"Caixa para Fogo, Cantil, Corda, Mochila, 2 potes de Óleo, 10 dias de Rações, Saco de Dormir, 10 Tochas"},
-      {n:"Kit de Curandeiro", d:"", p:"—", c:5},
-      {n:"Kit de Diplomata", d:"", p:"—", c:39, cont:"Baú, Caixa para Fogo, 5 Canetas Tinteiro, 2 Estojos de Mapa/Pergaminho, Lâmpada, 4 potes de Óleo, Perfume, 5 folhas de Papel, 5 folhas de Pergaminho, Roupas Finas, Tinta"},
-      {n:"Kit de Erudito", d:"", p:"—", c:40, cont:"Caixa para Fogo, Caneta Tinteiro, Lâmpada, Livro, Mochila, 10 potes de Óleo, 10 folhas de Pergaminho, Tinta"},
-      {n:"Kit de Escalada", d:"", p:"—", c:25},
-      {n:"Kit de Explorador de Masmorras", d:"", p:"—", c:12, cont:"Caixa para Fogo, Cantil, Corda, Estrepes, Mochila, 2 potes de Óleo, Pé de Cabra, 10 dias de Rações, 10 Tochas"},
-      {n:"Kit de Falsificação", d:"", p:"—", c:15},
-      {n:"Lâmpada", d:"", p:"—", c:0.5},
-      {n:"Lanterna Coberta", d:"", p:"—", c:5},
-      {n:"Lanterna Foca-facho", d:"", p:"—", c:10},
-      {n:"Livro", d:"", p:"—", c:25},
-      {n:"Mochila", d:"", p:"—", c:2},
-      {n:"Óleo (frasco)", d:"", p:"—", c:0.1},
-      {n:"Pá", d:"", p:"—", c:2},
-      {n:"Pé de Cabra", d:"", p:"Vantagem em Atletismo pra forçar", c:2},
-      {n:"Perfume", d:"", p:"—", c:5},
-      {n:"Poção de Cura", d:"", p:"Cura 2d4+2 PV", c:50},
-      {n:"Rações (1 dia)", d:"", p:"—", c:0.5},
-      {n:"Roupas Finas", d:"", p:"—", c:15},
-      {n:"Roupas de Viagem", d:"", p:"—", c:2},
-      {n:"Suprimentos de Pintor", d:"", p:"Ferramenta de Artesão", c:10},
-  ]}
-};
+
+/* Teto de ouro dinâmico — usado pra filtrar itens caros demais pra
+   aparecerem na Loja (ver PENDÊNCIA sobre isso na nota de arquitetura no
+   topo do arquivo). Some o maior valor possível do lado da classe com o
+   maior valor possível do lado do antecedente. */
+function computeMaxPossibleGold(){
+  const classMax = Math.max(...Object.values(CLASS_CONST).map(c =>
+    Math.max(c.equipmentA_gold||0, c.equipmentB_gold||0, c.equipmentC_gold||0)));
+  const bgMax = Math.max(...Object.values(BACKGROUND_CONST).map(b =>
+    Math.max(b.equipmentA_gold||0, b.equipmentB_gold||0)));
+  return classMax + bgMax;
+}
 
 let step = 0;
 const TOTAL_STEPS = 10;
@@ -2668,8 +2630,9 @@ function renderShop(){
   const remaining = startingGold() - spentGold();
   const purchases = data.shop.purchases||{};
   const clsConst = activeClassConst();
+  const maxGold = computeMaxPossibleGold();
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
-  <div class="intro">Itens filtrados pelo que ${data.classe} pode usar (proficiências de arma e armadura da classe). Equipamento de aventura vale pra qualquer um. Armas Marciais e Armadura Média/Pesada ainda não estão na loja deste protótipo, mesmo se a classe tiver proficiência com elas.</div>
+  <div class="intro">Itens filtrados pelo que ${data.classe} pode usar (proficiências de arma e armadura da classe). Ferramentas, focos, munição e equipamento de aventura valem pra qualquer um. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
   <div class="wallet">
     <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
     <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
@@ -2677,9 +2640,11 @@ function renderShop(){
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
     if(cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
+    const visibleItems = cat.items.filter(it => it.c <= maxGold);
+    if(visibleItems.length===0) return;
     html += `<h3>${catName}</h3>
     <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
-    ${cat.items.map(it=>{
+    ${visibleItems.map(it=>{
       const qty = purchases[it.n]||0;
       const maxQty = maxAffordableQty(it.n) + qty; // limite considerando o que já foi gasto neste item
       const atCap = qty>=maxQty;
