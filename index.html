@@ -174,15 +174,11 @@
      entre perícias que o personagem JÁ tem (classe + antecedente +
      Habilidoso) — toggleLadinoSkill() faz cascade removendo do
      Especialista se a perícia de classe for desmarcada depois.
-   - PENDÊNCIA REGISTRADA A PEDIDO DO USUÁRIO: Gíria do Ladrão concede
-     Gíria dos Ladrões + 1 idioma à escolha, mas o app AINDA NÃO TEM
-     nenhum seletor de idiomas (não existe ALL_LANGUAGES nem nada
-     parecido). Ficou como texto informativo/placeholder — mesma decisão
-     já tomada pros instrumentos musicais do Bardo. Ao revisar isso,
-     CONFERIR O LIVRO DO JOGADOR (capítulo 2, tabelas de idiomas) antes
-     de codar a lista, não usar de memória. Essa pendência + a dos
-     instrumentos do Bardo deviam ser resolvidas juntas numa leva própria
-     de "escolhas de idioma/ferramenta" quando o usuário pedir.
+   - ✅ Gíria do Ladrão (Gíria dos Ladrões + 1 idioma à escolha) —
+     RESOLVIDO na etapa de Idiomas (passo 6, ver mais abaixo): a pill
+     "Gíria dos Ladrões" aparece automática pro Ladino, e a escolha de 1
+     idioma extra usa a lista completa de COMMON_LANGUAGES+RARE_LANGUAGES
+     (data/languages.js). Não fica mais dentro do renderLadinoDetail().
    - CA não precisou do tratamento "não calculada automaticamente" (ao
      contrário de Paladino/Clérigo/Guerreiro) — o equipamento padrão do
      Ladino é Armadura de Couro, então a fórmula simplificada de Couro +
@@ -397,14 +393,8 @@
    equipamento inicial fixo (opção A). Expandir SHOP com Armas Marciais +
    Armadura Média/Pesada + Escudos fica pra quando o usuário pedir
    explicitamente (ele já disse "resolvemos loja depois" duas vezes).
-   - Quando houver 2+ classes, generalizar render()/canAdvance()/
-     findFirstMissingGroup() pra classe do mesmo jeito que já foi feito pra
-     antecedente: um CLASS_DATA_KEY / CLASS_CONST mapeando nome->chave em
-     `data` e nome->objeto de dados fixos, ativado por algo tipo
-     activeClassData()/activeClassConst(), em vez de if/else hardcoded
-     "data.classe==='Bruxo' ? ...". Aprendemos isso do jeito difícil com
-     Charlatão/Nobre — comece já generalizado dessa vez, não espere ter 13
-     classes pra perceber que precisa generalizar.
+   (✅ CLASS_DATA_KEY/CLASS_CONST já foram generalizados faz tempo — ver
+   bloco do BÁRBARO mais abaixo — essa parte da nota antiga já não se aplica.)
 
    PENDÊNCIA CONHECIDA (não é sobre classes, mas fica registrada pra não
    esquecer): resetWizard() ("Criar Outro Personagem") só zera
@@ -557,15 +547,6 @@
      skillGroupsByAbility()/groupedSinglePick() — rótulo do atributo e as
      pills ficam na MESMA linha (ex: "Força: Atletismo Acrobacia"), sem
      cabeçalho separado.
-   - PENDÊNCIA (avisada pelo usuário, resolver só quando revisarmos CLASSES,
-     não mexer nisso fora dessa fase): a escolha de perícias do Bruxo
-     (renderBruxoDetail) e a lista de perícias na Ficha Concluída
-     (renderSummary) ainda mostram a lista "chapada", sem agrupar por
-     atributo como já fizemos no Hábil/Habilidoso. Quando for a vez de
-     revisar o Bruxo, aplicar groupedSinglePick/skillGroupsByAbility (ou
-     uma variante multi-select, já que o Bruxo escolhe 2) nesses dois
-     lugares também.
-
    ✅ ANTECEDENTES (Origens/Backgrounds) — CONCLUÍDO, os 16 do PHB 2024:
    - Charlatão, Nobre, Andarilho, Criminoso, Eremita, Fazendeiro,
      Marinheiro, Escriba, Mercador, Artesão, Artista, Guarda, Soldado,
