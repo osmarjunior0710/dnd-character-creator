@@ -163,12 +163,18 @@
       o que já foi concedido pela classe + antecedente (equipamento
       inicial fixo) somado ao que for comprado na loja. Ajuda a não
       perder a visão geral enquanto compra.
-   6. PENDENTE (CONFIRMADO PELO USUÁRIO EM TESTE MOBILE — nav() ainda
-      rola junto com a página, listas ficaram grandes com a Loja
-      expandida): os botões Voltar/Avançar (função nav()) deveriam ficar
-      ANCORADOS NA TELA (sticky/fixed), não rolando junto com a página —
-      principalmente importante no mobile, pra não precisar rolar até o
-      fim toda vez que quiser avançar.
+   6. ✅ FEITO (usuário pediu explicitamente): nav() agora é
+      position:fixed no rodapé da viewport (não mais dentro do fluxo
+      normal da página), envolvido num .nav-inner que respeita o mesmo
+      max-width:960px do .wrap pra não ficar esticado em telas largas.
+      body ganhou padding-bottom maior (90px + env(safe-area-inset-
+      bottom) pra iPhones com home indicator) pra o conteúdo não ficar
+      escondido atrás da barra. Testado que .card/.wrap não têm
+      transform/filter (o que quebraria position:fixed criando um novo
+      containing block) e que scrollToMissing() usa block:'center' no
+      scrollIntoView (não bate na barra fixa do rodapé). css/styles.css
+      foi o arquivo alterado (não index.html, que só referencia a
+      classe .nav).
    7. ✅ FEITO: teto de ouro dinâmico implementado —
       computeMaxPossibleGold() (perto de const SHOP) calcula
       classMax + bgMax a partir de CLASS_CONST/BACKGROUND_CONST, sem
@@ -1295,13 +1301,13 @@ function scrollToMissing(id){
 
 function nav(canNext){
   const summaryBtn = data.returnToSummary ? `<button class="btn primary" onclick="returnToSummaryNow()" style="margin-left:8px;">Voltar ao Resumo ✓</button>` : '';
-  return `<div class="nav">
+  return `<div class="nav"><div class="nav-inner">
     <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
     <div>
       <button class="btn primary" id="nextBtn" onclick="next()">${step===TOTAL_STEPS-1?'Concluir':'Avançar →'}</button>
       ${summaryBtn}
     </div>
-  </div>`;
+  </div></div>`;
 }
 function editSection(idx){ data.returnToSummary=true; goTo(idx); }
 function returnToSummaryNow(){
