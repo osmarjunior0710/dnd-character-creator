@@ -37,6 +37,7 @@
 <script src="data/classes/guardiao.js"></script>
 <script src="data/languages.js"></script>
 <script src="data/instruments.js"></script>
+<script src="data/game-sets.js"></script>
 <script src="data/shop-items.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
@@ -103,9 +104,13 @@
         personagem anterior.
       - "Talentos de Talento Selvagem" do UA (10 talentos do Psiônico,
         Atmocinese/Biocinese/etc.) não implementados em lugar nenhum.
-      - Guarda, Soldado e Nobre ainda usam o placeholder antigo de
-        ferramenta (mesma pendência já resolvida no Artista/Bardo —
-        aplicar bgConst.ferramentaOpcoes = ALL_INSTRUMENTS).
+      - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
+        ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
+        antigo de fato), mas cada um duplicava o mesmo array de 4
+        variantes de Kit de Jogos — mesmo problema que ALL_INSTRUMENTS já
+        tinha resolvido pro Bardo/Artista. Extraído pra ALL_GAME_SETS em
+        data/game-sets.js (carregado logo depois de data/instruments.js),
+        os três arquivos agora referenciam a const em vez de duplicar.
       - "CA não calculada automaticamente" repetida em 5 classes
         (Paladino/Clérigo/Guerreiro/Druida/Guardião) — candidata a virar
         uma função só.
