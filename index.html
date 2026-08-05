@@ -25,6 +25,7 @@
 <script src="data/feats.js"></script>
 <script src="data/skills.js"></script>
 <script src="data/classes/bardo.js"></script>
+<script src="data/classes/mago.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -59,11 +60,25 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
-   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro e Bardo (nível 1 apenas),
-   todas as 10 espécies do PHB 2024, os 16 antecedentes do PHB 2024.
-   FALTAM: as outras 9 classes (Clérigo, Druida, Feiticeiro, Guardião,
-   Guerreiro, Ladino, Mago, Monge, Paladino). Todas já mapeadas na
-   planilha classes_phb2024.xlsx — não precisa voltar ao PDF.
+   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro, Bardo e Mago (nível 1
+   apenas), todas as 10 espécies do PHB 2024, os 16 antecedentes do PHB
+   2024. FALTAM: Clérigo, Druida, Feiticeiro, Guardião, Guerreiro, Ladino,
+   Monge, Paladino. Todas já mapeadas na planilha classes_phb2024.xlsx.
+
+   ✅ MAGO (nível 1) — CONCLUÍDO. Dados em data/classes/mago.js. Única
+   classe até agora com DOIS níveis de escolha de magia: primeiro o Livro
+   de Magias (6 magias de 1º círculo — "estoque" conhecido), depois as
+   Magias Preparadas (4, subconjunto do livro). toggleMagoSpellbook()
+   remove em cascata da lista de Preparadas se uma magia sair do livro.
+   Truques/magias extraídos da planilha de magias (coluna "Mago"), não do
+   PDF. Adepto de Ritual e Recuperação Arcana são só texto informativo
+   (sem escolha nível 1). Sem armadura (MAGO.armorProf = []) — o filtro de
+   SHOP já lida bem com array vazio (nunca dá match, categoria de
+   armadura simplesmente não aparece pro Mago).
+   - renderSummary() agora calcula o atributo de conjuração por classe
+     (spellMod: Inteligência pro Mago, Carisma pra Bruxo/Bardo) em vez de
+     fixar Carisma — importante lembrar disso quando entrar Clérigo/
+     Druida/Guardião (Sabedoria) ou Guerreiro com truques via talento.
 
    ✅ BARDO (nível 1) — CONCLUÍDO. Dados em data/classes/bardo.js.
    Particularidades registradas:
@@ -331,7 +346,7 @@
    ========================================================================== */
 
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
-const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago"];
 
 /* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
    NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
@@ -340,8 +355,8 @@ const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo"];
    se ramificando por nome de classe (if/else), porque cada classe nível 1
    tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
    proficiências de arma/armadura, perícias) usam esses mapas. */
-const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo" };
-const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO };
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO };
 function activeClassData(){
   const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
   return data[key];
@@ -538,6 +553,10 @@ const CLASS_INFO = {
   "Bardo": {
     descricao: "Artista que tece magia através de música, palavras e performance, acreditando que o multiverso nasceu de palavras de criação que ainda ressoam.",
     fields: [["Atributo Principal","Carisma"],["Dado de Vida","d8"],["Complexidade","Alta"]]
+  },
+  "Mago": {
+    descricao: "Estudioso da magia arcana, que aprende feitiços através de pesquisa metódica registrada em seu livro de magias.",
+    fields: [["Atributo Principal","Inteligência"],["Dado de Vida","d6"],["Complexidade","Média"]]
   }
 };
 
@@ -648,6 +667,7 @@ let data = {
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   barbaro: { skills: [], maestria: [], equipment: null },
   bardo: { skills: [], cantrips: [], spells1: [], equipment: null },
+  mago: { skills: [], cantrips: [], spellbook: [], prepared: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -746,6 +766,15 @@ function findFirstMissingGroup(){
         if(bd.cantrips.length!==2) return 'grp-1-cantrips';
         if(bd.spells1.length!==4) return 'grp-1-spells1';
         if(!bd.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Mago'){
+        const mg = data.mago;
+        if(mg.skills.length!==2) return 'grp-1-skills';
+        if(mg.cantrips.length!==MAGO.cantripsCount) return 'grp-1-cantrips';
+        if(mg.spellbook.length!==MAGO.spellbookCount) return 'grp-1-spellbook';
+        if(mg.prepared.length!==MAGO.preparedCount) return 'grp-1-prepared';
+        if(!mg.equipment) return 'grp-1-equipment';
         return null;
       }
       const b = data.bruxo;
@@ -848,6 +877,10 @@ function canAdvance(){
         const bd = data.bardo;
         return bd.skills.length===BARDO.skillsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
       }
+      if(data.classe==='Mago'){
+        const mg = data.mago;
+        return mg.skills.length===2 && mg.cantrips.length===MAGO.cantripsCount && mg.spellbook.length===MAGO.spellbookCount && mg.prepared.length===MAGO.preparedCount && !!mg.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -880,7 +913,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
@@ -1566,6 +1599,59 @@ function renderBardoDetail(){
   ${nav(canAdvance())}`;
 }
 
+function renderMagoDetail(){
+  const mg = data.mago;
+  return `<h2>Mago — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Inteligência · Dado de Vida: d6 · Salvaguardas: Inteligência e Sabedoria · Armas Simples · Sem treinamento com Armadura</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${(()=>{
+      const bgConst = activeBgConst();
+      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+      const available = MAGO.skills.filter(s=>!alreadyHave.includes(s));
+      return available.map(s=>{
+        const sel = mg.skills.includes(s);
+        const disabled = !sel && mg.skills.length>=2;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleMagoSkill"`}>${s}</div>`;
+      }).join('');
+    })()}
+  </div>
+  <div class="counter ${mg.skills.length===2?'ok':''}">${mg.skills.length}/2 escolhidas</div>
+
+  <h3>Adepto de Ritual</h3>
+  <div class="option-block">${MAGO.adeptoRitual}</div>
+
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha ${MAGO.cantripsCount}, da lista de Mago)</h3>
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(MAGO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), mg.cantrips, MAGO.cantripsCount, 'toggleMagoCantrip')}
+  <div class="counter ${mg.cantrips.length===MAGO.cantripsCount?'ok':''}">${mg.cantrips.length}/${MAGO.cantripsCount} escolhidos</div>
+
+  <h3>Recuperação Arcana</h3>
+  <div class="option-block">${MAGO.recuperacaoArcana}</div>
+
+  <h3 id="grp-1-spellbook">Livro de Magias (escolha ${MAGO.spellbookCount}, da lista de Mago)</h3>
+  <div class="intro" style="margin-bottom:8px;">São as magias que você conhece de verdade — seu "estoque". No passo seguinte você escolhe quais delas ficam Preparadas (prontas pra conjurar sem reler o livro).</div>
+  ${spellChoiceList(MAGO.spells1, mg.spellbook, MAGO.spellbookCount, 'toggleMagoSpellbook')}
+  <div class="counter ${mg.spellbook.length===MAGO.spellbookCount?'ok':''}">${mg.spellbook.length}/${MAGO.spellbookCount} escolhidas</div>
+
+  <h3 id="grp-1-prepared">Magias Preparadas (escolha ${MAGO.preparedCount}, do seu Livro de Magias)</h3>
+  ${mg.spellbook.length===0 ? `<div class="intro">Escolha primeiro as magias do seu Livro de Magias acima.</div>` : spellChoiceList(mg.spellbook, mg.prepared, MAGO.preparedCount, 'toggleMagoPrepared')}
+  <div class="counter ${mg.prepared.length===MAGO.preparedCount?'ok':''}">${mg.prepared.length}/${MAGO.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${mg.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...MAGO.equipmentA, MAGO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickMagoEquip">${mg.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${mg.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${MAGO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickMagoEquip">${mg.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
 function getBonusFor(ability){
   const plan = activeBgData().abilityPlan;
   if(!plan) return 0;
@@ -1677,6 +1763,7 @@ function renderShop(){
 function renderSummary(){
   const isBarbaro = data.classe==='Bárbaro';
   const isBardo = data.classe==='Bardo';
+  const isMago = data.classe==='Mago';
   const cls = activeClassData();
   const clsConst = activeClassConst();
   const t = data.tiefling;
@@ -1686,17 +1773,21 @@ function renderSummary(){
   const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
   const prof = 2;
   const carMod = mod(finalScore('Carisma'));
+  const intMod = mod(finalScore('Inteligência'));
   const conMod = mod(finalScore('Constituição'));
   const dexMod = mod(finalScore('Destreza'));
-  const hp = isBarbaro ? (12 + conMod) : (8 + conMod);
-  const ac = isBarbaro ? (10 + dexMod + conMod) : (11 + dexMod);
-  const dc = 8 + prof + carMod;
-  const atkMagic = prof + carMod;
+  const spellMod = isMago ? intMod : carMod; // atributo de conjuração varia por classe
+  const hp = isBarbaro ? (12 + conMod) : isMago ? (6 + conMod) : (8 + conMod);
+  const ac = isBarbaro ? (10 + dexMod + conMod) : isMago ? (10 + dexMod) : (11 + dexMod);
+  const dc = 8 + prof + spellMod;
+  const atkMagic = prof + spellMod;
   const remaining = startingGold() - spentGold();
   const purchases = Object.entries(data.shop.purchases||{}).filter(([,q])=>q>0);
 
   const combateContent = isBarbaro
     ? `PV: ${hp} (1d12) · CA: ${ac} (sem armadura: 10 + Destreza + Constituição, ou o que for comprado na Loja)`
+    : isMago
+    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
 
   const classFeatureBlock = isBarbaro ? `
@@ -1708,6 +1799,12 @@ function renderSummary(){
   <div class="content">
     Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
     Magias: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>` : isMago ? `
+  <div class="summary-section"><h3>Adepto de Ritual, Recuperação Arcana, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 3 da classe">${s} (espécie)</span>`).join('')}<br>
+    Livro de Magias: ${cls.spellbook.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
+    Preparadas: ${cls.prepared.map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>` : `
   <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
@@ -1774,6 +1871,7 @@ function resetWizard(){
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],equipment:null},
+    mago:{skills:[],cantrips:[],spellbook:[],prepared:[],equipment:null},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -1841,6 +1939,22 @@ function toggleBardoSkill(v){ const s=data.bardo.skills; const i=s.indexOf(v); i
 function toggleBardoCantrip(v){ const s=data.bardo.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleBardoSpell1(v){ const s=data.bardo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<4)s.push(v); persist(); render(); }
 function pickBardoEquip(v){ data.bardo.equipment=v; persist(); render(); }
+function toggleMagoSkill(v){ const s=data.mago.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleMagoCantrip(v){ const s=data.mago.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<MAGO.cantripsCount)s.push(v); persist(); render(); }
+function toggleMagoSpellbook(v){
+  const mg = data.mago;
+  const i = mg.spellbook.indexOf(v);
+  if(i>=0){
+    mg.spellbook.splice(i,1);
+    const pi = mg.prepared.indexOf(v);
+    if(pi>=0) mg.prepared.splice(pi,1); // sai do livro, sai também das preparadas
+  } else if(mg.spellbook.length<MAGO.spellbookCount){
+    mg.spellbook.push(v);
+  }
+  persist(); render();
+}
+function toggleMagoPrepared(v){ const s=data.mago.prepared; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<MAGO.preparedCount)s.push(v); persist(); render(); }
+function pickMagoEquip(v){ data.mago.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
