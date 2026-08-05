@@ -31,6 +31,11 @@
 <script src="data/classes/clerigo.js"></script>
 <script src="data/classes/guerreiro.js"></script>
 <script src="data/classes/ladino.js"></script>
+<script src="data/classes/druida.js"></script>
+<script src="data/classes/feiticeiro.js"></script>
+<script src="data/classes/monge.js"></script>
+<script src="data/classes/guardiao.js"></script>
+<script src="data/languages.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -65,11 +70,90 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
-   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro, Bardo, Mago, Paladino,
-   Psiônico, Clérigo, Guerreiro e Ladino (nível 1 apenas), todas as 10
-   espécies do PHB 2024, os 16 antecedentes do PHB 2024. FALTAM do PHB:
-   Druida, Feiticeiro, Guardião, Monge. Todas já mapeadas na planilha
-   classes_phb2024.xlsx.
+   ESCOPO ATUAL (funcionando): 🎉 TODAS AS 12 CLASSES DO PHB 2024 + o
+   Psiônico (UA 2025), nível 1 apenas: Bárbaro, Bardo, Bruxo, Clérigo,
+   Druida, Feiticeiro, Guardião, Guerreiro, Ladino, Mago, Monge, Paladino
+   e Psiônico. Mais todas as 10 espécies do PHB 2024 e os 16 antecedentes
+   do PHB 2024. CONFERIDO duas vezes contra a lista real de 12 classes do
+   PHB antes de declarar completo (já escrevi essa frase errado uma vez
+   nesta mesma nota, esquecendo o Guardião — ver histórico logo abaixo).
+   Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
+   Próxima frente natural é decidir entre (a) progressão de nível 2+ pras
+   classes já existentes, ou (b) revisar as pendências acumuladas
+   (idiomas, instrumentos/ferramentas — 3 classes com esse placeholder:
+   Bardo/Ladino/Monge —, SHOP com armas Marciais/armadura Média-Pesada,
+   unificar a lógica de "CA não calculada automaticamente" numa função só
+   — já são 5 classes repetindo esse texto: Paladino/Clérigo/Guerreiro/
+   Druida/Guardião). Perguntar ao usuário antes de escolher uma frente.
+
+   ✅ GUARDIÃO (nível 1) — CONCLUÍDO. Dados em data/classes/guardiao.js.
+   Estrutura parecida com Paladino: sem truques, magias preparadas (2) +
+   Maestria em Arma (2, CONFERIDO no PDF — mesmo o próprio exemplo do
+   livro mistura Arco Longo com Espada Curta, então SEM restrição a
+   Corpo a Corpo, reforçando o padrão Paladino/Guerreiro/Ladino/Guardião
+   "sem restrição" vs. só o Bárbaro "com restrição"). Inimigo Favorito
+   (Marca do Predador sempre preparada, filtrada da lista de escolha,
+   mesmo padrão do Falar com Animais no Druida). Perícias são 3 (não 2),
+   de uma lista de 8. CA recebeu o tratamento "não calculada
+   automaticamente" — equipamento padrão tem Couro Batido (Armadura
+   Leve tipo diferente de Couro simples, CA base 12 em vez de 11, mais
+   uma razão nova pra não usar a fórmula simplificada de qualquer classe
+   já existente).
+
+   ✅ MONGE (nível 1) — CONCLUÍDO. Dados em data/classes/monge.js. A
+   implementação mais simples de todas: SEM nenhuma escolha de classe
+   além de Perícias e Equipamento (Artes Marciais e Defesa sem Armadura
+   são 100% informativas, e não há Maestria em Arma no nível 1 do Monge —
+   CONFERIDO no PDF, não assumido). Duas particularidades registradas:
+   - Proficiência de arma é a mais restrita de todas: só Armas Simples
+     CORPO A CORPO (nem todas as Simples — exclui à distância!) + Marciais
+     Corpo a Corpo com propriedade Leve. Só afeta CLASS_INFO/exibição por
+     enquanto, já que não há Maestria em Arma pra filtrar de verdade.
+   - Ferramentas: mesmo placeholder genérico do Bardo/Ladino ("escolha 1
+     tipo: Ferramentas de Artesão OU Instrumento Musical", sem seletor
+     real) — é a 3ª classe com essa pendência (Bardo, Ladino, Monge),
+     reforça que vale resolver isso numa leva só quando o usuário pedir.
+   - CA usa fórmula própria (10 + Destreza + Sabedoria, variável acMonge
+     dedicada em renderSummary) — não reaproveitou nenhuma das fórmulas
+     dos outros grupos porque Monge é a única classe com esse combo de
+     atributos na CA sem-armadura.
+
+   ✅ FEITICEIRO (nível 1) — CONCLUÍDO. Dados em data/classes/feiticeiro.js.
+   Sem particularidade estrutural nova — mesmo formato do Bardo/Psiônico
+   (N truques + N magias preparadas, sem sub-escolha extra tipo Ordem
+   Divina/Primal ou livro separado). Feitiçaria Inata é só texto
+   informativo (2 usos/dia, sem escolha do jogador). Sem armadura
+   (armorProf=[]), então CA usa a fórmula "sem armadura: 10+Destreza"
+   (mesmo grupo do Mago/Psiônico), não precisou do tratamento "não
+   calculada automaticamente". Foi a implementação mais rápida até agora
+   por não ter nenhuma mecânica nova pra desenhar — só copiar o padrão já
+   validado do Bardo/Psiônico com os dados certos do Feiticeiro.
+
+   ✅ DRUIDA (nível 1) — CONCLUÍDO. Dados em data/classes/druida.js.
+   Estrutura quase idêntica ao Clérigo (Ordem Primal = mesmo formato da
+   Ordem Divina: Protetor/Xamã em vez de Protetor/Taumaturgo, mesmo
+   efeito — Xamã dá +1 truque igual Taumaturgo, druidaEffectiveCantrips
+   Count() é cópia do padrão do Clérigo). Duas notas específicas:
+   - A tabela/caixa da "Ordem Primal" saiu BAGUNÇADA na primeira extração
+     de texto do PDF (colunas se misturaram, texto de Protetor/Xamã
+     apareceu longe do título deles). Precisei reextrair só a página
+     certa com pdftotext -layout -f/-l apontando pro número de página
+     real do PDF (calculado contando marcadores \f no texto já
+     extraído) — a extração de 397 páginas de uma vez só não capturou
+     bem esse layout em colunas. Se aparecer esse tipo de bagunça de
+     novo (texto de uma seção "vazando" pra outra coluna), tentar
+     reextrair só a página específica antes de desistir/perguntar pro
+     usuário.
+   - Falar com Animais vem de graça pelo Idioma Druídico (não conta nas 4
+     magias preparadas escolhidas) — por isso é FILTRADA da lista de
+     escolha (spells1.filter(s=>s!=='Falar com Animais')), mesmo padrão
+     de excluir truques concedidos pela espécie que já era usado em
+     outras classes.
+   - CA recebeu o tratamento "não calculada automaticamente" (Opção A tem
+     Escudo, que muda a fórmula simplificada de Couro+Destreza) — já são
+     4 classes com esse tratamento agora (Paladino, Clérigo, Guerreiro,
+     Druida). Continua valendo a pena generalizar numa função só quando
+     tiver tempo/pedido — a lista só cresce.
 
    ✅ LADINO (nível 1) — CONCLUÍDO. Dados em data/classes/ladino.js.
    Particularidades:
@@ -377,6 +461,31 @@
      etapa, atualizar
      TOTAL_STEPS, render(), canAdvance() E findFirstMissingGroup() juntos
      (os 3 têm um switch/case por step).
+   - ✅ NOVA ETAPA "IDIOMAS" INSERIDA (passo 6, entre Espécie-detalhe e
+     Atributos) — pedido do usuário com print das tabelas Idiomas Comuns
+     e Idiomas Raros do cap. 2. TOTAL_STEPS virou 10 (era 9). Renumeração
+     que isso causou: Atributos (id grp-6-attr-* → grp-7-attr-*, step 6→7,
+     editSection(6)→editSection(7)), Loja (step 7→8, editSection(7)→
+     editSection(8)), Resumo (step 8→9, inclusive o goTo(8) dentro de
+     returnToSummaryNow() virou goTo(9)). Os headers "Passo 1/2/3" de
+     Classe/Antecedente/Espécie NÃO mudaram (são só texto solto, não
+     ligados ao valor de `step`) — segui o mesmo estilo de Atributos/Loja
+     (headers sem número: "Passo — Idiomas", igual "Passo — Atributos").
+   - Dados: COMMON_LANGUAGES (9) e RARE_LANGUAGES (9) em
+     data/languages.js — "Comum" NÃO entra em nenhuma das duas, é
+     concedido automático (pill fixa, sem grp- id, não entra em validação).
+     Todo personagem escolhe 2 de COMMON_LANGUAGES (data.idiomas.comuns).
+     Se a classe for Ladino, mostra uma seção extra "Ladino — Gíria dos
+     Ladrões" com a pill fixa "Gíria dos Ladrões" (grátis, não conta) +
+     escolha de 1 idioma adicional de QUALQUER um dos dois grupos
+     (data.idiomas.extra, array de tamanho 1), excluindo os já escolhidos
+     como comuns e a própria Gíria dos Ladrões. toggleIdiomaComum() faz
+     cascade: se o idioma marcado como "comum" já estava escolhido como
+     "extra", tira de lá (evita duplicata).
+   - languageGroupsByCategory(pool) é o par de skillGroupsByAbility(pool),
+     mesma função groupedChoiceList() por trás — quando o pool só tem
+     idiomas Comuns (caso do primeiro grupo de 2), o grupo "Raros" fica
+     vazio e some sozinho (groupedChoiceList já filtra grupos vazios).
    - findFirstMissingGroup(): cada grupo de escolha tem id="grp-{step}-nome"
      pra permitir o scroll+destaque automático. Grupo novo = id novo.
    - editSection(idx) / returnToSummary: sistema de "editar e voltar pro
@@ -500,7 +609,7 @@
    colocar em CLASSES faz ela nunca aparecer na tela (bug já aconteceu com
    o Psiônico — CLASSES só tinha as 12 do PHB por padrão). */
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino","Psiônico"];
-const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico","Clérigo","Guerreiro","Ladino"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico","Clérigo","Guerreiro","Ladino","Druida","Feiticeiro","Monge","Guardião"];
 
 /* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
    NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
@@ -509,8 +618,8 @@ const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico
    se ramificando por nome de classe (if/else), porque cada classe nível 1
    tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
    proficiências de arma/armadura, perícias) usam esses mapas. */
-const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago", "Paladino":"paladino", "Psiônico":"psionico", "Clérigo":"clerigo", "Guerreiro":"guerreiro", "Ladino":"ladino" };
-const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO, "Paladino":PALADINO, "Psiônico":PSIONICO, "Clérigo":CLERIGO, "Guerreiro":GUERREIRO, "Ladino":LADINO };
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago", "Paladino":"paladino", "Psiônico":"psionico", "Clérigo":"clerigo", "Guerreiro":"guerreiro", "Ladino":"ladino", "Druida":"druida", "Feiticeiro":"feiticeiro", "Monge":"monge", "Guardião":"guardiao" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO, "Paladino":PALADINO, "Psiônico":PSIONICO, "Clérigo":CLERIGO, "Guerreiro":GUERREIRO, "Ladino":LADINO, "Druida":DRUIDA, "Feiticeiro":FEITICEIRO, "Monge":MONGE, "Guardião":GUARDIAO };
 function activeClassData(){
   const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
   return data[key];
@@ -731,6 +840,22 @@ const CLASS_INFO = {
   "Ladino": {
     descricao: "Especialista em furtividade e golpes precisos, que usa astúcia e as fraquezas do inimigo em vez de força bruta.",
     fields: [["Atributo Principal","Destreza"],["Dado de Vida","d8"],["Complexidade","Baixa"]]
+  },
+  "Druida": {
+    descricao: "Guardião da natureza que extrai magia primal dos elementos, animais e plantas, e pode se transformar em criaturas selvagens.",
+    fields: [["Atributo Principal","Sabedoria"],["Dado de Vida","d8"],["Complexidade","Alta"]]
+  },
+  "Feiticeiro": {
+    descricao: "Conjurador com magia inata, gravada em sua própria essência por uma origem incomum — sangue de dragão, evento sobrenatural, dádiva divina.",
+    fields: [["Atributo Principal","Carisma"],["Dado de Vida","d6"],["Complexidade","Alta"]]
+  },
+  "Monge": {
+    descricao: "Artista marcial que canaliza um poder interior através de disciplina física e mental extremas, lutando desarmado ou com armas simples.",
+    fields: [["Atributo Principal","Destreza e Sabedoria"],["Dado de Vida","d8"],["Complexidade","Alta"]]
+  },
+  "Guardião": {
+    descricao: "Combatente errante das terras selvagens, que une técnica marcial e magia primitiva da natureza pra rastrear e enfrentar ameaças.",
+    fields: [["Atributo Principal","Destreza e Sabedoria"],["Dado de Vida","d10"],["Complexidade","Média"]]
   }
 };
 
@@ -809,7 +934,7 @@ const SHOP = {
 };
 
 let step = 0;
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 10;
 let data = {
   especie: null, antecedente: null, classe: null,
   tiefling: { tamanho: null, legado: null, atributoLegado: null },
@@ -847,6 +972,11 @@ let data = {
   clerigo: { skills: [], ordem: null, cantrips: [], spells1: [], equipment: null },
   guerreiro: { skills: [], estilo: null, maestria: [], equipment: null },
   ladino: { skills: [], especialista: [], maestria: [], equipment: null },
+  druida: { skills: [], ordem: null, cantrips: [], spells1: [], equipment: null },
+  feiticeiro: { skills: [], cantrips: [], spells1: [], equipment: null },
+  monge: { skills: [], equipment: null },
+  guardiao: { skills: [], spells1: [], maestria: [], equipment: null },
+  idiomas: { comuns: [], extra: [] },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -997,6 +1127,37 @@ function findFirstMissingGroup(){
         if(!ld.equipment) return 'grp-1-equipment';
         return null;
       }
+      if(data.classe==='Druida'){
+        const dr = data.druida;
+        if(dr.skills.length!==2) return 'grp-1-skills';
+        if(!dr.ordem) return 'grp-1-ordem';
+        if(dr.cantrips.length!==druidaEffectiveCantripsCount()) return 'grp-1-cantrips';
+        if(dr.spells1.length!==DRUIDA.preparedCount) return 'grp-1-spells1';
+        if(!dr.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Feiticeiro'){
+        const ft = data.feiticeiro;
+        if(ft.skills.length!==2) return 'grp-1-skills';
+        if(ft.cantrips.length!==FEITICEIRO.cantripsCount) return 'grp-1-cantrips';
+        if(ft.spells1.length!==FEITICEIRO.preparedCount) return 'grp-1-spells1';
+        if(!ft.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Monge'){
+        const mk = data.monge;
+        if(mk.skills.length!==2) return 'grp-1-skills';
+        if(!mk.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Guardião'){
+        const gd = data.guardiao;
+        if(gd.skills.length!==GUARDIAO.skillsCount) return 'grp-1-skills';
+        if(gd.spells1.length!==GUARDIAO.preparedCount) return 'grp-1-spells1';
+        if(gd.maestria.length!==GUARDIAO.maestriaCount) return 'grp-1-maestria';
+        if(!gd.equipment) return 'grp-1-equipment';
+        return null;
+      }
       const b = data.bruxo;
       if(b.skills.length!==2) return 'grp-1-skills';
       if(!b.pactBoon) return 'grp-1-pact';
@@ -1051,8 +1212,13 @@ function findFirstMissingGroup(){
       if(!data.tiefling.atributoLegado) return 'grp-5-atributo';
       return null;
     case 6: {
+      if(data.idiomas.comuns.length!==2) return 'grp-6-comuns';
+      if(data.classe==='Ladino' && data.idiomas.extra.length!==1) return 'grp-6-extra';
+      return null;
+    }
+    case 7: {
       const missingAbility = ABILITIES.find(a=>data.attrs[a]===undefined);
-      return missingAbility ? 'grp-6-attr-'+missingAbility : null;
+      return missingAbility ? 'grp-7-attr-'+missingAbility : null;
     }
     default: return null;
   }
@@ -1082,7 +1248,7 @@ function editSection(idx){ data.returnToSummary=true; goTo(idx); }
 function returnToSummaryNow(){
   const missing = findFirstMissingGroup();
   if(missing){ scrollToMissing(missing); return; }
-  data.returnToSummary=false; goTo(8);
+  data.returnToSummary=false; goTo(9);
 }
 
 function canAdvance(){
@@ -1121,6 +1287,22 @@ function canAdvance(){
         const ld = data.ladino;
         return ld.skills.length===LADINO.skillsCount && ld.especialista.length===LADINO.especialistaCount && ld.maestria.length===LADINO.maestriaCount && !!ld.equipment;
       }
+      if(data.classe==='Druida'){
+        const dr = data.druida;
+        return dr.skills.length===2 && !!dr.ordem && dr.cantrips.length===druidaEffectiveCantripsCount() && dr.spells1.length===DRUIDA.preparedCount && !!dr.equipment;
+      }
+      if(data.classe==='Feiticeiro'){
+        const ft = data.feiticeiro;
+        return ft.skills.length===2 && ft.cantrips.length===FEITICEIRO.cantripsCount && ft.spells1.length===FEITICEIRO.preparedCount && !!ft.equipment;
+      }
+      if(data.classe==='Monge'){
+        const mk = data.monge;
+        return mk.skills.length===2 && !!mk.equipment;
+      }
+      if(data.classe==='Guardião'){
+        const gd = data.guardiao;
+        return gd.skills.length===GUARDIAO.skillsCount && gd.spells1.length===GUARDIAO.preparedCount && gd.maestria.length===GUARDIAO.maestriaCount && !!gd.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -1141,9 +1323,10 @@ function canAdvance(){
     }
     case 4: return !!data.especie;
     case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
-    case 6: return ABILITIES.every(a=>data.attrs[a]!==undefined);
-    case 7: return true;
+    case 6: return data.idiomas.comuns.length===2 && (data.classe!=='Ladino' || data.idiomas.extra.length===1);
+    case 7: return ABILITIES.every(a=>data.attrs[a]!==undefined);
     case 8: return true;
+    case 9: return true;
     default: return false;
   }
 }
@@ -1153,14 +1336,15 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : (data.classe==='Paladino') ? renderPaladinoDetail() : (data.classe==='Psiônico') ? renderPsionicoDetail() : (data.classe==='Clérigo') ? renderClerigoDetail() : (data.classe==='Guerreiro') ? renderGuerreiroDetail() : (data.classe==='Ladino') ? renderLadinoDetail() : renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : (data.classe==='Paladino') ? renderPaladinoDetail() : (data.classe==='Psiônico') ? renderPsionicoDetail() : (data.classe==='Clérigo') ? renderClerigoDetail() : (data.classe==='Guerreiro') ? renderGuerreiroDetail() : (data.classe==='Ladino') ? renderLadinoDetail() : (data.classe==='Druida') ? renderDruidaDetail() : (data.classe==='Feiticeiro') ? renderFeiticeiroDetail() : (data.classe==='Monge') ? renderMongeDetail() : (data.classe==='Guardião') ? renderGuardiaoDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
   else if(step===5) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
-  else if(step===6) html = renderAttrs();
-  else if(step===7) html = renderShop();
-  else if(step===8) html = renderSummary();
+  else if(step===6) html = renderIdiomasStep();
+  else if(step===7) html = renderAttrs();
+  else if(step===8) html = renderShop();
+  else if(step===9) html = renderSummary();
   c.innerHTML = html;
   attachStepHandlers();
 }
@@ -1578,6 +1762,15 @@ function skillGroupsByAbility(skillList){
     label: ab,
     items: skillList.filter(s => SKILL_ABILITY[s]===ab)
   }));
+}
+
+/* Mesma ideia do skillGroupsByAbility, mas agrupando idiomas em Comuns/
+   Raros em vez de por atributo — usado no passo de Idiomas. */
+function languageGroupsByCategory(pool){
+  return [
+    { label: "Comuns", items: pool.filter(l => COMMON_LANGUAGES.includes(l)) },
+    { label: "Raros", items: pool.filter(l => RARE_LANGUAGES.includes(l)) }
+  ];
 }
 
 /* Igual ao groupedChoiceList, mas de escolha ÚNICA (radio, não checkbox) —
@@ -2112,6 +2305,176 @@ function renderLadinoDetail(){
   ${nav(canAdvance())}`;
 }
 
+/* Xamã concede +1 truque — mesmo padrão do clerigoEffectiveCantripsCount(). */
+function druidaEffectiveCantripsCount(){
+  return DRUIDA.cantripsCount + (data.druida.ordem==='Xamã' ? 1 : 0);
+}
+
+function renderDruidaDetail(){
+  const dr = data.druida;
+  const cantripsMax = druidaEffectiveCantripsCount();
+  return `<h2>Druida — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Sabedoria · Dado de Vida: d8 · Salvaguardas: Inteligência e Sabedoria · Armas Simples · Armadura Leve e Escudos · Kit de Herbalismo (automático)</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = DRUIDA.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), dr.skills, 2, 'toggleDruidaSkill');
+  })()}
+  <div class="counter ${dr.skills.length===2?'ok':''}">${dr.skills.length}/2 escolhidas</div>
+
+  <h3>Idioma Druídico</h3>
+  <div class="option-block">${DRUIDA.idiomaDruidico}</div>
+
+  <h3 id="grp-1-ordem">Ordem Primal (escolha 1)</h3>
+  ${Object.entries(DRUIDA.ordemPrimal).map(([name,desc])=>`
+    <div class="option-block ${dr.ordem===name?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${name}</h3><p>${desc}</p>
+      <button class="pick-btn" data-pick="${name}" data-fn="pickDruidaOrdem">${dr.ordem===name?'Selecionado':'Escolher'}</button>
+    </div>`).join('')}
+
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha ${cantripsMax}, da lista de Druida)</h3>
+  ${spellChoiceList(DRUIDA.cantrips, dr.cantrips, cantripsMax, 'toggleDruidaCantrip')}
+  <div class="counter ${dr.cantrips.length===cantripsMax?'ok':''}">${dr.cantrips.length}/${cantripsMax} escolhidos</div>
+
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${DRUIDA.preparedCount}, da lista de Druida)</h3>
+  <div class="intro" style="margin-bottom:8px;">Falar com Animais não aparece aqui — você já tem ela sempre preparada de graça pelo Idioma Druídico.</div>
+  ${spellChoiceList(DRUIDA.spells1.filter(s=>s!=='Falar com Animais'), dr.spells1, DRUIDA.preparedCount, 'toggleDruidaSpell1')}
+  <div class="counter ${dr.spells1.length===DRUIDA.preparedCount?'ok':''}">${dr.spells1.length}/${DRUIDA.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${dr.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...DRUIDA.equipmentA, DRUIDA.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickDruidaEquip">${dr.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${dr.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${DRUIDA.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickDruidaEquip">${dr.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderFeiticeiroDetail(){
+  const ft = data.feiticeiro;
+  return `<h2>Feiticeiro — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Carisma · Dado de Vida: d6 · Salvaguardas: Constituição e Carisma · Armas Simples · Sem treinamento com Armadura</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = FEITICEIRO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), ft.skills, 2, 'toggleFeiticeiroSkill');
+  })()}
+  <div class="counter ${ft.skills.length===2?'ok':''}">${ft.skills.length}/2 escolhidas</div>
+
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha ${FEITICEIRO.cantripsCount}, da lista de Feiticeiro)</h3>
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(FEITICEIRO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), ft.cantrips, FEITICEIRO.cantripsCount, 'toggleFeiticeiroCantrip')}
+  <div class="counter ${ft.cantrips.length===FEITICEIRO.cantripsCount?'ok':''}">${ft.cantrips.length}/${FEITICEIRO.cantripsCount} escolhidos</div>
+
+  <h3>Feitiçaria Inata</h3>
+  <div class="option-block">${FEITICEIRO.feiticariaInata}</div>
+
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${FEITICEIRO.preparedCount}, da lista de Feiticeiro)</h3>
+  ${spellChoiceList(FEITICEIRO.spells1, ft.spells1, FEITICEIRO.preparedCount, 'toggleFeiticeiroSpell1')}
+  <div class="counter ${ft.spells1.length===FEITICEIRO.preparedCount?'ok':''}">${ft.spells1.length}/${FEITICEIRO.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${ft.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...FEITICEIRO.equipmentA, FEITICEIRO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickFeiticeiroEquip">${ft.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${ft.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${FEITICEIRO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickFeiticeiroEquip">${ft.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderMongeDetail(){
+  const mk = data.monge;
+  return `<h2>Monge — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Destreza e Sabedoria · Dado de Vida: d8 · Salvaguardas: Força e Destreza · Armas Simples Corpo a Corpo e Marciais Corpo a Corpo com Leve · Sem treinamento com Armadura · ${MONGE.toolsNote}</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = MONGE.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), mk.skills, 2, 'toggleMongeSkill');
+  })()}
+  <div class="counter ${mk.skills.length===2?'ok':''}">${mk.skills.length}/2 escolhidas</div>
+
+  <h3>Artes Marciais</h3>
+  <div class="option-block">${MONGE.artesMarciais}</div>
+
+  <h3>Defesa sem Armadura</h3>
+  <div class="option-block">${MONGE.defesaSemArmadura}</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${mk.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...MONGE.equipmentA, MONGE.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickMongeEquip">${mk.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${mk.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${MONGE.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickMongeEquip">${mk.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderGuardiaoDetail(){
+  const gd = data.guardiao;
+  return `<h2>Guardião — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Destreza e Sabedoria · Dado de Vida: d10 · Salvaguardas: Força e Destreza · Armas Simples e Marciais · Armadura Leve, Média e Escudo</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha ${GUARDIAO.skillsCount})</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = GUARDIAO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), gd.skills, GUARDIAO.skillsCount, 'toggleGuardiaoSkill');
+  })()}
+  <div class="counter ${gd.skills.length===GUARDIAO.skillsCount?'ok':''}">${gd.skills.length}/${GUARDIAO.skillsCount} escolhidas</div>
+
+  <h3>Inimigo Favorito</h3>
+  <div class="option-block">${GUARDIAO.inimigoFavorito}</div>
+
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${GUARDIAO.preparedCount}, da lista de Guardião)</h3>
+  <div class="intro" style="margin-bottom:8px;">Sem truques no nível 1. Marca do Predador não aparece aqui — você já tem ela sempre preparada de graça pelo Inimigo Favorito.</div>
+  ${spellChoiceList(GUARDIAO.spells1.filter(s=>s!=='Marca do Predador'), gd.spells1, GUARDIAO.preparedCount, 'toggleGuardiaoSpell1')}
+  <div class="counter ${gd.spells1.length===GUARDIAO.preparedCount?'ok':''}">${gd.spells1.length}/${GUARDIAO.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-maestria">Maestria em Arma (escolha ${GUARDIAO.maestriaCount}, com as quais você tem proficiência)</h3>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
+      const sel = gd.maestria.includes(name);
+      const disabled = !sel && gd.maestria.length>=GUARDIAO.maestriaCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="toggleGuardiaoMaestria"`} title="${w.mastery}: ${MASTERY_PROPERTIES[w.mastery]}">${name} (${w.mastery})</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${gd.maestria.length===GUARDIAO.maestriaCount?'ok':''}">${gd.maestria.length}/${GUARDIAO.maestriaCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${gd.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...GUARDIAO.equipmentA, GUARDIAO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickGuardiaoEquip">${gd.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${gd.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${GUARDIAO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickGuardiaoEquip">${gd.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
 function getBonusFor(ability){
   const plan = activeBgData().abilityPlan;
   if(!plan) return 0;
@@ -2125,6 +2488,53 @@ function getBonusFor(ability){
   return 0;
 }
 
+function renderIdiomasStep(){
+  const id = data.idiomas;
+  const isLadino = data.classe==='Ladino';
+  const comunsPool = COMMON_LANGUAGES;
+  return `<h2>Passo — Idiomas</h2>
+  <div class="intro">Todo personagem conhece Comum, além de mais idiomas escolhidos abaixo.</div>
+
+  <div class="check-list" style="margin-bottom:14px;">
+    <span class="group-label" style="margin:0 2px 0 0;">Automático:</span>
+    <div class="check-pill selected">Comum</div>
+  </div>
+
+  <h3 id="grp-6-comuns">Escolha 2 Idiomas Comuns</h3>
+  ${groupedChoiceList(languageGroupsByCategory(comunsPool), id.comuns, 2, 'toggleIdiomaComum')}
+  <div class="counter ${id.comuns.length===2?'ok':''}">${id.comuns.length}/2 escolhidos</div>
+
+  ${isLadino ? `
+  <h3>Ladino — Gíria dos Ladrões</h3>
+  <div class="intro" style="margin-bottom:8px;">Como Ladino, você conhece a Gíria dos Ladrões automaticamente (não conta como uma das escolhas acima).</div>
+  <div class="check-list" style="margin-bottom:14px;">
+    <div class="check-pill selected">Gíria dos Ladrões</div>
+  </div>
+
+  <h3 id="grp-6-extra">Escolha 1 Idioma Adicional (Comum ou Raro)</h3>
+  ${(()=>{
+    const pool = [...COMMON_LANGUAGES, ...RARE_LANGUAGES].filter(l => l!=='Gíria dos Ladrões' && !id.comuns.includes(l));
+    return groupedChoiceList(languageGroupsByCategory(pool), id.extra, 1, 'toggleIdiomaExtra');
+  })()}
+  <div class="counter ${id.extra.length===1?'ok':''}">${id.extra.length}/1 escolhido</div>
+  ` : ''}
+  ${nav(canAdvance())}`;
+}
+
+function toggleIdiomaComum(v){
+  const id = data.idiomas;
+  const i = id.comuns.indexOf(v);
+  if(i>=0){
+    id.comuns.splice(i,1);
+  } else if(id.comuns.length<2){
+    id.comuns.push(v);
+    const ei = id.extra.indexOf(v);
+    if(ei>=0) id.extra.splice(ei,1); // idioma virou "comum escolhido" — sai do extra se estava lá
+  }
+  persist(); render();
+}
+function toggleIdiomaExtra(v){ const s=data.idiomas.extra; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<1)s.push(v); persist(); render(); }
+
 function renderAttrs(){
   const used = Object.values(data.attrs);
   return `<h2>Passo — Atributos (Array Padrão)</h2>
@@ -2133,7 +2543,7 @@ function renderAttrs(){
     const chosen = data.attrs[a];
     const bonus = getBonusFor(a);
     const final = chosen!==undefined ? chosen+bonus : null;
-    return `<div class="attr-row" id="grp-6-attr-${a}">
+    return `<div class="attr-row" id="grp-7-attr-${a}">
       <div class="name">${a}</div>
       <select data-ability="${a}" onchange="setAttr('${a}', this.value)">
         <option value="">—</option>
@@ -2229,6 +2639,10 @@ function renderSummary(){
   const isClerigo = data.classe==='Clérigo';
   const isGuerreiro = data.classe==='Guerreiro';
   const isLadino = data.classe==='Ladino';
+  const isDruida = data.classe==='Druida';
+  const isFeiticeiro = data.classe==='Feiticeiro';
+  const isMonge = data.classe==='Monge';
+  const isGuardiao = data.classe==='Guardião';
   const cls = activeClassData();
   const clsConst = activeClassConst();
   const t = data.tiefling;
@@ -2242,9 +2656,10 @@ function renderSummary(){
   const wisMod = mod(finalScore('Sabedoria'));
   const conMod = mod(finalScore('Constituição'));
   const dexMod = mod(finalScore('Destreza'));
-  const spellMod = (isMago || isPsionico) ? intMod : isClerigo ? wisMod : carMod; // atributo de conjuração varia por classe
-  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico) ? (6 + conMod) : (isPaladino || isGuerreiro) ? (10 + conMod) : (8 + conMod);
-  const ac = isBarbaro ? (10 + dexMod + conMod) : (isMago || isPsionico) ? (10 + dexMod) : (11 + dexMod);
+  const spellMod = (isMago || isPsionico) ? intMod : (isClerigo || isDruida || isGuardiao) ? wisMod : carMod; // atributo de conjuração varia por classe
+  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico || isFeiticeiro) ? (6 + conMod) : (isPaladino || isGuerreiro || isGuardiao) ? (10 + conMod) : (8 + conMod);
+  const ac = isBarbaro ? (10 + dexMod + conMod) : (isMago || isPsionico || isFeiticeiro) ? (10 + dexMod) : (11 + dexMod);
+  const acMonge = 10 + dexMod + wisMod;
   const dc = 8 + prof + spellMod;
   const atkMagic = prof + spellMod;
   const remaining = startingGold() - spentGold();
@@ -2256,6 +2671,8 @@ function renderSummary(){
     ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : isPsionico
     ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
+    : isFeiticeiro
+    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : isPaladino
     ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : isClerigo
@@ -2264,6 +2681,12 @@ function renderSummary(){
     ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo. Sem conjuração.`
     : isLadino
     ? `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · Sem conjuração.`
+    : isDruida
+    ? `PV: ${hp} (1d8) · CA: depende da armadura equipada (Couro + Escudo, se Opção A — soma +2 de Escudo ao ${ac}) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
+    : isMonge
+    ? `PV: ${hp} (1d8) · CA: ${acMonge} (sem armadura: 10 + Destreza + Sabedoria) · Sem conjuração.`
+    : isGuardiao
+    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Couro Batido, se Opção A — CA 12 + Destreza) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
 
   const classFeatureBlock = isBarbaro ? `
@@ -2307,6 +2730,24 @@ function renderSummary(){
   <div class="content">
     Especialista: ${cls.especialista.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
     Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
+  </div></div>` : isDruida ? `
+  <div class="summary-section"><h3>Idioma Druídico, Ordem Primal, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    <b>${cls.ordem}</b><br>
+    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
+    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')} <span class="pill-static" title="Concedida de graça pelo Idioma Druídico">Falar com Animais (grátis)</span>
+  </div></div>` : isFeiticeiro ? `
+  <div class="summary-section"><h3>Feitiçaria Inata, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
+    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>` : isMonge ? `
+  <div class="summary-section"><h3>Artes Marciais e Defesa sem Armadura</h3>
+  <div class="content">Ataque Desarmado Adicional, Dado de Artes Marciais (1d6) e Ataques com Destreza, enquanto desarmado/com armas de Monge, sem armadura nem Escudo.</div></div>` : isGuardiao ? `
+  <div class="summary-section"><h3>Inimigo Favorito, Magias e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')} <span class="pill-static" title="Concedida de graça pelo Inimigo Favorito">Marca do Predador (grátis)</span><br>
+    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
   </div></div>` : `
   <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
@@ -2321,7 +2762,10 @@ function renderSummary(){
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
   <div class="content">${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente}</div></div>
 
-  <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
+  <div class="summary-section"><h3>Idiomas <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
+  <div class="content"><span class="pill-static">Comum</span>${data.idiomas.comuns.map(s=>`<span class="pill-static">${s}</span>`).join('')}${data.classe==='Ladino' ? `<span class="pill-static" title="Concedida de graça pela classe Ladino">Gíria dos Ladrões</span>${data.idiomas.extra.map(s=>`<span class="pill-static">${s}</span>`).join('')}` : ''}</div></div>
+
+  <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
   <div class="content">${ABILITIES.map(a=>`<span class="pill-static">${a} ${finalScore(a)} (${fmt(mod(finalScore(a)))})</span>`).join('')}</div></div>
 
   <div class="summary-section"><h3>Combate</h3>
@@ -2346,7 +2790,7 @@ function renderSummary(){
     ${(bg.equipment==='A'?[...bgEquipA, bgConst.equipmentA_gold+' PO']:[bgConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>
 
-  <div class="summary-section"><h3>Compras na Loja <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
+  <div class="summary-section"><h3>Compras na Loja <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
   <div class="content">
     ${purchases.length ? purchases.map(([n,q])=>`<span class="pill-static">${n} ×${q}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhuma compra.</span>'}
     <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(remaining)} PO</div>
@@ -2379,6 +2823,11 @@ function resetWizard(){
     clerigo:{skills:[],ordem:null,cantrips:[],spells1:[],equipment:null},
     guerreiro:{skills:[],estilo:null,maestria:[],equipment:null},
     ladino:{skills:[],especialista:[],maestria:[],equipment:null},
+    druida:{skills:[],ordem:null,cantrips:[],spells1:[],equipment:null},
+    feiticeiro:{skills:[],cantrips:[],spells1:[],equipment:null},
+    monge:{skills:[],equipment:null},
+    guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
+    idiomas:{comuns:[],extra:[]},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -2500,6 +2949,27 @@ function toggleLadinoSkill(v){
 function toggleLadinoEspecialista(v){ const s=data.ladino.especialista; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<LADINO.especialistaCount)s.push(v); persist(); render(); }
 function toggleLadinoMaestria(v){ const s=data.ladino.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<LADINO.maestriaCount)s.push(v); persist(); render(); }
 function pickLadinoEquip(v){ data.ladino.equipment=v; persist(); render(); }
+function toggleDruidaSkill(v){ const s=data.druida.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickDruidaOrdem(v){
+  const dr = data.druida;
+  dr.ordem = v;
+  const max = druidaEffectiveCantripsCount();
+  if(dr.cantrips.length>max) dr.cantrips.length = max;
+  persist(); render();
+}
+function toggleDruidaCantrip(v){ const s=data.druida.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<druidaEffectiveCantripsCount())s.push(v); persist(); render(); }
+function toggleDruidaSpell1(v){ const s=data.druida.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<DRUIDA.preparedCount)s.push(v); persist(); render(); }
+function pickDruidaEquip(v){ data.druida.equipment=v; persist(); render(); }
+function toggleFeiticeiroSkill(v){ const s=data.feiticeiro.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function toggleFeiticeiroCantrip(v){ const s=data.feiticeiro.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<FEITICEIRO.cantripsCount)s.push(v); persist(); render(); }
+function toggleFeiticeiroSpell1(v){ const s=data.feiticeiro.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<FEITICEIRO.preparedCount)s.push(v); persist(); render(); }
+function pickFeiticeiroEquip(v){ data.feiticeiro.equipment=v; persist(); render(); }
+function toggleMongeSkill(v){ const s=data.monge.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickMongeEquip(v){ data.monge.equipment=v; persist(); render(); }
+function toggleGuardiaoSkill(v){ const s=data.guardiao.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.skillsCount)s.push(v); persist(); render(); }
+function toggleGuardiaoSpell1(v){ const s=data.guardiao.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.preparedCount)s.push(v); persist(); render(); }
+function toggleGuardiaoMaestria(v){ const s=data.guardiao.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.maestriaCount)s.push(v); persist(); render(); }
+function pickGuardiaoEquip(v){ data.guardiao.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
