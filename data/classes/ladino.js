@@ -4,11 +4,11 @@ const LADINO = {
   /* Proficiência de arma é FILTRADA: Simples (todas) + Marciais que
      tenham a propriedade Acuidade OU Leve (não é "todas as Marciais"
      como Bárbaro/Guerreiro/Paladino). weaponProf aqui ainda lista
-     ["simples","marcial"] só pra exibição/CLASS_INFO — o SHOP não tem
-     granularidade pra filtrar por propriedade de arma dentro de uma
-     categoria (só filtra categoria inteira), e como ele só vende Simples
-     mesmo, isso não causa erro prático ainda. Revisar se/quando o SHOP
-     ganhar Armas Marciais de verdade. */
+     ["simples","marcial"] pra exibição/CLASS_INFO — o filtro fino por
+     propriedade é aplicado em renderShop() via weaponProfFiltroMarcial,
+     só quando o jogador liga o checkbox "Filtrar por proficiência"
+     (desligado por padrão — com ele desligado a Loja mostra tudo, pra
+     qualquer classe, de propósito). */
   weaponProf: ["simples","marcial"],
   weaponProfFiltroMarcial: ["Acuidade","Leve"],
   armorProf: ["leve"],

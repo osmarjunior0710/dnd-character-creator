@@ -91,19 +91,55 @@
       seção correspondente — procure pelo texto entre aspas):
       - "floater/painel fixo" — inventário do personagem (classe +
         antecedente + compras da loja) sempre visível.
-      - "filtro de proficiência FILTRADA por propriedade" — Ladino
-        (Acuidade/Leve) e Monge (Corpo a Corpo + Leve) veem armas
-        Marciais demais na Loja hoje; o filtro só olha categoria, não
-        propriedade individual (WEAPON_MASTERY já tem o campo
-        "propriedades" pronto pra isso).
-      - "perícia duplicada entre fontes" — dá pra escolher a mesma
-        perícia na classe, no antecedente E na espécie ao mesmo tempo;
-        cada fonte só filtra contra o antecedente, não contra as outras.
-      - resetWizard() só zera data.tiefling/data.pequenino entre
-        personagens — as outras 8 espécies carregam sub-escolhas do
-        personagem anterior.
-      - "Talentos de Talento Selvagem" do UA (10 talentos do Psiônico,
-        Atmocinese/Biocinese/etc.) não implementados em lugar nenhum.
+      - ✅ RESOLVIDO (Claude Code), e com um desenho diferente do que a
+        pendência original sugeria: em vez de filtrar a Loja
+        automaticamente, virou um checkbox opcional "Filtrar por
+        proficiência" (desligado por padrão — a Loja mostra TUDO por
+        padrão pra qualquer classe, decisão do usuário: "assim todo mundo
+        sabe de tudo que pode fazer/comprar"). Com o checkbox ligado,
+        usa itemMatchesWeaponProf() (perto de renderShop()) pra filtrar
+        por propriedade individual via WEAPON_MASTERY — Ladino
+        (weaponProfFiltroMarcial=["Acuidade","Leve"]) e Monge
+        (weaponProfMeleeOnly=true + weaponProfFiltroMarcial=["Leve"]) já
+        usam isso; Bárbaro/Guerreiro/Paladino/Guardião não têm restrição
+        extra, então o checkbox não muda nada pra eles (proficiência
+        plena com Simples+Marcial já era mostrada certa). Só afeta
+        categorias de Arma/Armadura — Ferramentas/Instrumentos/Focos/
+        Munição/Equipamento de Aventura continuam sempre visíveis, com
+        ou sem o filtro.
+      - ✅ RESOLVIDO (Claude Code): "perícia duplicada entre fontes" —
+        dava pra escolher a mesma perícia na classe, no antecedente E na
+        espécie ao mesmo tempo. Generalizado pra perícia, talento, truque
+        E magia de 1º círculo — ver bloco "DEDUPLICAÇÃO DE ESCOLHAS ENTRE
+        FONTES" perto de speciesFixedGrants()/skillsGrantedElsewhere()/
+        chosenCantripsElsewhere() (fim do arquivo, logo depois de
+        activeBgConst()). Regra: concessão FIXA (traço automático de
+        espécie/classe, ex. truque do Legado do Tiferino) continua
+        excluída das listas de ESCOLHA de outras fontes (comportamento
+        que já existia, generalizado de Tiferino pra também cobrir
+        Aasimar/Elfo/Gnomo) mas segue aparecendo no resumo; ESCOLHA do
+        jogador numa fonte (perícia/truque/magia realmente selecionada)
+        agora some da lista de escolha de TODAS as outras fontes também,
+        não só contra o antecedente como antes. Talento também: o
+        Versátil do Humano não deixa mais escolher o mesmo talento que o
+        antecedente já concede fixo (backgroundFeatBaseName()).
+      - ✅ RESOLVIDO (Claude Code): resetWizard() só zerava
+        data.tiefling/data.pequenino entre personagens — as outras 8
+        espécies carregavam sub-escolhas do personagem anterior. Ver
+        freshSpeciesData() perto de resetWizard().
+      - ✅ RESOLVIDO (Claude Code): "Talentos de Talento Selvagem" do UA
+        (10 talentos do Psiônico, Atmocinese/Biocinese/etc.) já existiam
+        completos em data/feats.js mas não estavam ligados a nenhuma UI.
+        Ligados ao Versátil do Humano (único lugar do app que já era uma
+        escolha livre de talento por nome) — ver talentosSelvagens em
+        renderHumanoDetail(). Adicionado campo Fonte em
+        renderFeatDetailCard() (ⓘ) pra deixar claro que é UA Psiônico
+        2025, não PHB, já que agora aparecem lado a lado com talentos de
+        Origem oficiais. PENDÊNCIA NOVA achada nesse meio-tempo (não
+        resolvida, fora de escopo): a tela de Resumo não mostra NENHUMA
+        escolha do passo 5 (detalhe de espécie) — nem o próprio Versátil/
+        Hábil do Humano, nem Sentidos Aguçados do Elfo, nem Linhagem do
+        Gnomo etc. Revisar quando mexer no resumo/export de novo.
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
         ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
         antigo de fato), mas cada um duplicava o mesmo array de 4
@@ -116,11 +152,21 @@
         uma função só.
       - Progressão de nível 2+ — nenhuma das 13 classes tem isso ainda,
         é tudo só nível 1.
-      - computeMaxPossibleGold() nunca rodou de verdade com os 16
-        antecedentes carregados ao mesmo tempo (só foi confirmado
-        indiretamente pelo usuário vendo "205 PO" numa combinação
-        específica) — vale um teste explícito com cada combinação de
-        classe+antecedente extrema.
+      - ✅ RESOLVIDO (Claude Code): computeMaxPossibleGold() nunca tinha
+        rodado de verdade com as 13 classes + 16 antecedentes carregados
+        ao mesmo tempo. Rodei o cálculo real fora do navegador (Node,
+        carregando os data/*.js na ordem certa): classMax=155 PO
+        (Guerreiro, Opção C) + bgMax=50 PO (empate entre os 16
+        antecedentes — a Opção B de todo antecedente vale exatamente 50
+        PO, regra oficial do PHB 2024, não coincidência de dado) =
+        teto de 205 PO, batendo exatamente com o que o usuário já tinha
+        visto no celular. Conferi também os 179 itens do SHOP contra
+        esse teto: 6 ficam acima (Placas 1500, Luneta 1000, Placas
+        Parcial 750, Mosquete 500, Couraça Peitoral 400, Pistola 250) e
+        são corretamente escondidos pelo filtro `it.c &lt;= maxGold`
+        (inclusivo — nenhum item exatamente em 205 PO hoje, mas o
+        operador está certo pra quando aparecer um). Nenhum bug
+        encontrado, só verificação pendente que agora está feita.
    4. Prioridade sugerida: converse com o usuário antes de escolher —
       não presuma que a ordem acima é a ordem de importância.
 
@@ -200,13 +246,15 @@
    3. ✅ FEITO: filtro de proficiência por categoria já cobre as 13
       classes automaticamente (usa clsConst.weaponProf/armorProf.includes,
       testado que os valores batem: simples/marcial/leve/media/pesada/
-      escudo). AINDA NÃO cobre filtro por PROPRIEDADE individual da arma
-      (Ladino só Acuidade/Leve, Monge só Corpo a Corpo com Leve) — hoje
-      se o Ladino tiver proficiência "marcial" ele veria TODAS as armas
-      marciais na loja, não só as com Acuidade/Leve. Isso é uma
-      simplificação aceita por ora (fica mais permissivo, não menos) —
-      resolver se o usuário pedir, usando o campo "propriedades" que já
-      existe em WEAPON_MASTERY.
+      escudo). ✅ TAMBÉM FEITO (Claude Code, resolvido bem depois desta
+      sessão original): filtro por PROPRIEDADE individual da arma
+      (Ladino só Acuidade/Leve, Monge só Corpo a Corpo com Leve), usando
+      o campo "propriedades" de WEAPON_MASTERY como já estava previsto
+      aqui — mas o usuário pediu um desenho diferente do que "resolver
+      automaticamente": virou um checkbox opcional "Filtrar por
+      proficiência" em renderShop(), DESLIGADO por padrão (a Loja mostra
+      tudo pra todo mundo por padrão, de propósito — ver
+      itemMatchesWeaponProf()/toggleShopProfFilter()).
    4. ✅ Calculadora de ouro mantida (startingGold(), spentGold(),
       maxAffordableQty(), a lógica de troco em renderShop()) — não foi
       mexida, só reaproveitada pros itens novos.
@@ -240,7 +288,13 @@
       real no celular: apareceu "205 PO" de Restante pra um Guerreiro —
       bate exatamente com 155 (Guerreiro Opção C) + 50 (algum
       antecedente com equipmentB_gold=50, ex. Artista) = 205. Funciona
-      de verdade, não só no papel.
+      de verdade, não só no papel. ✅ CONFIRMADO DE NOVO (Claude Code,
+      sessão com acesso ao repo inteiro): rodei o cálculo com os 16
+      antecedentes de verdade — bgMax=50 é empate entre TODOS eles
+      (Opção B de todo antecedente vale 50 PO, regra do livro), classMax
+      continua 155 (Guerreiro). Teto = 205 PO, exatamente igual ao
+      confirmado no celular. Ver pendência marcada ✅ mais acima nesta
+      nota pra detalhe completo, incluindo os itens do SHOP acima do teto.
    8. ✅ FEITO (usuário testou no celular e pediu 2 ajustes): a tabela da
       Loja estourava a tela no mobile (coluna Qtd. cortada fora da
       viewport) — agora usa layout de "cartão" empilhado abaixo de
@@ -254,18 +308,17 @@
       inteira) — toggleShopCategory() só salva o estado, não chama
       render(). css/styles.css foi criado nesta sessão (reconstruído a
       partir do anexo original da conversa) já com esses estilos.
-   9. 🔜 PENDENTE NOVA (achada pelo usuário em teste, registrar pra
-      revisar depois, NÃO mexer agora): é possível escolher a MESMA
+   9. ✅ RESOLVIDO (Claude Code, ver bloco "DEDUPLICAÇÃO DE ESCOLHAS ENTRE
+      FONTES" perto do fim do arquivo): era possível escolher a MESMA
       perícia em fontes diferentes ao mesmo tempo (ex: classe E
-      antecedente E espécie), quando o ideal seria uma fonte bloquear a
-      perícia nas outras (evitar duplicar proficiência à toa). Hoje só
-      Bruxo/Bárbaro/etc. filtram perícias já escolhidas pelo
-      ANTECEDENTE (activeBgConst().skills + habilidoso) na hora de
-      montar a lista de escolha — não filtram o que a ESPÉCIE ou outra
-      fonte podem ter concedido. Resolver isso provavelmente exige uma
-      função central tipo "todas as perícias já garantidas por qualquer
-      fonte" (espécie + antecedente + classe já escolhida) reusada em
-      todo lugar que hoje faz esse filtro parcialmente.
+      antecedente E espécie). skillsGrantedElsewhere(fonte) agora é a
+      função central "todas as perícias já garantidas por qualquer
+      fonte" que a nota antiga aqui embaixo já previa — reusada nos 13
+      pickers de classe, no Habilidoso, no Hábil (Humano) e no Sentidos
+      Aguçados (Elfo). Mesma generalização aplicada a talento (Versátil
+      do Humano vs. talento fixo do antecedente) e truque/magia (classe
+      vs. Iniciado em Magia do antecedente, e concessão fixa de espécie
+      generalizada de Tiferino pra também cobrir Aasimar/Elfo/Gnomo).
    - Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
      Depois da Loja, outras frentes possíveis: progressão de nível 2+,
      Talentos de Talento Selvagem do UA, arquivos de Guarda/Soldado/Nobre
@@ -434,16 +487,14 @@
      novo, MELHOR conferir contra a coluna "Psiônico" da planilha de
      magias antes de usar o texto do UA direto — a planilha já cobre
      "PHB 2024 + UA Psion" no nome, é a fonte de nomes oficiais.
-   - 🔜 PENDÊNCIA (não urgente, não afeta o fluxo básico de criação):
-     o UA também tem "Talentos de Talento Selvagem" (Wild Talent feats —
-     Atmocinese, Biocinese, Clarividência, Criocinese, Empata, Modelador
-     de Carne, Sussurrador Mental, Trapaceiro Psiônico, Psicinético,
-     Pirocinese) que ainda NÃO estão implementados em lugar nenhum do
-     app — nem como talento de antecedente (Nobre/Sábio podem trocar o
-     talento de origem por um desses) nem como opção de talento genérico.
-     Isso só importa quando a gente for mexer em talentos/antecedentes de
-     novo, não trava a criação de personagem Psiônico hoje. Revisar
-     nessa hora — não é sobre magias, é sobre feats.
+   - ✅ RESOLVIDO (Claude Code): o UA também tem "Talentos de Talento
+     Selvagem" (Wild Talent feats — Atmocinese, Biocinese, Clarividência,
+     Criocinese, Empata, Modelador de Carne, Sussurrador Mental,
+     Trapaceiro Psiônico, Psicinético, Pirocinese), já cadastrados em
+     data/feats.js mas sem UI. Resolvido pela opção "talento genérico"
+     citada aqui embaixo (não pela troca de talento de antecedente, que
+     continua sem implementar): ligados ao Versátil do Humano — ver
+     talentosSelvagens em renderHumanoDetail(), perto de talentosOrigem.
 
    ✅ PALADINO (nível 1) — CONCLUÍDO. Dados em data/classes/paladino.js.
    Particularidades:
@@ -580,13 +631,15 @@
    (✅ CLASS_DATA_KEY/CLASS_CONST já foram generalizados faz tempo — ver
    bloco do BÁRBARO mais abaixo — essa parte da nota antiga já não se aplica.)
 
-   PENDÊNCIA CONHECIDA (não é sobre classes, mas fica registrada pra não
-   esquecer): resetWizard() ("Criar Outro Personagem") só zera
-   data.tiefling/data.pequenino entre as espécies — as outras 8 (anao, orc,
-   humano, draconato, elfo, gnomo, golias, aasimar) não são resetadas.
-   Resolver quando for a vez de revisar espécies de novo, ou aproveitar
-   quando mexer no resetWizard() pra classes (mesmo tipo de bug pode já
-   nascer ali se não for generalizado desde o início).
+   ✅ RESOLVIDO (Claude Code): resetWizard() (botão agora "Iniciar Novo
+   Personagem", era "Criar Outro Personagem") só zerava data.tiefling/
+   data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
+   draconato, elfo, gnomo, golias, aasimar) carregavam sub-escolhas do
+   personagem anterior. Generalizado com freshSpeciesData() (função nova,
+   perto de resetWizard() no fim do arquivo) com os defaults das 10
+   espécies num só lugar, reaproveitada também na migração de saves
+   antigos em restore() (que antes tinha os mesmos 8 defaults duplicados
+   em ifs separados).
 
    NOTA SOBRE PEQUENINO (Halfling): diferente do Tiferino, essa espécie NÃO
    tem nenhuma escolha própria no PHB 2024 (sem subraça, sem legado, sem
@@ -767,12 +820,11 @@
      os outros talentos fixos (Sortudo, Alerta, Curandeiro, Vigoroso,
      Valentão de Taverna, Artifista, Músico, Atacante Selvagem) não têm
      escolha nenhuma, só o texto informativo.
-   - PENDÊNCIA (não é sobre antecedentes, achada de bônus ao mexer no
-     resetWizard): "Criar Outro Personagem" só zera data.tiefling/
-     data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
-     draconato, elfo, gnomo, golias, aasimar) não são resetadas. Não é bug
-     introduzido agora, já existia; resolver quando for a vez de revisar
-     espécies de novo, não misturar com antecedentes.
+   - ✅ RESOLVIDO (Claude Code, ver bloco perto de freshSpeciesData() mais
+     acima): "Iniciar Novo Personagem" (renomeado, era "Criar Outro
+     Personagem") só zerava data.tiefling/data.pequenino entre as
+     espécies — as outras 8 não eram resetadas. Não era bug de
+     antecedente, só achado de bônus nesta mesma nota.
    - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
      pode virar data/shop.js separado depois, sem relação direta com os
      antecedentes — não misturar as duas tarefas.
@@ -1126,15 +1178,16 @@ async function restore(){
       step = parsed.step || 0;
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
-      if(!data.pequenino) data.pequenino = {};
-      if(!data.aasimar) data.aasimar = { tamanho: null };
-      if(!data.anao) data.anao = {};
-      if(!data.orc) data.orc = {};
-      if(!data.humano) data.humano = { tamanho: null, pericia: null, talento: null };
-      if(!data.draconato) data.draconato = { heranca: null };
-      if(!data.elfo) data.elfo = { pericia: null, linhagem: null };
-      if(!data.gnomo) data.gnomo = { linhagem: null, atributoLinhagem: null };
-      if(!data.golias) data.golias = { ancestralidade: null };
+      if(data.shop.filterByProf===undefined) data.shop.filterByProf = false;
+      /* Espécies: garante que TODA chave de freshSpeciesData() exista em
+         data (evita crash se um save antigo do navegador não tiver uma
+         espécie mais recente que a gente adicionou depois) — mesma função
+         usada por resetWizard(), pra não duplicar os defaults em dois
+         lugares. */
+      const speciesDefaults = freshSpeciesData();
+      Object.keys(speciesDefaults).forEach(key=>{
+        if(!data[key]) data[key] = speciesDefaults[key];
+      });
       /* Antecedentes: garante que TODA chave de BACKGROUND_DATA_KEY exista
          em data (evita crash se um save antigo do navegador não tiver o
          antecedente mais recente que a gente adicionou depois). */
@@ -1368,84 +1421,16 @@ function returnToSummaryNow(){
   data.returnToSummary=false; goTo(9);
 }
 
+/* Antes disso era um switch(step) de ~80 linhas reimplementando, campo por
+   campo, exatamente a mesma validação de findFirstMissingGroup() (só que
+   devolvendo bool em vez do id do grupo faltante) — toda classe/espécie
+   nova precisava ser atualizada nas DUAS funções, em dois formatos
+   diferentes, e era fácil esquecer uma. Verificado caso a caso (steps 0-7)
+   que as duas eram logicamente equivalentes; steps 8 (Loja) e 9 (Resumo)
+   não têm campo obrigatório nas duas (findFirstMissingGroup cai no
+   default:null igual canAdvance caía em true). */
 function canAdvance(){
-  switch(step){
-    case 0: return !!data.classe;
-    case 1: {
-      if(data.classe==='Bárbaro'){
-        const bb = data.barbaro;
-        return bb.skills.length===2 && bb.maestria.length===BARBARO.maestriaCount && !!bb.equipment;
-      }
-      if(data.classe==='Bardo'){
-        const bd = data.bardo;
-        return bd.skills.length===BARDO.skillsCount && bd.instruments.length===BARDO.toolsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
-      }
-      if(data.classe==='Mago'){
-        const mg = data.mago;
-        return mg.skills.length===2 && mg.cantrips.length===MAGO.cantripsCount && mg.spellbook.length===MAGO.spellbookCount && mg.prepared.length===MAGO.preparedCount && !!mg.equipment;
-      }
-      if(data.classe==='Paladino'){
-        const pl = data.paladino;
-        return pl.skills.length===2 && pl.prepared.length===PALADINO.preparedCount && pl.maestria.length===PALADINO.maestriaCount && !!pl.equipment;
-      }
-      if(data.classe==='Psiônico'){
-        const ps = data.psionico;
-        return ps.skills.length===2 && ps.cantrips.length===PSIONICO.cantripsCount && ps.spells1.length===PSIONICO.preparedCount && !!ps.equipment;
-      }
-      if(data.classe==='Clérigo'){
-        const cl = data.clerigo;
-        return cl.skills.length===2 && !!cl.ordem && cl.cantrips.length===clerigoEffectiveCantripsCount() && cl.spells1.length===CLERIGO.preparedCount && !!cl.equipment;
-      }
-      if(data.classe==='Guerreiro'){
-        const gr = data.guerreiro;
-        return gr.skills.length===2 && !!gr.estilo && gr.maestria.length===GUERREIRO.maestriaCount && !!gr.equipment;
-      }
-      if(data.classe==='Ladino'){
-        const ld = data.ladino;
-        return ld.skills.length===LADINO.skillsCount && ld.especialista.length===LADINO.especialistaCount && ld.maestria.length===LADINO.maestriaCount && !!ld.equipment;
-      }
-      if(data.classe==='Druida'){
-        const dr = data.druida;
-        return dr.skills.length===2 && !!dr.ordem && dr.cantrips.length===druidaEffectiveCantripsCount() && dr.spells1.length===DRUIDA.preparedCount && !!dr.equipment;
-      }
-      if(data.classe==='Feiticeiro'){
-        const ft = data.feiticeiro;
-        return ft.skills.length===2 && ft.cantrips.length===FEITICEIRO.cantripsCount && ft.spells1.length===FEITICEIRO.preparedCount && !!ft.equipment;
-      }
-      if(data.classe==='Monge'){
-        const mk = data.monge;
-        return mk.skills.length===2 && !!mk.equipment;
-      }
-      if(data.classe==='Guardião'){
-        const gd = data.guardiao;
-        return gd.skills.length===GUARDIAO.skillsCount && gd.spells1.length===GUARDIAO.preparedCount && gd.maestria.length===GUARDIAO.maestriaCount && !!gd.equipment;
-      }
-      const b = data.bruxo;
-      return b.skills.length===2 && !!b.pactBoon &&
-        b.cantrips.length===2 &&
-        (b.pactBoon!=='Pacto do Tomo' || b.tomoCantrips.length===3) &&
-        b.spells1.length===2 &&
-        (b.pactBoon!=='Pacto do Tomo' || b.tomoRituals.length===2) &&
-        !!b.equipment;
-    }
-    case 2: return !!data.antecedente;
-    case 3: {
-      const bg = activeBgData();
-      const plan = bg.abilityPlan;
-      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
-      const ferramentaOk = !activeBgConst().ferramentaOpcoes || !!bg.ferramentaEscolhida;
-      const iniciadoOk = !activeBgConst().iniciadoEmMagia || (bg.iniciadoCantrips.length===2 && bg.iniciadoSpell1.length===1);
-      const habilidosoOk = !activeBgConst().feat.startsWith('Habilidoso') || bg.habilidoso.length===3;
-      return planOk && ferramentaOk && iniciadoOk && !!bg.equipment && habilidosoOk;
-    }
-    case 4: return !!data.especie;
-    case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
-    case 6: return data.idiomas.comuns.length===2 && (data.classe!=='Ladino' || data.idiomas.extra.length===1);
-    case 7: return ABILITIES.every(a=>data.attrs[a]!==undefined);
-    case 8: return true;
-    case 9: return true;
-    default: return false;
-  }
+  return findFirstMissingGroup()===null;
 }
 
 function render(){
@@ -1493,6 +1478,7 @@ function renderFeatDetailCard(d){
       ${d.nivelMinimo?`<span><b>Nível mínimo:</b> ${d.nivelMinimo}</span>`:''}
       ${d.repetivel?`<span><b>Repetível</b></span>`:''}
       ${d.pagina?`<span><b>Página:</b> ${d.pagina}</span>`:''}
+      ${d.fonte?`<span><b>Fonte:</b> ${d.fonte}</span>`:''}
     </div>
     ${d.outroPreRequisito?`<div><b>Pré-requisito:</b> ${d.outroPreRequisito}</div>`:''}
     <div>${d.beneficios}</div>
@@ -1683,7 +1669,8 @@ function renderOrcDetail(){
 
 function renderHumanoDetail(){
   const h = data.humano;
-  const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem');
+  const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem' && n!==backgroundFeatBaseName());
+  const talentosSelvagens = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Talento Selvagem' && n!==backgroundFeatBaseName());
   return `<h2>Humano</h2>
   <p class="species-flavor">${HUMANO.flavor}</p>
   <div class="species-facts">
@@ -1699,9 +1686,13 @@ function renderHumanoDetail(){
   <h3>Traços Natos</h3>
   ${HUMANO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-5-pericia">Hábil — escolha 1 perícia</h3>
-  ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS), h.pericia, 'pickHumanoPericia')}
+  <div class="intro" style="margin-bottom:8px;">Perícias já escolhidas pela classe ou pelo antecedente não aparecem aqui.</div>
+  ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('humano').includes(s))), h.pericia, 'pickHumanoPericia')}
   <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
+  <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente e não aparece aqui.</div>
   ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento')}
+  <div class="intro" style="margin:10px 0 8px;">Talentos Selvagens (Unearthed Arcana 2025 — não é conteúdo oficial do PHB, ligado ao Psiônico): o Versátil também permite escolher um destes em vez de um talento de Origem.</div>
+  ${featPickList(talentosSelvagens, h.talento, 'pickHumanoTalento')}
   ${nav(canAdvance())}`;
 }
 
@@ -1751,7 +1742,8 @@ function renderElfoDetail(){
   <h3>Traços Natos</h3>
   ${ELFO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-5-pericia">${ELFO.sentidosAgucados.nome} — escolha 1 perícia</h3>
-  ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes), e.pericia, 'pickElfoPericia')}
+  <div class="intro" style="margin-bottom:8px;">Perícias já escolhidas pela classe ou pelo antecedente não aparecem aqui.</div>
+  ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes.filter(s=>!skillsGrantedElsewhere('elfo').includes(s))), e.pericia, 'pickElfoPericia')}
   <h3 id="grp-5-linhagem">${ELFO.subespecie.nome}</h3>
   ${ELFO.subespecie.opcoes.map(opt=>`
     <div class="option-block ${e.linhagem===opt.nome?'selected':''}">
@@ -1956,19 +1948,20 @@ function renderSimpleBackgroundDetail(bgConst){
 
   ${bgConst.iniciadoEmMagia ? `
   <h3 id="grp-3-iniciado-truques">Iniciado em Magia — 2 truques de ${bgConst.iniciadoEmMagia.classe}</h3>
-  ${spellChoiceList(bgConst.iniciadoEmMagia.cantrips, bg.iniciadoCantrips, 2, 'toggleIniciadoCantrip')}
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(bgConst.iniciadoEmMagia.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('iniciadoEmMagia').includes(c)), bg.iniciadoCantrips, 2, 'toggleIniciadoCantrip')}
   <div class="counter ${bg.iniciadoCantrips.length===2?'ok':''}">${bg.iniciadoCantrips.length}/2 escolhidos</div>
 
   <h3 id="grp-3-iniciado-magia1">Iniciado em Magia — 1 magia de 1º círculo de ${bgConst.iniciadoEmMagia.classe}</h3>
   <div class="intro" style="margin-bottom:8px;">Essa magia fica sempre preparada e pode ser conjurada 1x grátis por Descanso Longo (ou com espaço de magia depois).</div>
-  ${spellChoiceList(bgConst.iniciadoEmMagia.spells1, bg.iniciadoSpell1, 1, 'toggleIniciadoSpell1')}
+  ${spellChoiceList(bgConst.iniciadoEmMagia.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('iniciadoEmMagia').includes(s)), bg.iniciadoSpell1, 1, 'toggleIniciadoSpell1')}
   <div class="counter ${bg.iniciadoSpell1.length===1?'ok':''}">${bg.iniciadoSpell1.length}/1 escolhida</div>` : ''}
 
   ${isHabilidoso ? `
   <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
-  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome} e não aparecem aqui.</div>
+  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome}, e perícias já escolhidas pela classe ou espécie, não aparecem aqui.</div>
   ${groupedChoiceList([
-    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!bgConst.skills.includes(s))),
+    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('habilidoso').includes(s))),
     {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==excludedTool)}
   ], bg.habilidoso, 3, 'toggleHabilidoso')}
   <div class="counter ${bg.habilidoso.length===3?'ok':''}">${bg.habilidoso.length}/3 escolhidos</div>` : ''}
@@ -2000,8 +1993,7 @@ function renderBruxoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = BRUXO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), b.skills, 2, 'toggleBruxoSkill');
   })()}
@@ -2017,22 +2009,22 @@ function renderBruxoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha 2, da lista de Bruxo)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(BRUXO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), b.cantrips, 2, 'toggleCantrip')}
+  ${spellChoiceList(BRUXO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), b.cantrips, 2, 'toggleCantrip')}
   <div class="counter ${b.cantrips.length===2?'ok':''}">${b.cantrips.length}/2 escolhidos</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
   <h3 id="grp-1-tomocantrips">Truques do Pacto do Tomo (escolha 3, de qualquer classe)</h3>
-  ${spellChoiceList(ALL_CANTRIPS.filter(c=>!b.cantrips.includes(c) && !speciesGrantedCantrips().includes(c)), b.tomoCantrips, 3, 'toggleTomoCantrip')}
+  ${spellChoiceList(ALL_CANTRIPS.filter(c=>!b.cantrips.includes(c) && !speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), b.tomoCantrips, 3, 'toggleTomoCantrip')}
   <div class="counter ${b.tomoCantrips.length===3?'ok':''}">${b.tomoCantrips.length}/3 escolhidos</div>
   `:''}
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha 2, da lista de Bruxo)</h3>
-  ${spellChoiceList(BRUXO.spells1, b.spells1, 2, 'toggleSpell1')}
+  ${spellChoiceList(BRUXO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), b.spells1, 2, 'toggleSpell1')}
   <div class="counter ${b.spells1.length===2?'ok':''}">${b.spells1.length}/2 escolhidas</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
   <h3 id="grp-1-tomorituals">Magias Rituais do Pacto do Tomo (escolha 2, 1º círculo, de qualquer classe)</h3>
-  ${spellChoiceList(ALL_1ST_RITUAL.filter(r=>!b.spells1.includes(r)), b.tomoRituals, 2, 'toggleTomoRitual')}
+  ${spellChoiceList(ALL_1ST_RITUAL.filter(r=>!b.spells1.includes(r) && !speciesGrantedSpells().includes(r) && !chosenSpells1Elsewhere('classe').includes(r)), b.tomoRituals, 2, 'toggleTomoRitual')}
   <div class="counter ${b.tomoRituals.length===2?'ok':''}">${b.tomoRituals.length}/2 escolhidas</div>
   `:''}
 
@@ -2056,8 +2048,7 @@ function renderBarbaroDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = BARBARO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), bb.skills, 2, 'toggleBarbaroSkill');
   })()}
@@ -2100,8 +2091,7 @@ function renderBardoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha ${BARDO.skillsCount}, QUAISQUER — sem lista restrita)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = ALL_SKILLS.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), bd.skills, BARDO.skillsCount, 'toggleBardoSkill');
   })()}
@@ -2122,11 +2112,11 @@ function renderBardoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha 2, da lista de Bardo)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(BARDO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), bd.cantrips, 2, 'toggleBardoCantrip')}
+  ${spellChoiceList(BARDO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), bd.cantrips, 2, 'toggleBardoCantrip')}
   <div class="counter ${bd.cantrips.length===2?'ok':''}">${bd.cantrips.length}/2 escolhidos</div>
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha 4, da lista de Bardo)</h3>
-  ${spellChoiceList(BARDO.spells1, bd.spells1, 4, 'toggleBardoSpell1')}
+  ${spellChoiceList(BARDO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), bd.spells1, 4, 'toggleBardoSpell1')}
   <div class="counter ${bd.spells1.length===4?'ok':''}">${bd.spells1.length}/4 escolhidas</div>
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
@@ -2149,8 +2139,7 @@ function renderMagoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = MAGO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), mg.skills, 2, 'toggleMagoSkill');
   })()}
@@ -2161,7 +2150,7 @@ function renderMagoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha ${MAGO.cantripsCount}, da lista de Mago)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(MAGO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), mg.cantrips, MAGO.cantripsCount, 'toggleMagoCantrip')}
+  ${spellChoiceList(MAGO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), mg.cantrips, MAGO.cantripsCount, 'toggleMagoCantrip')}
   <div class="counter ${mg.cantrips.length===MAGO.cantripsCount?'ok':''}">${mg.cantrips.length}/${MAGO.cantripsCount} escolhidos</div>
 
   <h3>Recuperação Arcana</h3>
@@ -2169,7 +2158,7 @@ function renderMagoDetail(){
 
   <h3 id="grp-1-spellbook">Livro de Magias (escolha ${MAGO.spellbookCount}, da lista de Mago)</h3>
   <div class="intro" style="margin-bottom:8px;">São as magias que você conhece de verdade — seu "estoque". No passo seguinte você escolhe quais delas ficam Preparadas (prontas pra conjurar sem reler o livro).</div>
-  ${spellChoiceList(MAGO.spells1, mg.spellbook, MAGO.spellbookCount, 'toggleMagoSpellbook')}
+  ${spellChoiceList(MAGO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), mg.spellbook, MAGO.spellbookCount, 'toggleMagoSpellbook')}
   <div class="counter ${mg.spellbook.length===MAGO.spellbookCount?'ok':''}">${mg.spellbook.length}/${MAGO.spellbookCount} escolhidas</div>
 
   <h3 id="grp-1-prepared">Magias Preparadas (escolha ${MAGO.preparedCount}, do seu Livro de Magias)</h3>
@@ -2196,8 +2185,7 @@ function renderPaladinoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = PALADINO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), pl.skills, 2, 'togglePaladinoSkill');
   })()}
@@ -2205,7 +2193,7 @@ function renderPaladinoDetail(){
 
   <h3 id="grp-1-prepared">Magias Preparadas de 1º Círculo (escolha ${PALADINO.preparedCount}, da lista de Paladino)</h3>
   <div class="intro" style="margin-bottom:8px;">Paladino não conhece truques no nível 1, só magias preparadas.</div>
-  ${spellChoiceList(PALADINO.spells1, pl.prepared, PALADINO.preparedCount, 'togglePaladinoPrepared')}
+  ${spellChoiceList(PALADINO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), pl.prepared, PALADINO.preparedCount, 'togglePaladinoPrepared')}
   <div class="counter ${pl.prepared.length===PALADINO.preparedCount?'ok':''}">${pl.prepared.length}/${PALADINO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${PALADINO.maestriaCount}, com as quais você tem proficiência)</h3>
@@ -2242,8 +2230,7 @@ function renderPsionicoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = PSIONICO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), ps.skills, 2, 'togglePsionicoSkill');
   })()}
@@ -2251,7 +2238,7 @@ function renderPsionicoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha ${PSIONICO.cantripsCount}, da lista de Psiônico)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(PSIONICO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), ps.cantrips, PSIONICO.cantripsCount, 'togglePsionicoCantrip')}
+  ${spellChoiceList(PSIONICO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), ps.cantrips, PSIONICO.cantripsCount, 'togglePsionicoCantrip')}
   <div class="counter ${ps.cantrips.length===PSIONICO.cantripsCount?'ok':''}">${ps.cantrips.length}/${PSIONICO.cantripsCount} escolhidos</div>
 
   <h3>Poder Psiônico</h3>
@@ -2261,7 +2248,7 @@ function renderPsionicoDetail(){
   <div class="option-block">${PSIONICO.telecineseSutil}</div>
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${PSIONICO.preparedCount}, da lista de Psiônico)</h3>
-  ${spellChoiceList(PSIONICO.spells1, ps.spells1, PSIONICO.preparedCount, 'togglePsionicoSpell1')}
+  ${spellChoiceList(PSIONICO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), ps.spells1, PSIONICO.preparedCount, 'togglePsionicoSpell1')}
   <div class="counter ${ps.spells1.length===PSIONICO.preparedCount?'ok':''}">${ps.spells1.length}/${PSIONICO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
@@ -2291,8 +2278,7 @@ function renderClerigoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = CLERIGO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), cl.skills, 2, 'toggleClerigoSkill');
   })()}
@@ -2307,11 +2293,11 @@ function renderClerigoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha ${cantripsMax}, da lista de Clérigo)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(CLERIGO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), cl.cantrips, cantripsMax, 'toggleClerigoCantrip')}
+  ${spellChoiceList(CLERIGO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), cl.cantrips, cantripsMax, 'toggleClerigoCantrip')}
   <div class="counter ${cl.cantrips.length===cantripsMax?'ok':''}">${cl.cantrips.length}/${cantripsMax} escolhidos</div>
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${CLERIGO.preparedCount}, da lista de Clérigo)</h3>
-  ${spellChoiceList(CLERIGO.spells1, cl.spells1, CLERIGO.preparedCount, 'toggleClerigoSpell1')}
+  ${spellChoiceList(CLERIGO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), cl.spells1, CLERIGO.preparedCount, 'toggleClerigoSpell1')}
   <div class="counter ${cl.spells1.length===CLERIGO.preparedCount?'ok':''}">${cl.spells1.length}/${CLERIGO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
@@ -2334,8 +2320,7 @@ function renderGuerreiroDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = GUERREIRO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), gr.skills, 2, 'toggleGuerreiroSkill');
   })()}
@@ -2386,8 +2371,7 @@ function renderLadinoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha ${LADINO.skillsCount})</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = LADINO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), ld.skills, LADINO.skillsCount, 'toggleLadinoSkill');
   })()}
@@ -2446,8 +2430,7 @@ function renderDruidaDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = DRUIDA.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), dr.skills, 2, 'toggleDruidaSkill');
   })()}
@@ -2464,12 +2447,13 @@ function renderDruidaDetail(){
     </div>`).join('')}
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha ${cantripsMax}, da lista de Druida)</h3>
-  ${spellChoiceList(DRUIDA.cantrips, dr.cantrips, cantripsMax, 'toggleDruidaCantrip')}
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(DRUIDA.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), dr.cantrips, cantripsMax, 'toggleDruidaCantrip')}
   <div class="counter ${dr.cantrips.length===cantripsMax?'ok':''}">${dr.cantrips.length}/${cantripsMax} escolhidos</div>
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${DRUIDA.preparedCount}, da lista de Druida)</h3>
   <div class="intro" style="margin-bottom:8px;">Falar com Animais não aparece aqui — você já tem ela sempre preparada de graça pelo Idioma Druídico.</div>
-  ${spellChoiceList(DRUIDA.spells1.filter(s=>s!=='Falar com Animais'), dr.spells1, DRUIDA.preparedCount, 'toggleDruidaSpell1')}
+  ${spellChoiceList(DRUIDA.spells1.filter(s=>s!=='Falar com Animais' && !speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), dr.spells1, DRUIDA.preparedCount, 'toggleDruidaSpell1')}
   <div class="counter ${dr.spells1.length===DRUIDA.preparedCount?'ok':''}">${dr.spells1.length}/${DRUIDA.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
@@ -2492,8 +2476,7 @@ function renderFeiticeiroDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = FEITICEIRO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), ft.skills, 2, 'toggleFeiticeiroSkill');
   })()}
@@ -2501,14 +2484,14 @@ function renderFeiticeiroDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha ${FEITICEIRO.cantripsCount}, da lista de Feiticeiro)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(FEITICEIRO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), ft.cantrips, FEITICEIRO.cantripsCount, 'toggleFeiticeiroCantrip')}
+  ${spellChoiceList(FEITICEIRO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), ft.cantrips, FEITICEIRO.cantripsCount, 'toggleFeiticeiroCantrip')}
   <div class="counter ${ft.cantrips.length===FEITICEIRO.cantripsCount?'ok':''}">${ft.cantrips.length}/${FEITICEIRO.cantripsCount} escolhidos</div>
 
   <h3>Feitiçaria Inata</h3>
   <div class="option-block">${FEITICEIRO.feiticariaInata}</div>
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${FEITICEIRO.preparedCount}, da lista de Feiticeiro)</h3>
-  ${spellChoiceList(FEITICEIRO.spells1, ft.spells1, FEITICEIRO.preparedCount, 'toggleFeiticeiroSpell1')}
+  ${spellChoiceList(FEITICEIRO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), ft.spells1, FEITICEIRO.preparedCount, 'toggleFeiticeiroSpell1')}
   <div class="counter ${ft.spells1.length===FEITICEIRO.preparedCount?'ok':''}">${ft.spells1.length}/${FEITICEIRO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
@@ -2531,8 +2514,7 @@ function renderMongeDetail(){
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = MONGE.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), mk.skills, 2, 'toggleMongeSkill');
   })()}
@@ -2564,8 +2546,7 @@ function renderGuardiaoDetail(){
   <h3 id="grp-1-skills">Perícias (escolha ${GUARDIAO.skillsCount})</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
   ${(()=>{
-    const bgConst = activeBgConst();
-    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const alreadyHave = skillsGrantedElsewhere('classe');
     const available = GUARDIAO.skills.filter(s=>!alreadyHave.includes(s));
     return groupedChoiceList(skillGroupsByAbility(available), gd.skills, GUARDIAO.skillsCount, 'toggleGuardiaoSkill');
   })()}
@@ -2576,7 +2557,7 @@ function renderGuardiaoDetail(){
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${GUARDIAO.preparedCount}, da lista de Guardião)</h3>
   <div class="intro" style="margin-bottom:8px;">Sem truques no nível 1. Marca do Predador não aparece aqui — você já tem ela sempre preparada de graça pelo Inimigo Favorito.</div>
-  ${spellChoiceList(GUARDIAO.spells1.filter(s=>s!=='Marca do Predador'), gd.spells1, GUARDIAO.preparedCount, 'toggleGuardiaoSpell1')}
+  ${spellChoiceList(GUARDIAO.spells1.filter(s=>s!=='Marca do Predador' && !speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), gd.spells1, GUARDIAO.preparedCount, 'toggleGuardiaoSpell1')}
   <div class="counter ${gd.spells1.length===GUARDIAO.preparedCount?'ok':''}">${gd.spells1.length}/${GUARDIAO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${GUARDIAO.maestriaCount}, com as quais você tem proficiência)</h3>
@@ -2712,21 +2693,49 @@ function findShopItem(name){
   }
   return null;
 }
+/* Checa se um item de Arma (categoria "simples"/"marcial" do SHOP) bate
+   com a proficiência FINA da classe (não só a categoria) — cruza por nome
+   com WEAPON_MASTERY (que tem tipo Corpo a Corpo/À Distância e a lista de
+   propriedades de cada arma). weaponProfMeleeOnly e weaponProfFiltroMarcial
+   são campos opcionais no CONST da classe (hoje só Monge e Ladino têm),
+   ausentes = sem restrição extra além da categoria. Se o nome do item não
+   bater com nada em WEAPON_MASTERY (não deveria acontecer — os 28 nomes de
+   Armas Simples/Marciais do SHOP foram conferidos 1 a 1 contra
+   WEAPON_MASTERY), falha fechado (esconde) em vez de aberto, pra nunca
+   mostrar uma arma que a classe não usa bem só por causa de um typo futuro
+   de nome entre os dois arquivos. */
+function itemMatchesWeaponProf(clsConst, itemName){
+  const wm = WEAPON_MASTERY[itemName];
+  if(!wm) return false;
+  if(clsConst.weaponProfMeleeOnly && wm.tipo!=='Corpo a Corpo') return false;
+  if(wm.categoria==='Marcial' && clsConst.weaponProfFiltroMarcial){
+    return wm.propriedades.some(p=>clsConst.weaponProfFiltroMarcial.includes(p));
+  }
+  return true;
+}
+function toggleShopProfFilter(){ data.shop.filterByProf = !data.shop.filterByProf; persist(); render(); }
+
 function renderShop(){
   const remaining = startingGold() - spentGold();
   const purchases = data.shop.purchases||{};
   const clsConst = activeClassConst();
   const maxGold = computeMaxPossibleGold();
+  const filtering = data.shop.filterByProf;
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
-  <div class="intro">Itens filtrados pelo que ${data.classe} pode usar (proficiências de arma e armadura da classe). Ferramentas, focos, munição e equipamento de aventura valem pra qualquer um. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
+  <div class="intro">Por padrão a Loja mostra TODAS as armas e armaduras, pra você conhecer as opções — ferramentas, focos, munição e equipamento de aventura valem pra qualquer um sempre. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:10px 0;" onclick="toggleShopProfFilter()">
+    <input type="checkbox" style="width:16px;height:16px;flex:none;margin:0;pointer-events:none;" ${filtering?'checked':''}>
+    <span>Filtrar por proficiência (mostra só armas e armaduras que ${data.classe} usa bem)</span>
+  </div>
   <div class="wallet">
     <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
     <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
   </div>`;
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
-    if(cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
-    const visibleItems = cat.items.filter(it => it.c <= maxGold);
+    const isWeaponCat = cat.filterProf==='simples' || cat.filterProf==='marcial';
+    if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
+    const visibleItems = cat.items.filter(it => it.c <= maxGold && (!filtering || !isWeaponCat || itemMatchesWeaponProf(clsConst, it.n)));
     if(visibleItems.length===0) return;
     const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
     html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
@@ -2934,10 +2943,33 @@ function renderSummary(){
 
   <div class="nav">
     <button class="btn" onclick="back()">← Voltar</button>
-    <button class="btn primary" onclick="resetWizard()">Criar Outro Personagem</button>
+    <button class="btn primary" onclick="resetWizard()">Iniciar Novo Personagem</button>
   </div>`;
 }
 
+/* Defaults "vazios" das 10 espécies (data.<chave>), num só lugar — usado
+   tanto por resetWizard() quanto pela migração de saves antigos em
+   restore(). Antes só tiefling/pequenino eram zeradas no reset; as outras
+   8 (aasimar, anao, orc, humano, draconato, elfo, gnomo, golias) ficavam
+   com sub-escolhas do personagem anterior. Não existe um SPECIES_DATA_KEY
+   tipo o de classes/antecedentes (passo 5 continua ramificando por
+   if/else de nome, decisão já registrada na nota do topo), então as 10
+   chaves ficam hardcoded aqui mesmo — se uma espécie nova entrar, some a
+   entrada aqui também. */
+function freshSpeciesData(){
+  return {
+    tiefling:{tamanho:null,legado:null,atributoLegado:null},
+    pequenino:{},
+    aasimar:{tamanho:null},
+    anao:{},
+    orc:{},
+    humano:{tamanho:null,pericia:null,talento:null},
+    draconato:{heranca:null},
+    elfo:{pericia:null,linhagem:null},
+    gnomo:{linhagem:null,atributoLinhagem:null},
+    golias:{ancestralidade:null}
+  };
+}
 function resetWizard(){
   if(!confirm('Isso apaga o personagem atual e começa do zero. Continuar?')) return;
   step = 0;
@@ -2945,11 +2977,7 @@ function resetWizard(){
   Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
     bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
-  // NOTA: igual antes, esse reset só zera tiefling/pequenino entre as espécies
-  // (pendência antiga, não introduzida agora — revisar quando mexer em espécies).
   data = Object.assign({ especie:null, antecedente:null, classe:null,
-    tiefling:{tamanho:null,legado:null,atributoLegado:null},
-    pequenino:{},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],instruments:[],equipment:null},
@@ -2964,7 +2992,8 @@ function resetWizard(){
     monge:{skills:[],equipment:null},
     guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
     idiomas:{comuns:[],extra:[]},
-    attrs:{}, shop:{purchases:{},collapsedCats:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
+    attrs:{}, shop:{purchases:{},collapsedCats:{},filterByProf:false}, returnToSummary:false, freeAbilityRule:false },
+    freshSpeciesData(), bgDataInit);
   persist(); render();
 }
 
@@ -3108,20 +3137,6 @@ function toggleGuardiaoSpell1(v){ const s=data.guardiao.spells1; const i=s.index
 function toggleGuardiaoMaestria(v){ const s=data.guardiao.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.maestriaCount)s.push(v); persist(); render(); }
 function pickGuardiaoEquip(v){ data.guardiao.equipment=v; persist(); render(); }
 
-/* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
-   do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
-   podia "escolher" de novo um truque que já tem e não ganhar nada com isso
-   (ou pior, a lista deixava parecer que ele nem foi concedido). Retorna
-   sempre um array (vazio se a espécie não concede nenhum). */
-function speciesGrantedCantrips(){
-  if(data.especie==='Tiferino' && data.tiefling.legado){
-    const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
-    const item = opt && opt.nivel1.concede && opt.nivel1.concede[0];
-    if(item) return [item.nome];
-  }
-  return [];
-}
-
 /* Retorna o objeto de dados do antecedente ativo (data.charlatao, data.nobre,
    data.andarilho etc.) — os handlers abaixo (plano de atributos, Habilidoso,
    equipamento) são compartilhados entre TODOS os antecedentes, via o mapa
@@ -3135,6 +3150,113 @@ function activeBgData(){
    ANDARILHO etc.), via BACKGROUND_CONST. */
 function activeBgConst(){
   return BACKGROUND_CONST[data.antecedente] || CHARLATAO;
+}
+
+/* ==========================================================================
+   DEDUPLICAÇÃO DE ESCOLHAS ENTRE FONTES (Classe / Antecedente / Espécie)
+   ==========================================================================
+   Perícia, talento, truque e magia de 1º círculo podem vir de mais de uma
+   fonte ao mesmo tempo. Duas situações diferentes, tratadas diferente:
+   1. CONCESSÃO FIXA (a espécie ou a própria classe dá algo automático, sem
+      escolha do jogador — ex: o truque do Legado Ínfero do Tiferino, ou
+      Falar com Animais do Druida): é excluída das listas de ESCOLHA de
+      outras fontes (senão a pessoa "escolhe" de novo algo que já tem e não
+      ganha nada com isso), mas continua aparecendo normalmente no resumo
+      final, marcada como concessão automática — isso NÃO muda aqui.
+   2. ESCOLHA do jogador feita numa fonte (ex: perícia da classe, truque da
+      classe, talento Versátil do Humano): passa a ser excluída das listas
+      de escolha de TODAS as outras fontes assim que selecionada — sem
+      isso dava pra escolher a mesma coisa 2x (ex: Atletismo pela classe E
+      pelo antecedente E pela espécie), achando que ganhou 2 perícias
+      diferentes quando só ganhou 1 de verdade.
+   Cada função abaixo recebe a fonte que está sendo renderizada (pra não se
+   auto-excluir) e devolve tudo que as OUTRAS fontes já garantem. */
+
+/* Truques/magias que a ESPÉCIE concede de graça no nível 1 (Tiferino: Legado
+   Ínfero; Aasimar: Portador da Luz; Elfo: Linhagem Élfica; Gnomo: Linhagem
+   Gnômica — cada uma lida com nivel1.concede da subespécie escolhida, ou
+   tracosFixos quando não depende de subespécie, como o Aasimar). Generaliza
+   o que antes só cobria o Tiferino. tipo é 'truque' ou 'magia'. */
+function speciesFixedGrants(tipo){
+  const out = [];
+  const collect = concede => (concede||[]).forEach(item => { if(item.tipo===tipo) out.push(item.nome); });
+  if(data.especie==='Aasimar'){
+    AASIMAR.tracosFixos.forEach(tr=>collect(tr.concede));
+  } else if(data.especie==='Tiferino' && data.tiefling.legado){
+    const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
+    if(opt) collect(opt.nivel1.concede);
+  } else if(data.especie==='Elfo' && data.elfo.linhagem){
+    const opt = ELFO.subespecie.opcoes.find(o=>o.nome===data.elfo.linhagem);
+    if(opt) collect(opt.nivel1.concede);
+  } else if(data.especie==='Gnomo' && data.gnomo.linhagem){
+    const opt = GNOMO.subespecie.opcoes.find(o=>o.nome===data.gnomo.linhagem);
+    if(opt) collect(opt.nivel1.concede);
+  }
+  return out;
+}
+function speciesGrantedCantrips(){ return speciesFixedGrants('truque'); }
+function speciesGrantedSpells(){ return speciesFixedGrants('magia'); }
+
+/* Mapa classe -> campo em data.<classe> que guarda as magias de 1º círculo
+   ESCOLHIDAS de uma lista (não usado pra truques, que são sempre .cantrips
+   em toda classe conjuradora). Mago não tem spells1: a escolha de verdade
+   acontece no Livro de Magias (.spellbook); .prepared é só um subconjunto
+   do que já está no livro, não uma nova escolha da lista mestra, por isso
+   não teria com o que colidir de novo aqui. */
+const CLASS_SPELL1_FIELD = { "Bruxo":"spells1", "Bardo":"spells1", "Mago":"spellbook", "Paladino":"prepared", "Psiônico":"spells1", "Clérigo":"spells1", "Druida":"spells1", "Feiticeiro":"spells1", "Guardião":"spells1" };
+
+/* Perícias já garantidas por QUALQUER fonte (classe, antecedente fixo,
+   Habilidoso, Humano/Hábil, Elfo/Sentidos Aguçados), separadas por fonte —
+   quem chama exclui a própria fonte antes de filtrar a própria lista. */
+function skillsGrantedBySource(){
+  return {
+    classe: (activeClassData().skills || []),
+    antecedenteFixo: (activeBgConst().skills || []),
+    habilidoso: (activeBgData().habilidoso || []).filter(s=>ALL_SKILLS.includes(s)),
+    humano: (data.especie==='Humano' && data.humano.pericia) ? [data.humano.pericia] : [],
+    elfo: (data.especie==='Elfo' && data.elfo.pericia) ? [data.elfo.pericia] : []
+  };
+}
+function skillsGrantedElsewhere(excludeSource){
+  const bySource = skillsGrantedBySource();
+  return [].concat(...Object.keys(bySource).filter(k=>k!==excludeSource).map(k=>bySource[k]));
+}
+
+/* Nome "puro" do talento fixo do antecedente ativo (bgConst.feat guarda
+   "Nome — descrição", ou "Iniciado em Magia (Classe) — descrição" nos 3
+   antecedentes de Iniciado em Magia) — usado pra excluir esse talento da
+   lista do Versátil (Humano), que hoje já usa os mesmos 10 nomes da
+   categoria "Origem" do banco de talentos. */
+function backgroundFeatBaseName(){
+  return (activeBgConst().feat || '').split(' — ')[0].split(' (')[0].trim();
+}
+
+/* Truques/magias de 1º círculo já ESCOLHIDOS (não concedidos de graça) por
+   outra fonte — hoje as duas fontes que escolhem de uma lista de verdade
+   são a própria Classe e o Iniciado em Magia do Antecedente (Acólito/Guia/
+   Sábio), cujas listas podem se sobrepor com a de outra classe. */
+function chosenCantripsElsewhere(excludeSource){
+  const out = [];
+  if(excludeSource!=='classe'){
+    const cd = activeClassData();
+    if(cd && cd.cantrips) out.push(...cd.cantrips);
+  }
+  if(excludeSource!=='iniciadoEmMagia'){
+    out.push(...(activeBgData().iniciadoCantrips || []));
+  }
+  return out;
+}
+function chosenSpells1Elsewhere(excludeSource){
+  const out = [];
+  if(excludeSource!=='classe'){
+    const field = CLASS_SPELL1_FIELD[data.classe];
+    const cd = activeClassData();
+    if(field && cd && cd[field]) out.push(...cd[field]);
+  }
+  if(excludeSource!=='iniciadoEmMagia'){
+    out.push(...(activeBgData().iniciadoSpell1 || []));
+  }
+  return out;
 }
 
 /* Regra da casa: por padrão (freeAbilityRule=true) os bônus de atributo do
