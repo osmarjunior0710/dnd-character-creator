@@ -4,12 +4,9 @@ const BARDO = {
      em vez de um pool fixo aqui. */
   skillsAll: true,
   skillsCount: 3,
-  /* Ferramentas: "Escolha 3 Instrumentos Musicais". Ainda sem seletor de
-     instrumentos específicos neste protótipo (decisão combinada com o
-     usuário — revisar quando mexermos em ferramentas/instrumentos de
-     verdade, isso também afeta Artista/Guarda/Soldado). Só texto
-     informativo por enquanto. */
-  toolsNote: "Escolha 3 Instrumentos Musicais à sua escolha (seletor específico ainda não implementado neste protótipo).",
+  /* Ferramentas: "Escolha 3 Instrumentos Musicais". Usa ALL_INSTRUMENTS
+     (data/instruments.js) — os 10 do capítulo de Equipamento. */
+  toolsCount: 3,
   weaponProf: ["simples"],
   armorProf: ["leve"],
   equipmentA: ["Armadura de Couro", "2 Adagas", "Instrumento Musical à escolha", "Kit de Artista"],
@@ -21,5 +18,5 @@ const BARDO = {
   spells1: ["Amizade Animal","Comando","Compreender Idiomas","Curar Ferimentos","Detectar Magia","Disfarçar-se","Enfeitiçar Pessoa","Escrita Ilusória","Falar com Animais","Fogo das Fadas","Gargalhada Nefasta de Tasha","Heroísmo","Identificar","Imagem Silenciosa","Leque Cromático","Onda Trovejante","Palavra Curativa","Passos Largos","Perdição","Queda Suave","Servo Invisível","Sono","Sussurros Dissonantes"],
   /* Inspiração de Bardo não tem escolha do jogador no nível 1 (é sempre
      concedida) — só texto informativo, sem grupo de seleção. */
-  inspiracao: "Como Ação Bônus, você pode dar um dado de Inspiração de Bardo (d6) a uma criatura a até 18 metros que possa vê-lo ou ouvi-lo. <br>Dentro da próxima hora, ela pode somar esse dado a um Teste de D20 que tenha falhado, podendo transformar a falha em sucesso. <br>Usos = seu mod. de Carisma (mínimo 1), recupera todos ao completar um Descanso Longo."
+  inspiracao: "Como Ação Bônus, você pode dar um dado de Inspiração de Bardo (d6) a uma criatura a até 18 metros que possa vê-lo ou ouvi-lo. Dentro da próxima hora, ela pode somar esse dado a um Teste de D20 que tenha falhado, podendo transformar a falha em sucesso. Usos = seu mod. de Carisma (mínimo 1), recupera todos ao completar um Descanso Longo."
 };
