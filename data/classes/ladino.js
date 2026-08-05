@@ -26,6 +26,6 @@ const LADINO = {
      não tem uma lista de idiomas do PHB 2024 implementada em lugar
      nenhum. Ao revisar isso, CHECAR O LIVRO DO JOGADOR (capítulo 2,
      tabelas de idiomas) antes de codar a lista — não usar de memória. */
-  giriaDoLadrao: "Você conhece a Gíria dos Ladrões automaticamente, mais 1 idioma à sua escolha das tabelas de idiomas do capítulo 2 (seletor específico de idiomas ainda não implementado neste protótipo).",
+  giriaDoLadrao: "Você conhece a Gíria dos Ladrões automaticamente, mais 1 idioma à sua escolha das tabelas de idiomas do capítulo 2 (escolhido no passo de Idiomas, mais adiante).",
   maestriaCount: 2
 };
