@@ -72,6 +72,53 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
+   🚀 MIGRAÇÃO PRO CLAUDE CODE (a partir daqui o trabalho de código passa a
+   acontecer no terminal, com acesso direto ao repo — não mais em chat com
+   arquivos anexados manualmente). Se você é essa sessão do Claude Code,
+   comece por aqui:
+   1. Leia esta nota inteira antes de tocar em qualquer arquivo — ela tem
+      o histórico de decisões, convenções e armadilhas já conhecidas do
+      projeto. Sim, é longa; leia mesmo assim.
+   2. Confirme que enxerga o repo inteiro (index.html, todo data/*.js,
+      css/styles.css) antes de assumir que algo "não existe" — o chat
+      anterior teve que pedir arquivos um por um porque não tinha acesso
+      direto, e isso já causou pelo menos um caso de recriar um arquivo
+      (styles.css) de memória por não ter certeza se existia. Isso não
+      deveria mais acontecer aqui.
+   3. Lista consolidada de pendências abertas (compiladas de várias notas
+      espalhadas pelo arquivo, cada uma com mais detalhe no bloco da
+      seção correspondente — procure pelo texto entre aspas):
+      - "floater/painel fixo" — inventário do personagem (classe +
+        antecedente + compras da loja) sempre visível.
+      - "filtro de proficiência FILTRADA por propriedade" — Ladino
+        (Acuidade/Leve) e Monge (Corpo a Corpo + Leve) veem armas
+        Marciais demais na Loja hoje; o filtro só olha categoria, não
+        propriedade individual (WEAPON_MASTERY já tem o campo
+        "propriedades" pronto pra isso).
+      - "perícia duplicada entre fontes" — dá pra escolher a mesma
+        perícia na classe, no antecedente E na espécie ao mesmo tempo;
+        cada fonte só filtra contra o antecedente, não contra as outras.
+      - resetWizard() só zera data.tiefling/data.pequenino entre
+        personagens — as outras 8 espécies carregam sub-escolhas do
+        personagem anterior.
+      - "Talentos de Talento Selvagem" do UA (10 talentos do Psiônico,
+        Atmocinese/Biocinese/etc.) não implementados em lugar nenhum.
+      - Guarda, Soldado e Nobre ainda usam o placeholder antigo de
+        ferramenta (mesma pendência já resolvida no Artista/Bardo —
+        aplicar bgConst.ferramentaOpcoes = ALL_INSTRUMENTS).
+      - "CA não calculada automaticamente" repetida em 5 classes
+        (Paladino/Clérigo/Guerreiro/Druida/Guardião) — candidata a virar
+        uma função só.
+      - Progressão de nível 2+ — nenhuma das 13 classes tem isso ainda,
+        é tudo só nível 1.
+      - computeMaxPossibleGold() nunca rodou de verdade com os 16
+        antecedentes carregados ao mesmo tempo (só foi confirmado
+        indiretamente pelo usuário vendo "205 PO" numa combinação
+        específica) — vale um teste explícito com cada combinação de
+        classe+antecedente extrema.
+   4. Prioridade sugerida: converse com o usuário antes de escolher —
+      não presuma que a ordem acima é a ordem de importância.
+
    ⚠️ AVISO PRA QUALQUER SESSÃO NOVA — LEIA ISSO PRIMEIRO:
    Antes de abrir o PDF do livro (397 páginas, caro e lento de processar),
    PEÇA AO USUÁRIO os arquivos de contexto relevantes pro que você vai
