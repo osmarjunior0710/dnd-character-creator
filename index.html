@@ -130,11 +130,21 @@
         uma função só.
       - Progressão de nível 2+ — nenhuma das 13 classes tem isso ainda,
         é tudo só nível 1.
-      - computeMaxPossibleGold() nunca rodou de verdade com os 16
-        antecedentes carregados ao mesmo tempo (só foi confirmado
-        indiretamente pelo usuário vendo "205 PO" numa combinação
-        específica) — vale um teste explícito com cada combinação de
-        classe+antecedente extrema.
+      - ✅ RESOLVIDO (Claude Code): computeMaxPossibleGold() nunca tinha
+        rodado de verdade com as 13 classes + 16 antecedentes carregados
+        ao mesmo tempo. Rodei o cálculo real fora do navegador (Node,
+        carregando os data/*.js na ordem certa): classMax=155 PO
+        (Guerreiro, Opção C) + bgMax=50 PO (empate entre os 16
+        antecedentes — a Opção B de todo antecedente vale exatamente 50
+        PO, regra oficial do PHB 2024, não coincidência de dado) =
+        teto de 205 PO, batendo exatamente com o que o usuário já tinha
+        visto no celular. Conferi também os 179 itens do SHOP contra
+        esse teto: 6 ficam acima (Placas 1500, Luneta 1000, Placas
+        Parcial 750, Mosquete 500, Couraça Peitoral 400, Pistola 250) e
+        são corretamente escondidos pelo filtro `it.c &lt;= maxGold`
+        (inclusivo — nenhum item exatamente em 205 PO hoje, mas o
+        operador está certo pra quando aparecer um). Nenhum bug
+        encontrado, só verificação pendente que agora está feita.
    4. Prioridade sugerida: converse com o usuário antes de escolher —
       não presuma que a ordem acima é a ordem de importância.
 
@@ -254,7 +264,13 @@
       real no celular: apareceu "205 PO" de Restante pra um Guerreiro —
       bate exatamente com 155 (Guerreiro Opção C) + 50 (algum
       antecedente com equipmentB_gold=50, ex. Artista) = 205. Funciona
-      de verdade, não só no papel.
+      de verdade, não só no papel. ✅ CONFIRMADO DE NOVO (Claude Code,
+      sessão com acesso ao repo inteiro): rodei o cálculo com os 16
+      antecedentes de verdade — bgMax=50 é empate entre TODOS eles
+      (Opção B de todo antecedente vale 50 PO, regra do livro), classMax
+      continua 155 (Guerreiro). Teto = 205 PO, exatamente igual ao
+      confirmado no celular. Ver pendência marcada ✅ mais acima nesta
+      nota pra detalhe completo, incluindo os itens do SHOP acima do teto.
    8. ✅ FEITO (usuário testou no celular e pediu 2 ajustes): a tabela da
       Loja estourava a tela no mobile (coluna Qtd. cortada fora da
       viewport) — agora usa layout de "cartão" empilhado abaixo de
