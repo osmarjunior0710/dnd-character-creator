@@ -26,6 +26,8 @@
 <script src="data/skills.js"></script>
 <script src="data/classes/bardo.js"></script>
 <script src="data/classes/mago.js"></script>
+<script src="data/classes/paladino.js"></script>
+<script src="data/classes/psionico.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -60,10 +62,61 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
-   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro, Bardo e Mago (nível 1
-   apenas), todas as 10 espécies do PHB 2024, os 16 antecedentes do PHB
-   2024. FALTAM: Clérigo, Druida, Feiticeiro, Guardião, Guerreiro, Ladino,
-   Monge, Paladino. Todas já mapeadas na planilha classes_phb2024.xlsx.
+   ESCOPO ATUAL (funcionando): Bruxo, Bárbaro, Bardo, Mago, Paladino e
+   Psiônico (nível 1 apenas), todas as 10 espécies do PHB 2024, os 16
+   antecedentes do PHB 2024. FALTAM as classes oficiais do PHB: Clérigo,
+   Druida, Feiticeiro, Guardião, Guerreiro, Ladino, Monge. Todas já
+   mapeadas na planilha classes_phb2024.xlsx.
+
+   ✅ PSIÔNICO (nível 1) — CONCLUÍDO. Dados em data/classes/psionico.js.
+   NÃO é conteúdo oficial do PHB — é Unearthed Arcana 2025 (playtest,
+   tradução do Canal do Condado), registrado como tal no CLASS_INFO
+   (campo "Fonte" extra nos fields, algo que nenhuma outra classe tem).
+   Mesmo formato do Bardo (2 truques + 4 magias preparadas, sem livro
+   separado como o Mago) — Poder Psiônico (Dados de Energia Psiônica,
+   Impulso Telecinético, Conexão Telepática) e Telecinese Sutil (Mão
+   Mágica grátis) são só texto informativo, sem escolha nível 1. Truques
+   e magias de 1º círculo vieram DIRETO das tabelas do PDF do UA que já
+   estavam no contexto da conversa (pág. 8) — não precisou reabrir nada,
+   nem a planilha de magias (essa planilha cobre "PHB 2024 + UA Psion" no
+   nome mas as magias exclusivas do UA como Arremesso Telecinético e
+   Sifão de Vida não têm entrada em SPELL_DETAILS, então não mostram o
+   botão de detalhe "ⓘ" na tela — isso é esperado, spellChoiceList() já
+   lida bem com isso, não é bug).
+
+   ✅ PALADINO (nível 1) — CONCLUÍDO. Dados em data/classes/paladino.js.
+   Particularidades:
+   - Maestria em Arma do Paladino NÃO se restringe a "Corpo a Corpo" (só
+     exige proficiência) — diferente do Bárbaro. CONFERIDO NO PDF antes de
+     assumir isso (pág. 167), porque o texto do livro só dizia "com as
+     quais você tem proficiência", sem repetir a restrição que o Bárbaro
+     tem. Guardião/Guerreiro/Ladino também têm Maestria em Arma — checar a
+     redação exata de cada um antes de reusar a suposição de um ou outro
+     (não assumir que todos seguem o mesmo padrão do Bárbaro OU do
+     Paladino sem conferir).
+   - Sem truques no nível 1 (só magias preparadas, 2 de uma lista de 16 —
+     extraída da planilha de magias, coluna "Paladino").
+   - Mãos Consagradas é só texto informativo (baseado no nível, sem
+     escolha do jogador).
+   - CA do Paladino no resumo NÃO é calculada automaticamente (fica só um
+     texto "depende da armadura equipada") — diferente de Bárbaro/Mago/
+     Bruxo/Bardo, que assumem sempre o cenário sem-armadura ou com a
+     armadura padrão do equipamento A. Como o Paladino tem armadura Pesada
+     na Opção A (Cota de Malha) e isso muda MUITO a CA (fixa, sem Destreza,
+     ainda por cima com requisito de Força), não dava pra usar a mesma
+     fórmula simplificada sem arriscar mostrar um número errado.
+
+   ✅ PENDÊNCIA RESOLVIDA (perícias agrupadas por atributo): as escolhas
+   de perícias das 5 classes (Bruxo, Bárbaro, Bardo, Mago, Paladino) agora
+   usam groupedChoiceList(skillGroupsByAbility(pool), ...) — mesmo padrão
+   já usado no Hábil (Humano) e Habilidoso (antecedentes), agrupado por
+   atributo em vez de lista chapada. O usuário reparou que o Bardo tinha
+   ficado diferente do resto (a pendência já estava anotada aqui desde a
+   migração do Bruxo, mas só foi resolvida agora que tínhamos 5 classes
+   pra padronizar de uma vez). O resumo final (renderSummary) CONTINUA
+   com lista chapada de perícias — isso é intencional/consistente com o
+   resto do app (Habilidoso também mostra flat no resumo, só o PICKER
+   agrupa), não confundir com pendência de novo.
 
    ✅ MAGO (nível 1) — CONCLUÍDO. Dados em data/classes/mago.js. Única
    classe até agora com DOIS níveis de escolha de magia: primeiro o Livro
@@ -345,8 +398,13 @@
      antecedentes — não misturar as duas tarefas.
    ========================================================================== */
 
-const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino"];
-const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago"];
+/* CLASSES = lista MESTRE pra grade de seleção (todas as 12 do PHB + qualquer
+   homebrew/UA, como Psiônico). ENABLED_CLASSES = quais dessas já têm nível 1
+   implementado. Adicionar uma classe nova em ENABLED_CLASSES sem também
+   colocar em CLASSES faz ela nunca aparecer na tela (bug já aconteceu com
+   o Psiônico — CLASSES só tinha as 12 do PHB por padrão). */
+const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino","Psiônico"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico"];
 
 /* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
    NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
@@ -355,8 +413,8 @@ const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago"];
    se ramificando por nome de classe (if/else), porque cada classe nível 1
    tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
    proficiências de arma/armadura, perícias) usam esses mapas. */
-const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago" };
-const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO };
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago", "Paladino":"paladino", "Psiônico":"psionico" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO, "Paladino":PALADINO, "Psiônico":PSIONICO };
 function activeClassData(){
   const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
   return data[key];
@@ -557,6 +615,14 @@ const CLASS_INFO = {
   "Mago": {
     descricao: "Estudioso da magia arcana, que aprende feitiços através de pesquisa metódica registrada em seu livro de magias.",
     fields: [["Atributo Principal","Inteligência"],["Dado de Vida","d6"],["Complexidade","Média"]]
+  },
+  "Paladino": {
+    descricao: "Combatente ligado por um juramento sagrado, que une poder marcial e divino pra proteger os indefesos e combater a corrupção.",
+    fields: [["Atributo Principal","Força e Carisma"],["Dado de Vida","d10"],["Complexidade","Média"]]
+  },
+  "Psiônico": {
+    descricao: "Conjurador que manifesta magia através do poder da própria mente, usando Dados de Energia Psiônica pra abastecer habilidades telecinéticas e telepáticas.",
+    fields: [["Atributo Principal","Inteligência"],["Dado de Vida","d6"],["Complexidade","Alta"],["Fonte","Unearthed Arcana 2025 — não é conteúdo oficial do PHB"]]
   }
 };
 
@@ -668,6 +734,8 @@ let data = {
   barbaro: { skills: [], maestria: [], equipment: null },
   bardo: { skills: [], cantrips: [], spells1: [], equipment: null },
   mago: { skills: [], cantrips: [], spellbook: [], prepared: [], equipment: null },
+  paladino: { skills: [], maestria: [], prepared: [], equipment: null },
+  psionico: { skills: [], cantrips: [], spells1: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -777,6 +845,22 @@ function findFirstMissingGroup(){
         if(!mg.equipment) return 'grp-1-equipment';
         return null;
       }
+      if(data.classe==='Paladino'){
+        const pl = data.paladino;
+        if(pl.skills.length!==2) return 'grp-1-skills';
+        if(pl.prepared.length!==PALADINO.preparedCount) return 'grp-1-prepared';
+        if(pl.maestria.length!==PALADINO.maestriaCount) return 'grp-1-maestria';
+        if(!pl.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Psiônico'){
+        const ps = data.psionico;
+        if(ps.skills.length!==2) return 'grp-1-skills';
+        if(ps.cantrips.length!==PSIONICO.cantripsCount) return 'grp-1-cantrips';
+        if(ps.spells1.length!==PSIONICO.preparedCount) return 'grp-1-spells1';
+        if(!ps.equipment) return 'grp-1-equipment';
+        return null;
+      }
       const b = data.bruxo;
       if(b.skills.length!==2) return 'grp-1-skills';
       if(!b.pactBoon) return 'grp-1-pact';
@@ -881,6 +965,14 @@ function canAdvance(){
         const mg = data.mago;
         return mg.skills.length===2 && mg.cantrips.length===MAGO.cantripsCount && mg.spellbook.length===MAGO.spellbookCount && mg.prepared.length===MAGO.preparedCount && !!mg.equipment;
       }
+      if(data.classe==='Paladino'){
+        const pl = data.paladino;
+        return pl.skills.length===2 && pl.prepared.length===PALADINO.preparedCount && pl.maestria.length===PALADINO.maestriaCount && !!pl.equipment;
+      }
+      if(data.classe==='Psiônico'){
+        const ps = data.psionico;
+        return ps.skills.length===2 && ps.cantrips.length===PSIONICO.cantripsCount && ps.spells1.length===PSIONICO.preparedCount && !!ps.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -913,7 +1005,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : (data.classe==='Paladino') ? renderPaladinoDetail() : (data.classe==='Psiônico') ? renderPsionicoDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
@@ -1449,18 +1541,12 @@ function renderBruxoDetail(){
 
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
-  <div class="check-list" style="margin-bottom:6px;">
-    ${(()=>{
-      const bgConst = activeBgConst();
-      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
-      const available = BRUXO.skills.filter(s=>!alreadyHave.includes(s));
-      return available.map(s=>{
-        const sel = b.skills.includes(s);
-        const disabled = !sel && b.skills.length>=2;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBruxoSkill"`}>${s}</div>`;
-      }).join('');
-    })()}
-  </div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = BRUXO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), b.skills, 2, 'toggleBruxoSkill');
+  })()}
   <div class="counter ${b.skills.length===2?'ok':''}">${b.skills.length}/2 escolhidas</div>
 
   <h3 id="grp-1-pact">Vínculo de Pacto</h3>
@@ -1511,18 +1597,12 @@ function renderBarbaroDetail(){
 
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
-  <div class="check-list" style="margin-bottom:6px;">
-    ${(()=>{
-      const bgConst = activeBgConst();
-      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
-      const available = BARBARO.skills.filter(s=>!alreadyHave.includes(s));
-      return available.map(s=>{
-        const sel = bb.skills.includes(s);
-        const disabled = !sel && bb.skills.length>=2;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBarbaroSkill"`}>${s}</div>`;
-      }).join('');
-    })()}
-  </div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = BARBARO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), bb.skills, 2, 'toggleBarbaroSkill');
+  })()}
   <div class="counter ${bb.skills.length===2?'ok':''}">${bb.skills.length}/2 escolhidas</div>
 
   <h3>Fúria</h3>
@@ -1561,18 +1641,12 @@ function renderBardoDetail(){
 
   <h3 id="grp-1-skills">Perícias (escolha ${BARDO.skillsCount}, QUAISQUER — sem lista restrita)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
-  <div class="check-list" style="margin-bottom:6px;">
-    ${(()=>{
-      const bgConst = activeBgConst();
-      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
-      const available = ALL_SKILLS.filter(s=>!alreadyHave.includes(s));
-      return available.map(s=>{
-        const sel = bd.skills.includes(s);
-        const disabled = !sel && bd.skills.length>=BARDO.skillsCount;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleBardoSkill"`}>${s}</div>`;
-      }).join('');
-    })()}
-  </div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = ALL_SKILLS.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), bd.skills, BARDO.skillsCount, 'toggleBardoSkill');
+  })()}
   <div class="counter ${bd.skills.length===BARDO.skillsCount?'ok':''}">${bd.skills.length}/${BARDO.skillsCount} escolhidas</div>
 
   <h3>Inspiração de Bardo</h3>
@@ -1606,18 +1680,12 @@ function renderMagoDetail(){
 
   <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
-  <div class="check-list" style="margin-bottom:6px;">
-    ${(()=>{
-      const bgConst = activeBgConst();
-      const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
-      const available = MAGO.skills.filter(s=>!alreadyHave.includes(s));
-      return available.map(s=>{
-        const sel = mg.skills.includes(s);
-        const disabled = !sel && mg.skills.length>=2;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${s}" data-fn="toggleMagoSkill"`}>${s}</div>`;
-      }).join('');
-    })()}
-  </div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = MAGO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), mg.skills, 2, 'toggleMagoSkill');
+  })()}
   <div class="counter ${mg.skills.length===2?'ok':''}">${mg.skills.length}/2 escolhidas</div>
 
   <h3>Adepto de Ritual</h3>
@@ -1648,6 +1716,94 @@ function renderMagoDetail(){
   <div class="option-block ${mg.equipment==='B'?'selected':''}">
     <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${MAGO.equipmentB_gold} PO</p>
     <button class="pick-btn" data-pick="B" data-fn="pickMagoEquip">${mg.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderPaladinoDetail(){
+  const pl = data.paladino;
+  return `<h2>Paladino — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Força e Carisma · Dado de Vida: d10 · Salvaguardas: Sabedoria e Carisma · Armas Simples e Marciais · Armadura Leve, Média, Pesada e Escudo</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = PALADINO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), pl.skills, 2, 'togglePaladinoSkill');
+  })()}
+  <div class="counter ${pl.skills.length===2?'ok':''}">${pl.skills.length}/2 escolhidas</div>
+
+  <h3 id="grp-1-prepared">Magias Preparadas de 1º Círculo (escolha ${PALADINO.preparedCount}, da lista de Paladino)</h3>
+  <div class="intro" style="margin-bottom:8px;">Paladino não conhece truques no nível 1, só magias preparadas.</div>
+  ${spellChoiceList(PALADINO.spells1, pl.prepared, PALADINO.preparedCount, 'togglePaladinoPrepared')}
+  <div class="counter ${pl.prepared.length===PALADINO.preparedCount?'ok':''}">${pl.prepared.length}/${PALADINO.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-maestria">Maestria em Arma (escolha ${PALADINO.maestriaCount}, com as quais você tem proficiência)</h3>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
+      const sel = pl.maestria.includes(name);
+      const disabled = !sel && pl.maestria.length>=PALADINO.maestriaCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="togglePaladinoMaestria"`} title="${w.mastery}: ${MASTERY_PROPERTIES[w.mastery]}">${name} (${w.mastery})</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${pl.maestria.length===PALADINO.maestriaCount?'ok':''}">${pl.maestria.length}/${PALADINO.maestriaCount} escolhidas</div>
+
+  <h3>Mãos Consagradas</h3>
+  <div class="option-block">${PALADINO.maosConsagradas}</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${pl.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...PALADINO.equipmentA, PALADINO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickPaladinoEquip">${pl.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${pl.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${PALADINO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickPaladinoEquip">${pl.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderPsionicoDetail(){
+  const ps = data.psionico;
+  return `<h2>Psiônico — Detalhes da Classe <span style="font-size:0.6em;color:var(--parchment-dim);">(Unearthed Arcana 2025)</span></h2>
+  <div class="intro">Atributo Primário: Inteligência · Dado de Vida: d6 · Salvaguardas: Inteligência e Sabedoria · Armas Simples · Sem treinamento com Armadura</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = PSIONICO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), ps.skills, 2, 'togglePsionicoSkill');
+  })()}
+  <div class="counter ${ps.skills.length===2?'ok':''}">${ps.skills.length}/2 escolhidas</div>
+
+  <h3 id="grp-1-cantrips">Truques da Classe (escolha ${PSIONICO.cantripsCount}, da lista de Psiônico)</h3>
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
+  ${spellChoiceList(PSIONICO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c)), ps.cantrips, PSIONICO.cantripsCount, 'togglePsionicoCantrip')}
+  <div class="counter ${ps.cantrips.length===PSIONICO.cantripsCount?'ok':''}">${ps.cantrips.length}/${PSIONICO.cantripsCount} escolhidos</div>
+
+  <h3>Poder Psiônico</h3>
+  <div class="option-block">${PSIONICO.poderPsionico}</div>
+
+  <h3>Telecinese Sutil</h3>
+  <div class="option-block">${PSIONICO.telecineseSutil}</div>
+
+  <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha ${PSIONICO.preparedCount}, da lista de Psiônico)</h3>
+  ${spellChoiceList(PSIONICO.spells1, ps.spells1, PSIONICO.preparedCount, 'togglePsionicoSpell1')}
+  <div class="counter ${ps.spells1.length===PSIONICO.preparedCount?'ok':''}">${ps.spells1.length}/${PSIONICO.preparedCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${ps.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...PSIONICO.equipmentA, PSIONICO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickPsionicoEquip">${ps.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${ps.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${PSIONICO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickPsionicoEquip">${ps.equipment==='B'?'Selecionado':'Escolher'}</button>
   </div>
   ${nav(canAdvance())}`;
 }
@@ -1764,6 +1920,8 @@ function renderSummary(){
   const isBarbaro = data.classe==='Bárbaro';
   const isBardo = data.classe==='Bardo';
   const isMago = data.classe==='Mago';
+  const isPaladino = data.classe==='Paladino';
+  const isPsionico = data.classe==='Psiônico';
   const cls = activeClassData();
   const clsConst = activeClassConst();
   const t = data.tiefling;
@@ -1776,9 +1934,9 @@ function renderSummary(){
   const intMod = mod(finalScore('Inteligência'));
   const conMod = mod(finalScore('Constituição'));
   const dexMod = mod(finalScore('Destreza'));
-  const spellMod = isMago ? intMod : carMod; // atributo de conjuração varia por classe
-  const hp = isBarbaro ? (12 + conMod) : isMago ? (6 + conMod) : (8 + conMod);
-  const ac = isBarbaro ? (10 + dexMod + conMod) : isMago ? (10 + dexMod) : (11 + dexMod);
+  const spellMod = (isMago || isPsionico) ? intMod : carMod; // atributo de conjuração varia por classe
+  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico) ? (6 + conMod) : isPaladino ? (10 + conMod) : (8 + conMod);
+  const ac = isBarbaro ? (10 + dexMod + conMod) : (isMago || isPsionico) ? (10 + dexMod) : (11 + dexMod);
   const dc = 8 + prof + spellMod;
   const atkMagic = prof + spellMod;
   const remaining = startingGold() - spentGold();
@@ -1788,6 +1946,10 @@ function renderSummary(){
     ? `PV: ${hp} (1d12) · CA: ${ac} (sem armadura: 10 + Destreza + Constituição, ou o que for comprado na Loja)`
     : isMago
     ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
+    : isPsionico
+    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
+    : isPaladino
+    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
 
   const classFeatureBlock = isBarbaro ? `
@@ -1805,6 +1967,16 @@ function renderSummary(){
     Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 3 da classe">${s} (espécie)</span>`).join('')}<br>
     Livro de Magias: ${cls.spellbook.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
     Preparadas: ${cls.prepared.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>` : isPsionico ? `
+  <div class="summary-section"><h3>Poder Psiônico, Telecinese Sutil, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
+    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>` : isPaladino ? `
+  <div class="summary-section"><h3>Magias, Maestria em Arma e Mãos Consagradas <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Magias Preparadas: ${cls.prepared.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
+    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
   </div></div>` : `
   <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
@@ -1872,6 +2044,8 @@ function resetWizard(){
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],equipment:null},
     mago:{skills:[],cantrips:[],spellbook:[],prepared:[],equipment:null},
+    paladino:{skills:[],maestria:[],prepared:[],equipment:null},
+    psionico:{skills:[],cantrips:[],spells1:[],equipment:null},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -1955,6 +2129,14 @@ function toggleMagoSpellbook(v){
 }
 function toggleMagoPrepared(v){ const s=data.mago.prepared; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<MAGO.preparedCount)s.push(v); persist(); render(); }
 function pickMagoEquip(v){ data.mago.equipment=v; persist(); render(); }
+function togglePaladinoSkill(v){ const s=data.paladino.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function togglePaladinoPrepared(v){ const s=data.paladino.prepared; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<PALADINO.preparedCount)s.push(v); persist(); render(); }
+function togglePaladinoMaestria(v){ const s=data.paladino.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<PALADINO.maestriaCount)s.push(v); persist(); render(); }
+function pickPaladinoEquip(v){ data.paladino.equipment=v; persist(); render(); }
+function togglePsionicoSkill(v){ const s=data.psionico.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function togglePsionicoCantrip(v){ const s=data.psionico.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<PSIONICO.cantripsCount)s.push(v); persist(); render(); }
+function togglePsionicoSpell1(v){ const s=data.psionico.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<PSIONICO.preparedCount)s.push(v); persist(); render(); }
+function pickPsionicoEquip(v){ data.psionico.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa
