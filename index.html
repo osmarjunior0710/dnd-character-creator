@@ -99,9 +99,10 @@
       - "perícia duplicada entre fontes" — dá pra escolher a mesma
         perícia na classe, no antecedente E na espécie ao mesmo tempo;
         cada fonte só filtra contra o antecedente, não contra as outras.
-      - resetWizard() só zera data.tiefling/data.pequenino entre
-        personagens — as outras 8 espécies carregam sub-escolhas do
-        personagem anterior.
+      - ✅ RESOLVIDO (Claude Code): resetWizard() só zerava
+        data.tiefling/data.pequenino entre personagens — as outras 8
+        espécies carregavam sub-escolhas do personagem anterior. Ver
+        freshSpeciesData() perto de resetWizard().
       - "Talentos de Talento Selvagem" do UA (10 talentos do Psiônico,
         Atmocinese/Biocinese/etc.) não implementados em lugar nenhum.
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
@@ -580,13 +581,15 @@
    (✅ CLASS_DATA_KEY/CLASS_CONST já foram generalizados faz tempo — ver
    bloco do BÁRBARO mais abaixo — essa parte da nota antiga já não se aplica.)
 
-   PENDÊNCIA CONHECIDA (não é sobre classes, mas fica registrada pra não
-   esquecer): resetWizard() ("Criar Outro Personagem") só zera
-   data.tiefling/data.pequenino entre as espécies — as outras 8 (anao, orc,
-   humano, draconato, elfo, gnomo, golias, aasimar) não são resetadas.
-   Resolver quando for a vez de revisar espécies de novo, ou aproveitar
-   quando mexer no resetWizard() pra classes (mesmo tipo de bug pode já
-   nascer ali se não for generalizado desde o início).
+   ✅ RESOLVIDO (Claude Code): resetWizard() (botão agora "Iniciar Novo
+   Personagem", era "Criar Outro Personagem") só zerava data.tiefling/
+   data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
+   draconato, elfo, gnomo, golias, aasimar) carregavam sub-escolhas do
+   personagem anterior. Generalizado com freshSpeciesData() (função nova,
+   perto de resetWizard() no fim do arquivo) com os defaults das 10
+   espécies num só lugar, reaproveitada também na migração de saves
+   antigos em restore() (que antes tinha os mesmos 8 defaults duplicados
+   em ifs separados).
 
    NOTA SOBRE PEQUENINO (Halfling): diferente do Tiferino, essa espécie NÃO
    tem nenhuma escolha própria no PHB 2024 (sem subraça, sem legado, sem
@@ -767,12 +770,11 @@
      os outros talentos fixos (Sortudo, Alerta, Curandeiro, Vigoroso,
      Valentão de Taverna, Artifista, Músico, Atacante Selvagem) não têm
      escolha nenhuma, só o texto informativo.
-   - PENDÊNCIA (não é sobre antecedentes, achada de bônus ao mexer no
-     resetWizard): "Criar Outro Personagem" só zera data.tiefling/
-     data.pequenino entre as espécies — as outras 8 (anao, orc, humano,
-     draconato, elfo, gnomo, golias, aasimar) não são resetadas. Não é bug
-     introduzido agora, já existia; resolver quando for a vez de revisar
-     espécies de novo, não misturar com antecedentes.
+   - ✅ RESOLVIDO (Claude Code, ver bloco perto de freshSpeciesData() mais
+     acima): "Iniciar Novo Personagem" (renomeado, era "Criar Outro
+     Personagem") só zerava data.tiefling/data.pequenino entre as
+     espécies — as outras 8 não eram resetadas. Não era bug de
+     antecedente, só achado de bônus nesta mesma nota.
    - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
      pode virar data/shop.js separado depois, sem relação direta com os
      antecedentes — não misturar as duas tarefas.
@@ -1126,15 +1128,15 @@ async function restore(){
       step = parsed.step || 0;
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
-      if(!data.pequenino) data.pequenino = {};
-      if(!data.aasimar) data.aasimar = { tamanho: null };
-      if(!data.anao) data.anao = {};
-      if(!data.orc) data.orc = {};
-      if(!data.humano) data.humano = { tamanho: null, pericia: null, talento: null };
-      if(!data.draconato) data.draconato = { heranca: null };
-      if(!data.elfo) data.elfo = { pericia: null, linhagem: null };
-      if(!data.gnomo) data.gnomo = { linhagem: null, atributoLinhagem: null };
-      if(!data.golias) data.golias = { ancestralidade: null };
+      /* Espécies: garante que TODA chave de freshSpeciesData() exista em
+         data (evita crash se um save antigo do navegador não tiver uma
+         espécie mais recente que a gente adicionou depois) — mesma função
+         usada por resetWizard(), pra não duplicar os defaults em dois
+         lugares. */
+      const speciesDefaults = freshSpeciesData();
+      Object.keys(speciesDefaults).forEach(key=>{
+        if(!data[key]) data[key] = speciesDefaults[key];
+      });
       /* Antecedentes: garante que TODA chave de BACKGROUND_DATA_KEY exista
          em data (evita crash se um save antigo do navegador não tiver o
          antecedente mais recente que a gente adicionou depois). */
@@ -2934,10 +2936,33 @@ function renderSummary(){
 
   <div class="nav">
     <button class="btn" onclick="back()">← Voltar</button>
-    <button class="btn primary" onclick="resetWizard()">Criar Outro Personagem</button>
+    <button class="btn primary" onclick="resetWizard()">Iniciar Novo Personagem</button>
   </div>`;
 }
 
+/* Defaults "vazios" das 10 espécies (data.<chave>), num só lugar — usado
+   tanto por resetWizard() quanto pela migração de saves antigos em
+   restore(). Antes só tiefling/pequenino eram zeradas no reset; as outras
+   8 (aasimar, anao, orc, humano, draconato, elfo, gnomo, golias) ficavam
+   com sub-escolhas do personagem anterior. Não existe um SPECIES_DATA_KEY
+   tipo o de classes/antecedentes (passo 5 continua ramificando por
+   if/else de nome, decisão já registrada na nota do topo), então as 10
+   chaves ficam hardcoded aqui mesmo — se uma espécie nova entrar, some a
+   entrada aqui também. */
+function freshSpeciesData(){
+  return {
+    tiefling:{tamanho:null,legado:null,atributoLegado:null},
+    pequenino:{},
+    aasimar:{tamanho:null},
+    anao:{},
+    orc:{},
+    humano:{tamanho:null,pericia:null,talento:null},
+    draconato:{heranca:null},
+    elfo:{pericia:null,linhagem:null},
+    gnomo:{linhagem:null,atributoLinhagem:null},
+    golias:{ancestralidade:null}
+  };
+}
 function resetWizard(){
   if(!confirm('Isso apaga o personagem atual e começa do zero. Continuar?')) return;
   step = 0;
@@ -2945,11 +2970,7 @@ function resetWizard(){
   Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
     bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
-  // NOTA: igual antes, esse reset só zera tiefling/pequenino entre as espécies
-  // (pendência antiga, não introduzida agora — revisar quando mexer em espécies).
   data = Object.assign({ especie:null, antecedente:null, classe:null,
-    tiefling:{tamanho:null,legado:null,atributoLegado:null},
-    pequenino:{},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],instruments:[],equipment:null},
@@ -2964,7 +2985,8 @@ function resetWizard(){
     monge:{skills:[],equipment:null},
     guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
     idiomas:{comuns:[],extra:[]},
-    attrs:{}, shop:{purchases:{},collapsedCats:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
+    attrs:{}, shop:{purchases:{},collapsedCats:{}}, returnToSummary:false, freeAbilityRule:false },
+    freshSpeciesData(), bgDataInit);
   persist(); render();
 }
 
