@@ -12,7 +12,7 @@ body{
   margin:0; min-height:100vh;
   background:var(--ink);
   color:var(--parchment); font-family:'Spectral',serif;
-  padding:20px 14px 60px;
+  padding:20px 14px calc(90px + env(safe-area-inset-bottom, 0px));
 }
 .wrap{max-width:960px;margin:0 auto;}
 header{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--line); padding-bottom:12px; margin-bottom:18px;}
@@ -80,7 +80,13 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 .spell-detail .stats{display:flex; flex-wrap:wrap; gap:4px 14px; margin-bottom:8px; font-size:0.72rem; color:var(--parchment-dim);}
 .spell-detail .stats b{color:var(--gold); font-family:'Cinzel',serif; font-weight:700;}
 .spell-detail .escala{margin-top:8px; color:var(--gold-dim); font-style:italic; font-size:0.78rem;}
-.nav{display:flex; justify-content:space-between; margin-top:22px;}
+.nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:20;
+  background:#ffffff; border-top:1px solid var(--line);
+  box-shadow:0 -2px 8px rgba(60,64,67,0.12);
+  padding:10px 14px; padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.nav .nav-inner{display:flex; justify-content:space-between; align-items:center; max-width:960px; margin:0 auto;}
 .btn{font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:10px 22px; border-radius:4px; cursor:pointer; border:1px solid var(--line); background:#ffffff; color:var(--gold-dim);}
 .btn.primary{background:var(--wax); border-color:var(--wax); color:#ffffff;}
 .btn.primary:disabled{background:var(--disabled); border-color:var(--disabled); color:#9aa0a6; cursor:not-allowed;}
