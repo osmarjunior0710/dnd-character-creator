@@ -3,7 +3,7 @@ const DRUIDA = {
   weaponProf: ["simples"],
   armorProf: ["leve","escudo"],
   toolsFixed: "Kit de Herbalismo",
-  equipmentA: ["Armadura de Couro", "Escudo", "Foice", "Foco Druídico (Cajado)", "Kit de Explorador", "Kit de Herbalismo"],
+  equipmentA: ["Armadura de Couro", "Escudo", "Foice", "Foco Druídico (Cajado)", "Kit de Explorador de Masmorras", "Kit de Herbalismo"],
   equipmentA_gold: 9,
   equipmentB_gold: 50,
   /* Truques e magias de 1º círculo da lista de Druida, extraídos da
