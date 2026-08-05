@@ -111,8 +111,28 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .shop-table .qty-cell input{width:44px; text-align:center; padding:3px;}
 .cart-list{font-size:0.85rem; margin-top:6px;}
 .cart-item{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px dashed var(--line);}
+.shop-category{border:1px solid var(--line); border-radius:5px; margin-bottom:12px; overflow:hidden;}
+.shop-category summary{
+  cursor:pointer; list-style:none; padding:10px 14px;
+  font-family:'Cinzel',serif; font-size:0.85rem; color:var(--gold);
+  background:#f8f9fa; display:flex; justify-content:space-between; align-items:center;
+}
+.shop-category summary::-webkit-details-marker{display:none;}
+.shop-category summary::after{content:"▾"; color:var(--gold-dim); transition:transform .15s; font-size:0.75rem;}
+.shop-category:not([open]) summary::after{transform:rotate(-90deg);}
+.shop-category summary .cat-count{font-family:'Spectral',serif; font-size:0.72rem; color:var(--parchment-dim); font-weight:normal; margin-left:8px;}
+.shop-category .shop-table{margin:0; padding:0 14px 10px;}
+.shop-category .shop-table thead{display:table-header-group;}
 @media (max-width:700px){
   .attr-row{grid-template-columns:100px 1fr 1fr; row-gap:4px;}
   .attr-row .final{grid-column:1/-1;}
   .shop-table{font-size:0.75rem;}
+  .shop-table thead{display:none;}
+  .shop-table, .shop-table tbody, .shop-table tr, .shop-table td{display:block; width:100%;}
+  .shop-table tr{border:1px solid var(--line); border-radius:4px; margin-bottom:10px; padding:8px 10px;}
+  .shop-table td{border:none; padding:3px 0; display:flex; justify-content:space-between; align-items:center; gap:8px; word-break:break-word;}
+  .shop-table td:before{content:attr(data-label); font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--gold-dim); flex:0 0 auto;}
+  .shop-table td:first-child{font-weight:700; font-size:0.95rem;}
+  .shop-table td:first-child:before{content:none;}
+  .shop-table .qty-cell{justify-content:flex-end;}
 }
