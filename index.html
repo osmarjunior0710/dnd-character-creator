@@ -71,21 +71,98 @@
    passo a passo, só libera "Avançar" quando a etapa está completa, com foco
    automático (scroll + destaque) na primeira seleção faltante.
 
+   ⚠️ AVISO PRA QUALQUER SESSÃO NOVA — LEIA ISSO PRIMEIRO:
+   Antes de abrir o PDF do livro (397 páginas, caro e lento de processar),
+   PEÇA AO USUÁRIO os arquivos de contexto relevantes pro que você vai
+   mexer: o data/*.js específico do assunto (ex: data/classes/bruxo.js se
+   for mexer no Bruxo), as planilhas já existentes (classes_phb2024.xlsx,
+   D_D_5_5_-_Magias_e_Talentos.xlsx), e o index.html mais atual. O livro é
+   o ÚLTIMO recurso — só abrir quando a informação necessária não estiver
+   em nada que já foi exportado/anexado. Isso já economizou bastante
+   tempo/tokens nesta conversa; não regredir nisso numa sessão nova.
+
+   🎓 LIÇÕES APRENDIDAS (aplicar sempre, não só quando alguém lembrar):
+   - Antes de sair pesquisando algo no livro, perguntar se já existe um
+     arquivo/planilha/anexo com a mesma informação — já aconteceu mais de
+     uma vez de reprocessar o PDF quando a planilha de magias/talentos ou
+     a de classes já tinha tudo parafraseado.
+   - Se precisar abrir o livro mesmo assim, extrair só a página necessária
+     (pdftotext -f/-l com o número certo do PDF, calculado contando
+     marcadores de página \f no texto já extraído) em vez de reprocessar
+     as 397 páginas de novo — funcionou bem quando a extração em coluna
+     saiu bagunçada (caso da Ordem Primal do Druida).
+   - Nomes vindos de fontes alternativas (ex: Unearthed Arcana) podem
+     divergir da tradução "oficial" já usada no resto do app — sempre
+     conferir contra a planilha oficial antes de assumir que é a mesma
+     coisa ou uma coisa nova (caso do Psiônico: "Amizade"/"Prestidigitação"
+     /"Sifão de Vida" do UA eram a mesma magia que "Amigos"/"Prestidigitação
+     Arcana"/"Sifão Vital" já usados em outras classes).
+   - Ao adicionar algo que parece seguir um padrão já visto em outra classe
+     (Maestria em Arma, Ordem Divina/Primal, Estilo de Luta etc.), NÃO
+     assumir que a redação é idêntica — conferir o texto exato no livro.
+     Já rendeu descobertas reais: Bárbaro restringe Maestria em Arma a
+     Corpo a Corpo, mas Paladino/Guerreiro/Ladino/Guardião não.
+   - Fazer checagem cruzada por grep (campo usado no código vs. campo
+     definido no const) depois de cada leva antes de entregar — pegou
+     vários erros de digitação/campo esquecido ao longo da conversa.
+   - Rodar `node --check` no bundle combinado (todos os data/*.js + o
+     <script> principal extraído) antes de entregar — pega erro de
+     sintaxe sem precisar de navegador (que não está disponível aqui).
+   - Quando um arquivo de dados (classe, antecedente, espécie) não estiver
+     disponível na conversa, NÃO recriar de memória — pedir pro usuário
+     anexar, mesmo que pareça simples (risco de sobrescrever algo que já
+     funciona com dados errados).
+   - Depois de qualquer mudança estrutural (ex: inserir uma etapa nova no
+     wizard), fazer uma varredura completa por TODOS os lugares que
+     dependem de números de step/id (render(), canAdvance(),
+     findFirstMissingGroup(), editSection(), goTo() hardcoded, ids
+     grp-N-*) — é fácil esquecer um e deixar um botão "Editar" quebrado.
+
    ESCOPO ATUAL (funcionando): 🎉 TODAS AS 12 CLASSES DO PHB 2024 + o
    Psiônico (UA 2025), nível 1 apenas: Bárbaro, Bardo, Bruxo, Clérigo,
    Druida, Feiticeiro, Guardião, Guerreiro, Ladino, Mago, Monge, Paladino
    e Psiônico. Mais todas as 10 espécies do PHB 2024 e os 16 antecedentes
-   do PHB 2024. CONFERIDO duas vezes contra a lista real de 12 classes do
-   PHB antes de declarar completo (já escrevi essa frase errado uma vez
-   nesta mesma nota, esquecendo o Guardião — ver histórico logo abaixo).
-   Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
-   Próxima frente natural é decidir entre (a) progressão de nível 2+ pras
-   classes já existentes, ou (b) revisar as pendências acumuladas
-   (idiomas, instrumentos/ferramentas — 3 classes com esse placeholder:
-   Bardo/Ladino/Monge —, SHOP com armas Marciais/armadura Média-Pesada,
-   unificar a lógica de "CA não calculada automaticamente" numa função só
-   — já são 5 classes repetindo esse texto: Paladino/Clérigo/Guerreiro/
-   Druida/Guardião). Perguntar ao usuário antes de escolher uma frente.
+   do PHB 2024. Mais a etapa de Idiomas (passo 6). CONFERIDO duas vezes
+   contra a lista real de 12 classes do PHB antes de declarar completo
+   (já escrevi essa frase errado uma vez nesta mesma nota, esquecendo o
+   Guardião — ver histórico logo abaixo).
+
+   🔜 PRÓXIMA FRENTE — LOJA/SHOP (o usuário vai abrir uma conversa
+   separada pra isso; se você é essa conversa, comece por aqui):
+   1. Olhar no PDF as páginas do capítulo 6 (Equipamento) — mas ANTES
+      disso, perguntar ao usuário se ele já tem algo exportado (planilha,
+      lista) pros itens da loja, seguindo o AVISO lá em cima. Só abrir o
+      PDF se não tiver nada pronto.
+   2. Mapear TODOS os itens comprável num banco de dados: armas simples e
+      marciais, armaduras leve/média/pesada, escudos, equipamento de
+      aventura, ferramentas — hoje o SHOP (dentro do index.html, ~linha
+      520+) só tem uma fração disso (Armas Simples + Armadura Leve +
+      alguns itens de aventura).
+   3. Fazer um filtro de proficiência POR CLASSE, generalizado pras 13
+      classes — hoje existe uma versão em renderShop() que usa
+      activeClassConst().weaponProf/armorProf via .includes(), pensada
+      originalmente só pro Bruxo mas já preparada pra ser genérica (ver
+      CLASS_CONST). Conferir se cobre bem os casos de proficiência
+      FILTRADA por propriedade (Ladino: só Acuidade/Leve; Monge: só
+      Corpo a Corpo com Leve) — hoje o filtro é só por categoria
+      (simples/marcial/leve/media/pesada/escudo), não por propriedade de
+      arma individual, então provavelmente vai precisar de ajuste.
+   4. MANTER a calculadora de ouro atual (startingGold(), spentGold(), a
+      lógica de troco em renderShop()) — já funciona bem, não reinventar
+      do zero, só estender pros itens novos.
+   5. PENDENTE (registrar, não necessariamente resolver na mesma leva):
+      um floater/painel fixo mostrando o inventário atual do personagem —
+      o que já foi concedido pela classe + antecedente (equipamento
+      inicial fixo) somado ao que for comprado na loja. Ajuda a não
+      perder a visão geral enquanto compra.
+   6. PENDENTE: os botões Voltar/Avançar (função nav()) deveriam ficar
+      ANCORADOS NA TELA (sticky/fixed), não rolando junto com a página —
+      principalmente importante no mobile, pra não precisar rolar até o
+      fim toda vez que quiser avançar.
+   - Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
+     Depois da Loja, outras frentes possíveis: progressão de nível 2+,
+     Talentos de Talento Selvagem do UA, arquivos de Guarda/Soldado/Nobre
+     (mesma pendência de ferramenta que já resolvemos no Artista).
 
    ✅ GUARDIÃO (nível 1) — CONCLUÍDO. Dados em data/classes/guardiao.js.
    Estrutura parecida com Paladino: sem truques, magias preparadas (2) +
