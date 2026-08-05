@@ -3,9 +3,12 @@ const MONGE = {
   /* Proficiência de arma restrita: Simples CORPO A CORPO + Marciais Corpo
      a Corpo com propriedade Leve (nem todas as Simples — exclui as à
      Distância também, diferente de todas as outras classes até agora).
-     Sem Maestria em Arma no nível 1, então esse filtro só serve pra
-     exibição/CLASS_INFO por enquanto. */
+     Sem Maestria em Arma no nível 1, então esse filtro não afeta escolha
+     de Maestria — mas afeta o filtro de "proficiência" (opcional) da
+     Loja, ver renderShop()/weaponProfMeleeOnly/weaponProfFiltroMarcial. */
   weaponProf: ["simples","marcial"],
+  weaponProfMeleeOnly: true,
+  weaponProfFiltroMarcial: ["Leve"],
   armorProf: [],
   /* Ferramentas: escolha 1 CATEGORIA entre Ferramentas de Artesão OU
      Instrumento Musical (não um item específico) — mesmo tratamento de

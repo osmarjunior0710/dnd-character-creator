@@ -91,11 +91,22 @@
       seção correspondente — procure pelo texto entre aspas):
       - "floater/painel fixo" — inventário do personagem (classe +
         antecedente + compras da loja) sempre visível.
-      - "filtro de proficiência FILTRADA por propriedade" — Ladino
-        (Acuidade/Leve) e Monge (Corpo a Corpo + Leve) veem armas
-        Marciais demais na Loja hoje; o filtro só olha categoria, não
-        propriedade individual (WEAPON_MASTERY já tem o campo
-        "propriedades" pronto pra isso).
+      - ✅ RESOLVIDO (Claude Code), e com um desenho diferente do que a
+        pendência original sugeria: em vez de filtrar a Loja
+        automaticamente, virou um checkbox opcional "Filtrar por
+        proficiência" (desligado por padrão — a Loja mostra TUDO por
+        padrão pra qualquer classe, decisão do usuário: "assim todo mundo
+        sabe de tudo que pode fazer/comprar"). Com o checkbox ligado,
+        usa itemMatchesWeaponProf() (perto de renderShop()) pra filtrar
+        por propriedade individual via WEAPON_MASTERY — Ladino
+        (weaponProfFiltroMarcial=["Acuidade","Leve"]) e Monge
+        (weaponProfMeleeOnly=true + weaponProfFiltroMarcial=["Leve"]) já
+        usam isso; Bárbaro/Guerreiro/Paladino/Guardião não têm restrição
+        extra, então o checkbox não muda nada pra eles (proficiência
+        plena com Simples+Marcial já era mostrada certa). Só afeta
+        categorias de Arma/Armadura — Ferramentas/Instrumentos/Focos/
+        Munição/Equipamento de Aventura continuam sempre visíveis, com
+        ou sem o filtro.
       - ✅ RESOLVIDO (Claude Code): "perícia duplicada entre fontes" —
         dava pra escolher a mesma perícia na classe, no antecedente E na
         espécie ao mesmo tempo. Generalizado pra perícia, talento, truque
@@ -235,13 +246,15 @@
    3. ✅ FEITO: filtro de proficiência por categoria já cobre as 13
       classes automaticamente (usa clsConst.weaponProf/armorProf.includes,
       testado que os valores batem: simples/marcial/leve/media/pesada/
-      escudo). AINDA NÃO cobre filtro por PROPRIEDADE individual da arma
-      (Ladino só Acuidade/Leve, Monge só Corpo a Corpo com Leve) — hoje
-      se o Ladino tiver proficiência "marcial" ele veria TODAS as armas
-      marciais na loja, não só as com Acuidade/Leve. Isso é uma
-      simplificação aceita por ora (fica mais permissivo, não menos) —
-      resolver se o usuário pedir, usando o campo "propriedades" que já
-      existe em WEAPON_MASTERY.
+      escudo). ✅ TAMBÉM FEITO (Claude Code, resolvido bem depois desta
+      sessão original): filtro por PROPRIEDADE individual da arma
+      (Ladino só Acuidade/Leve, Monge só Corpo a Corpo com Leve), usando
+      o campo "propriedades" de WEAPON_MASTERY como já estava previsto
+      aqui — mas o usuário pediu um desenho diferente do que "resolver
+      automaticamente": virou um checkbox opcional "Filtrar por
+      proficiência" em renderShop(), DESLIGADO por padrão (a Loja mostra
+      tudo pra todo mundo por padrão, de propósito — ver
+      itemMatchesWeaponProf()/toggleShopProfFilter()).
    4. ✅ Calculadora de ouro mantida (startingGold(), spentGold(),
       maxAffordableQty(), a lógica de troco em renderShop()) — não foi
       mexida, só reaproveitada pros itens novos.
@@ -1165,6 +1178,7 @@ async function restore(){
       step = parsed.step || 0;
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
+      if(data.shop.filterByProf===undefined) data.shop.filterByProf = false;
       /* Espécies: garante que TODA chave de freshSpeciesData() exista em
          data (evita crash se um save antigo do navegador não tiver uma
          espécie mais recente que a gente adicionou depois) — mesma função
@@ -2679,21 +2693,49 @@ function findShopItem(name){
   }
   return null;
 }
+/* Checa se um item de Arma (categoria "simples"/"marcial" do SHOP) bate
+   com a proficiência FINA da classe (não só a categoria) — cruza por nome
+   com WEAPON_MASTERY (que tem tipo Corpo a Corpo/À Distância e a lista de
+   propriedades de cada arma). weaponProfMeleeOnly e weaponProfFiltroMarcial
+   são campos opcionais no CONST da classe (hoje só Monge e Ladino têm),
+   ausentes = sem restrição extra além da categoria. Se o nome do item não
+   bater com nada em WEAPON_MASTERY (não deveria acontecer — os 28 nomes de
+   Armas Simples/Marciais do SHOP foram conferidos 1 a 1 contra
+   WEAPON_MASTERY), falha fechado (esconde) em vez de aberto, pra nunca
+   mostrar uma arma que a classe não usa bem só por causa de um typo futuro
+   de nome entre os dois arquivos. */
+function itemMatchesWeaponProf(clsConst, itemName){
+  const wm = WEAPON_MASTERY[itemName];
+  if(!wm) return false;
+  if(clsConst.weaponProfMeleeOnly && wm.tipo!=='Corpo a Corpo') return false;
+  if(wm.categoria==='Marcial' && clsConst.weaponProfFiltroMarcial){
+    return wm.propriedades.some(p=>clsConst.weaponProfFiltroMarcial.includes(p));
+  }
+  return true;
+}
+function toggleShopProfFilter(){ data.shop.filterByProf = !data.shop.filterByProf; persist(); render(); }
+
 function renderShop(){
   const remaining = startingGold() - spentGold();
   const purchases = data.shop.purchases||{};
   const clsConst = activeClassConst();
   const maxGold = computeMaxPossibleGold();
+  const filtering = data.shop.filterByProf;
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
-  <div class="intro">Itens filtrados pelo que ${data.classe} pode usar (proficiências de arma e armadura da classe). Ferramentas, focos, munição e equipamento de aventura valem pra qualquer um. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
+  <div class="intro">Por padrão a Loja mostra TODAS as armas e armaduras, pra você conhecer as opções — ferramentas, focos, munição e equipamento de aventura valem pra qualquer um sempre. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
+  <div style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:10px 0;" onclick="toggleShopProfFilter()">
+    <input type="checkbox" style="width:16px;height:16px;flex:none;margin:0;pointer-events:none;" ${filtering?'checked':''}>
+    <span>Filtrar por proficiência (mostra só armas e armaduras que ${data.classe} usa bem)</span>
+  </div>
   <div class="wallet">
     <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
     <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
   </div>`;
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
-    if(cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
-    const visibleItems = cat.items.filter(it => it.c <= maxGold);
+    const isWeaponCat = cat.filterProf==='simples' || cat.filterProf==='marcial';
+    if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
+    const visibleItems = cat.items.filter(it => it.c <= maxGold && (!filtering || !isWeaponCat || itemMatchesWeaponProf(clsConst, it.n)));
     if(visibleItems.length===0) return;
     const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
     html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
@@ -2950,7 +2992,7 @@ function resetWizard(){
     monge:{skills:[],equipment:null},
     guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
     idiomas:{comuns:[],extra:[]},
-    attrs:{}, shop:{purchases:{},collapsedCats:{}}, returnToSummary:false, freeAbilityRule:false },
+    attrs:{}, shop:{purchases:{},collapsedCats:{},filterByProf:false}, returnToSummary:false, freeAbilityRule:false },
     freshSpeciesData(), bgDataInit);
   persist(); render();
 }
