@@ -29,6 +29,8 @@
 <script src="data/classes/paladino.js"></script>
 <script src="data/classes/psionico.js"></script>
 <script src="data/classes/clerigo.js"></script>
+<script src="data/classes/guerreiro.js"></script>
+<script src="data/classes/ladino.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -64,10 +66,70 @@
    automático (scroll + destaque) na primeira seleção faltante.
 
    ESCOPO ATUAL (funcionando): Bruxo, Bárbaro, Bardo, Mago, Paladino,
-   Psiônico e Clérigo (nível 1 apenas), todas as 10 espécies do PHB 2024,
-   os 16 antecedentes do PHB 2024. FALTAM do PHB: Druida, Feiticeiro,
-   Guardião, Guerreiro, Ladino, Monge. Todas já mapeadas na planilha
+   Psiônico, Clérigo, Guerreiro e Ladino (nível 1 apenas), todas as 10
+   espécies do PHB 2024, os 16 antecedentes do PHB 2024. FALTAM do PHB:
+   Druida, Feiticeiro, Guardião, Monge. Todas já mapeadas na planilha
    classes_phb2024.xlsx.
+
+   ✅ LADINO (nível 1) — CONCLUÍDO. Dados em data/classes/ladino.js.
+   Particularidades:
+   - PRIMEIRA classe com proficiência de arma FILTRADA por propriedade,
+     não só por categoria: Simples (todas) + Marciais que tenham Acuidade
+     OU Leve. Isso motivou adicionar um campo novo "propriedades" (array)
+     em CADA arma de WEAPON_MASTERY (data/weapon-mastery.js) — reaproveitei
+     os dados que já tinha extraído pra planilha classes_phb2024.xlsx (aba
+     Maestria — Armas) em vez de reabrir o PDF. A lista de Maestria em
+     Arma do Ladino já usa esse filtro de verdade
+     (categoria==='Simples' || propriedades.includes('Acuidade'|'Leve')).
+     Monge também tem esse tipo de filtro (só Leve) — quando entrar, dá
+     pra reusar o mesmo campo "propriedades".
+   - CONFERIDO no PDF: Maestria em Arma do Ladino (2 armas) também NÃO se
+     restringe a Corpo a Corpo, mesma regra de Paladino/Guerreiro.
+   - Especialista (escolha 2 perícias já proficientes) só pode escolher
+     entre perícias que o personagem JÁ tem (classe + antecedente +
+     Habilidoso) — toggleLadinoSkill() faz cascade removendo do
+     Especialista se a perícia de classe for desmarcada depois.
+   - PENDÊNCIA REGISTRADA A PEDIDO DO USUÁRIO: Gíria do Ladrão concede
+     Gíria dos Ladrões + 1 idioma à escolha, mas o app AINDA NÃO TEM
+     nenhum seletor de idiomas (não existe ALL_LANGUAGES nem nada
+     parecido). Ficou como texto informativo/placeholder — mesma decisão
+     já tomada pros instrumentos musicais do Bardo. Ao revisar isso,
+     CONFERIR O LIVRO DO JOGADOR (capítulo 2, tabelas de idiomas) antes
+     de codar a lista, não usar de memória. Essa pendência + a dos
+     instrumentos do Bardo deviam ser resolvidas juntas numa leva própria
+     de "escolhas de idioma/ferramenta" quando o usuário pedir.
+   - CA não precisou do tratamento "não calculada automaticamente" (ao
+     contrário de Paladino/Clérigo/Guerreiro) — o equipamento padrão do
+     Ladino é Armadura de Couro, então a fórmula simplificada de Couro +
+     Destreza que já existia serve normalmente.
+
+   ✅ GUERREIRO (nível 1) — CONCLUÍDO. Dados em data/classes/guerreiro.js.
+   Duas particularidades novas:
+   - PRIMEIRA classe com TRÊS opções de equipamento inicial (A/B/C), não
+     só A/B. Schema mudou: equipmentB agora é lista de itens (igual A) +
+     equipmentB_gold (sobra), e equipmentC_gold é a opção só-em-ouro (que
+     nas outras classes era equipmentB_gold). startingGold() e o bloco de
+     equipamento do renderSummary() foram generalizados pra checar 'C'
+     também — como nenhuma outra classe tem equipmentC_gold definido,
+     isso não afeta nada que já existia.
+   - Estilo de Luta (escolha 1 talento entre 10) é um sub-sistema
+     transversal (CONFIRMADO: outras classes também concedem Estilo de
+     Luta — Paladino no nível 2, por exemplo), mas por enquanto os dados
+     estão só dentro de GUERREIRO.estiloDeLuta, extraídos da aba
+     "Talentos" da planilha de magias (coluna Categoria="Estilo de Luta").
+     Se uma 2ª classe também conceder Estilo de Luta nível 1 (nenhuma
+     tem, é sempre nível 2+ nas outras), vale extrair pra um arquivo
+     separado tipo data/fighting-styles.js, no mesmo espírito do
+     weapon-mastery.js.
+   - Maestria em Arma do Guerreiro tem 3 armas (não 2) e, CONFERIDO no PDF
+     (pág. 126), também não se restringe a Corpo a Corpo — mesma regra do
+     Paladino, diferente do Bárbaro. Já são 2 classes "sem restrição" e 1
+     "com restrição" (Bárbaro) — continuar conferindo caso a caso pras que
+     faltam (Guardião, Ladino também têm Maestria em Arma nível 1).
+   - CA não calculada automaticamente (mesmo tratamento de Paladino/
+     Clérigo — Opção A vem com Cota de Malha). Já são 3 classes com esse
+     tratamento — Guardião é a 4ª que provavelmente vai precisar (tem
+     Escudo), pode valer a pena generalizar numa função só nessa hora.
 
    ✅ CLÉRIGO (nível 1) — CONCLUÍDO. Dados em data/classes/clerigo.js.
    Particularidade nova: Ordem Divina (Protetor ou Taumaturgo) é uma
@@ -96,14 +158,27 @@
    Mesmo formato do Bardo (2 truques + 4 magias preparadas, sem livro
    separado como o Mago) — Poder Psiônico (Dados de Energia Psiônica,
    Impulso Telecinético, Conexão Telepática) e Telecinese Sutil (Mão
-   Mágica grátis) são só texto informativo, sem escolha nível 1. Truques
-   e magias de 1º círculo vieram DIRETO das tabelas do PDF do UA que já
-   estavam no contexto da conversa (pág. 8) — não precisou reabrir nada,
-   nem a planilha de magias (essa planilha cobre "PHB 2024 + UA Psion" no
-   nome mas as magias exclusivas do UA como Arremesso Telecinético e
-   Sifão de Vida não têm entrada em SPELL_DETAILS, então não mostram o
-   botão de detalhe "ⓘ" na tela — isso é esperado, spellChoiceList() já
-   lida bem com isso, não é bug).
+   Mágica grátis) são só texto informativo, sem escolha nível 1.
+   - CORREÇÃO (feita depois da primeira versão): os nomes de truques/
+     magias inicialmente vieram direto do texto do PDF do UA, mas a
+     tradução do UA diverge da planilha oficial de magias em pelo menos 3
+     casos ("Amizade"→"Amigos", "Prestidigitação"→"Prestidigitação
+     Arcana", "Sifão de Vida"→"Sifão Vital" — mesma magia, nome
+     diferente). Já corrigido em data/classes/psionico.js, com nota lá
+     explicando. Ao usar qualquer nome de magia vindo do PDF do UA de
+     novo, MELHOR conferir contra a coluna "Psiônico" da planilha de
+     magias antes de usar o texto do UA direto — a planilha já cobre
+     "PHB 2024 + UA Psion" no nome, é a fonte de nomes oficiais.
+   - 🔜 PENDÊNCIA (não urgente, não afeta o fluxo básico de criação):
+     o UA também tem "Talentos de Talento Selvagem" (Wild Talent feats —
+     Atmocinese, Biocinese, Clarividência, Criocinese, Empata, Modelador
+     de Carne, Sussurrador Mental, Trapaceiro Psiônico, Psicinético,
+     Pirocinese) que ainda NÃO estão implementados em lugar nenhum do
+     app — nem como talento de antecedente (Nobre/Sábio podem trocar o
+     talento de origem por um desses) nem como opção de talento genérico.
+     Isso só importa quando a gente for mexer em talentos/antecedentes de
+     novo, não trava a criação de personagem Psiônico hoje. Revisar
+     nessa hora — não é sobre magias, é sobre feats.
 
    ✅ PALADINO (nível 1) — CONCLUÍDO. Dados em data/classes/paladino.js.
    Particularidades:
@@ -425,7 +500,7 @@
    colocar em CLASSES faz ela nunca aparecer na tela (bug já aconteceu com
    o Psiônico — CLASSES só tinha as 12 do PHB por padrão). */
 const CLASSES = ["Bárbaro","Bardo","Bruxo","Clérigo","Druida","Feiticeiro","Guardião","Guerreiro","Ladino","Mago","Monge","Paladino","Psiônico"];
-const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico","Clérigo"];
+const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico","Clérigo","Guerreiro","Ladino"];
 
 /* Mesmo padrão do BACKGROUND_DATA_KEY/BACKGROUND_CONST, mas pra classes.
    NUNCA hardcodar "data.classe==='Bárbaro' ? BARBARO : BRUXO" de novo em
@@ -434,8 +509,8 @@ const ENABLED_CLASSES = ["Bruxo","Bárbaro","Bardo","Mago","Paladino","Psiônico
    se ramificando por nome de classe (if/else), porque cada classe nível 1
    tem recursos bem diferentes entre si — só os campos COMUNS (equipamento,
    proficiências de arma/armadura, perícias) usam esses mapas. */
-const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago", "Paladino":"paladino", "Psiônico":"psionico", "Clérigo":"clerigo" };
-const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO, "Paladino":PALADINO, "Psiônico":PSIONICO, "Clérigo":CLERIGO };
+const CLASS_DATA_KEY = { "Bruxo":"bruxo", "Bárbaro":"barbaro", "Bardo":"bardo", "Mago":"mago", "Paladino":"paladino", "Psiônico":"psionico", "Clérigo":"clerigo", "Guerreiro":"guerreiro", "Ladino":"ladino" };
+const CLASS_CONST = { "Bruxo":BRUXO, "Bárbaro":BARBARO, "Bardo":BARDO, "Mago":MAGO, "Paladino":PALADINO, "Psiônico":PSIONICO, "Clérigo":CLERIGO, "Guerreiro":GUERREIRO, "Ladino":LADINO };
 function activeClassData(){
   const key = CLASS_DATA_KEY[data.classe] || 'bruxo';
   return data[key];
@@ -648,6 +723,14 @@ const CLASS_INFO = {
   "Clérigo": {
     descricao: "Sacerdote que canaliza o poder divino de um deus, panteão ou entidade imortal para curar aliados e castigar inimigos.",
     fields: [["Atributo Principal","Sabedoria"],["Dado de Vida","d8"],["Complexidade","Média"]]
+  },
+  "Guerreiro": {
+    descricao: "Mestre versátil de armas e armaduras, com treinamento amplo em técnicas de combate e destaque num estilo especializado.",
+    fields: [["Atributo Principal","Força ou Destreza"],["Dado de Vida","d10"],["Complexidade","Baixa"]]
+  },
+  "Ladino": {
+    descricao: "Especialista em furtividade e golpes precisos, que usa astúcia e as fraquezas do inimigo em vez de força bruta.",
+    fields: [["Atributo Principal","Destreza"],["Dado de Vida","d8"],["Complexidade","Baixa"]]
   }
 };
 
@@ -762,6 +845,8 @@ let data = {
   paladino: { skills: [], maestria: [], prepared: [], equipment: null },
   psionico: { skills: [], cantrips: [], spells1: [], equipment: null },
   clerigo: { skills: [], ordem: null, cantrips: [], spells1: [], equipment: null },
+  guerreiro: { skills: [], estilo: null, maestria: [], equipment: null },
+  ladino: { skills: [], especialista: [], maestria: [], equipment: null },
   attrs: {},
   shop: { purchases: {} },
   returnToSummary: false,
@@ -896,6 +981,22 @@ function findFirstMissingGroup(){
         if(!cl.equipment) return 'grp-1-equipment';
         return null;
       }
+      if(data.classe==='Guerreiro'){
+        const gr = data.guerreiro;
+        if(gr.skills.length!==2) return 'grp-1-skills';
+        if(!gr.estilo) return 'grp-1-estilo';
+        if(gr.maestria.length!==GUERREIRO.maestriaCount) return 'grp-1-maestria';
+        if(!gr.equipment) return 'grp-1-equipment';
+        return null;
+      }
+      if(data.classe==='Ladino'){
+        const ld = data.ladino;
+        if(ld.skills.length!==LADINO.skillsCount) return 'grp-1-skills';
+        if(ld.especialista.length!==LADINO.especialistaCount) return 'grp-1-especialista';
+        if(ld.maestria.length!==LADINO.maestriaCount) return 'grp-1-maestria';
+        if(!ld.equipment) return 'grp-1-equipment';
+        return null;
+      }
       const b = data.bruxo;
       if(b.skills.length!==2) return 'grp-1-skills';
       if(!b.pactBoon) return 'grp-1-pact';
@@ -1012,6 +1113,14 @@ function canAdvance(){
         const cl = data.clerigo;
         return cl.skills.length===2 && !!cl.ordem && cl.cantrips.length===clerigoEffectiveCantripsCount() && cl.spells1.length===CLERIGO.preparedCount && !!cl.equipment;
       }
+      if(data.classe==='Guerreiro'){
+        const gr = data.guerreiro;
+        return gr.skills.length===2 && !!gr.estilo && gr.maestria.length===GUERREIRO.maestriaCount && !!gr.equipment;
+      }
+      if(data.classe==='Ladino'){
+        const ld = data.ladino;
+        return ld.skills.length===LADINO.skillsCount && ld.especialista.length===LADINO.especialistaCount && ld.maestria.length===LADINO.maestriaCount && !!ld.equipment;
+      }
       const b = data.bruxo;
       return b.skills.length===2 && !!b.pactBoon &&
         b.cantrips.length===2 &&
@@ -1044,7 +1153,7 @@ function render(){
   const c = document.getElementById('cardContent');
   let html = '';
   if(step===0) html = renderClassStep();
-  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : (data.classe==='Paladino') ? renderPaladinoDetail() : (data.classe==='Psiônico') ? renderPsionicoDetail() : (data.classe==='Clérigo') ? renderClerigoDetail() : renderBruxoDetail();
+  else if(step===1) html = (data.classe==='Bárbaro') ? renderBarbaroDetail() : (data.classe==='Bardo') ? renderBardoDetail() : (data.classe==='Mago') ? renderMagoDetail() : (data.classe==='Paladino') ? renderPaladinoDetail() : (data.classe==='Psiônico') ? renderPsionicoDetail() : (data.classe==='Clérigo') ? renderClerigoDetail() : (data.classe==='Guerreiro') ? renderGuerreiroDetail() : (data.classe==='Ladino') ? renderLadinoDetail() : renderBruxoDetail();
   else if(step===2) html = renderBackgroundStep();
   else if(step===3) html = renderSimpleBackgroundDetail(activeBgConst());
   else if(step===4) html = renderSpeciesStep();
@@ -1897,6 +2006,112 @@ function renderClerigoDetail(){
   ${nav(canAdvance())}`;
 }
 
+function renderGuerreiroDetail(){
+  const gr = data.guerreiro;
+  return `<h2>Guerreiro — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Força ou Destreza · Dado de Vida: d10 · Salvaguardas: Força e Constituição · Armas Simples e Marciais · Armadura Leve, Média, Pesada e Escudo</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha 2)</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = GUERREIRO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), gr.skills, 2, 'toggleGuerreiroSkill');
+  })()}
+  <div class="counter ${gr.skills.length===2?'ok':''}">${gr.skills.length}/2 escolhidas</div>
+
+  <h3 id="grp-1-estilo">Estilo de Luta (escolha 1 talento)</h3>
+  ${Object.entries(GUERREIRO.estiloDeLuta).map(([name,desc])=>`
+    <div class="option-block ${gr.estilo===name?'selected':''}">
+      <h3 style="color:var(--gold);margin-top:0;">${name}</h3><p>${desc}</p>
+      <button class="pick-btn" data-pick="${name}" data-fn="pickGuerreiroEstilo">${gr.estilo===name?'Selecionado':'Escolher'}</button>
+    </div>`).join('')}
+
+  <h3 id="grp-1-maestria">Maestria em Arma (escolha ${GUERREIRO.maestriaCount}, com as quais você tem proficiência)</h3>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
+      const sel = gr.maestria.includes(name);
+      const disabled = !sel && gr.maestria.length>=GUERREIRO.maestriaCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="toggleGuerreiroMaestria"`} title="${w.mastery}: ${MASTERY_PROPERTIES[w.mastery]}">${name} (${w.mastery})</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${gr.maestria.length===GUERREIRO.maestriaCount?'ok':''}">${gr.maestria.length}/${GUERREIRO.maestriaCount} escolhidas</div>
+
+  <h3>Recuperar Fôlego</h3>
+  <div class="option-block">${GUERREIRO.recuperarFolego}</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${gr.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...GUERREIRO.equipmentA, GUERREIRO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickGuerreiroEquip">${gr.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${gr.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${[...GUERREIRO.equipmentB, GUERREIRO.equipmentB_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickGuerreiroEquip">${gr.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${gr.equipment==='C'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção C</h3><p>${GUERREIRO.equipmentC_gold} PO</p>
+    <button class="pick-btn" data-pick="C" data-fn="pickGuerreiroEquip">${gr.equipment==='C'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
+function renderLadinoDetail(){
+  const ld = data.ladino;
+  return `<h2>Ladino — Detalhes da Classe</h2>
+  <div class="intro">Atributo Primário: Destreza · Dado de Vida: d8 · Salvaguardas: Destreza e Inteligência · Armas Simples e Marciais com Acuidade ou Leve · Armadura Leve · Ferramentas de Ladrão (automático)</div>
+
+  <h3 id="grp-1-skills">Perícias (escolha ${LADINO.skillsCount})</h3>
+  <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const alreadyHave = [...bgConst.skills, ...activeBgData().habilidoso];
+    const available = LADINO.skills.filter(s=>!alreadyHave.includes(s));
+    return groupedChoiceList(skillGroupsByAbility(available), ld.skills, LADINO.skillsCount, 'toggleLadinoSkill');
+  })()}
+  <div class="counter ${ld.skills.length===LADINO.skillsCount?'ok':''}">${ld.skills.length}/${LADINO.skillsCount} escolhidas</div>
+
+  <h3>Ataque Furtivo</h3>
+  <div class="option-block">${LADINO.ataqueFurtivo}</div>
+
+  <h3 id="grp-1-especialista">Especialista (escolha ${LADINO.especialistaCount} perícias já proficientes)</h3>
+  <div class="intro" style="margin-bottom:8px;">Dobra o bônus de proficiência nessas perícias. Só pode escolher entre as que você já tem (da classe, do antecedente, ou de Habilidoso).</div>
+  ${(()=>{
+    const bgConst = activeBgConst();
+    const jaProficiente = [...new Set([...ld.skills, ...bgConst.skills, ...activeBgData().habilidoso])].filter(s=>ALL_SKILLS.includes(s));
+    if(jaProficiente.length===0) return `<div class="intro">Escolha primeiro suas perícias acima.</div>`;
+    return groupedChoiceList(skillGroupsByAbility(jaProficiente), ld.especialista, LADINO.especialistaCount, 'toggleLadinoEspecialista');
+  })()}
+  <div class="counter ${ld.especialista.length===LADINO.especialistaCount?'ok':''}">${ld.especialista.length}/${LADINO.especialistaCount} escolhidas</div>
+
+  <h3>Gíria do Ladrão</h3>
+  <div class="option-block">${LADINO.giriaDoLadrao}</div>
+
+  <h3 id="grp-1-maestria">Maestria em Arma (escolha ${LADINO.maestriaCount}, com as quais você tem proficiência)</h3>
+  <div class="intro" style="margin-bottom:8px;">Só armas Simples ou Marciais com Acuidade/Leve aparecem aqui — é o que o Ladino tem proficiência pra usar. Você pode trocar essa escolha ao completar um Descanso Longo.</div>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${Object.entries(WEAPON_MASTERY).filter(([,w])=>w.categoria==='Simples' || w.propriedades.includes('Acuidade') || w.propriedades.includes('Leve')).map(([name,w])=>{
+      const sel = ld.maestria.includes(name);
+      const disabled = !sel && ld.maestria.length>=LADINO.maestriaCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="toggleLadinoMaestria"`} title="${w.mastery}: ${MASTERY_PROPERTIES[w.mastery]}">${name} (${w.mastery})</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${ld.maestria.length===LADINO.maestriaCount?'ok':''}">${ld.maestria.length}/${LADINO.maestriaCount} escolhidas</div>
+
+  <h3 id="grp-1-equipment">Equipamento Inicial</h3>
+  <div class="option-block ${ld.equipment==='A'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...LADINO.equipmentA, LADINO.equipmentA_gold+' PO'].join(', ')}</p>
+    <button class="pick-btn" data-pick="A" data-fn="pickLadinoEquip">${ld.equipment==='A'?'Selecionado':'Escolher'}</button>
+  </div>
+  <div class="option-block ${ld.equipment==='B'?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">Opção B</h3><p>${LADINO.equipmentB_gold} PO</p>
+    <button class="pick-btn" data-pick="B" data-fn="pickLadinoEquip">${ld.equipment==='B'?'Selecionado':'Escolher'}</button>
+  </div>
+  ${nav(canAdvance())}`;
+}
+
 function getBonusFor(ability){
   const plan = activeBgData().abilityPlan;
   if(!plan) return 0;
@@ -1939,7 +2154,7 @@ function renderAttrs(){
 function startingGold(){
   const clsConst = activeClassConst();
   const cls = activeClassData();
-  const clsGold = cls.equipment==='B' ? clsConst.equipmentB_gold : (cls.equipment==='A' ? clsConst.equipmentA_gold : 0);
+  const clsGold = cls.equipment==='C' ? clsConst.equipmentC_gold : cls.equipment==='B' ? clsConst.equipmentB_gold : (cls.equipment==='A' ? clsConst.equipmentA_gold : 0);
   const bgConst = activeBgConst();
   const bg = activeBgData();
   const bgGold = bg.equipment==='B' ? bgConst.equipmentB_gold : (bg.equipment==='A' ? bgConst.equipmentA_gold : 0);
@@ -2012,6 +2227,8 @@ function renderSummary(){
   const isPaladino = data.classe==='Paladino';
   const isPsionico = data.classe==='Psiônico';
   const isClerigo = data.classe==='Clérigo';
+  const isGuerreiro = data.classe==='Guerreiro';
+  const isLadino = data.classe==='Ladino';
   const cls = activeClassData();
   const clsConst = activeClassConst();
   const t = data.tiefling;
@@ -2026,7 +2243,7 @@ function renderSummary(){
   const conMod = mod(finalScore('Constituição'));
   const dexMod = mod(finalScore('Destreza'));
   const spellMod = (isMago || isPsionico) ? intMod : isClerigo ? wisMod : carMod; // atributo de conjuração varia por classe
-  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico) ? (6 + conMod) : isPaladino ? (10 + conMod) : (8 + conMod);
+  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico) ? (6 + conMod) : (isPaladino || isGuerreiro) ? (10 + conMod) : (8 + conMod);
   const ac = isBarbaro ? (10 + dexMod + conMod) : (isMago || isPsionico) ? (10 + dexMod) : (11 + dexMod);
   const dc = 8 + prof + spellMod;
   const atkMagic = prof + spellMod;
@@ -2043,6 +2260,10 @@ function renderSummary(){
     ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
     : isClerigo
     ? `PV: ${hp} (1d8) · CA: depende da armadura equipada (Cota de Malha Parcial + Escudo, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
+    : isGuerreiro
+    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo. Sem conjuração.`
+    : isLadino
+    ? `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · Sem conjuração.`
     : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
 
   const classFeatureBlock = isBarbaro ? `
@@ -2076,6 +2297,16 @@ function renderSummary(){
     <b>${cls.ordem}</b><br>
     Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
     Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  </div></div>` : isGuerreiro ? `
+  <div class="summary-section"><h3>Estilo de Luta, Maestria em Arma e Recuperar Fôlego <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Estilo de Luta: <span class="pill-static">${cls.estilo}</span><br>
+    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
+  </div></div>` : isLadino ? `
+  <div class="summary-section"><h3>Ataque Furtivo, Especialista, Gíria do Ladrão e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    Especialista: ${cls.especialista.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
+    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
   </div></div>` : `
   <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
@@ -2111,7 +2342,7 @@ function renderSummary(){
 
   <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
   <div class="content">
-    ${(cls.equipment==='A'?[...clsConst.equipmentA, clsConst.equipmentA_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    ${(cls.equipment==='A'?[...clsConst.equipmentA, clsConst.equipmentA_gold+' PO']:cls.equipment==='B' && clsConst.equipmentB?[...clsConst.equipmentB, clsConst.equipmentB_gold+' PO']:cls.equipment==='C'?[clsConst.equipmentC_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
     ${(bg.equipment==='A'?[...bgEquipA, bgConst.equipmentA_gold+' PO']:[bgConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>
 
@@ -2146,6 +2377,8 @@ function resetWizard(){
     paladino:{skills:[],maestria:[],prepared:[],equipment:null},
     psionico:{skills:[],cantrips:[],spells1:[],equipment:null},
     clerigo:{skills:[],ordem:null,cantrips:[],spells1:[],equipment:null},
+    guerreiro:{skills:[],estilo:null,maestria:[],equipment:null},
+    ladino:{skills:[],especialista:[],maestria:[],equipment:null},
     attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
@@ -2248,6 +2481,25 @@ function pickClerigoOrdem(v){
 function toggleClerigoCantrip(v){ const s=data.clerigo.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<clerigoEffectiveCantripsCount())s.push(v); persist(); render(); }
 function toggleClerigoSpell1(v){ const s=data.clerigo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<CLERIGO.preparedCount)s.push(v); persist(); render(); }
 function pickClerigoEquip(v){ data.clerigo.equipment=v; persist(); render(); }
+function toggleGuerreiroSkill(v){ const s=data.guerreiro.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickGuerreiroEstilo(v){ data.guerreiro.estilo=v; persist(); render(); }
+function toggleGuerreiroMaestria(v){ const s=data.guerreiro.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUERREIRO.maestriaCount)s.push(v); persist(); render(); }
+function pickGuerreiroEquip(v){ data.guerreiro.equipment=v; persist(); render(); }
+function toggleLadinoSkill(v){
+  const ld = data.ladino;
+  const i = ld.skills.indexOf(v);
+  if(i>=0){
+    ld.skills.splice(i,1);
+    const ei = ld.especialista.indexOf(v);
+    if(ei>=0) ld.especialista.splice(ei,1); // perícia saiu do pool de "já proficiente", sai do Especialista também
+  } else if(ld.skills.length<LADINO.skillsCount){
+    ld.skills.push(v);
+  }
+  persist(); render();
+}
+function toggleLadinoEspecialista(v){ const s=data.ladino.especialista; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<LADINO.especialistaCount)s.push(v); persist(); render(); }
+function toggleLadinoMaestria(v){ const s=data.ladino.maestria; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<LADINO.maestriaCount)s.push(v); persist(); render(); }
+function pickLadinoEquip(v){ data.ladino.equipment=v; persist(); render(); }
 
 /* Retorna o(s) truque(s) que a ESPÉCIE já concede de graça (ex: Legado Ínfero
    do Tiferino), pra excluir da lista de truques da classe — senão a pessoa

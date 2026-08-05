@@ -13,51 +13,56 @@ const MASTERY_PROPERTIES = {
   "Trespassar": "Se atingir corpo a corpo, pode fazer um segundo ataque com a mesma arma contra outra criatura próxima ao alvo, sem somar seu mod. de atributo ao dano extra (1x por turno)."
 };
 
-/* Nome da arma -> {categoria: "Simples"|"Marcial", tipo: "Corpo a Corpo"|"À Distância", mastery}.
-   Cobre as armas do capítulo de Equipamento. O campo "noShop" marca armas
-   que ainda não existem no SHOP do app (armas Marciais, principalmente —
-   ver PENDÊNCIA no index.html sobre expandir o SHOP). */
+/* Nome da arma -> {categoria: "Simples"|"Marcial", tipo: "Corpo a Corpo"|"À Distância", mastery, propriedades}.
+   Cobre as armas do capítulo de Equipamento. "propriedades" é a lista de
+   propriedades da arma (Leve, Acuidade, Duas Mãos, Pesada, Versátil,
+   Arremesso, Munição, Recarga, Extensão) SEM os números de alcance/dado
+   entre parênteses — útil pra filtrar por proficiência restrita (ex:
+   Ladino só tem proficiência com Marciais que sejam Acuidade OU Leve).
+   O campo "noShop" marca armas que ainda não existem no SHOP do app
+   (armas Marciais, principalmente — ver PENDÊNCIA no index.html sobre
+   expandir o SHOP). */
 const WEAPON_MASTERY = {
   // Simples Corpo a Corpo
-  "Adaga": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil"},
-  "Azagaia": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Lentidão"},
-  "Cajado": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Derrubar"},
-  "Clava": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Lentidão"},
-  "Clava Grande": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Empurrar"},
-  "Foice": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil"},
-  "Lança": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Drenar"},
-  "Maça": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Drenar"},
-  "Machadinha": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Afligir"},
-  "Martelo Leve": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil"},
+  "Adaga": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil", propriedades:["Acuidade", "Arremesso", "Leve"]},
+  "Azagaia": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Lentidão", propriedades:["Arremesso"]},
+  "Cajado": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Derrubar", propriedades:["Versátil"]},
+  "Clava": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Lentidão", propriedades:["Leve"]},
+  "Clava Grande": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Empurrar", propriedades:["Duas Mãos"]},
+  "Foice": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil", propriedades:["Leve"]},
+  "Lança": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Drenar", propriedades:["Arremesso", "Versátil"]},
+  "Maça": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Drenar", propriedades:[]},
+  "Machadinha": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Afligir", propriedades:["Arremesso", "Leve"]},
+  "Martelo Leve": {categoria:"Simples", tipo:"Corpo a Corpo", mastery:"Ágil", propriedades:["Arremesso", "Leve"]},
   // Simples À Distância
-  "Arco Curto": {categoria:"Simples", tipo:"À Distância", mastery:"Afligir"},
-  "Besta Leve": {categoria:"Simples", tipo:"À Distância", mastery:"Lentidão"},
-  "Dardo": {categoria:"Simples", tipo:"À Distância", mastery:"Afligir", noShop:true},
-  "Funda": {categoria:"Simples", tipo:"À Distância", mastery:"Lentidão", noShop:true},
+  "Arco Curto": {categoria:"Simples", tipo:"À Distância", mastery:"Afligir", propriedades:["Duas Mãos", "Munição"]},
+  "Besta Leve": {categoria:"Simples", tipo:"À Distância", mastery:"Lentidão", propriedades:["Duas Mãos", "Munição", "Recarga"]},
+  "Dardo": {categoria:"Simples", tipo:"À Distância", mastery:"Afligir", noShop:true, propriedades:["Acuidade", "Arremesso"]},
+  "Funda": {categoria:"Simples", tipo:"À Distância", mastery:"Lentidão", noShop:true, propriedades:["Munição"]},
   // Marciais Corpo a Corpo
-  "Alabarda": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Trespassar", noShop:true},
-  "Chicote": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Lentidão", noShop:true},
-  "Cimitarra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Ágil", noShop:true},
-  "Espada Curta": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Afligir", noShop:true},
-  "Espada Grande": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Garantido", noShop:true},
-  "Espada Longa": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true},
-  "Glaive": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Garantido", noShop:true},
-  "Lança de Montaria": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true},
-  "Lança Longa": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Empurrar", noShop:true},
-  "Maça Estrela": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true},
-  "Machado de Batalha": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true},
-  "Machado Grande": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Trespassar", noShop:true},
-  "Malho": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true},
-  "Mangual": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true},
-  "Martelo de Guerra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Empurrar", noShop:true},
-  "Picareta de Guerra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true},
-  "Rapieira": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Afligir", noShop:true},
-  "Tridente": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true},
+  "Alabarda": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Trespassar", noShop:true, propriedades:["Duas Mãos", "Extensão", "Pesada"]},
+  "Chicote": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Lentidão", noShop:true, propriedades:["Acuidade", "Extensão"]},
+  "Cimitarra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Ágil", noShop:true, propriedades:["Acuidade", "Leve"]},
+  "Espada Curta": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Afligir", noShop:true, propriedades:["Acuidade", "Leve"]},
+  "Espada Grande": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Garantido", noShop:true, propriedades:["Duas Mãos", "Pesada"]},
+  "Espada Longa": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true, propriedades:["Versátil"]},
+  "Glaive": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Garantido", noShop:true, propriedades:["Duas Mãos", "Extensão", "Pesada"]},
+  "Lança de Montaria": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true, propriedades:["Duas Mãos", "Extensão", "Pesada"]},
+  "Lança Longa": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Empurrar", noShop:true, propriedades:["Duas Mãos", "Extensão", "Pesada"]},
+  "Maça Estrela": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true, propriedades:[]},
+  "Machado de Batalha": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true, propriedades:["Versátil"]},
+  "Machado Grande": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Trespassar", noShop:true, propriedades:["Duas Mãos", "Pesada"]},
+  "Malho": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true, propriedades:["Duas Mãos", "Pesada"]},
+  "Mangual": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true, propriedades:[]},
+  "Martelo de Guerra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Empurrar", noShop:true, propriedades:["Versátil"]},
+  "Picareta de Guerra": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Drenar", noShop:true, propriedades:["Versátil"]},
+  "Rapieira": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Afligir", noShop:true, propriedades:["Acuidade"]},
+  "Tridente": {categoria:"Marcial", tipo:"Corpo a Corpo", mastery:"Derrubar", noShop:true, propriedades:["Arremesso", "Versátil"]},
   // Marciais À Distância
-  "Arco Longo": {categoria:"Marcial", tipo:"À Distância", mastery:"Lentidão", noShop:true},
-  "Besta de Mão": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true},
-  "Besta Pesada": {categoria:"Marcial", tipo:"À Distância", mastery:"Empurrar", noShop:true},
-  "Mosquete": {categoria:"Marcial", tipo:"À Distância", mastery:"Lentidão", noShop:true},
-  "Pistola": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true},
-  "Zarabatana": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true}
+  "Arco Longo": {categoria:"Marcial", tipo:"À Distância", mastery:"Lentidão", noShop:true, propriedades:["Duas Mãos", "Munição", "Pesada"]},
+  "Besta de Mão": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true, propriedades:["Leve", "Munição", "Recarga"]},
+  "Besta Pesada": {categoria:"Marcial", tipo:"À Distância", mastery:"Empurrar", noShop:true, propriedades:["Duas Mãos", "Munição", "Pesada", "Recarga"]},
+  "Mosquete": {categoria:"Marcial", tipo:"À Distância", mastery:"Lentidão", noShop:true, propriedades:["Duas Mãos", "Munição", "Recarga"]},
+  "Pistola": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true, propriedades:["Munição", "Recarga"]},
+  "Zarabatana": {categoria:"Marcial", tipo:"À Distância", mastery:"Afligir", noShop:true, propriedades:["Munição", "Recarga"]}
 };
