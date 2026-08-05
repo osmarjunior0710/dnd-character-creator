@@ -163,7 +163,9 @@
       o que já foi concedido pela classe + antecedente (equipamento
       inicial fixo) somado ao que for comprado na loja. Ajuda a não
       perder a visão geral enquanto compra.
-   6. PENDENTE: os botões Voltar/Avançar (função nav()) deveriam ficar
+   6. PENDENTE (CONFIRMADO PELO USUÁRIO EM TESTE MOBILE — nav() ainda
+      rola junto com a página, listas ficaram grandes com a Loja
+      expandida): os botões Voltar/Avançar (função nav()) deveriam ficar
       ANCORADOS NA TELA (sticky/fixed), não rolando junto com a página —
       principalmente importante no mobile, pra não precisar rolar até o
       fim toda vez que quiser avançar.
@@ -175,11 +177,37 @@
       referencia os 16 consts de antecedente (CHARLATAO, NOBRE, etc.) que
       só existem de verdade quando os respectivos data/backgrounds/*.js
       estão carregados via <script> — nesta sessão eu só tinha
-      artista.js e acolito.js, então NÃO CONSEGUI TESTAR
-      computeMaxPossibleGold() em runtime (só sintaxe com node --check,
-      que não executa). Testar de verdade no ambiente real do usuário,
-      com todos os 16 antecedentes carregados, antes de confiar 100%
-      nisso — funciona no papel, mas nunca rodou de fato ainda.
+      artista.js e acolito.js, então não consegui testar em runtime aqui
+      (só sintaxe com node --check). ✅ CONFIRMADO PELO USUÁRIO em teste
+      real no celular: apareceu "205 PO" de Restante pra um Guerreiro —
+      bate exatamente com 155 (Guerreiro Opção C) + 50 (algum
+      antecedente com equipmentB_gold=50, ex. Artista) = 205. Funciona
+      de verdade, não só no papel.
+   8. ✅ FEITO (usuário testou no celular e pediu 2 ajustes): a tabela da
+      Loja estourava a tela no mobile (coluna Qtd. cortada fora da
+      viewport) — agora usa layout de "cartão" empilhado abaixo de
+      700px (cada linha vira um bloco com rótulos, via atributo
+      data-label + CSS, técnica clássica de tabela responsiva). Também
+      virou colapsável: cada categoria agora é um <details>/<summary>
+      nativo (shop-category), com contador de itens visível no
+      cabeçalho. O estado aberto/fechado de cada categoria é lembrado em
+      data.shop.collapsedCats (senão resetaria toda vez que o usuário
+      mexe na quantidade de um item, já que render() reconstrói a tela
+      inteira) — toggleShopCategory() só salva o estado, não chama
+      render(). css/styles.css foi criado nesta sessão (reconstruído a
+      partir do anexo original da conversa) já com esses estilos.
+   9. 🔜 PENDENTE NOVA (achada pelo usuário em teste, registrar pra
+      revisar depois, NÃO mexer agora): é possível escolher a MESMA
+      perícia em fontes diferentes ao mesmo tempo (ex: classe E
+      antecedente E espécie), quando o ideal seria uma fonte bloquear a
+      perícia nas outras (evitar duplicar proficiência à toa). Hoje só
+      Bruxo/Bárbaro/etc. filtram perícias já escolhidas pelo
+      ANTECEDENTE (activeBgConst().skills + habilidoso) na hora de
+      montar a lista de escolha — não filtram o que a ESPÉCIE ou outra
+      fonte podem ter concedido. Resolver isso provavelmente exige uma
+      função central tipo "todas as perícias já garantidas por qualquer
+      fonte" (espécie + antecedente + classe já escolhida) reusada em
+      todo lugar que hoje faz esse filtro parcialmente.
    - Marco: fecha o ciclo "uma classe por vez" que começou com o Bárbaro.
      Depois da Loja, outras frentes possíveis: progressão de nível 2+,
      Talentos de Talento Selvagem do UA, arquivos de Guarda/Soldado/Nobre
@@ -1008,7 +1036,7 @@ let data = {
   guardiao: { skills: [], spells1: [], maestria: [], equipment: null },
   idiomas: { comuns: [], extra: [] },
   attrs: {},
-  shop: { purchases: {} },
+  shop: { purchases: {}, collapsedCats: {} },
   returnToSummary: false,
   freeAbilityRule: false
 };
@@ -2642,24 +2670,29 @@ function renderShop(){
     if(cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
     const visibleItems = cat.items.filter(it => it.c <= maxGold);
     if(visibleItems.length===0) return;
-    html += `<h3>${catName}</h3>
+    const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
+    html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
+    <summary>${catName} <span class="cat-count">(${visibleItems.length} ${visibleItems.length===1?'item':'itens'})</span></summary>
     <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
     ${visibleItems.map(it=>{
       const qty = purchases[it.n]||0;
       const maxQty = maxAffordableQty(it.n) + qty; // limite considerando o que já foi gasto neste item
       const atCap = qty>=maxQty;
-      const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px; max-width:220px;">${it.cont}</div>` : '';
+      const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px;">${it.cont}</div>` : '';
       return `<tr>
-        <td>${it.n}${contHtml}</td><td>${it.d}</td><td style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
-        <td>${fmtGold(it.c)} PO</td>
-        <td><div class="qty-cell">
+        <td data-label="Item">${it.n}${contHtml}</td>
+        <td data-label="Dano/Efeito">${it.d}</td>
+        <td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
+        <td data-label="Custo">${fmtGold(it.c)} PO</td>
+        <td data-label="Qtd."><div class="qty-cell">
           <button class="btn small" data-fn="shopDec" data-pick="${it.n}">−</button>
           <input type="number" min="0" max="${maxQty}" value="${qty}" data-fn="shopSet" data-item="${it.n}">
           <button class="btn small" data-fn="shopInc" data-pick="${it.n}" ${atCap?'disabled title="Ouro insuficiente"':''}>+</button>
         </div></td>
       </tr>`;
     }).join('')}
-    </tbody></table>`;
+    </tbody></table>
+    </details>`;
   });
 
   const cartEntries = Object.entries(purchases).filter(([,q])=>q>0);
@@ -2873,7 +2906,7 @@ function resetWizard(){
     monge:{skills:[],equipment:null},
     guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
     idiomas:{comuns:[],extra:[]},
-    attrs:{}, shop:{purchases:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
+    attrs:{}, shop:{purchases:{},collapsedCats:{}}, returnToSummary:false, freeAbilityRule:false }, bgDataInit);
   persist(); render();
 }
 
@@ -3173,6 +3206,11 @@ function shopSetQty(name, qty){
 }
 function shopInc(name){ shopSetQty(name, (data.shop.purchases[name]||0)+1); }
 function shopDec(name){ shopSetQty(name, Math.max(0,(data.shop.purchases[name]||0)-1)); }
+function toggleShopCategory(detailsEl){
+  if(!data.shop.collapsedCats) data.shop.collapsedCats={};
+  data.shop.collapsedCats[detailsEl.dataset.cat] = !detailsEl.open;
+  persist(); // não chama render() — o <details> já se abre/fecha sozinho, só precisamos lembrar o estado pra próxima renderização
+}
 
 async function init(){
   await restore();
