@@ -1382,84 +1382,16 @@ function returnToSummaryNow(){
   data.returnToSummary=false; goTo(9);
 }
 
+/* Antes disso era um switch(step) de ~80 linhas reimplementando, campo por
+   campo, exatamente a mesma validação de findFirstMissingGroup() (só que
+   devolvendo bool em vez do id do grupo faltante) — toda classe/espécie
+   nova precisava ser atualizada nas DUAS funções, em dois formatos
+   diferentes, e era fácil esquecer uma. Verificado caso a caso (steps 0-7)
+   que as duas eram logicamente equivalentes; steps 8 (Loja) e 9 (Resumo)
+   não têm campo obrigatório nas duas (findFirstMissingGroup cai no
+   default:null igual canAdvance caía em true). */
 function canAdvance(){
-  switch(step){
-    case 0: return !!data.classe;
-    case 1: {
-      if(data.classe==='Bárbaro'){
-        const bb = data.barbaro;
-        return bb.skills.length===2 && bb.maestria.length===BARBARO.maestriaCount && !!bb.equipment;
-      }
-      if(data.classe==='Bardo'){
-        const bd = data.bardo;
-        return bd.skills.length===BARDO.skillsCount && bd.instruments.length===BARDO.toolsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
-      }
-      if(data.classe==='Mago'){
-        const mg = data.mago;
-        return mg.skills.length===2 && mg.cantrips.length===MAGO.cantripsCount && mg.spellbook.length===MAGO.spellbookCount && mg.prepared.length===MAGO.preparedCount && !!mg.equipment;
-      }
-      if(data.classe==='Paladino'){
-        const pl = data.paladino;
-        return pl.skills.length===2 && pl.prepared.length===PALADINO.preparedCount && pl.maestria.length===PALADINO.maestriaCount && !!pl.equipment;
-      }
-      if(data.classe==='Psiônico'){
-        const ps = data.psionico;
-        return ps.skills.length===2 && ps.cantrips.length===PSIONICO.cantripsCount && ps.spells1.length===PSIONICO.preparedCount && !!ps.equipment;
-      }
-      if(data.classe==='Clérigo'){
-        const cl = data.clerigo;
-        return cl.skills.length===2 && !!cl.ordem && cl.cantrips.length===clerigoEffectiveCantripsCount() && cl.spells1.length===CLERIGO.preparedCount && !!cl.equipment;
-      }
-      if(data.classe==='Guerreiro'){
-        const gr = data.guerreiro;
-        return gr.skills.length===2 && !!gr.estilo && gr.maestria.length===GUERREIRO.maestriaCount && !!gr.equipment;
-      }
-      if(data.classe==='Ladino'){
-        const ld = data.ladino;
-        return ld.skills.length===LADINO.skillsCount && ld.especialista.length===LADINO.especialistaCount && ld.maestria.length===LADINO.maestriaCount && !!ld.equipment;
-      }
-      if(data.classe==='Druida'){
-        const dr = data.druida;
-        return dr.skills.length===2 && !!dr.ordem && dr.cantrips.length===druidaEffectiveCantripsCount() && dr.spells1.length===DRUIDA.preparedCount && !!dr.equipment;
-      }
-      if(data.classe==='Feiticeiro'){
-        const ft = data.feiticeiro;
-        return ft.skills.length===2 && ft.cantrips.length===FEITICEIRO.cantripsCount && ft.spells1.length===FEITICEIRO.preparedCount && !!ft.equipment;
-      }
-      if(data.classe==='Monge'){
-        const mk = data.monge;
-        return mk.skills.length===2 && !!mk.equipment;
-      }
-      if(data.classe==='Guardião'){
-        const gd = data.guardiao;
-        return gd.skills.length===GUARDIAO.skillsCount && gd.spells1.length===GUARDIAO.preparedCount && gd.maestria.length===GUARDIAO.maestriaCount && !!gd.equipment;
-      }
-      const b = data.bruxo;
-      return b.skills.length===2 && !!b.pactBoon &&
-        b.cantrips.length===2 &&
-        (b.pactBoon!=='Pacto do Tomo' || b.tomoCantrips.length===3) &&
-        b.spells1.length===2 &&
-        (b.pactBoon!=='Pacto do Tomo' || b.tomoRituals.length===2) &&
-        !!b.equipment;
-    }
-    case 2: return !!data.antecedente;
-    case 3: {
-      const bg = activeBgData();
-      const plan = bg.abilityPlan;
-      const planOk = plan && (plan.type==='2-1' ? (!!plan.plus2 && !!plan.plus1) : (plan.plusOnes||[]).length===3);
-      const ferramentaOk = !activeBgConst().ferramentaOpcoes || !!bg.ferramentaEscolhida;
-      const iniciadoOk = !activeBgConst().iniciadoEmMagia || (bg.iniciadoCantrips.length===2 && bg.iniciadoSpell1.length===1);
-      const habilidosoOk = !activeBgConst().feat.startsWith('Habilidoso') || bg.habilidoso.length===3;
-      return planOk && ferramentaOk && iniciadoOk && !!bg.equipment && habilidosoOk;
-    }
-    case 4: return !!data.especie;
-    case 5: return (data.especie==='Pequenino' || data.especie==='Anão' || data.especie==='Orc') ? true : (data.especie==='Humano' ? !!(data.humano.tamanho && data.humano.pericia && data.humano.talento) : (data.especie==='Draconato' ? !!data.draconato.heranca : (data.especie==='Elfo' ? !!(data.elfo.pericia && data.elfo.linhagem) : (data.especie==='Gnomo' ? !!(data.gnomo.linhagem && data.gnomo.atributoLinhagem) : (data.especie==='Golias' ? !!data.golias.ancestralidade : (data.especie==='Aasimar' ? !!data.aasimar.tamanho : !!(data.tiefling.tamanho && data.tiefling.legado && data.tiefling.atributoLegado)))))));
-    case 6: return data.idiomas.comuns.length===2 && (data.classe!=='Ladino' || data.idiomas.extra.length===1);
-    case 7: return ABILITIES.every(a=>data.attrs[a]!==undefined);
-    case 8: return true;
-    case 9: return true;
-    default: return false;
-  }
+  return findFirstMissingGroup()===null;
 }
 
 function render(){
