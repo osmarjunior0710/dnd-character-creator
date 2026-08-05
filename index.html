@@ -36,6 +36,7 @@
 <script src="data/classes/monge.js"></script>
 <script src="data/classes/guardiao.js"></script>
 <script src="data/languages.js"></script>
+<script src="data/instruments.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -326,12 +327,21 @@
    - Truques/magias de 1º círculo: extraídos da planilha
      D_D_5_5_-_Magias_e_Talentos.xlsx (coluna "Bardo"=Sim), NÃO do PDF —
      13 truques, 23 magias de 1º círculo.
-   - Ferramentas (Instrumento Musical ×3): registrado só como texto
-     informativo (BARDO.toolsNote), SEM seletor de instrumentos
-     específicos ainda — decisão combinada com o usuário, mesma pendência
-     que já existia no antecedente Artista (e existirá em Guarda/Soldado
-     quando entrarem). Revisar tudo isso junto numa leva própria de
-     "ferramentas de verdade" quando o usuário pedir.
+   - ✅ Ferramentas (Instrumento Musical ×3) — RESOLVIDO. Seletor de
+     verdade agora, usando ALL_INSTRUMENTS (data/instruments.js, os 10 do
+     capítulo 6: Alaúde, Flauta, Flauta de Pã, Gaita de Foles, Lira, Oboé,
+     Tambor, Trombeta, Violino, Xilofone). Campo BARDO.toolsCount=3,
+     escolha em data.bardo.instruments, grupo grp-1-instruments.
+     ATUALIZAÇÃO: o antecedente Artista (data/backgrounds/artista.js) já
+     tinha essa lista completa e correta desde antes — só precisou trocar
+     pra referenciar ALL_INSTRUMENTS em vez de duplicar o array (evita
+     desalinhamento futuro entre Bardo e Artista). Único ajuste de
+     conteúdo: minha primeira extração do PDF tinha saído "Flauta de Pan"
+     (sem til, provavelmente erro de OCR/extração) — corrigido pra
+     "Flauta de Pã", que é o que o artista.js (já revisado antes) usava.
+     Guarda/Soldado/Nobre ainda não foram conferidos (arquivos não
+     chegaram nesta sessão) — se tiverem o mesmo tipo de escolha de
+     ferramenta, aplicar ALL_INSTRUMENTS neles também quando chegar a vez.
    - Inspiração de Bardo não tem escolha do jogador no nível 1 (é sempre
      concedida) — só texto informativo, igual Fúria/Defesa sem Armadura
      do Bárbaro.
@@ -965,7 +975,7 @@ let data = {
   sabio: { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] },
   bruxo: { skills: [], pactBoon: null, cantrips: [], tomoCantrips: [], spells1: [], tomoRituals: [], equipment: null },
   barbaro: { skills: [], maestria: [], equipment: null },
-  bardo: { skills: [], cantrips: [], spells1: [], equipment: null },
+  bardo: { skills: [], cantrips: [], spells1: [], instruments: [], equipment: null },
   mago: { skills: [], cantrips: [], spellbook: [], prepared: [], equipment: null },
   paladino: { skills: [], maestria: [], prepared: [], equipment: null },
   psionico: { skills: [], cantrips: [], spells1: [], equipment: null },
@@ -1072,6 +1082,7 @@ function findFirstMissingGroup(){
       if(data.classe==='Bardo'){
         const bd = data.bardo;
         if(bd.skills.length!==BARDO.skillsCount) return 'grp-1-skills';
+        if(bd.instruments.length!==BARDO.toolsCount) return 'grp-1-instruments';
         if(bd.cantrips.length!==2) return 'grp-1-cantrips';
         if(bd.spells1.length!==4) return 'grp-1-spells1';
         if(!bd.equipment) return 'grp-1-equipment';
@@ -1261,7 +1272,7 @@ function canAdvance(){
       }
       if(data.classe==='Bardo'){
         const bd = data.bardo;
-        return bd.skills.length===BARDO.skillsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
+        return bd.skills.length===BARDO.skillsCount && bd.instruments.length===BARDO.toolsCount && bd.cantrips.length===2 && bd.spells1.length===4 && !!bd.equipment;
       }
       if(data.classe==='Mago'){
         const mg = data.mago;
@@ -1978,7 +1989,7 @@ function renderBarbaroDetail(){
 function renderBardoDetail(){
   const bd = data.bardo;
   return `<h2>Bardo — Detalhes da Classe</h2>
-  <div class="intro">Atributo Primário: Carisma · Dado de Vida: d8 · Salvaguardas: Destreza e Carisma · Armas Simples · Armadura Leve · ${BARDO.toolsNote}</div>
+  <div class="intro">Atributo Primário: Carisma · Dado de Vida: d8 · Salvaguardas: Destreza e Carisma · Armas Simples · Armadura Leve</div>
 
   <h3 id="grp-1-skills">Perícias (escolha ${BARDO.skillsCount}, QUAISQUER — sem lista restrita)</h3>
   <div class="intro" style="margin-bottom:8px;">Perícias que você já tem por outro recurso não aparecem aqui (escolhê-las de novo não dá benefício extra).</div>
@@ -1989,6 +2000,16 @@ function renderBardoDetail(){
     return groupedChoiceList(skillGroupsByAbility(available), bd.skills, BARDO.skillsCount, 'toggleBardoSkill');
   })()}
   <div class="counter ${bd.skills.length===BARDO.skillsCount?'ok':''}">${bd.skills.length}/${BARDO.skillsCount} escolhidas</div>
+
+  <h3 id="grp-1-instruments">Ferramentas — Instrumentos Musicais (escolha ${BARDO.toolsCount})</h3>
+  <div class="check-list" style="margin-bottom:6px;">
+    ${ALL_INSTRUMENTS.map(name=>{
+      const sel = bd.instruments.includes(name);
+      const disabled = !sel && bd.instruments.length>=BARDO.toolsCount;
+      return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="toggleBardoInstrument"`}>${name}</div>`;
+    }).join('')}
+  </div>
+  <div class="counter ${bd.instruments.length===BARDO.toolsCount?'ok':''}">${bd.instruments.length}/${BARDO.toolsCount} escolhidos</div>
 
   <h3>Inspiração de Bardo</h3>
   <div class="option-block">${BARDO.inspiracao}</div>
@@ -2694,8 +2715,9 @@ function renderSummary(){
   <div class="content">
     Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
   </div></div>` : isBardo ? `
-  <div class="summary-section"><h3>Inspiração de Bardo, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="summary-section"><h3>Inspiração de Bardo, Instrumentos, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
   <div class="content">
+    Instrumentos: ${cls.instruments.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
     Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
     Magias: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>` : isMago ? `
@@ -2816,7 +2838,7 @@ function resetWizard(){
     pequenino:{},
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
-    bardo:{skills:[],cantrips:[],spells1:[],equipment:null},
+    bardo:{skills:[],cantrips:[],spells1:[],instruments:[],equipment:null},
     mago:{skills:[],cantrips:[],spellbook:[],prepared:[],equipment:null},
     paladino:{skills:[],maestria:[],prepared:[],equipment:null},
     psionico:{skills:[],cantrips:[],spells1:[],equipment:null},
@@ -2894,6 +2916,7 @@ function pickBarbaroEquip(v){ data.barbaro.equipment=v; persist(); render(); }
 function toggleBardoSkill(v){ const s=data.bardo.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<BARDO.skillsCount)s.push(v); persist(); render(); }
 function toggleBardoCantrip(v){ const s=data.bardo.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleBardoSpell1(v){ const s=data.bardo.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<4)s.push(v); persist(); render(); }
+function toggleBardoInstrument(v){ const s=data.bardo.instruments; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<BARDO.toolsCount)s.push(v); persist(); render(); }
 function pickBardoEquip(v){ data.bardo.equipment=v; persist(); render(); }
 function toggleMagoSkill(v){ const s=data.mago.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleMagoCantrip(v){ const s=data.mago.cantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<MAGO.cantripsCount)s.push(v); persist(); render(); }
