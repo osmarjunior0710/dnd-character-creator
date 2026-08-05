@@ -116,8 +116,19 @@
         data.tiefling/data.pequenino entre personagens — as outras 8
         espécies carregavam sub-escolhas do personagem anterior. Ver
         freshSpeciesData() perto de resetWizard().
-      - "Talentos de Talento Selvagem" do UA (10 talentos do Psiônico,
-        Atmocinese/Biocinese/etc.) não implementados em lugar nenhum.
+      - ✅ RESOLVIDO (Claude Code): "Talentos de Talento Selvagem" do UA
+        (10 talentos do Psiônico, Atmocinese/Biocinese/etc.) já existiam
+        completos em data/feats.js mas não estavam ligados a nenhuma UI.
+        Ligados ao Versátil do Humano (único lugar do app que já era uma
+        escolha livre de talento por nome) — ver talentosSelvagens em
+        renderHumanoDetail(). Adicionado campo Fonte em
+        renderFeatDetailCard() (ⓘ) pra deixar claro que é UA Psiônico
+        2025, não PHB, já que agora aparecem lado a lado com talentos de
+        Origem oficiais. PENDÊNCIA NOVA achada nesse meio-tempo (não
+        resolvida, fora de escopo): a tela de Resumo não mostra NENHUMA
+        escolha do passo 5 (detalhe de espécie) — nem o próprio Versátil/
+        Hábil do Humano, nem Sentidos Aguçados do Elfo, nem Linhagem do
+        Gnomo etc. Revisar quando mexer no resumo/export de novo.
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
         ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
         antigo de fato), mas cada um duplicava o mesmo array de 4
@@ -463,16 +474,14 @@
      novo, MELHOR conferir contra a coluna "Psiônico" da planilha de
      magias antes de usar o texto do UA direto — a planilha já cobre
      "PHB 2024 + UA Psion" no nome, é a fonte de nomes oficiais.
-   - 🔜 PENDÊNCIA (não urgente, não afeta o fluxo básico de criação):
-     o UA também tem "Talentos de Talento Selvagem" (Wild Talent feats —
-     Atmocinese, Biocinese, Clarividência, Criocinese, Empata, Modelador
-     de Carne, Sussurrador Mental, Trapaceiro Psiônico, Psicinético,
-     Pirocinese) que ainda NÃO estão implementados em lugar nenhum do
-     app — nem como talento de antecedente (Nobre/Sábio podem trocar o
-     talento de origem por um desses) nem como opção de talento genérico.
-     Isso só importa quando a gente for mexer em talentos/antecedentes de
-     novo, não trava a criação de personagem Psiônico hoje. Revisar
-     nessa hora — não é sobre magias, é sobre feats.
+   - ✅ RESOLVIDO (Claude Code): o UA também tem "Talentos de Talento
+     Selvagem" (Wild Talent feats — Atmocinese, Biocinese, Clarividência,
+     Criocinese, Empata, Modelador de Carne, Sussurrador Mental,
+     Trapaceiro Psiônico, Psicinético, Pirocinese), já cadastrados em
+     data/feats.js mas sem UI. Resolvido pela opção "talento genérico"
+     citada aqui embaixo (não pela troca de talento de antecedente, que
+     continua sem implementar): ligados ao Versátil do Humano — ver
+     talentosSelvagens em renderHumanoDetail(), perto de talentosOrigem.
 
    ✅ PALADINO (nível 1) — CONCLUÍDO. Dados em data/classes/paladino.js.
    Particularidades:
@@ -1455,6 +1464,7 @@ function renderFeatDetailCard(d){
       ${d.nivelMinimo?`<span><b>Nível mínimo:</b> ${d.nivelMinimo}</span>`:''}
       ${d.repetivel?`<span><b>Repetível</b></span>`:''}
       ${d.pagina?`<span><b>Página:</b> ${d.pagina}</span>`:''}
+      ${d.fonte?`<span><b>Fonte:</b> ${d.fonte}</span>`:''}
     </div>
     ${d.outroPreRequisito?`<div><b>Pré-requisito:</b> ${d.outroPreRequisito}</div>`:''}
     <div>${d.beneficios}</div>
@@ -1646,6 +1656,7 @@ function renderOrcDetail(){
 function renderHumanoDetail(){
   const h = data.humano;
   const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem' && n!==backgroundFeatBaseName());
+  const talentosSelvagens = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Talento Selvagem' && n!==backgroundFeatBaseName());
   return `<h2>Humano</h2>
   <p class="species-flavor">${HUMANO.flavor}</p>
   <div class="species-facts">
@@ -1666,6 +1677,8 @@ function renderHumanoDetail(){
   <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
   <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente e não aparece aqui.</div>
   ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento')}
+  <div class="intro" style="margin:10px 0 8px;">Talentos Selvagens (Unearthed Arcana 2025 — não é conteúdo oficial do PHB, ligado ao Psiônico): o Versátil também permite escolher um destes em vez de um talento de Origem.</div>
+  ${featPickList(talentosSelvagens, h.talento, 'pickHumanoTalento')}
   ${nav(canAdvance())}`;
 }
 
