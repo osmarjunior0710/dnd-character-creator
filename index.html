@@ -3422,7 +3422,11 @@ function renderSpellEntryList(entries){
 function characterSheetAsText(sheet){
   const L = [];
   const push = (...s) => L.push(s.join(''));
-  push(`${data.characterName || '(sem nome)'} — ${sheet.identidade.classe} 1, ${sheet.identidade.especie}, Antecedente ${sheet.identidade.antecedente}`);
+  const t = data.tiefling;
+  push(data.characterName || '(sem nome)');
+  push(`Classe: ${sheet.identidade.classe} 1`);
+  push(`Antecedente: ${sheet.identidade.antecedente}`);
+  push(`Espécie: ${sheet.identidade.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''}`);
   push(`Bônus de Proficiência: ${fmt(sheet.identidade.profBonus)}`);
   push('');
   push('ATRIBUTOS, SALVAGUARDAS E PERÍCIAS:');
@@ -3511,7 +3515,10 @@ function renderSummary(){
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
   <div class="content">
     <input type="text" placeholder="Nome do personagem" value="${(data.characterName||'').replace(/"/g,'&quot;')}" oninput="setCharacterName(this.value)" style="margin-bottom:8px;">
-    ${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente} · Bônus de Proficiência ${fmt(sheet.identidade.profBonus)}
+    <div style="margin-bottom:4px;"><b>Classe:</b> ${data.classe} 1</div>
+    <div style="margin-bottom:4px;"><b>Antecedente:</b> ${data.antecedente}</div>
+    <div style="margin-bottom:4px;"><b>Espécie:</b> ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''}</div>
+    <div><b>Bônus de Proficiência:</b> ${fmt(sheet.identidade.profBonus)}</div>
   </div></div>
 
   <div class="summary-section"><h3>Atributos, Salvaguardas e Perícias <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
