@@ -961,6 +961,52 @@
    - SHOP (linha ~285, itens da loja) também ainda está solto aqui dentro;
      pode virar data/shop.js separado depois, sem relação direta com os
      antecedentes — não misturar as duas tarefas.
+
+   REVISÃO GERAL (engenharia + design mobile-first) — pedida pelo usuário
+   quando o projeto tava perto de fechar, pra listar o que falta antes de
+   perder de vista. Cada item tem o estado atual; times futuros: procure
+   pelo texto entre aspas antes de assumir que já foi feito.
+   - ✅ RESOLVIDO (Claude Code): "persistência nunca funcionou de verdade"
+     — persist()/restore() chamavam window.storage.get/set (API de
+     Artifact do claude.ai, injetada só naquele runtime), que nunca
+     existiu num site estático do GitHub Pages. Todo clique tentava
+     salvar, falhava calado, e o indicador no header ficava preso em "—"
+     desde o 1º clique — qualquer reload/troca de app no celular perdia
+     o personagem inteiro, sem aviso nenhum ao jogador. Trocado por
+     localStorage direto (síncrono, sem precisar de API externa) —
+     persist() grava em 'char_wizard_state', restore() lê de volta.
+     Testado: escolher classe + perícias + navegar de passo, dar reload,
+     e o estado volta certinho (classe, perícias, passo atual).
+   - 🔜 PENDENTE: botões flutuantes (Mochila/Randomizar, position:fixed
+     ancorados só no topo via positionMochilaFloater()/
+     positionRandomizarFloater()) cobrem o conteúdo por baixo deles ao
+     rolar a tela em telas com lista longa (Classe 13 cards, Antecedente
+     16, Espécie 10, Loja) — confirmado com screenshot em 375px, texto do
+     Feiticeiro ficando ilegível atrás do "🎲 Randomizar". Não reagem a
+     scroll nenhum, só ao resize.
+   - 🔜 PENDENTE: "Passo —" sem número nos títulos de Idiomas (passo 6) e
+     Atributos (passo 7) — os outros 3 passos numerados (Classe/
+     Antecedente/Espécie) têm "Passo 1/2/3", esses dois têm um "—" literal
+     no lugar do número, parece placeholder esquecido.
+   - 🔜 PENDENTE (arquitetura, sem pressa): app inteiro é um único
+     <script> de ~4600 linhas/230 funções dentro do index.html, sem
+     módulos nem testes automatizados no repo — toda validação de sessão
+     usa Playwright ad-hoc escrito e descartado na hora, nada fica pra
+     próxima vez. + 50 <script src> separados só pra carregar data/*.js
+     (50 round-trips antes do app inicializar, dava pra virar 1 bundle).
+   - 🔜 PENDENTE (limpeza pequena): CLASSES/ENABLED_CLASSES, SPECIES/
+     ENABLED_SPECIES, BACKGROUNDS/ENABLED_BACKGROUNDS são hoje listas
+     idênticas (tudo habilitado) — o mecanismo de "em breve" do
+     choiceGrid() nunca mais dispara, dava pra virar uma lista só por
+     categoria. Onclick inline (~30 lugares) e data-fn/data-pick
+     delegado via attachStepHandlers() (~70 lugares) também coexistem
+     sem motivo, valeria escolher um padrão só.
+   - 🔜 IDEIA DE DESIGN (não é bug): sem modo escuro (paleta 100% clara);
+     nome do personagem só aparece no Resumo (passo 9, nunca antes); sem
+     "Passo 3 de 10" em texto (só os tracinhos, pequenos demais em
+     375px); só Array Padrão pra atributos (sem Compra por Pontos/
+     Rolagem) — simplificação legítima pro "free and easy" do README,
+     mas é a limitação mais sentida por quem já joga.
    ========================================================================== */
 
 /* CLASSES = lista MESTRE pra grade de seleção (todas as 12 do PHB + qualquer
@@ -1308,9 +1354,9 @@ function persist(){
   clearTimeout(saveTimer);
   document.getElementById('saveText').textContent = 'salvando…';
   document.getElementById('saveDot').style.opacity='1';
-  saveTimer = setTimeout(async ()=>{
+  saveTimer = setTimeout(()=>{
     try{
-      await window.storage.set('char_wizard_state', JSON.stringify({step, data}));
+      localStorage.setItem('char_wizard_state', JSON.stringify({step, data}));
       document.getElementById('saveText').textContent='salvo';
       document.getElementById('saveDot').style.opacity='0.3';
     }catch(e){
@@ -1320,9 +1366,9 @@ function persist(){
 }
 async function restore(){
   try{
-    const r = await window.storage.get('char_wizard_state');
-    if(r && r.value){
-      const parsed = JSON.parse(r.value);
+    const raw = localStorage.getItem('char_wizard_state');
+    if(raw){
+      const parsed = JSON.parse(raw);
       step = parsed.step || 0;
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
@@ -2483,9 +2529,10 @@ function renderMochilaPopup(){
 
 /* Popup "Novidades" — resumo das últimas atualizações, mostrado uma vez
    na 1ª tela (Passo 1) quando há update novo desde a última vez que o
-   jogador fechou o popup (guardado em localStorage direto, não no
-   window.storage/persist() do personagem — é preferência do navegador,
-   não estado de ficha). Sempre só os 3 mais recentes: ao adicionar um
+   jogador fechou o popup (guardado em localStorage numa chave própria,
+   separada da chave 'char_wizard_state' do persist() — é preferência do
+   navegador sobre o QUE JÁ VIU, não estado de ficha). Sempre só os 3
+   mais recentes: ao adicionar um
    novo no topo, apaga o mais antigo do array em vez de deixar crescer.
    changelogOpen decidido 1x em init() (ver final do arquivo) comparando
    CHANGELOG[0].id salvo; fechar (✕ ou clique fora) grava esse id como
