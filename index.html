@@ -3614,6 +3614,82 @@ function computeToolProficiencies(clsConst, bgConst, bg){
   return [...new Set(tools)];
 }
 
+/* Checagem de duplicidade pro aviso no Resumo — as telas de escolha já
+   filtram a maioria das colisões em tempo real (ex: spellChoiceList()
+   tirando da lista o que a espécie já concede de graça), mas isso só
+   evita ESCOLHER de novo; não limpa uma escolha que já existia se o
+   jogador voltar e trocar espécie/antecedente/legado depois (só o Bruxo
+   trocando de Legado tem essa limpeza, em pickLegado()). Esta função
+   comprova o estado final inteiro, pegando qualquer coisa (perícia,
+   ferramenta, magia/truque ou talento) que apareça em mais de uma fonte
+   ao mesmo tempo, não importa como chegou lá. */
+const DUP_SOURCE_LABEL = {
+  classe: 'Classe',
+  antecedenteFixo: 'Antecedente',
+  habilidoso: 'Antecedente (Habilidoso)',
+  humano: 'Traço de Espécie (Humano)',
+  elfo: 'Traço de Espécie (Elfo)',
+  antecedenteIniciado: 'Antecedente (Iniciado em Magia)',
+  especie: 'Espécie',
+  humanoTalento: 'Talento Versátil (Humano)'
+};
+
+function mapDuplicatesBySource(bySource){
+  const nameToSources = {};
+  Object.keys(bySource).forEach(src=>{
+    (bySource[src]||[]).forEach(name=>{
+      if(!name) return;
+      if(!nameToSources[name]) nameToSources[name] = new Set();
+      nameToSources[name].add(DUP_SOURCE_LABEL[src] || src);
+    });
+  });
+  return Object.keys(nameToSources).filter(name=>nameToSources[name].size>1)
+    .map(name=>({nome:name, fontes:[...nameToSources[name]]}));
+}
+
+/* Mesmo switch por classe de computeSpellcasting(), mas devolvendo TODOS
+   os nomes escolhidos (sem o new Set() final) — pro Mago usa o Livro de
+   Magias inteiro (spellbook), não só o Preparado (prepared é só um
+   subconjunto do que já foi escolhido, então checar o livro cobre tudo). */
+function classSpellNamesRaw(cls){
+  switch(data.classe){
+    case 'Bruxo': return [...cls.cantrips, ...cls.tomoCantrips, ...cls.spells1, ...cls.tomoRituals];
+    case 'Mago': return [...cls.cantrips, ...cls.spellbook];
+    case 'Paladino': return [...cls.prepared];
+    case 'Guardião': return [...cls.spells1, 'Marca do Predador'];
+    case 'Druida': return [...cls.cantrips, ...cls.spells1, 'Falar com Animais'];
+    default: return [...cls.cantrips, ...cls.spells1];
+  }
+}
+
+function detectDuplicidades(sheet){
+  const pericias = mapDuplicatesBySource(skillsGrantedBySource())
+    .map(d=>({...d, tipo:'Perícia'}));
+  const ferramentas = mapDuplicatesBySource({
+    classe: (sheet.clsConst.toolsFixed ? [sheet.clsConst.toolsFixed] : []).concat(data.classe==='Bardo' ? data.bardo.instruments : []).concat(data.classe==='Monge' && data.monge.toolChoice ? [data.monge.toolChoice] : []),
+    antecedenteFixo: sheet.bgConst.ferramentaOpcoes ? (sheet.bg.ferramentaEscolhida ? [sheet.bg.ferramentaEscolhida] : []) : (sheet.bgConst.tool ? [sheet.bgConst.tool] : []),
+    habilidoso: (sheet.bg.habilidoso||[]).filter(x=>!ALL_SKILLS.includes(x))
+  }).map(d=>({...d, tipo:'Ferramenta'}));
+  const magias = mapDuplicatesBySource({
+    classe: classSpellNamesRaw(sheet.cls),
+    antecedenteIniciado: [...(sheet.bg.iniciadoCantrips||[]), ...(sheet.bg.iniciadoSpell1||[])],
+    especie: [...speciesGrantedCantrips(), ...speciesGrantedSpells()]
+  }).map(d=>({...d, tipo:'Magia/Truque'}));
+  const talentos = (data.especie==='Humano' && data.humano.talento && data.humano.talento===backgroundFeatBaseName())
+    ? [{nome:data.humano.talento, fontes:[DUP_SOURCE_LABEL.antecedenteFixo, DUP_SOURCE_LABEL.humanoTalento], tipo:'Talento'}]
+    : [];
+  return [...pericias, ...ferramentas, ...magias, ...talentos];
+}
+
+function renderDuplicidadesBox(dups){
+  if(!dups.length) return '';
+  return `<div class="dup-warning">
+    <div class="dup-warning-title">⚠️ Duplicidade ⚠️</div>
+    <div class="dup-warning-intro">O que está abaixo foi adquirido em mais de um lugar — a repetição não soma benefício extra, considere trocar uma das escolhas.</div>
+    ${dups.map(d=>`<div class="dup-warning-item"><b>${d.nome}</b> <span class="dup-warning-tipo">(${d.tipo})</span> — adquirido em ${d.fontes.length} lugares: ${d.fontes.join(', ')}</div>`).join('')}
+  </div>`;
+}
+
 function computeCharacterSheet(){
   const clsConst = activeClassConst();
   const cls = activeClassData();
@@ -3667,7 +3743,7 @@ function computeCharacterSheet(){
 
   const remaining = startingGold() - spentGold();
 
-  return {
+  const sheet = {
     identidade: {
       classe: data.classe, nivel: 1, antecedente: data.antecedente, especie: data.especie,
       profBonus: prof
@@ -3680,6 +3756,8 @@ function computeCharacterSheet(){
     equipamento: { itens: mochilaItems(), poRestante: remaining },
     especieConst, clsConst, bgConst, bg, cls
   };
+  sheet.duplicidades = detectDuplicidades(sheet);
+  return sheet;
 }
 
 function setCharacterName(v){ data.characterName = v; persist(); }
@@ -3862,7 +3940,7 @@ function renderSummary(){
     : `<div class="content">${ta.texto}</div>`;
 
   return `<h2>Ficha Concluída</h2>
-  <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto. Tudo já vem calculado (nível 1); traços de personalidade, aparência e história ficam de fora — são de interpretação livre, não mecânicos.</div>
+  ${renderDuplicidadesBox(sheet.duplicidades)}
 
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
   <div class="content">
