@@ -1965,7 +1965,7 @@ function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
 
 function renderSpeciesStep(){
   return `<h2>Passo 3 — Escolha sua Espécie</h2>
-  <div class="intro">Sua espécie define traços físicos e sobrenaturais natos — visão no escuro, resistências, truques grátis. Tiferino e Pequenino estão disponíveis neste protótipo.</div>
+  <div class="intro">Sua espécie define traços físicos e sobrenaturais natos — visão no escuro, resistências, truques grátis.</div>
   <div id="grp-4-especie">${choiceGrid(SPECIES, ENABLED_SPECIES, data.especie, 'pickSpecies')}</div>
   ${nav(canAdvance())}`;
 }
@@ -2296,7 +2296,7 @@ function tamanhoPickList(tamanho, selected, pickFn){
 
 function renderBackgroundStep(){
   return `<h2>Passo 2 — Escolha seu Antecedente</h2>
-  <div class="intro">O antecedente representa a vida do seu personagem antes da aventura: concede um talento, duas perícias, uma ferramenta e ajuda a definir os atributos. Só Charlatão está disponível neste protótipo.</div>
+  <div class="intro">O antecedente representa a vida do seu personagem antes da aventura: concede um talento, duas perícias, uma ferramenta e ajuda a definir os atributos.</div>
   <div id="grp-2-antecedente">${choiceGridWithInfo(BACKGROUNDS, ENABLED_BACKGROUNDS, data.antecedente, 'pickBackground', BACKGROUND_INFO)}</div>
   ${nav(canAdvance())}`;
 }
@@ -2532,7 +2532,7 @@ function renderSimpleBackgroundDetail(bgConst){
 
 function renderClassStep(){
   return `<h2>Passo 1 — Escolha sua Classe</h2>
-  <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia. Bruxo e Bárbaro estão disponíveis neste protótipo; as demais chegam em breve.</div>
+  <div class="intro">A classe define seu papel central: como você luta, sobrevive e (se aplicável) conjura magia.</div>
   <div id="grp-0-classe">${choiceGridWithInfo(CLASSES, ENABLED_CLASSES, data.classe, 'pickClass', CLASS_INFO)}</div>
   ${nav(canAdvance())}`;
 }
@@ -2613,7 +2613,7 @@ function renderBarbaroDetail(){
   <div class="option-block">${BARBARO.defesaSemArmadura}</div>
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${BARBARO.maestriaCount}, armas Corpo a Corpo Simples ou Marciais)</h3>
-  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim (você pode conseguir a arma depois em jogo).</div>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo.</div>
   <div class="check-list" style="margin-bottom:6px;">
     ${Object.entries(WEAPON_MASTERY).filter(([,w])=>w.tipo==='Corpo a Corpo').map(([name,w])=>{
       const sel = bb.maestria.includes(name);
@@ -2749,7 +2749,7 @@ function renderPaladinoDetail(){
   <div class="counter ${pl.prepared.length===PALADINO.preparedCount?'ok':''}">${pl.prepared.length}/${PALADINO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${PALADINO.maestriaCount}, com as quais você tem proficiência)</h3>
-  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo.</div>
   <div class="check-list" style="margin-bottom:6px;">
     ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
       const sel = pl.maestria.includes(name);
@@ -2886,7 +2886,7 @@ function renderGuerreiroDetail(){
     </div>`).join('')}
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${GUERREIRO.maestriaCount}, com as quais você tem proficiência)</h3>
-  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo.</div>
   <div class="check-list" style="margin-bottom:6px;">
     ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
       const sel = gr.maestria.includes(name);
@@ -3123,7 +3123,7 @@ function renderGuardiaoDetail(){
   <div class="counter ${gd.spells1.length===GUARDIAO.preparedCount?'ok':''}">${gd.spells1.length}/${GUARDIAO.preparedCount} escolhidas</div>
 
   <h3 id="grp-1-maestria">Maestria em Arma (escolha ${GUARDIAO.maestriaCount}, com as quais você tem proficiência)</h3>
-  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo. Armas Marciais ainda não estão à venda na Loja deste protótipo, mas a maestria pode ser escolhida mesmo assim.</div>
+  <div class="intro" style="margin-bottom:8px;">Você pode trocar essa escolha ao completar um Descanso Longo.</div>
   <div class="check-list" style="margin-bottom:6px;">
     ${Object.entries(WEAPON_MASTERY).map(([name,w])=>{
       const sel = gd.maestria.includes(name);
