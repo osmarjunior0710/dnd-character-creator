@@ -3652,6 +3652,7 @@ function mapDuplicatesBySource(bySource){
    Magias inteiro (spellbook), não só o Preparado (prepared é só um
    subconjunto do que já foi escolhido, então checar o livro cobre tudo). */
 function classSpellNamesRaw(cls){
+  if(!CLASS_SPELL_ABILITY[data.classe]) return [];
   switch(data.classe){
     case 'Bruxo': return [...cls.cantrips, ...cls.tomoCantrips, ...cls.spells1, ...cls.tomoRituals];
     case 'Mago': return [...cls.cantrips, ...cls.spellbook];
