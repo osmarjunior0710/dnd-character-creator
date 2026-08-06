@@ -226,6 +226,25 @@
         renderStatRows()) monta isso reaproveitando o mesmo componente
         visual de linha com bolinha de proficiência; characterSheetAsText()
         (botão Copiar Resumo) segue o mesmo agrupamento em texto puro.
+      - ✅ RESOLVIDO (Claude Code): popup de detalhe (ⓘ) pra Atributos/
+        Salvaguardas/Perícias no Resumo, mostrando de onde vem cada
+        número (pedido do usuário, mesmo padrão de interação da Mochila —
+        overlay cobrindo a tela, clique fora ou "✕" fecha). Cada entrada
+        de attrs/savingThrows/skills em computeCharacterSheet() ganhou um
+        campo `breakdown` (lista de {label,value}) além do valor final —
+        ver computeSkills()/computeSavingThrows() e a construção de
+        `attrs`. Especialista do Ladino (única fonte de proficiência
+        dobrada em perícia no nível 1 — nenhuma classe/espécie mais tem
+        isso nesse nível, conferido) aparece como 1 linha só já com o
+        valor dobrado, não 2 linhas de +prof separadas. Estado da UI
+        (statInfoOpen, guarda só a chave "tipo:nome") e renderização
+        (renderStatInfoPopup(), openStatInfo()/closeStatInfo()) ficam
+        perto de renderAttributeGroups(). Nova classe CSS
+        .info-btn-inline (menor que .info-btn, com display:inline-flex
+        em vez do display:flex herdado de .info-btn, que por ser "outer
+        display:block" quebrava linha dentro de .stat-name/.group-label
+        — só reaproveitar .info-btn direto ali causava esse bug visual,
+        corrigido antes de dar como pronto).
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
         ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
         antigo de fato), mas cada um duplicava o mesmo array de 4
@@ -3134,6 +3153,14 @@ function computeAC(classe, dexMod, conMod, wisMod){
    mesma) + Especialista do Ladino (proficiência dobrada) — reusa
    skillsGrantedBySource() (já existia pro sistema de deduplicação de
    escolhas) em vez de montar a lista nas mãos de novo. */
+/* Cada perícia/salvaguarda/atributo carrega um "breakdown" (lista de
+   {label, value}) além do bônus final — é a fonte de dados do popup de
+   detalhe (ⓘ) do Resumo, pedido do usuário pra mostrar de onde vem cada
+   número em vez de só o total. Especialista do Ladino (única fonte de
+   proficiência dobrada em nível 1 — nenhuma classe/espécie mais tem isso
+   nesse nível) aparece como uma linha só, já com o valor dobrado, em vez
+   de duas linhas de +prof cada, pra não confundir com 2 proficiências
+   diferentes. */
 function computeSkills(finalScore, prof){
   const bySource = skillsGrantedBySource();
   const proficient = new Set([].concat(...Object.values(bySource)));
@@ -3143,8 +3170,13 @@ function computeSkills(finalScore, prof){
     const abMod = mod(finalScore(ability));
     const isProf = proficient.has(skill);
     const isExpert = expertise.has(skill);
-    const bonus = abMod + (isExpert ? prof*2 : isProf ? prof : 0);
-    return {skill, ability, proficient:isProf, expertise:isExpert, bonus};
+    const profBonus = isExpert ? prof*2 : isProf ? prof : 0;
+    const bonus = abMod + profBonus;
+    const breakdown = [{label:`Mod. de ${ability}`, value: abMod}];
+    if(isExpert) breakdown.push({label:'Proficiência (Especialista — dobrada)', value: profBonus});
+    else if(isProf) breakdown.push({label:'Proficiência', value: profBonus});
+    else breakdown.push({label:'Sem proficiência', value: 0});
+    return {skill, ability, proficient:isProf, expertise:isExpert, bonus, breakdown};
   });
 }
 
@@ -3152,7 +3184,12 @@ function computeSavingThrows(clsConst, finalScore, prof){
   return ABILITIES.map(a=>{
     const abMod = mod(finalScore(a));
     const isProf = (clsConst.savingThrows||[]).includes(a);
-    return {ability:a, proficient:isProf, bonus: abMod + (isProf?prof:0)};
+    const profBonus = isProf ? prof : 0;
+    const breakdown = [
+      {label:`Mod. de ${a}`, value: abMod},
+      isProf ? {label:'Proficiência', value: profBonus} : {label:'Sem proficiência', value: 0}
+    ];
+    return {ability:a, proficient:isProf, bonus: abMod + profBonus, breakdown};
   });
 }
 
@@ -3321,7 +3358,13 @@ function computeCharacterSheet(){
   const especieConst = SPECIES_CONST[data.especie];
   const prof = PROF_BONUS_BY_LEVEL[1];
   const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
-  const attrs = ABILITIES.map(a=>({ability:a, score:finalScore(a), mod:mod(finalScore(a))}));
+  const attrs = ABILITIES.map(a=>{
+    const base = data.attrs[a]||0;
+    const bgBonus = getBonusFor(a);
+    const breakdown = [{label:'Valor Base', value: base, plain:true}];
+    if(bgBonus) breakdown.push({label:'Bônus do Antecedente', value: bgBonus});
+    return {ability:a, score: base+bgBonus, mod: mod(base+bgBonus), breakdown};
+  });
   const modOf = a => mod(finalScore(a));
 
   const savingThrows = computeSavingThrows(clsConst, finalScore, prof);
@@ -3380,8 +3423,10 @@ function setCharacterName(v){ data.characterName = v; persist(); }
 /* Linha de estatística com "bolinha" de proficiência (○ nenhuma, ●
    proficiente, ◆ com Especialista/dobrada) + valor com sinal — usada
    tanto pra Salvaguardas quanto Perícias, mesmo formato visual. */
+/* infoKey (opcional, "tipo:nome") liga a linha ao popup de detalhe (ⓘ) —
+   ver statInfoOpen/openStatInfo() logo abaixo. */
 function renderStatRows(rows){
-  return `<div class="stat-grid">${rows.map(r=>`<div class="stat-row ${r.marked?'prof':''}"><span class="stat-name">${r.dot} ${r.label}</span><span class="stat-bonus">${fmt(r.bonus)}</span></div>`).join('')}</div>`;
+  return `<div class="stat-grid">${rows.map(r=>`<div class="stat-row ${r.marked?'prof':''}"><span class="stat-name">${r.dot} ${r.label}${r.infoKey?`<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('${r.infoKey}')" title="Ver de onde vem esse número">ⓘ</button>`:''}</span><span class="stat-bonus">${fmt(r.bonus)}</span></div>`).join('')}</div>`;
 }
 
 /* Atributos + Salvaguardas + Perícias agrupados por atributo (como na
@@ -3395,14 +3440,57 @@ function renderAttributeGroups(sheet){
     const save = sheet.savingThrows.find(s=>s.ability===ability);
     const skillsForAbility = sheet.skills.filter(s=>s.ability===ability);
     const rows = [
-      {label:'Salvaguarda', bonus:save.bonus, marked:save.proficient, dot:save.proficient?'●':'○'},
-      ...skillsForAbility.map(s=>({label:s.skill, bonus:s.bonus, marked:s.proficient, dot:s.expertise?'◆':s.proficient?'●':'○'}))
+      {label:'Salvaguarda', bonus:save.bonus, marked:save.proficient, dot:save.proficient?'●':'○', infoKey:`salvaguarda:${ability}`},
+      ...skillsForAbility.map(s=>({label:s.skill, bonus:s.bonus, marked:s.proficient, dot:s.expertise?'◆':s.proficient?'●':'○', infoKey:`pericia:${s.skill}`}))
     ];
     return `<div class="attr-group" style="margin-bottom:14px;">
-      <div class="group-label">${ability} ${attr.score} (${fmt(attr.mod)})</div>
+      <div class="group-label">${ability} ${attr.score} (${fmt(attr.mod)})<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('atributo:${ability}')" title="Ver de onde vem esse número">ⓘ</button></div>
       ${renderStatRows(rows)}
     </div>`;
   }).join('');
+}
+
+/* Popup de detalhe (ⓘ) — mostra de onde vem o número de um atributo/
+   salvaguarda/perícia específico, mesmo padrão visual/interação da
+   Mochila (overlay cobrindo a tela, clique fora fecha, "✕" fecha).
+   statInfoOpen guarda só a chave "tipo:nome" (estado de UI puro, não
+   entra em data/persist() — mesmo padrão de mochilaOpen/
+   expandedSpellInfo). Pedido do usuário: "colocar um I que abre um popup
+   simples... mostrando de onde vem o valor". */
+let statInfoOpen = null;
+function openStatInfo(key){ statInfoOpen = (statInfoOpen===key) ? null : key; render(); }
+function closeStatInfo(){ statInfoOpen = null; render(); }
+
+function renderStatInfoPopup(sheet){
+  if(!statInfoOpen) return '';
+  const [tipo, nome] = statInfoOpen.split(':');
+  let title, total, totalPlain, breakdown;
+  if(tipo==='atributo'){
+    const a = sheet.attrs.find(x=>x.ability===nome);
+    if(!a) return '';
+    title = `${a.ability} — Valor Final`;
+    total = a.score; totalPlain = true; breakdown = a.breakdown;
+  } else if(tipo==='salvaguarda'){
+    const s = sheet.savingThrows.find(x=>x.ability===nome);
+    if(!s) return '';
+    title = `Salvaguarda de ${s.ability}`;
+    total = s.bonus; breakdown = s.breakdown;
+  } else if(tipo==='pericia'){
+    const s = sheet.skills.find(x=>x.skill===nome);
+    if(!s) return '';
+    title = s.skill;
+    total = s.bonus; breakdown = s.breakdown;
+  } else return '';
+  return `<div class="mochila-overlay" onclick="closeStatInfo()">
+    <div class="mochila-popup stat-info-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>${title}</h3>
+        <button class="btn small" onclick="closeStatInfo()">✕</button>
+      </div>
+      <div class="stat-grid">${breakdown.map(b=>`<div class="stat-row"><span class="stat-name">${b.label}</span><span class="stat-bonus">${b.plain?b.value:fmt(b.value)}</span></div>`).join('')}</div>
+      <div class="stat-row prof" style="margin-top:6px;border-top:1px solid var(--line);padding-top:8px;"><span class="stat-name"><b>Total</b></span><span class="stat-bonus">${totalPlain?total:fmt(total)}</span></div>
+    </div>
+  </div>`;
 }
 
 /* Truque/magia sempre expandido (não é a lista de ESCOLHA — aqui é só
@@ -3597,7 +3685,8 @@ function renderSummary(){
   <div class="nav">
     <button class="btn" onclick="back()">← Voltar</button>
     <button class="btn primary" onclick="resetWizard()">Iniciar Novo Personagem</button>
-  </div>`;
+  </div>
+  ${renderStatInfoPopup(sheet)}`;
 }
 
 /* Defaults "vazios" das 10 espécies (data.<chave>), num só lugar — usado
