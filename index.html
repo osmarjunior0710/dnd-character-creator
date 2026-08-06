@@ -4003,8 +4003,8 @@ function renderSummary(){
   ${talentoBlock}</div>
 
   <div class="summary-section"><h3>Traços de Espécie <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
-  <div class="content">${[...(especieConst.tracosFixos||[]), ...sheet.especieTracosExtras].map(tr=>`<div style="margin-bottom:8px;"><b style="color:var(--gold);">${tr.nome}</b><br>${tr.resumo}</div>`).join('')}
-  ${sheet.humanoTalento ? `<div style="margin-bottom:8px;"><b style="color:var(--gold);">Versátil: ${sheet.humanoTalento.nome}</b>${sheet.humanoTalento.detalhe ? renderFeatDetailCard(sheet.humanoTalento.detalhe) : ''}</div>` : ''}
+  <div class="content">${[...(especieConst.tracosFixos||[]), ...sheet.especieTracosExtras].map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
+  ${sheet.humanoTalento ? `<div class="option-block"><h3 style="color:var(--gold);margin-top:0;">Versátil: ${sheet.humanoTalento.nome}</h3>${sheet.humanoTalento.detalhe ? renderFeatDetailCard(sheet.humanoTalento.detalhe) : ''}</div>` : ''}
   </div></div>
 
   <div class="summary-section"><h3>Proficiências e Idiomas <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
