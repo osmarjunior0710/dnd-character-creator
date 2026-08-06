@@ -201,6 +201,31 @@
         (pedido explícito do usuário, não é bug): revisar o
         formato/design de exibição dos itens agrupados na Loja — "tem item
         que não mostra o que é importante ou está com um design ruim".
+      - ✅ RESOLVIDO (Claude Code): usuário mandou um MD com regras
+        revisadas de CA/Iniciativa/atributo-de-ataque-de-arma pra validar
+        contra a implementação. Conferido item a item: (1) atributo de
+        ataque de arma (Força/Destreza/Acuidade/Arremessável) já estava
+        certo em computeAttacks() — as armas arremessáveis sem Acuidade
+        (Azagaia/Lança/Machadinha) já são tipo:"Corpo a Corpo" em
+        data/weapon-mastery.js, então já caem no ramo de Força. (2) achados
+        2 bugs de verdade e corrigidos: CA do Monge não desligava a Defesa
+        sem Armadura ao empunhar Escudo (regra exige "sem armadura E sem
+        escudo" pro Monge, diferente do Bárbaro que pode usar escudo
+        normalmente) — computeAC() agora só entra no ramo do Monge se
+        `!hasShield`, senão cai no padrão 10+Destreza+2 de escudo, igual
+        preveem o documento e o pseudocódigo dele. Iniciativa nunca somava
+        o Bônus de Proficiência do talento Alerta (fixo em Guarda/
+        Criminoso, ou escolhido no Versátil do Humano) — nova
+        hasFeatByName() (perto de backgroundFeatBaseName()) checa as duas
+        fontes possíveis de talento por nome; sheet.combate.initiativeAlerta
+        e o texto "(com Alerta)" mostram quando o bônus está ativo.
+      - ✅ RESOLVIDO (Claude Code): tela de Resumo — Atributos, Salvaguardas
+        e Perícias eram 3 seções separadas; usuário pediu pra agrupar por
+        atributo, como na ficha física (atributo -> salvaguarda dele ->
+        perícias que usam ele). Nova renderAttributeGroups() (perto de
+        renderStatRows()) monta isso reaproveitando o mesmo componente
+        visual de linha com bolinha de proficiência; characterSheetAsText()
+        (botão Copiar Resumo) segue o mesmo agrupamento em texto puro.
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
         ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
         antigo de fato), mas cada um duplicava o mesmo array de 4
@@ -3079,7 +3104,11 @@ function ownedArmorAndShield(){
    antes só mostrava um texto explicando que dependia da armadura.
    Bárbaro/Monge usam a fórmula de Defesa sem Armadura SE não tiverem
    nenhuma armadura de verdade em posse (RAW: perdem o traço se vestirem
-   armadura) — Escudo continua somando +2 em cima de qualquer caso. */
+   armadura) — Escudo continua somando +2 em cima de qualquer caso, EXCETO
+   pro Monge, que perde a Defesa sem Armadura ao empunhar escudo (regra
+   exige "sem armadura E sem escudo") e cai no padrão 10+Destreza+2 de
+   escudo, igual qualquer outra classe. Bárbaro não tem essa exceção: pode
+   usar escudo e manter a fórmula com Constituição. */
 function computeAC(classe, dexMod, conMod, wisMod){
   const {armor, hasShield} = ownedArmorAndShield();
   let base, source;
@@ -3090,7 +3119,7 @@ function computeAC(classe, dexMod, conMod, wisMod){
   } else if(classe==='Bárbaro'){
     base = 10 + dexMod + conMod;
     source = 'Defesa sem Armadura (Bárbaro)';
-  } else if(classe==='Monge'){
+  } else if(classe==='Monge' && !hasShield){
     base = 10 + dexMod + wisMod;
     source = 'Defesa sem Armadura (Monge)';
   } else {
@@ -3303,7 +3332,8 @@ function computeCharacterSheet(){
   const hitDie = CLASS_HIT_DIE[data.classe];
   const hp = hitDie + modOf('Constituição');
   const ac = computeAC(data.classe, modOf('Destreza'), modOf('Constituição'), modOf('Sabedoria'));
-  const initiative = modOf('Destreza');
+  const initiativeAlerta = hasFeatByName('Alerta');
+  const initiative = modOf('Destreza') + (initiativeAlerta ? prof : 0);
   const attacks = computeAttacks(clsConst, modOf('Força'), modOf('Destreza'), prof);
   const spellcasting = computeSpellcasting(cls, finalScore, prof);
   const especieMagias = speciesGrantedSpellEntries();
@@ -3336,7 +3366,7 @@ function computeCharacterSheet(){
       profBonus: prof
     },
     attrs, savingThrows, skills, passivePerception,
-    combate: { hp, hitDie: `1d${hitDie}`, ac, initiative, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
+    combate: { hp, hitDie: `1d${hitDie}`, ac, initiative, initiativeAlerta, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
     attacks, spellcasting, especieMagias, especieTracosExtras, humanoTalento,
     classFeatureLines, talentoAntecedente,
     proficiencias: { idiomas, ferramentas: tools, armas: weaponProfText, armaduras: armorProfText },
@@ -3352,6 +3382,27 @@ function setCharacterName(v){ data.characterName = v; persist(); }
    tanto pra Salvaguardas quanto Perícias, mesmo formato visual. */
 function renderStatRows(rows){
   return `<div class="stat-grid">${rows.map(r=>`<div class="stat-row ${r.marked?'prof':''}"><span class="stat-name">${r.dot} ${r.label}</span><span class="stat-bonus">${fmt(r.bonus)}</span></div>`).join('')}</div>`;
+}
+
+/* Atributos + Salvaguardas + Perícias agrupados por atributo (como na
+   ficha física), em vez de 3 blocos separados — cada atributo mostra sua
+   salvaguarda (sempre 1) seguida das perícias que usam ele (0 a 5,
+   Constituição nunca tem nenhuma). Pedido do usuário depois de comparar
+   com a ficha em papel. */
+function renderAttributeGroups(sheet){
+  return ABILITIES.map(ability=>{
+    const attr = sheet.attrs.find(a=>a.ability===ability);
+    const save = sheet.savingThrows.find(s=>s.ability===ability);
+    const skillsForAbility = sheet.skills.filter(s=>s.ability===ability);
+    const rows = [
+      {label:'Salvaguarda', bonus:save.bonus, marked:save.proficient, dot:save.proficient?'●':'○'},
+      ...skillsForAbility.map(s=>({label:s.skill, bonus:s.bonus, marked:s.proficient, dot:s.expertise?'◆':s.proficient?'●':'○'}))
+    ];
+    return `<div class="attr-group" style="margin-bottom:14px;">
+      <div class="group-label">${ability} ${attr.score} (${fmt(attr.mod)})</div>
+      ${renderStatRows(rows)}
+    </div>`;
+  }).join('');
 }
 
 /* Truque/magia sempre expandido (não é a lista de ESCOLHA — aqui é só
@@ -3371,17 +3422,25 @@ function renderSpellEntryList(entries){
 function characterSheetAsText(sheet){
   const L = [];
   const push = (...s) => L.push(s.join(''));
-  push(`${data.characterName || '(sem nome)'} — ${sheet.identidade.classe} 1, ${sheet.identidade.especie}, Antecedente ${sheet.identidade.antecedente}`);
+  const t = data.tiefling;
+  push(data.characterName || '(sem nome)');
+  push(`Classe: ${sheet.identidade.classe} 1`);
+  push(`Antecedente: ${sheet.identidade.antecedente}`);
+  push(`Espécie: ${sheet.identidade.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''}`);
   push(`Bônus de Proficiência: ${fmt(sheet.identidade.profBonus)}`);
   push('');
-  push('ATRIBUTOS: ', sheet.attrs.map(a=>`${a.ability} ${a.score} (${fmt(a.mod)})`).join(' · '));
+  push('ATRIBUTOS, SALVAGUARDAS E PERÍCIAS:');
+  ABILITIES.forEach(ability=>{
+    const attr = sheet.attrs.find(a=>a.ability===ability);
+    const save = sheet.savingThrows.find(s=>s.ability===ability);
+    const skillsForAbility = sheet.skills.filter(s=>s.ability===ability);
+    push(`  ${ability} ${attr.score} (${fmt(attr.mod)})`);
+    push(`    Salvaguarda ${fmt(save.bonus)}${save.proficient?'*':''}`);
+    skillsForAbility.forEach(s=>push(`    ${s.skill} ${fmt(s.bonus)}${s.expertise?'**':s.proficient?'*':''}`));
+  });
+  push(`  Percepção Passiva: ${sheet.passivePerception}`);
   push('');
-  push('SALVAGUARDAS: ', sheet.savingThrows.map(s=>`${s.ability} ${fmt(s.bonus)}${s.proficient?'*':''}`).join(' · '));
-  push('');
-  push('PERÍCIAS: ', sheet.skills.map(s=>`${s.skill} ${fmt(s.bonus)}${s.expertise?'**':s.proficient?'*':''}`).join(' · '));
-  push(`Percepção Passiva: ${sheet.passivePerception}`);
-  push('');
-  push(`COMBATE: PV ${sheet.combate.hp} (${sheet.combate.hitDie}) · CA ${sheet.combate.ac.value} (${sheet.combate.ac.source}) · Iniciativa ${fmt(sheet.combate.initiative)} · Deslocamento ${sheet.combate.deslocamento}${sheet.combate.visaoNoEscuro ? ` · Visão no Escuro ${sheet.combate.visaoNoEscuro}` : ''}`);
+  push(`COMBATE: PV ${sheet.combate.hp} (${sheet.combate.hitDie}) · CA ${sheet.combate.ac.value} (${sheet.combate.ac.source}) · Iniciativa ${fmt(sheet.combate.initiative)}${sheet.combate.initiativeAlerta ? ' (com Alerta)' : ''} · Deslocamento ${sheet.combate.deslocamento}${sheet.combate.visaoNoEscuro ? ` · Visão no Escuro ${sheet.combate.visaoNoEscuro}` : ''}`);
   if(sheet.attacks.length){
     push('');
     push('ATAQUES:');
@@ -3456,25 +3515,22 @@ function renderSummary(){
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
   <div class="content">
     <input type="text" placeholder="Nome do personagem" value="${(data.characterName||'').replace(/"/g,'&quot;')}" oninput="setCharacterName(this.value)" style="margin-bottom:8px;">
-    ${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente} · Bônus de Proficiência ${fmt(sheet.identidade.profBonus)}
+    <div style="margin-bottom:4px;"><b>Classe:</b> ${data.classe} 1</div>
+    <div style="margin-bottom:4px;"><b>Antecedente:</b> ${data.antecedente}</div>
+    <div style="margin-bottom:4px;"><b>Espécie:</b> ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''}</div>
+    <div><b>Bônus de Proficiência:</b> ${fmt(sheet.identidade.profBonus)}</div>
   </div></div>
 
-  <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
-  <div class="content">${sheet.attrs.map(a=>`<span class="pill-static">${a.ability} ${a.score} (${fmt(a.mod)})</span>`).join('')}</div></div>
-
-  <div class="summary-section"><h3>Salvaguardas</h3>
-  <div class="content">${renderStatRows(sheet.savingThrows.map(s=>({label:s.ability, bonus:s.bonus, marked:s.proficient, dot:s.proficient?'●':'○'})))}</div></div>
-
-  <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">${renderStatRows(sheet.skills.map(s=>({label:`${s.skill} (${SKILL_ABILITY[s.skill].slice(0,3)})`, bonus:s.bonus, marked:s.proficient, dot:s.expertise?'◆':s.proficient?'●':'○'})))}
-  <div style="margin-top:8px;font-size:0.78rem;color:var(--parchment-dim);">Percepção Passiva: <b style="color:var(--gold);">${sheet.passivePerception}</b></div>
+  <div class="summary-section"><h3>Atributos, Salvaguardas e Perícias <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
+  <div class="content">${renderAttributeGroups(sheet)}
+  <div style="margin-top:4px;font-size:0.78rem;color:var(--parchment-dim);">Percepção Passiva: <b style="color:var(--gold);">${sheet.passivePerception}</b></div>
   </div></div>
 
   <div class="summary-section"><h3>Combate</h3>
   <div class="content">
     <span class="pill-static">PV ${sheet.combate.hp}</span>
     <span class="pill-static">CA ${sheet.combate.ac.value} (${sheet.combate.ac.source})</span>
-    <span class="pill-static">Iniciativa ${fmt(sheet.combate.initiative)}</span>
+    <span class="pill-static">Iniciativa ${fmt(sheet.combate.initiative)}${sheet.combate.initiativeAlerta ? ' (com Alerta)' : ''}</span>
     <span class="pill-static">Deslocamento ${sheet.combate.deslocamento}</span>
     <span class="pill-static">Dado de Vida ${sheet.combate.hitDie}</span>
     ${sheet.combate.visaoNoEscuro ? `<span class="pill-static">Visão no Escuro ${sheet.combate.visaoNoEscuro}</span>` : ''}
@@ -3831,6 +3887,15 @@ function skillsGrantedElsewhere(excludeSource){
    categoria "Origem" do banco de talentos. */
 function backgroundFeatBaseName(){
   return (activeBgConst().feat || '').split(' — ')[0].split(' (')[0].trim();
+}
+
+/* Confere se o personagem tem um talento específico por NOME, olhando as
+   duas fontes possíveis de talento fixo/escolhido no nível 1: o talento
+   fixo do antecedente (backgroundFeatBaseName()) e o Versátil do Humano
+   (data.humano.talento). Usado hoje só pro Alerta (bônus de Proficiência
+   na Iniciativa), mas serve pra qualquer talento por nome no futuro. */
+function hasFeatByName(name){
+  return backgroundFeatBaseName()===name || (data.especie==='Humano' && data.humano.talento===name);
 }
 
 /* Truques/magias de 1º círculo já ESCOLHIDOS (não concedidos de graça) por
