@@ -49,6 +49,8 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 .check-pill{border:1px solid var(--line); border-radius:14px; padding:6px 14px; cursor:pointer; font-size:0.85rem; background:#f8f9fa; user-select:none;}
 .check-pill.selected{border-color:var(--wax); background:var(--wax); color:#ffffff;}
 .check-pill.disabled{opacity:0.45; cursor:not-allowed;}
+.check-pill.pill-orphan{border-color:var(--warn); background:var(--warn-bg); color:var(--warn);}
+.check-pill.pill-orphan.selected{background:var(--warn); border-color:var(--warn); color:#ffffff;}
 .counter{font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold-dim); margin:10px 0 14px;}
 .counter.ok{color:var(--green);}
 .group-label{
