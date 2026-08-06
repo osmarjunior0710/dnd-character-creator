@@ -110,6 +110,13 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .stat-name{color:var(--parchment-dim);}
 .stat-row.prof .stat-name{color:var(--parchment); font-weight:600;}
 .stat-bonus{font-family:'Cinzel',serif; color:var(--gold); font-weight:700;}
+.info-btn-inline{
+  display:inline-flex; align-items:center; justify-content:center; vertical-align:middle;
+  background:none; border:1px solid var(--line); color:var(--gold-dim); cursor:pointer;
+  font-size:0.6rem; width:15px; height:15px; border-radius:50%; line-height:1; padding:0;
+  margin-left:3px;
+}
+.info-btn-inline:hover{color:var(--gold); border-color:var(--gold);}
 .edit-link{float:right; font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--gold); cursor:pointer; border:none; background:none; text-decoration:underline; text-underline-offset:2px;}
 .edit-link:hover{color:var(--wax-bright);}
 .wallet{position:sticky; top:8px; z-index:5; display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid var(--line); border-radius:6px; padding:10px 16px; margin-bottom:16px; box-shadow:0 1px 3px rgba(60,64,67,0.12);}
