@@ -977,13 +977,13 @@
      persist() grava em 'char_wizard_state', restore() lê de volta.
      Testado: escolher classe + perícias + navegar de passo, dar reload,
      e o estado volta certinho (classe, perícias, passo atual).
-   - 🔜 PENDENTE: botões flutuantes (Mochila/Randomizar, position:fixed
-     ancorados só no topo via positionMochilaFloater()/
-     positionRandomizarFloater()) cobrem o conteúdo por baixo deles ao
-     rolar a tela em telas com lista longa (Classe 13 cards, Antecedente
-     16, Espécie 10, Loja) — confirmado com screenshot em 375px, texto do
-     Feiticeiro ficando ilegível atrás do "🎲 Randomizar". Não reagem a
-     scroll nenhum, só ao resize.
+   - ✅ RESOLVIDO (Claude Code): "botões flutuantes cobrem conteúdo ao
+     rolar" — Mochila/Randomizar eram pílulas com 2 linhas de texto
+     sempre visíveis, cobrindo texto real de cards por baixo em listas
+     longas (confirmado com screenshot em 375px). Encolhidos pra ícone
+     só (.floater-fab, 44px circular, sem rótulo permanente — a
+     explicação virou title/aria-label) — mesma posição fixa nos cantos
+     superiores de antes, só ocupando bem menos área.
    - 🔜 PENDENTE: "Passo —" sem número nos títulos de Idiomas (passo 6) e
      Atributos (passo 7) — os outros 3 passos numerados (Classe/
      Antecedente/Espécie) têm "Passo 1/2/3", esses dois têm um "—" literal
@@ -2477,12 +2477,16 @@ function positionMochilaFloater(){
 }
 window.addEventListener('resize', positionMochilaFloater);
 
+/* Ícone só (sem rótulo/subtítulo permanentes) — achado numa revisão
+   geral: a versão anterior (pílula "🎒 Mochila" + "(clique pra abrir/
+   fechar)") cobria conteúdo real da tela ao rolar em listas longas
+   (Classe/Antecedente/Espécie/Loja), porque é position:fixed e não
+   reage a scroll. Reduzido pra um círculo de 44px (.floater-fab no CSS)
+   — cobre bem menos, mantém alvo de toque acessível, e a explicação
+   agora é só o title/aria-label (tooltip), não texto sempre visível. */
 function renderMochilaFloater(){
   if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
-  return `<div class="mochila-floater" onclick="toggleMochilaOpen()">
-    <span class="mochila-floater-label">🎒 Mochila</span>
-    <span class="mochila-floater-sub">(clique para abrir/fechar)</span>
-  </div>
+  return `<div class="floater-fab mochila-floater" onclick="toggleMochilaOpen()" title="Mochila — ver itens" aria-label="Mochila — ver itens">🎒</div>
   ${mochilaOpen ? renderMochilaPopup() : ''}`;
 }
 
@@ -2503,10 +2507,7 @@ window.addEventListener('resize', positionRandomizarFloater);
 
 function renderRandomizarFloater(){
   if(step>7) return '';
-  return `<div class="randomizar-floater" onclick="randomizeCurrentStep()">
-    <span class="mochila-floater-label">🎲 Randomizar</span>
-    <span class="mochila-floater-sub">(preenche esta tela)</span>
-  </div>`;
+  return `<div class="floater-fab randomizar-floater" onclick="randomizeCurrentStep()" title="Randomizar — preenche esta tela" aria-label="Randomizar — preenche esta tela">🎲</div>`;
 }
 
 function renderMochilaPopup(){
