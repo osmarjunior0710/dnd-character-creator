@@ -10,11 +10,13 @@ const MONGE = {
   weaponProfMeleeOnly: true,
   weaponProfFiltroMarcial: ["Leve"],
   armorProf: [],
-  /* Ferramentas: escolha 1 CATEGORIA entre Ferramentas de Artesão OU
-     Instrumento Musical (não um item específico) — mesmo tratamento de
-     placeholder já usado pro Bardo/Artista, já que o app não tem listas
-     reais de artesão/instrumento ainda. */
-  toolsNote: "Escolha 1 tipo: Ferramentas de Artesão OU Instrumento Musical (seletor específico ainda não implementado neste protótipo).",
+  /* Ferramentas: escolha 1 CATEGORIA (Ferramentas de Artesão OU
+     Instrumento Musical) e DEPOIS 1 item específico dentro dela —
+     seletor de 2 níveis em renderMongeDetail(), usando ALL_ARTISAN_TOOLS
+     (data/artisan-tools.js) e ALL_INSTRUMENTS (data/instruments.js).
+     data.monge.toolCategory guarda a categoria, toolChoice o item. */
+  toolsNote: "Escolha 1 tipo (Ferramentas de Artesão OU Instrumento Musical) e depois 1 item específico dessa categoria.",
+  toolCategories: ["Ferramentas de Artesão", "Instrumento Musical"],
   equipmentA: ["Lança", "5 Adagas", "Ferramenta/Instrumento escolhido", "Kit de Aventureiro"],
   equipmentA_gold: 11,
   equipmentB_gold: 50,

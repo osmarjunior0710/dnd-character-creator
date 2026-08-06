@@ -38,7 +38,9 @@
 <script src="data/languages.js"></script>
 <script src="data/instruments.js"></script>
 <script src="data/game-sets.js"></script>
+<script src="data/artisan-tools.js"></script>
 <script src="data/shop-items.js"></script>
+<script src="data/equipment-aliases.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -89,8 +91,27 @@
    3. Lista consolidada de pendências abertas (compiladas de várias notas
       espalhadas pelo arquivo, cada uma com mais detalhe no bloco da
       seção correspondente — procure pelo texto entre aspas):
-      - "floater/painel fixo" — inventário do personagem (classe +
-        antecedente + compras da loja) sempre visível.
+      - ✅ RESOLVIDO (Claude Code): "floater/painel fixo" — inventário do
+        personagem (classe + antecedente + compras da loja) sempre
+        visível. Virou um floater no canto superior direito
+        (renderMochilaFloater(), pill "🎒 Mochila (clique para abrir/
+        fechar)") visível em QUALQUER passo do wizard a partir do
+        momento em que há classe ou antecedente escolhido — não só na
+        Loja, como uma 1ª versão interna desta mesma sessão tinha feito
+        (painel embutido, substituído por pedido do usuário: "não
+        precisa ter ui atrás dele... pode ficar voando mesmo"). Clicar
+        abre um popup (renderMochilaPopup(), mochilaOpen controla
+        aberto/fechado — estado de UI puro, não entra em `data`/
+        persist()) com o mesmo conteúdo de antes. Passo prévio
+        necessário: itens da Loja ganharam um
+        "id" estável (data/shop-items.js), e data/equipment-aliases.js
+        cruza o texto livre do equipamento inicial de classe/antecedente
+        com esse id (ver characterStartingItems()/mochilaItems() em
+        index.html). De brinde: Bardo e Monge ganharam seletor de
+        verdade pro instrumento/ferramenta do equipamento (antes só
+        texto placeholder nunca resolvido — Bardo reaproveita o 1º dos
+        3 instrumentos escolhidos na proficiência, Monge ganhou um
+        seletor novo de 2 níveis, categoria + item específico).
       - ✅ RESOLVIDO (Claude Code), e com um desenho diferente do que a
         pendência original sugeria: em vez de filtrar a Loja
         automaticamente, virou um checkbox opcional "Filtrar por
@@ -258,11 +279,11 @@
    4. ✅ Calculadora de ouro mantida (startingGold(), spentGold(),
       maxAffordableQty(), a lógica de troco em renderShop()) — não foi
       mexida, só reaproveitada pros itens novos.
-   5. PENDENTE (registrar, não necessariamente resolver na mesma leva):
-      um floater/painel fixo mostrando o inventário atual do personagem —
-      o que já foi concedido pela classe + antecedente (equipamento
-      inicial fixo) somado ao que for comprado na loja. Ajuda a não
-      perder a visão geral enquanto compra.
+   5. ✅ RESOLVIDO (Claude Code, bem depois desta sessão original): painel
+      mostrando o inventário atual do personagem — o que já foi
+      concedido pela classe + antecedente somado ao que for comprado na
+      loja. Ver bloco ✅ RESOLVIDO sobre "floater/painel fixo" na lista
+      consolidada de pendências, no topo desta nota.
    6. ✅ FEITO (usuário pediu explicitamente): nav() agora é
       position:fixed no rodapé da viewport (não mais dentro do fluxo
       normal da página), envolvido num .nav-inner que respeita o mesmo
@@ -1142,11 +1163,11 @@ let data = {
   ladino: { skills: [], especialista: [], maestria: [], equipment: null },
   druida: { skills: [], ordem: null, cantrips: [], spells1: [], equipment: null },
   feiticeiro: { skills: [], cantrips: [], spells1: [], equipment: null },
-  monge: { skills: [], equipment: null },
+  monge: { skills: [], equipment: null, toolCategory: null, toolChoice: null },
   guardiao: { skills: [], spells1: [], maestria: [], equipment: null },
   idiomas: { comuns: [], extra: [] },
   attrs: {},
-  shop: { purchases: {}, collapsedCats: {} },
+  shop: { purchases: {}, collapsedCats: {}, filterByProf: false },
   returnToSummary: false,
   freeAbilityRule: false
 };
@@ -1179,6 +1200,27 @@ async function restore(){
       data = Object.assign(data, parsed.data);
       if(!data.shop) data.shop = {purchases:{}};
       if(data.shop.filterByProf===undefined) data.shop.filterByProf = false;
+      /* Migração de saves antigos: data.shop.purchases costumava ser
+         chaveado pelo NOME de exibição do item (frágil — ver nota em
+         data/shop-items.js), agora é chaveado pelo "id" estável. Se a
+         chave já bate com um id válido, mantém; senão, tenta achar o
+         item pelo NOME antigo e reescreve com o id certo. Chave que não
+         bate com nada (item removido/renomeado sem deixar rastro) é
+         descartada — mais seguro que manter uma compra órfã. */
+      if(data.shop.purchases){
+        const migrated = {};
+        Object.entries(data.shop.purchases).forEach(([key, qty])=>{
+          if(findShopItem(key)){ migrated[key] = qty; return; }
+          const found = findShopItemByName(key);
+          if(found) migrated[found.id] = qty;
+        });
+        data.shop.purchases = migrated;
+      }
+      /* Monge: save antigo pode não ter os campos de escolha de
+         Ferramenta/Instrumento (adicionados quando o seletor de verdade
+         foi implementado). */
+      if(data.monge.toolCategory===undefined) data.monge.toolCategory = null;
+      if(data.monge.toolChoice===undefined) data.monge.toolChoice = null;
       /* Espécies: garante que TODA chave de freshSpeciesData() exista em
          data (evita crash se um save antigo do navegador não tiver uma
          espécie mais recente que a gente adicionou depois) — mesma função
@@ -1317,6 +1359,8 @@ function findFirstMissingGroup(){
       if(data.classe==='Monge'){
         const mk = data.monge;
         if(mk.skills.length!==2) return 'grp-1-skills';
+        if(!mk.toolCategory) return 'grp-1-toolcategory';
+        if(!mk.toolChoice) return 'grp-1-toolchoice';
         if(!mk.equipment) return 'grp-1-equipment';
         return null;
       }
@@ -1447,7 +1491,7 @@ function render(){
   else if(step===7) html = renderAttrs();
   else if(step===8) html = renderShop();
   else if(step===9) html = renderSummary();
-  c.innerHTML = html;
+  c.innerHTML = html + renderMochilaFloater();
   attachStepHandlers();
 }
 
@@ -1928,6 +1972,130 @@ function resolvedEquipmentA(bgConst, bg){
   const chosen = bg.ferramentaEscolhida || bgConst.ferramentaCategoria;
   return bgConst.equipmentA.map(item => item==='{ferramenta}' ? chosen : item);
 }
+
+/* Mesma ideia de resolvedEquipmentA(), mas pro lado da CLASSE: só o
+   Bardo ("Instrumento Musical à escolha") e o Monge ("Ferramenta/
+   Instrumento escolhido") têm placeholder de equipamento — reaproveita
+   a escolha que o jogador já fez em outro lugar (Bardo: o 1º dos 3
+   instrumentos de data.bardo.instruments; Monge: data.monge.toolChoice,
+   escolhido no próprio passo 1). Funciona pra equipmentA/B/C de
+   qualquer classe — é um no-op pras que não têm esses textos. */
+function resolvedClassEquipmentList(list){
+  if(!list) return [];
+  return list.map(item => {
+    if(item==='Instrumento Musical à escolha') return (data.bardo.instruments && data.bardo.instruments.length) ? data.bardo.instruments[0] : item;
+    if(item==='Ferramenta/Instrumento escolhido') return data.monge.toolChoice || item;
+    return item;
+  });
+}
+
+/* Acha um item da Loja pelo NOME de exibição (não pelo id) — usado só
+   pra RESOLVER equipamento inicial contra a Loja (equipamento inicial é
+   texto livre, então o cruzamento tem que ser por nome mesmo) e na
+   migração de saves antigos em restore(). Em qualquer outro lugar do
+   código, usar findShopItem(id). */
+function findShopItemByName(name){
+  for(const cat of Object.values(SHOP)){
+    const found = cat.items.find(i=>i.n===name);
+    if(found) return found;
+  }
+  return null;
+}
+
+/* Resolve UM texto de equipamento inicial (já com qualquer placeholder
+   de classe/antecedente substituído, ver resolvedClassEquipmentList()/
+   resolvedEquipmentA() acima) pro id real da Loja, quando existir.
+   Ordem: 1) EQUIPMENT_ALIASES (data/equipment-aliases.js — cobre
+   quantidade embutida tipo "20 Flechas" e formatação diferente tipo
+   "Foco Arcano (orbe)"); 2) match exato de nome; 3) variante de Kit de
+   Jogos escolhida via {ferramenta} (Guarda/Nobre/Soldado — a Loja só
+   vende 1 item genérico "Kit de Jogos", nenhuma variante bate sozinha);
+   4) sem resolução — vira item de sabor na mochila, sem id (ex:
+   "Símbolo Sagrado" sozinho, ambíguo entre as 3 variantes vendidas). */
+function resolveEquipmentText(text){
+  if(Object.prototype.hasOwnProperty.call(EQUIPMENT_ALIASES, text)){
+    const alias = EQUIPMENT_ALIASES[text];
+    return alias ? {label:text, id:alias.id, qty:alias.qty} : {label:text, id:null, qty:1};
+  }
+  const exact = findShopItemByName(text);
+  if(exact) return {label:text, id:exact.id, qty:1};
+  if(ALL_GAME_SETS.includes(text)) return {label:text, id:'kit-de-jogos', qty:1};
+  return {label:text, id:null, qty:1};
+}
+
+/* Todos os itens que o personagem já TEM antes de entrar na Loja —
+   resolvidos da Opção de equipamento escolhida na classe (A/B/C — C só
+   dá ouro, sem itens) e do antecedente (A só, B só dá ouro). Cada item
+   vem como {label, id, qty}; id é null quando o texto não bate com
+   nenhum item real da Loja (item de sabor, ver resolveEquipmentText()).
+   Base da "mochila do jogador" (renderMochilaFloater()/renderMochilaPopup()). */
+function characterStartingItems(){
+  const clsConst = activeClassConst();
+  const cls = activeClassData();
+  const bgConst = activeBgConst();
+  const bg = activeBgData();
+  const items = [];
+  const clsList = cls.equipment==='A' ? clsConst.equipmentA : cls.equipment==='B' ? clsConst.equipmentB : null;
+  resolvedClassEquipmentList(clsList).forEach(text => items.push(resolveEquipmentText(text)));
+  if(bg.equipment==='A'){
+    resolvedEquipmentA(bgConst, bg).forEach(text => items.push(resolveEquipmentText(text)));
+  }
+  return items;
+}
+
+/* Agrupa characterStartingItems() por item (soma quantidade se a mesma
+   coisa vier de duas fontes) e resolve o nome de EXIBIÇÃO pro nome
+   canônico da Loja quando tem id (senão usa o texto original). */
+function mochilaItems(){
+  const grouped = {};
+  characterStartingItems().forEach(({label, id, qty})=>{
+    const key = id || ('flavor:'+label);
+    if(!grouped[key]) grouped[key] = {label: id ? findShopItem(id).n : label, qty:0};
+    grouped[key].qty += qty;
+  });
+  return Object.values(grouped);
+}
+
+/* Floater "Mochila" (canto superior direito, sempre visível a partir do
+   momento em que há classe ou antecedente escolhido) + popup — itens
+   herdados da escolha de equipamento de classe/antecedente + o que já
+   foi comprado na Loja. Fecha o gap que existia antes: o equipamento
+   inicial só aparecia no passo em que era escolhido e de novo no
+   Resumo final, sumindo do resto do fluxo (incluindo a Loja inteira).
+   Ao contrário da 1ª versão (painel embutido só na Loja), agora é
+   global — dá pra conferir a qualquer momento do wizard, não só na
+   hora de comprar. mochilaOpen é estado de UI puro (não entra em
+   `data`/persist() — fechar sozinho ao recarregar a página é aceitável,
+   mesmo padrão de expandedSpellInfo/expandedTraitInfo). */
+let mochilaOpen = false;
+function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
+
+function renderMochilaFloater(){
+  if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
+  return `<div class="mochila-floater" onclick="toggleMochilaOpen()">
+    <span class="mochila-floater-label">🎒 Mochila</span>
+    <span class="mochila-floater-sub">(clique para abrir/fechar)</span>
+  </div>
+  ${mochilaOpen ? renderMochilaPopup() : ''}`;
+}
+
+function renderMochilaPopup(){
+  const inherited = mochilaItems();
+  const purchases = data.shop.purchases||{};
+  const purchasedEntries = Object.entries(purchases).filter(([,q])=>q>0).map(([id,q])=>({label: findShopItem(id).n, qty:q}));
+  const total = inherited.length + purchasedEntries.length;
+  return `<div class="mochila-overlay" onclick="toggleMochilaOpen()">
+    <div class="mochila-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>Sua Mochila</h3>
+        <button class="btn small" onclick="toggleMochilaOpen()">✕</button>
+      </div>
+      ${inherited.length ? `<div style="margin-bottom:10px;"><div class="group-label" style="margin-bottom:4px;">Herdado da Classe/Antecedente</div>${inherited.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('')}</div>` : ''}
+      ${purchasedEntries.length ? `<div><div class="group-label" style="margin-bottom:4px;">Comprado na Loja</div>${purchasedEntries.map(it=>`<span class="pill-static">${it.label} ×${it.qty}</span>`).join('')}</div>` : ''}
+      ${total===0 ? '<span style="color:var(--parchment-dim);">Nada ainda — escolha o equipamento inicial na Classe/Antecedente, ou compre algo na Loja.</span>' : ''}
+    </div>
+  </div>`;
+}
 function renderSimpleBackgroundDetail(bgConst){
   const bg = activeBgData();
   const plan = bg.abilityPlan;
@@ -2121,7 +2289,7 @@ function renderBardoDetail(){
 
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
   <div class="option-block ${bd.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...BARDO.equipmentA, BARDO.equipmentA_gold+' PO'].join(', ')}</p>
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...resolvedClassEquipmentList(BARDO.equipmentA), BARDO.equipmentA_gold+' PO'].join(', ')}</p>
     <button class="pick-btn" data-pick="A" data-fn="pickBardoEquip">${bd.equipment==='A'?'Selecionado':'Escolher'}</button>
   </div>
   <div class="option-block ${bd.equipment==='B'?'selected':''}">
@@ -2526,9 +2694,19 @@ function renderMongeDetail(){
   <h3>Defesa sem Armadura</h3>
   <div class="option-block">${MONGE.defesaSemArmadura}</div>
 
+  <h3 id="grp-1-toolcategory">Ferramenta ou Instrumento — escolha 1 categoria</h3>
+  <div class="check-list" style="margin-bottom:10px;">
+    ${MONGE.toolCategories.map(cat=>`<div class="check-pill ${mk.toolCategory===cat?'selected':''}" data-pick="${cat}" data-fn="pickMongeToolCategory">${cat}</div>`).join('')}
+  </div>
+  ${mk.toolCategory ? `
+  <h3 id="grp-1-toolchoice">${mk.toolCategory} — escolha 1</h3>
+  <div class="check-list" style="margin-bottom:10px;">
+    ${(mk.toolCategory==='Instrumento Musical' ? ALL_INSTRUMENTS : ALL_ARTISAN_TOOLS).map(t=>`<div class="check-pill ${mk.toolChoice===t?'selected':''}" data-pick="${t}" data-fn="pickMongeToolChoice">${t}</div>`).join('')}
+  </div>` : ''}
+
   <h3 id="grp-1-equipment">Equipamento Inicial</h3>
   <div class="option-block ${mk.equipment==='A'?'selected':''}">
-    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...MONGE.equipmentA, MONGE.equipmentA_gold+' PO'].join(', ')}</p>
+    <h3 style="color:var(--gold);margin-top:0;">Opção A</h3><p>${[...resolvedClassEquipmentList(MONGE.equipmentA), MONGE.equipmentA_gold+' PO'].join(', ')}</p>
     <button class="pick-btn" data-pick="A" data-fn="pickMongeEquip">${mk.equipment==='A'?'Selecionado':'Escolher'}</button>
   </div>
   <div class="option-block ${mk.equipment==='B'?'selected':''}">
@@ -2680,15 +2858,17 @@ function startingGold(){
 }
 function spentGold(){
   let total = 0;
-  for(const [name, qty] of Object.entries(data.shop.purchases||{})){
-    const item = findShopItem(name);
+  for(const [id, qty] of Object.entries(data.shop.purchases||{})){
+    const item = findShopItem(id);
     if(item) total += item.c * qty;
   }
   return total;
 }
-function findShopItem(name){
+/* Busca por ID (não mais por nome de exibição — nome pode mudar sem
+   quebrar compras salvas, ver nota em data/shop-items.js). */
+function findShopItem(id){
   for(const cat of Object.values(SHOP)){
-    const found = cat.items.find(i=>i.n===name);
+    const found = cat.items.find(i=>i.id===id);
     if(found) return found;
   }
   return null;
@@ -2742,8 +2922,8 @@ function renderShop(){
     <summary>${catName} <span class="cat-count">(${visibleItems.length} ${visibleItems.length===1?'item':'itens'})</span></summary>
     <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
     ${visibleItems.map(it=>{
-      const qty = purchases[it.n]||0;
-      const maxQty = maxAffordableQty(it.n) + qty; // limite considerando o que já foi gasto neste item
+      const qty = purchases[it.id]||0;
+      const maxQty = maxAffordableQty(it.id) + qty; // limite considerando o que já foi gasto neste item
       const atCap = qty>=maxQty;
       const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px;">${it.cont}</div>` : '';
       return `<tr>
@@ -2752,9 +2932,9 @@ function renderShop(){
         <td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
         <td data-label="Custo">${fmtGold(it.c)} PO</td>
         <td data-label="Qtd."><div class="qty-cell">
-          <button class="btn small" data-fn="shopDec" data-pick="${it.n}">−</button>
-          <input type="number" min="0" max="${maxQty}" value="${qty}" data-fn="shopSet" data-item="${it.n}">
-          <button class="btn small" data-fn="shopInc" data-pick="${it.n}" ${atCap?'disabled title="Ouro insuficiente"':''}>+</button>
+          <button class="btn small" data-fn="shopDec" data-pick="${it.id}">−</button>
+          <input type="number" min="0" max="${maxQty}" value="${qty}" data-fn="shopSet" data-item="${it.id}">
+          <button class="btn small" data-fn="shopInc" data-pick="${it.id}" ${atCap?'disabled title="Ouro insuficiente"':''}>+</button>
         </div></td>
       </tr>`;
     }).join('')}
@@ -2764,9 +2944,9 @@ function renderShop(){
 
   const cartEntries = Object.entries(purchases).filter(([,q])=>q>0);
   if(cartEntries.length){
-    html += `<h3>Carrinho</h3><div class="cart-list">${cartEntries.map(([n,q])=>{
-      const item = findShopItem(n);
-      return `<div class="cart-item"><span>${n} ×${q}</span><span>${fmtGold(item.c*q)} PO</span></div>`;
+    html += `<h3>Carrinho</h3><div class="cart-list">${cartEntries.map(([id,q])=>{
+      const item = findShopItem(id);
+      return `<div class="cart-item"><span>${item.n} ×${q}</span><span>${fmtGold(item.c*q)} PO</span></div>`;
     }).join('')}</div>`;
   }
 
@@ -2931,13 +3111,13 @@ function renderSummary(){
 
   <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
   <div class="content">
-    ${(cls.equipment==='A'?[...clsConst.equipmentA, clsConst.equipmentA_gold+' PO']:cls.equipment==='B' && clsConst.equipmentB?[...clsConst.equipmentB, clsConst.equipmentB_gold+' PO']:cls.equipment==='C'?[clsConst.equipmentC_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    ${(cls.equipment==='A'?[...resolvedClassEquipmentList(clsConst.equipmentA), clsConst.equipmentA_gold+' PO']:cls.equipment==='B' && clsConst.equipmentB?[...resolvedClassEquipmentList(clsConst.equipmentB), clsConst.equipmentB_gold+' PO']:cls.equipment==='C'?[clsConst.equipmentC_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
     ${(bg.equipment==='A'?[...bgEquipA, bgConst.equipmentA_gold+' PO']:[bgConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
   </div></div>
 
   <div class="summary-section"><h3>Compras na Loja <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
   <div class="content">
-    ${purchases.length ? purchases.map(([n,q])=>`<span class="pill-static">${n} ×${q}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhuma compra.</span>'}
+    ${purchases.length ? purchases.map(([id,q])=>`<span class="pill-static">${findShopItem(id).n} ×${q}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhuma compra.</span>'}
     <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(remaining)} PO</div>
   </div></div>
 
@@ -2989,7 +3169,7 @@ function resetWizard(){
     ladino:{skills:[],especialista:[],maestria:[],equipment:null},
     druida:{skills:[],ordem:null,cantrips:[],spells1:[],equipment:null},
     feiticeiro:{skills:[],cantrips:[],spells1:[],equipment:null},
-    monge:{skills:[],equipment:null},
+    monge:{skills:[],equipment:null,toolCategory:null,toolChoice:null},
     guardiao:{skills:[],spells1:[],maestria:[],equipment:null},
     idiomas:{comuns:[],extra:[]},
     attrs:{}, shop:{purchases:{},collapsedCats:{},filterByProf:false}, returnToSummary:false, freeAbilityRule:false },
@@ -3131,6 +3311,11 @@ function toggleFeiticeiroCantrip(v){ const s=data.feiticeiro.cantrips; const i=s
 function toggleFeiticeiroSpell1(v){ const s=data.feiticeiro.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<FEITICEIRO.preparedCount)s.push(v); persist(); render(); }
 function pickFeiticeiroEquip(v){ data.feiticeiro.equipment=v; persist(); render(); }
 function toggleMongeSkill(v){ const s=data.monge.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
+function pickMongeToolCategory(v){
+  if(data.monge.toolCategory!==v) data.monge.toolChoice=null; // troca de categoria zera o item específico já escolhido
+  data.monge.toolCategory=v; persist(); render();
+}
+function pickMongeToolChoice(v){ data.monge.toolChoice=v; persist(); render(); }
 function pickMongeEquip(v){ data.monge.equipment=v; persist(); render(); }
 function toggleGuardiaoSkill(v){ const s=data.guardiao.skills; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.skillsCount)s.push(v); persist(); render(); }
 function toggleGuardiaoSpell1(v){ const s=data.guardiao.spells1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<GUARDIAO.preparedCount)s.push(v); persist(); render(); }
@@ -3359,15 +3544,15 @@ function setAttr(ability, value){
 
 /* Quantidade máxima que dá pra comprar de um item sem estourar o ouro
    disponível, considerando o que já tá no carrinho pros OUTROS itens. */
-function maxAffordableQty(name){
-  const item = findShopItem(name);
+function maxAffordableQty(id){
+  const item = findShopItem(id);
   if(!item) return 0;
   if(item.c<=0) return 999; // item de custo 0, sem limite prático
   const purchases = data.shop.purchases||{};
   let othersCost = 0;
-  for(const [n,q] of Object.entries(purchases)){
-    if(n===name) continue;
-    const it = findShopItem(n);
+  for(const [otherId,q] of Object.entries(purchases)){
+    if(otherId===id) continue;
+    const it = findShopItem(otherId);
     if(it) othersCost += it.c*q;
   }
   const budget = startingGold() - othersCost;
@@ -3375,17 +3560,17 @@ function maxAffordableQty(name){
   return Math.floor((budget / item.c) + 1e-9); // epsilon evita erro de ponto flutuante
 }
 
-function shopSetQty(name, qty){
+function shopSetQty(id, qty){
   if(!data.shop.purchases) data.shop.purchases={};
   if(qty<0) qty=0;
-  const maxQty = maxAffordableQty(name);
+  const maxQty = maxAffordableQty(id);
   if(qty>maxQty) qty=maxQty;
-  if(qty<=0) delete data.shop.purchases[name];
-  else data.shop.purchases[name]=qty;
+  if(qty<=0) delete data.shop.purchases[id];
+  else data.shop.purchases[id]=qty;
   persist(); render();
 }
-function shopInc(name){ shopSetQty(name, (data.shop.purchases[name]||0)+1); }
-function shopDec(name){ shopSetQty(name, Math.max(0,(data.shop.purchases[name]||0)-1)); }
+function shopInc(id){ shopSetQty(id, (data.shop.purchases[id]||0)+1); }
+function shopDec(id){ shopSetQty(id, Math.max(0,(data.shop.purchases[id]||0)-1)); }
 function toggleShopCategory(detailsEl){
   if(!data.shop.collapsedCats) data.shop.collapsedCats={};
   data.shop.collapsedCats[detailsEl.dataset.cat] = !detailsEl.open;
