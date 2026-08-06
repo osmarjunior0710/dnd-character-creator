@@ -93,12 +93,17 @@
       seção correspondente — procure pelo texto entre aspas):
       - ✅ RESOLVIDO (Claude Code): "floater/painel fixo" — inventário do
         personagem (classe + antecedente + compras da loja) sempre
-        visível. Virou o painel "Sua Mochila" (renderMochila(), topo da
-        Loja) — não é fixo/flutuante (fica dentro do fluxo normal da
-        página, como um <details> igual às categorias da Loja), mas
-        resolve o gap real: equipamento inicial só aparecia no passo em
-        que era escolhido e de novo só no Resumo final, sumindo durante
-        toda a Loja. Passo prévio necessário: itens da Loja ganharam um
+        visível. Virou um floater no canto superior direito
+        (renderMochilaFloater(), pill "🎒 Mochila (clique para abrir/
+        fechar)") visível em QUALQUER passo do wizard a partir do
+        momento em que há classe ou antecedente escolhido — não só na
+        Loja, como uma 1ª versão interna desta mesma sessão tinha feito
+        (painel embutido, substituído por pedido do usuário: "não
+        precisa ter ui atrás dele... pode ficar voando mesmo"). Clicar
+        abre um popup (renderMochilaPopup(), mochilaOpen controla
+        aberto/fechado — estado de UI puro, não entra em `data`/
+        persist()) com o mesmo conteúdo de antes. Passo prévio
+        necessário: itens da Loja ganharam um
         "id" estável (data/shop-items.js), e data/equipment-aliases.js
         cruza o texto livre do equipamento inicial de classe/antecedente
         com esse id (ver characterStartingItems()/mochilaItems() em
@@ -1486,7 +1491,7 @@ function render(){
   else if(step===7) html = renderAttrs();
   else if(step===8) html = renderShop();
   else if(step===9) html = renderSummary();
-  c.innerHTML = html;
+  c.innerHTML = html + renderMochilaFloater();
   attachStepHandlers();
 }
 
@@ -2023,7 +2028,7 @@ function resolveEquipmentText(text){
    dá ouro, sem itens) e do antecedente (A só, B só dá ouro). Cada item
    vem como {label, id, qty}; id é null quando o texto não bate com
    nenhum item real da Loja (item de sabor, ver resolveEquipmentText()).
-   Base da "mochila do jogador" (renderMochila()). */
+   Base da "mochila do jogador" (renderMochilaFloater()/renderMochilaPopup()). */
 function characterStartingItems(){
   const clsConst = activeClassConst();
   const cls = activeClassData();
@@ -2051,24 +2056,45 @@ function mochilaItems(){
   return Object.values(grouped);
 }
 
-/* Painel "Sua Mochila" no topo da Loja — itens herdados da escolha de
-   equipamento de classe/antecedente + o que já foi comprado. Fecha o
-   gap que existia antes: o equipamento inicial só aparecia no passo em
-   que era escolhido e de novo no Resumo final, sumindo durante toda a
-   Loja. */
-function renderMochila(){
+/* Floater "Mochila" (canto superior direito, sempre visível a partir do
+   momento em que há classe ou antecedente escolhido) + popup — itens
+   herdados da escolha de equipamento de classe/antecedente + o que já
+   foi comprado na Loja. Fecha o gap que existia antes: o equipamento
+   inicial só aparecia no passo em que era escolhido e de novo no
+   Resumo final, sumindo do resto do fluxo (incluindo a Loja inteira).
+   Ao contrário da 1ª versão (painel embutido só na Loja), agora é
+   global — dá pra conferir a qualquer momento do wizard, não só na
+   hora de comprar. mochilaOpen é estado de UI puro (não entra em
+   `data`/persist() — fechar sozinho ao recarregar a página é aceitável,
+   mesmo padrão de expandedSpellInfo/expandedTraitInfo). */
+let mochilaOpen = false;
+function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
+
+function renderMochilaFloater(){
+  if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
+  return `<div class="mochila-floater" onclick="toggleMochilaOpen()">
+    <span class="mochila-floater-label">🎒 Mochila</span>
+    <span class="mochila-floater-sub">(clique para abrir/fechar)</span>
+  </div>
+  ${mochilaOpen ? renderMochilaPopup() : ''}`;
+}
+
+function renderMochilaPopup(){
   const inherited = mochilaItems();
   const purchases = data.shop.purchases||{};
   const purchasedEntries = Object.entries(purchases).filter(([,q])=>q>0).map(([id,q])=>({label: findShopItem(id).n, qty:q}));
   const total = inherited.length + purchasedEntries.length;
-  return `<details class="shop-category" open style="margin-bottom:14px;">
-    <summary>Sua Mochila <span class="cat-count">(${total} ${total===1?'item':'itens'})</span></summary>
-    <div style="padding:4px 4px 8px;">
-      ${inherited.length ? `<div style="margin-bottom:8px;"><div class="group-label" style="margin-bottom:4px;">Herdado da Classe/Antecedente</div>${inherited.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('')}</div>` : ''}
+  return `<div class="mochila-overlay" onclick="toggleMochilaOpen()">
+    <div class="mochila-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>Sua Mochila</h3>
+        <button class="btn small" onclick="toggleMochilaOpen()">✕</button>
+      </div>
+      ${inherited.length ? `<div style="margin-bottom:10px;"><div class="group-label" style="margin-bottom:4px;">Herdado da Classe/Antecedente</div>${inherited.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('')}</div>` : ''}
       ${purchasedEntries.length ? `<div><div class="group-label" style="margin-bottom:4px;">Comprado na Loja</div>${purchasedEntries.map(it=>`<span class="pill-static">${it.label} ×${it.qty}</span>`).join('')}</div>` : ''}
-      ${total===0 ? '<span style="color:var(--parchment-dim);">Nada ainda — escolha o equipamento inicial na Classe/Antecedente, ou compre algo abaixo.</span>' : ''}
+      ${total===0 ? '<span style="color:var(--parchment-dim);">Nada ainda — escolha o equipamento inicial na Classe/Antecedente, ou compre algo na Loja.</span>' : ''}
     </div>
-  </details>`;
+  </div>`;
 }
 function renderSimpleBackgroundDetail(bgConst){
   const bg = activeBgData();
@@ -2884,8 +2910,7 @@ function renderShop(){
   <div class="wallet">
     <div><div class="label">Ouro Inicial</div><div style="font-size:0.85rem;color:var(--parchment-dim);">${fmtGold(startingGold())} PO</div></div>
     <div style="text-align:right;"><div class="label">Restante</div><div class="value ${remaining<0?'negative':''}">${fmtGold(remaining)} PO</div></div>
-  </div>
-  ${renderMochila()}`;
+  </div>`;
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
     const isWeaponCat = cat.filterProf==='simples' || cat.filterProf==='marcial';
