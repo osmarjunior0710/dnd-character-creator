@@ -1831,7 +1831,7 @@ function render(){
   else if(step===7) html = renderAttrs();
   else if(step===8) html = renderShop();
   else if(step===9) html = renderSummary();
-  c.innerHTML = html + renderMochilaFloater() + renderRandomizarFloater();
+  c.innerHTML = html + renderMochilaFloater() + renderRandomizarFloater() + renderChangelogPopup();
   attachStepHandlers();
   positionMochilaFloater();
   positionRandomizarFloater();
@@ -2480,6 +2480,53 @@ function renderMochilaPopup(){
     </div>
   </div>`;
 }
+
+/* Popup "Novidades" — resumo das últimas atualizações, mostrado uma vez
+   na 1ª tela (Passo 1) quando há update novo desde a última vez que o
+   jogador fechou o popup (guardado em localStorage direto, não no
+   window.storage/persist() do personagem — é preferência do navegador,
+   não estado de ficha). Sempre só os 3 mais recentes: ao adicionar um
+   novo no topo, apaga o mais antigo do array em vez de deixar crescer.
+   changelogOpen decidido 1x em init() (ver final do arquivo) comparando
+   CHANGELOG[0].id salvo; fechar (✕ ou clique fora) grava esse id como
+   visto, então só reaparece sozinho quando o item mais novo mudar. */
+const CHANGELOG_SEEN_KEY = 'char_wizard_changelog_seen';
+const CHANGELOG = [
+  { id:'2026-08-06-c', titulo:'Resumo e Loja mais completos', bullets:[
+    '⚠️ Aviso quando algo foi adquirido em dois lugares diferentes (perícia, ferramenta, magia...)',
+    'Loja mostra o Mod. de Ataque de cada arma antes de comprar'
+  ]},
+  { id:'2026-08-06-b', titulo:'Botão Randomizar', bullets:[
+    '🎲 Sorteia automaticamente as escolhas da tela atual'
+  ]},
+  { id:'2026-08-06-a', titulo:'Resumo mais claro', bullets:[
+    'Botão ⓘ mostra de onde vem cada número (Atributo/Salvaguarda/Perícia)',
+    'Corrige CA do Monge com Escudo e Iniciativa com o talento Alerta'
+  ]}
+];
+
+let changelogOpen = false;
+function closeChangelog(){
+  changelogOpen = false;
+  try{ localStorage.setItem(CHANGELOG_SEEN_KEY, CHANGELOG[0].id); }catch(e){}
+  render();
+}
+function renderChangelogPopup(){
+  if(!changelogOpen) return '';
+  return `<div class="changelog-overlay" onclick="closeChangelog()">
+    <div class="changelog-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>📣 Novidades</h3>
+        <button class="btn small" onclick="closeChangelog()">✕</button>
+      </div>
+      ${CHANGELOG.slice(0,3).map(entry=>`<div class="changelog-entry">
+        <h4>${entry.titulo}</h4>
+        <ul>${entry.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
 function renderSimpleBackgroundDetail(bgConst){
   const bg = activeBgData();
   const plan = bg.abilityPlan;
@@ -4515,6 +4562,11 @@ function toggleShopCategory(detailsEl){
 
 async function init(){
   await restore();
+  if(step===0){
+    let seen = null;
+    try{ seen = localStorage.getItem(CHANGELOG_SEEN_KEY); }catch(e){}
+    if(seen !== CHANGELOG[0].id) changelogOpen = true;
+  }
   render();
 }
 init();
