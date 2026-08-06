@@ -2,6 +2,7 @@ const MAGO = {
   skills: ["Arcanismo","História","Intuição","Investigação","Medicina","Natureza","Religião"],
   weaponProf: ["simples"],
   armorProf: [],
+  savingThrows: ["Inteligência","Sabedoria"],
   equipmentA: ["2 Adagas", "Foco Arcano (Cajado)", "Kit de Erudito", "Livro de Magias", "Túnica"],
   equipmentA_gold: 5,
   equipmentB_gold: 55,

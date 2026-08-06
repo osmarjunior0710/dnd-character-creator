@@ -9,6 +9,7 @@ const BARDO = {
   toolsCount: 3,
   weaponProf: ["simples"],
   armorProf: ["leve"],
+  savingThrows: ["Destreza","Carisma"],
   equipmentA: ["Armadura de Couro", "2 Adagas", "Instrumento Musical à escolha", "Kit de Artista"],
   equipmentA_gold: 19,
   equipmentB_gold: 90,

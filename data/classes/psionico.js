@@ -2,6 +2,7 @@ const PSIONICO = {
   skills: ["Arcanismo","Intuição","Intimidação","Investigação","Medicina","Percepção","Persuasão"],
   weaponProf: ["simples"],
   armorProf: [],
+  savingThrows: ["Inteligência","Sabedoria"],
   equipmentA: ["Lança", "2 Adagas", "Besta Leve", "20 Virotes", "Estojo", "Mochila de Explorador de Masmorras"],
   equipmentA_gold: 6,
   equipmentB_gold: 50,

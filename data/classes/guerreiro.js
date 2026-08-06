@@ -2,6 +2,7 @@ const GUERREIRO = {
   skills: ["Acrobacia","Atletismo","História","Intimidação","Intuição","Lidar com Animais","Percepção","Persuasão","Sobrevivência"],
   weaponProf: ["simples","marcial"],
   armorProf: ["leve","media","pesada","escudo"],
+  savingThrows: ["Força","Constituição"],
   /* Única classe até agora com TRÊS opções de equipamento inicial (A, B
      ou C), não só A/B — schema novo: equipmentB agora é uma lista de
      itens (igual A), e equipmentC_gold é a opção só-em-ouro (que nas

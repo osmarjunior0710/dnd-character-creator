@@ -10,6 +10,7 @@ const MONGE = {
   weaponProfMeleeOnly: true,
   weaponProfFiltroMarcial: ["Leve"],
   armorProf: [],
+  savingThrows: ["Força","Destreza"],
   /* Ferramentas: escolha 1 CATEGORIA (Ferramentas de Artesão OU
      Instrumento Musical) e DEPOIS 1 item específico dentro dela —
      seletor de 2 níveis em renderMongeDetail(), usando ALL_ARTISAN_TOOLS
