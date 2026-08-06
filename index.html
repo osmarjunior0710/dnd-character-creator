@@ -1493,6 +1493,7 @@ function render(){
   else if(step===9) html = renderSummary();
   c.innerHTML = html + renderMochilaFloater();
   attachStepHandlers();
+  positionMochilaFloater();
 }
 
 let expandedSpellInfo = null;
@@ -2069,6 +2070,25 @@ function mochilaItems(){
    mesmo padrão de expandedSpellInfo/expandedTraitInfo). */
 let mochilaOpen = false;
 function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
+
+/* Posiciona o floater (e o popup, se estiver aberto) logo abaixo do
+   <header> de verdade, medindo a altura real dele em vez de cravar um
+   "top" fixo no CSS — o cabeçalho muda de altura conforme a largura da
+   tela (o título "Criador de Personagens" quebra em 1 ou 2 linhas
+   dependendo do aparelho), então um número fixo ficava certo numa
+   largura e em cima do título ou do resumo em outra (bug relatado pelo
+   usuário com print do celular). Chamada depois de todo render() e no
+   resize da janela (rotação de tela, redimensionar o browser). */
+function positionMochilaFloater(){
+  const header = document.querySelector('header');
+  const floater = document.querySelector('.mochila-floater');
+  if(!header || !floater) return;
+  const topBase = header.offsetTop + header.offsetHeight + 10;
+  floater.style.top = topBase + 'px';
+  const popup = document.querySelector('.mochila-popup');
+  if(popup) popup.style.top = (topBase + floater.offsetHeight + 8) + 'px';
+}
+window.addEventListener('resize', positionMochilaFloater);
 
 function renderMochilaFloater(){
   if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
