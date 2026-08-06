@@ -152,34 +152,25 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .shop-category summary .cat-count{font-family:'Spectral',serif; font-size:0.72rem; color:var(--parchment-dim); font-weight:normal; margin-left:8px;}
 .shop-category .shop-table{margin:0; padding:0 14px 10px;}
 .shop-category .shop-table thead{display:table-header-group;}
-.mochila-floater{
-  /* "top" real é calculado em JS (positionMochilaFloater(), logo depois
-     de header.offsetHeight) — a altura do cabeçalho varia com a largura
-     da tela (o título quebra em 1 ou 2 linhas), um valor fixo aqui
-     ficava certo numa largura e em cima do título/resumo em outra.
-     14px é só o fallback antes do 1º cálculo (evita pular de posição
-     visivelmente). */
-  position:fixed; top:14px; right:14px; z-index:15;
-  background:var(--wax); color:#ffffff; border-radius:20px;
-  padding:8px 16px; cursor:pointer; user-select:none; text-align:center;
+.floater-fab{
+  /* Ícone só, sem rótulo permanente (achado de revisão: a versão com
+     texto/subtítulo cobria conteúdo real ao rolar listas longas). "top"
+     real é calculado em JS (positionMochilaFloater()/
+     positionRandomizarFloater(), logo depois de header.offsetHeight —
+     o cabeçalho muda de altura conforme a largura da tela); 14px é só o
+     fallback antes do 1º cálculo (evita pular de posição visivelmente).
+     44px = alvo de toque mínimo recomendado, mesmo só com o emoji. */
+  position:fixed; top:14px; z-index:15;
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; line-height:1; cursor:pointer; user-select:none;
   box-shadow:0 2px 8px rgba(60,64,67,0.25);
-  transition:filter .15s;
+  transition:filter .15s, transform .1s;
 }
-.mochila-floater:hover{filter:brightness(1.08);}
-.mochila-floater-label{display:block; font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:0.04em;}
-.mochila-floater-sub{display:block; font-family:'Spectral',serif; font-size:0.62rem; opacity:0.85; margin-top:1px;}
-.randomizar-floater{
-  /* Mesma ideia/regras da .mochila-floater (posição calculada em JS por
-     positionRandomizarFloater(), 14px só de fallback), espelhada pro
-     lado esquerdo — usa a mesma cor "gold"/wax-dim em vez do azul da
-     Mochila só pra diferenciar visualmente os dois botões. */
-  position:fixed; top:14px; left:14px; z-index:15;
-  background:var(--gold-dim); color:#ffffff; border-radius:20px;
-  padding:8px 16px; cursor:pointer; user-select:none; text-align:center;
-  box-shadow:0 2px 8px rgba(60,64,67,0.25);
-  transition:filter .15s;
-}
-.randomizar-floater:hover{filter:brightness(1.12);}
+.floater-fab:hover{filter:brightness(1.1);}
+.floater-fab:active{transform:scale(0.94);}
+.mochila-floater{right:14px; background:var(--wax); color:#ffffff;}
+.randomizar-floater{left:14px; background:var(--gold-dim); color:#ffffff;}
 .mochila-overlay{
   position:fixed; inset:0; z-index:25; background:rgba(32,33,36,0.45);
 }
@@ -211,9 +202,9 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .changelog-entry ul{margin:0; padding-left:18px;}
 .changelog-entry li{font-size:0.85rem; line-height:1.5; margin-bottom:3px; color:var(--parchment);}
 @media (max-width:700px){
-  .mochila-floater{right:10px; padding:6px 12px;}
+  .mochila-floater{right:10px;}
   .mochila-popup{right:10px; max-width:none;}
-  .randomizar-floater{left:10px; padding:6px 12px;}
+  .randomizar-floater{left:10px;}
   .attr-row{grid-template-columns:100px 1fr 1fr; row-gap:4px;}
   .attr-row .final{grid-column:1/-1;}
   .shop-table{font-size:0.75rem;}
