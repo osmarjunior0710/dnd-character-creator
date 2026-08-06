@@ -41,6 +41,7 @@
 <script src="data/artisan-tools.js"></script>
 <script src="data/shop-items.js"></script>
 <script src="data/equipment-aliases.js"></script>
+<script src="data/armor-ac.js"></script>
 <script src="data/species/tiferino.js"></script>
 <script src="data/species/pequenino.js"></script>
 <script src="data/species/aasimar.js"></script>
@@ -156,11 +157,50 @@
         renderHumanoDetail(). Adicionado campo Fonte em
         renderFeatDetailCard() (ⓘ) pra deixar claro que é UA Psiônico
         2025, não PHB, já que agora aparecem lado a lado com talentos de
-        Origem oficiais. PENDÊNCIA NOVA achada nesse meio-tempo (não
-        resolvida, fora de escopo): a tela de Resumo não mostra NENHUMA
-        escolha do passo 5 (detalhe de espécie) — nem o próprio Versátil/
-        Hábil do Humano, nem Sentidos Aguçados do Elfo, nem Linhagem do
-        Gnomo etc. Revisar quando mexer no resumo/export de novo.
+        Origem oficiais. PENDÊNCIA NOVA achada nesse meio-tempo, ✅
+        RESOLVIDA junto com a reconstrução do Resumo (ver item abaixo): a
+        tela de Resumo não mostrava NENHUMA escolha do passo 5 (detalhe de
+        espécie).
+      - ✅ RESOLVIDO (Claude Code): tela de Resumo final (passo 9)
+        reconstruída do zero — antes era só "aqui está o que você
+        escolheu" com CA/PV "não calculada automaticamente" hardcoded pra
+        5 das 13 classes. Agora tudo é calculado de verdade a partir de
+        computeCharacterSheet() (função pura, sem acesso a DOM, logo antes
+        de renderSummary()): atributos finais, salvaguardas, perícias
+        (com Especialista do Ladino = ◆ proficiência dobrada), Percepção
+        Passiva, PV, CA (com fonte — armadura realmente possuída via
+        ownedArmorAndShield()/ARMOR_AC, OU fórmula de Defesa sem Armadura
+        do Bárbaro/Monge quando não há armadura equipada, escudo somando
+        +2 à parte), Iniciativa, Deslocamento, ataques (1 linha por arma
+        possuída que bate com WEAPON_MASTERY, Acuidade usa o melhor de
+        Força/Destreza), conjuração (CD, bônus de ataque, truques/magias
+        SEMPRE expandidos com o card de detalhe completo — tempo, alcance,
+        componentes, duração, efeito, escalonamento — reaproveitando
+        SPELL_DETAILS/renderSpellDetailCard() já usados nas telas de
+        escolha). Truque/magia grátis de espécie (Legado do Tiferino etc)
+        fica numa seção própria "Concedido pela Espécie", separada de
+        "Conjuração", pra não sumir em classes não-conjuradoras (ex:
+        Bárbaro Tiferino). Nome do personagem virou campo editável
+        (data.characterName). Botão "Copiar Resumo" exporta tudo em texto
+        puro (characterSheetAsText()) pra colar em qualquer lugar.
+        Também resolvida nessa reconstrução: as escolhas do passo 5
+        (detalhe de espécie) que ANTES não apareciam em lugar nenhum —
+        ver speciesChoiceTraits() perto de speciesGrantedSpellEntries():
+        resistência a dano do Legado Ínfero do Tiferino, texto completo
+        (não só a magia) da Linhagem Élfica/Gnômica, tipo de dano
+        resolvido da Herança Dracônica, regra completa da Ancestralidade
+        Gigante do Golias, e o talento Versátil do Humano com card de
+        detalhe (FEAT_DETAILS). Descoberto nesse processo: o Elfo
+        Silvestre muda Deslocamento base de 9m pra 10,5m — só esse caso
+        muda um número (os outros só mudam texto de traço/magia) — ver
+        resolvedDeslocamento(). Também acrescentado savingThrows:[...] em
+        cada um dos 13 data/classes/*.js (não existia como dado
+        estruturado antes, só em texto livre) e um novo
+        data/armor-ac.js com CA/limite de Destreza/categoria de cada
+        armadura do Shop, por id. PENDÊNCIA DEIXADA DE FORA DE PROPÓSITO
+        (pedido explícito do usuário, não é bug): revisar o
+        formato/design de exibição dos itens agrupados na Loja — "tem item
+        que não mostra o que é importante ou está com um design ruim".
       - ✅ RESOLVIDO (Claude Code): Guarda, Soldado e Nobre já usavam
         ferramentaCategoria/ferramentaOpcoes (não era mais o placeholder
         antigo de fato), mas cada um duplicava o mesmo array de 4
@@ -902,6 +942,16 @@ const BACKGROUND_CONST = {
   "Artesão":ARTESAO, "Artista":ARTISTA, "Guarda":GUARDA, "Soldado":SOLDADO,
   "Acólito":ACOLITO, "Guia":GUIA, "Sábio":SABIO
 };
+/* Igual CLASS_CONST/BACKGROUND_CONST, mas pra espécie — usado só onde
+   precisa de dados comuns entre todas (deslocamento, visão no escuro)
+   sem ramificar por nome; o passo 5 (detalhe de espécie) continua
+   ramificando por if/else como sempre (decisão já registrada no topo
+   do arquivo, cada espécie tem escolhas próprias bem diferentes). */
+const SPECIES_CONST = {
+  "Tiferino":TIEFLING, "Pequenino":PEQUENINO, "Aasimar":AASIMAR, "Anão":ANAO,
+  "Orc":ORC, "Humano":HUMANO, "Draconato":DRACONATO, "Elfo":ELFO,
+  "Gnomo":GNOMO, "Golias":GOLIAS
+};
 
 /* ==========================================================================
    ÍNDICE DE PÁGINAS DO LIVRO (PHB 2024, tradução PT-BR) — só pra acelerar a
@@ -952,6 +1002,10 @@ const BACKGROUND_CONST = {
 
 const STANDARD_ARRAY = [15,14,13,12,10,8];
 const ABILITIES = ["Força","Destreza","Constituição","Inteligência","Sabedoria","Carisma"];
+/* Bônus de Proficiência por nível (tabela "Evolução do Personagem", PHB
+   2024) — só nível 1 hoje (+2), já como const nomeada em vez de número
+   solto pra facilitar quando a progressão de nível 2+ existir. */
+const PROF_BONUS_BY_LEVEL = {1:2};
 
 const BACKGROUND_INFO = {
   "Charlatão": {
@@ -1125,6 +1179,7 @@ function computeMaxPossibleGold(){
 let step = 0;
 const TOTAL_STEPS = 10;
 let data = {
+  characterName: '',
   especie: null, antecedente: null, classe: null,
   tiefling: { tamanho: null, legado: null, atributoLegado: null },
   pequenino: {},
@@ -1221,6 +1276,7 @@ async function restore(){
          foi implementado). */
       if(data.monge.toolCategory===undefined) data.monge.toolCategory = null;
       if(data.monge.toolChoice===undefined) data.monge.toolChoice = null;
+      if(data.characterName===undefined) data.characterName = '';
       /* Espécies: garante que TODA chave de freshSpeciesData() exista em
          data (evita crash se um save antigo do navegador não tiver uma
          espécie mais recente que a gente adicionou depois) — mesma função
@@ -2974,172 +3030,513 @@ function renderShop(){
   return html;
 }
 
-function renderSummary(){
-  const isBarbaro = data.classe==='Bárbaro';
-  const isBardo = data.classe==='Bardo';
-  const isMago = data.classe==='Mago';
-  const isPaladino = data.classe==='Paladino';
-  const isPsionico = data.classe==='Psiônico';
-  const isClerigo = data.classe==='Clérigo';
-  const isGuerreiro = data.classe==='Guerreiro';
-  const isLadino = data.classe==='Ladino';
-  const isDruida = data.classe==='Druida';
-  const isFeiticeiro = data.classe==='Feiticeiro';
-  const isMonge = data.classe==='Monge';
-  const isGuardiao = data.classe==='Guardião';
-  const cls = activeClassData();
+/* ==========================================================================
+   RESUMO FINAL — cálculo (computeCharacterSheet) + render (renderSummary)
+   ==========================================================================
+   computeCharacterSheet() é uma função PURA (só lê `data`/consts, não toca
+   DOM) que devolve um objeto já com TUDO calculado — modificadores,
+   salvaguardas, perícias, CA/PV/iniciativa, ataques, conjuração (com ficha
+   completa de cada truque/magia via SPELL_DETAILS), proficiências e
+   equipamento. renderSummary() só formata esse objeto em HTML. Escopo
+   nível 1 apenas (igual o resto do wizard) — progressão de nível fica pra
+   quando o wizard cobrir nível 2+.
+   NÃO cobre Traços de Personalidade/Ideais/Ligações/Defeitos/Aparência/
+   História — são campos de interpretação livre que o wizard não coleta
+   (decisão do usuário: resumo focado no que é mecânico/calculável, não
+   precisa seguir a ficha física campo a campo). */
+
+const WEAPON_PROF_LABEL = {"simples":"Armas Simples","marcial":"Armas Marciais"};
+const ARMOR_PROF_LABEL = {"leve":"Armadura Leve","media":"Armadura Média","pesada":"Armadura Pesada","escudo":"Escudos"};
+const CLASS_HIT_DIE = {"Bárbaro":12,"Guerreiro":10,"Paladino":10,"Guardião":10,"Bardo":8,"Bruxo":8,"Clérigo":8,"Druida":8,"Ladino":8,"Monge":8,"Psiônico":6,"Feiticeiro":6,"Mago":6};
+const CLASS_SPELL_ABILITY = {"Mago":"Inteligência","Psiônico":"Inteligência","Clérigo":"Sabedoria","Druida":"Sabedoria","Guardião":"Sabedoria","Bruxo":"Carisma","Bardo":"Carisma","Paladino":"Carisma","Feiticeiro":"Carisma"};
+
+/* Todos os ids de item que o personagem possui de verdade (herdados +
+   comprados), sem duplicata — usado pra achar arma/armadura/escudo
+   realmente em posse, tanto faz quantas unidades. */
+function ownedItemIdSet(){
+  const set = new Set();
+  characterStartingItems().forEach(it=>{ if(it.id) set.add(it.id); });
+  Object.entries(data.shop.purchases||{}).forEach(([id,q])=>{ if(q>0) set.add(id); });
+  return set;
+}
+
+/* Armadura de maior CA que o personagem possui (entre as que tem) +
+   se possui Escudo. Cobre tanto quem ganhou armadura fixa na Opção A
+   quanto quem escolheu só ouro e comprou na Loja. */
+function ownedArmorAndShield(){
+  let bestArmor = null;
+  let hasShield = false;
+  ownedItemIdSet().forEach(id=>{
+    if(id===SHIELD_ITEM_ID){ hasShield = true; return; }
+    const armor = ARMOR_AC[id];
+    if(armor && (!bestArmor || armor.ca > bestArmor.ca)) bestArmor = {id, ...armor};
+  });
+  return {armor: bestArmor, hasShield};
+}
+
+/* CA de verdade — resolve a pendência antiga "CA não calculada
+   automaticamente" (Paladino/Clérigo/Guerreiro/Druida/Guardião), que
+   antes só mostrava um texto explicando que dependia da armadura.
+   Bárbaro/Monge usam a fórmula de Defesa sem Armadura SE não tiverem
+   nenhuma armadura de verdade em posse (RAW: perdem o traço se vestirem
+   armadura) — Escudo continua somando +2 em cima de qualquer caso. */
+function computeAC(classe, dexMod, conMod, wisMod){
+  const {armor, hasShield} = ownedArmorAndShield();
+  let base, source;
+  if(armor){
+    const dexBonus = armor.dexCap===null ? dexMod : armor.dexCap===0 ? 0 : Math.min(dexMod, armor.dexCap);
+    base = armor.ca + dexBonus;
+    source = findShopItem(armor.id).n;
+  } else if(classe==='Bárbaro'){
+    base = 10 + dexMod + conMod;
+    source = 'Defesa sem Armadura (Bárbaro)';
+  } else if(classe==='Monge'){
+    base = 10 + dexMod + wisMod;
+    source = 'Defesa sem Armadura (Monge)';
+  } else {
+    base = 10 + dexMod;
+    source = 'Sem armadura';
+  }
+  if(hasShield){ base += 2; source += ' + Escudo'; }
+  return {value: base, source};
+}
+
+/* Perícias proficientes (Set, nunca duplicado mesmo se 2+ fontes derem a
+   mesma) + Especialista do Ladino (proficiência dobrada) — reusa
+   skillsGrantedBySource() (já existia pro sistema de deduplicação de
+   escolhas) em vez de montar a lista nas mãos de novo. */
+function computeSkills(finalScore, prof){
+  const bySource = skillsGrantedBySource();
+  const proficient = new Set([].concat(...Object.values(bySource)));
+  const expertise = new Set(data.classe==='Ladino' ? data.ladino.especialista : []);
+  return ALL_SKILLS.map(skill=>{
+    const ability = SKILL_ABILITY[skill];
+    const abMod = mod(finalScore(ability));
+    const isProf = proficient.has(skill);
+    const isExpert = expertise.has(skill);
+    const bonus = abMod + (isExpert ? prof*2 : isProf ? prof : 0);
+    return {skill, ability, proficient:isProf, expertise:isExpert, bonus};
+  });
+}
+
+function computeSavingThrows(clsConst, finalScore, prof){
+  return ABILITIES.map(a=>{
+    const abMod = mod(finalScore(a));
+    const isProf = (clsConst.savingThrows||[]).includes(a);
+    return {ability:a, proficient:isProf, bonus: abMod + (isProf?prof:0)};
+  });
+}
+
+/* Proficiência de arma checando TUDO: categoria (Simples/Marcial contra
+   weaponProf), e a restrição fina por propriedade/tipo quando a classe
+   tiver (Ladino/Monge — mesmos campos weaponProfFiltroMarcial/
+   weaponProfMeleeOnly já usados no filtro opcional da Loja,
+   itemMatchesWeaponProf() reaproveitada daqui). */
+function isProficientWithWeapon(clsConst, itemName){
+  const wm = WEAPON_MASTERY[itemName];
+  if(!wm) return false;
+  const catKey = wm.categoria==='Simples' ? 'simples' : 'marcial';
+  if(!clsConst.weaponProf.includes(catKey)) return false;
+  return itemMatchesWeaponProf(clsConst, itemName);
+}
+
+/* Uma linha de "Ataque" por arma realmente possuída (herdada ou
+   comprada) que bate com WEAPON_MASTERY — Acuidade usa o melhor entre
+   Força/Destreza, senão Força se Corpo a Corpo ou Destreza se À
+   Distância. Mostra TODAS as armas possuídas, marcando quando não há
+   proficiência (em vez de esconder — o jogador decide se usa mesmo assim,
+   com desvantagem/sem o bônus). */
+function computeAttacks(clsConst, strMod, dexMod, prof){
+  const attacks = [];
+  ownedItemIdSet().forEach(id=>{
+    const item = findShopItem(id);
+    if(!item) return;
+    const wm = WEAPON_MASTERY[item.n];
+    if(!wm) return;
+    const finesse = wm.propriedades.includes('Acuidade');
+    const abMod = finesse ? Math.max(strMod, dexMod) : (wm.tipo==='Corpo a Corpo' ? strMod : dexMod);
+    const proficient = isProficientWithWeapon(clsConst, item.n);
+    const atkBonus = abMod + (proficient ? prof : 0);
+    attacks.push({nome: item.n, tipo: wm.tipo, bonus: atkBonus, dano: `${item.d}${abMod!==0?' '+fmt(abMod):''}`, proficient});
+  });
+  return attacks.sort((a,b)=>b.bonus-a.bonus);
+}
+
+const spellEntry = n => ({nome:n, detalhe: SPELL_DETAILS[n]||null});
+
+/* Conjuração — null se a classe não conjurar (Bárbaro/Guerreiro/Ladino/
+   Monge). Junta truques/magias de CADA campo específico por classe
+   (cantrips/spells1/prepared/spellbook/tomoCantrips/tomoRituals — os
+   mesmos nomes de campo já usados em classFeatureBlock) + concessão
+   fixa da PRÓPRIA classe (Falar com Animais do Druida, Marca do
+   Predador do Guardião — sempre casters, sem risco de sumir da ficha).
+   NÃO inclui concessão fixa de ESPÉCIE aqui — isso é
+   speciesGrantedSpellsEntries() à parte (ver abaixo), porque uma
+   espécie pode conceder truque/magia pra QUALQUER classe, inclusive
+   não-conjuradora (ex: Bárbaro Tiferino) — se ficasse só aqui dentro,
+   sumiria da ficha de quem não conjura. Cada truque/magia vem com o
+   detalhe completo de SPELL_DETAILS (tempo, alcance, componentes,
+   duração, efeito, escalonamento) — é o pedido central desta tela: "a
+   pessoa precisa saber o que a magia faz". */
+function computeSpellcasting(cls, finalScore, prof){
+  const ability = CLASS_SPELL_ABILITY[data.classe];
+  if(!ability) return null;
+  const abMod = mod(finalScore(ability));
+  let cantripNames = [], spellNames = [];
+  switch(data.classe){
+    case 'Bruxo':
+      cantripNames = [...cls.cantrips, ...cls.tomoCantrips];
+      spellNames = [...cls.spells1, ...cls.tomoRituals];
+      break;
+    case 'Mago':
+      cantripNames = [...cls.cantrips];
+      spellNames = [...cls.prepared];
+      break;
+    case 'Paladino':
+      spellNames = [...cls.prepared];
+      break;
+    case 'Guardião':
+      spellNames = [...cls.spells1, 'Marca do Predador'];
+      break;
+    case 'Druida':
+      cantripNames = [...cls.cantrips];
+      spellNames = [...cls.spells1, 'Falar com Animais'];
+      break;
+    default: // Bardo, Psiônico, Clérigo, Feiticeiro
+      cantripNames = [...cls.cantrips];
+      spellNames = [...cls.spells1];
+  }
+  return {
+    classe: data.classe,
+    habilidade: ability,
+    cd: 8 + prof + abMod,
+    ataque: prof + abMod,
+    cantrips: [...new Set(cantripNames)].map(spellEntry),
+    magias: [...new Set(spellNames)].map(spellEntry)
+  };
+}
+
+/* Truque/magia que a ESPÉCIE concede de graça (ex: Legado Ínfero do
+   Tiferino) — separado de computeSpellcasting() de propósito, pra
+   aparecer na ficha mesmo em classes que não conjuram (ex: Bárbaro
+   Tiferino não some com o truque grátis só porque Bárbaro não tem
+   seção de Conjuração). */
+function speciesGrantedSpellEntries(){
+  return [...speciesGrantedCantrips(), ...speciesGrantedSpells()].map(spellEntry);
+}
+
+/* Traços extras que vêm de uma escolha de subespécie/herança e por isso NÃO
+   estão em especieConst.tracosFixos (que só tem o que é automático pra
+   qualquer personagem da espécie, sem depender de escolha nenhuma) — ex:
+   resistência a dano do Legado do Tiferino, o texto completo da Linhagem
+   Élfica/Gnômica (que tem efeito além do truque/magia já listado em
+   "Concedido pela Espécie"), o tipo de dano da Herança Dracônica, a
+   Ancestralidade Gigante do Golias. Cada affix retorna {nome, resumo} pra
+   reaproveitar o mesmo layout de traitBox usado nas telas de escolha.
+   Achado como pendência ao montar o Resumo: essas escolhas do passo 5
+   (detalhe de espécie) não apareciam em NENHUM lugar da ficha final. */
+function speciesChoiceTraits(){
+  const out = [];
+  if(data.especie==='Tiferino' && data.tiefling.legado){
+    const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
+    if(opt && opt.nivel1 && opt.nivel1.resumo) out.push({nome:`Legado Ínfero: ${opt.nome}`, resumo:opt.nivel1.resumo});
+  }
+  if(data.especie==='Draconato' && data.draconato.heranca){
+    const opt = DRACONATO.subespecie.opcoes.find(o=>o.nome===data.draconato.heranca);
+    if(opt) out.push({nome:`Herança Dracônica: ${opt.nome}`, resumo:`Seu Ataque de Sopro e sua Resistência a Dano usam dano do tipo ${opt.tipoDano}.`});
+  }
+  if(data.especie==='Elfo' && data.elfo.linhagem){
+    const opt = ELFO.subespecie.opcoes.find(o=>o.nome===data.elfo.linhagem);
+    if(opt && opt.nivel1 && opt.nivel1.resumo) out.push({nome:`Linhagem Élfica: ${opt.nome}`, resumo:opt.nivel1.resumo});
+  }
+  if(data.especie==='Gnomo' && data.gnomo.linhagem){
+    const opt = GNOMO.subespecie.opcoes.find(o=>o.nome===data.gnomo.linhagem);
+    if(opt && opt.nivel1 && opt.nivel1.resumo) out.push({nome:`Linhagem Gnômica: ${opt.nome}`, resumo:opt.nivel1.resumo});
+  }
+  if(data.especie==='Golias' && data.golias.ancestralidade){
+    const opt = GOLIAS.subespecie.opcoes.find(o=>o.nome===data.golias.ancestralidade);
+    if(opt && opt.nivel1 && opt.nivel1.resumo) out.push({nome:`Ancestralidade Gigante: ${opt.nome}`, resumo:opt.nivel1.resumo});
+  }
+  return out;
+}
+
+/* Deslocamento base da espécie ajustado pela subespécie — hoje o único
+   caso que muda o número no nível 1 é o Elfo Silvestre (9m -> 10,5m); as
+   demais escolhas de subespécie só afetam texto de traço ou magia. */
+function resolvedDeslocamento(){
+  if(data.especie==='Elfo' && data.elfo.linhagem==='Elfo Silvestre') return '10,5 metros';
+  return SPECIES_CONST[data.especie].deslocamento;
+}
+
+/* Ferramentas/kits com proficiência — de todas as fontes possíveis
+   (classe, Bardo/Monge, antecedente fixo ou por escolha, Habilidoso
+   dentro do antecedente). bg.habilidoso pode ter perícia OU ferramenta
+   misturado (é uma escolha "3 perícias OU ferramentas") — !ALL_SKILLS.
+   includes() separa qual é qual. */
+function computeToolProficiencies(clsConst, bgConst, bg){
+  const tools = [];
+  if(clsConst.toolsFixed) tools.push(clsConst.toolsFixed);
+  if(data.classe==='Bardo') tools.push(...data.bardo.instruments);
+  if(data.classe==='Monge' && data.monge.toolChoice) tools.push(data.monge.toolChoice);
+  if(bgConst.ferramentaOpcoes){ if(bg.ferramentaEscolhida) tools.push(bg.ferramentaEscolhida); }
+  else if(bgConst.tool) tools.push(bgConst.tool);
+  (bg.habilidoso||[]).forEach(x=>{ if(!ALL_SKILLS.includes(x)) tools.push(x); });
+  return [...new Set(tools)];
+}
+
+function computeCharacterSheet(){
   const clsConst = activeClassConst();
-  const t = data.tiefling;
-  const bg = activeBgData();
+  const cls = activeClassData();
   const bgConst = activeBgConst();
-  const bgEquipA = resolvedEquipmentA(bgConst, bg);
+  const bg = activeBgData();
+  const especieConst = SPECIES_CONST[data.especie];
+  const prof = PROF_BONUS_BY_LEVEL[1];
   const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
-  const prof = 2;
-  const carMod = mod(finalScore('Carisma'));
-  const intMod = mod(finalScore('Inteligência'));
-  const wisMod = mod(finalScore('Sabedoria'));
-  const conMod = mod(finalScore('Constituição'));
-  const dexMod = mod(finalScore('Destreza'));
-  const spellMod = (isMago || isPsionico) ? intMod : (isClerigo || isDruida || isGuardiao) ? wisMod : carMod; // atributo de conjuração varia por classe
-  const hp = isBarbaro ? (12 + conMod) : (isMago || isPsionico || isFeiticeiro) ? (6 + conMod) : (isPaladino || isGuerreiro || isGuardiao) ? (10 + conMod) : (8 + conMod);
-  const ac = isBarbaro ? (10 + dexMod + conMod) : (isMago || isPsionico || isFeiticeiro) ? (10 + dexMod) : (11 + dexMod);
-  const acMonge = 10 + dexMod + wisMod;
-  const dc = 8 + prof + spellMod;
-  const atkMagic = prof + spellMod;
+  const attrs = ABILITIES.map(a=>({ability:a, score:finalScore(a), mod:mod(finalScore(a))}));
+  const modOf = a => mod(finalScore(a));
+
+  const savingThrows = computeSavingThrows(clsConst, finalScore, prof);
+  const skills = computeSkills(finalScore, prof);
+  const perceptionSkill = skills.find(s=>s.skill==='Percepção');
+  const passivePerception = 10 + perceptionSkill.bonus;
+
+  const hitDie = CLASS_HIT_DIE[data.classe];
+  const hp = hitDie + modOf('Constituição');
+  const ac = computeAC(data.classe, modOf('Destreza'), modOf('Constituição'), modOf('Sabedoria'));
+  const initiative = modOf('Destreza');
+  const attacks = computeAttacks(clsConst, modOf('Força'), modOf('Destreza'), prof);
+  const spellcasting = computeSpellcasting(cls, finalScore, prof);
+  const especieMagias = speciesGrantedSpellEntries();
+  const especieTracosExtras = speciesChoiceTraits();
+  const humanoTalento = (data.especie==='Humano' && data.humano.talento) ? { nome: data.humano.talento, detalhe: FEAT_DETAILS[data.humano.talento]||null } : null;
+
+  const classFeatureLines = [];
+  if(cls.maestria && cls.maestria.length) classFeatureLines.push(`Maestria em Arma: ${cls.maestria.map(m=>`${m} (${WEAPON_MASTERY[m].mastery})`).join(', ')}`);
+  if(cls.estilo) classFeatureLines.push(`Estilo de Luta: ${cls.estilo}`);
+  if(cls.ordem) classFeatureLines.push(`Ordem: ${cls.ordem}`);
+  if(cls.pactBoon) classFeatureLines.push(`Vínculo de Pacto: ${cls.pactBoon}`);
+  if(cls.especialista && cls.especialista.length) classFeatureLines.push(`Especialista (proficiência dobrada): ${cls.especialista.join(', ')}`);
+
+  const talentoAntecedente = bgConst.feat.startsWith('Habilidoso')
+    ? { tipo:'habilidoso', skills: bg.habilidoso }
+    : bgConst.iniciadoEmMagia
+    ? { tipo:'iniciado', classe: bgConst.iniciadoEmMagia.classe, entries: [...bg.iniciadoCantrips, ...bg.iniciadoSpell1].map(spellEntry) }
+    : { tipo:'texto', texto: bgConst.feat };
+
+  const idiomas = ['Comum', ...data.idiomas.comuns, ...(data.classe==='Ladino' ? ['Gíria dos Ladrões', ...data.idiomas.extra] : [])];
+  const tools = computeToolProficiencies(clsConst, bgConst, bg);
+  const weaponProfText = clsConst.weaponProf.map(w=>WEAPON_PROF_LABEL[w]).join(', ') || 'Nenhuma';
+  const armorProfText = clsConst.armorProf.length ? clsConst.armorProf.map(a=>ARMOR_PROF_LABEL[a]).join(', ') : 'Nenhuma';
+
   const remaining = startingGold() - spentGold();
-  const purchases = Object.entries(data.shop.purchases||{}).filter(([,q])=>q>0);
 
-  const combateContent = isBarbaro
-    ? `PV: ${hp} (1d12) · CA: ${ac} (sem armadura: 10 + Destreza + Constituição, ou o que for comprado na Loja)`
-    : isMago
-    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isPsionico
-    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isFeiticeiro
-    ? `PV: ${hp} (1d6) · CA: ${ac} (sem armadura: 10 + Destreza, ou o que for comprado na Loja) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isPaladino
-    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isClerigo
-    ? `PV: ${hp} (1d8) · CA: depende da armadura equipada (Cota de Malha Parcial + Escudo, se Opção A) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isGuerreiro
-    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Cota de Malha, se Opção A) — não calculada automaticamente neste protótipo. Sem conjuração.`
-    : isLadino
-    ? `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · Sem conjuração.`
-    : isDruida
-    ? `PV: ${hp} (1d8) · CA: depende da armadura equipada (Couro + Escudo, se Opção A — soma +2 de Escudo ao ${ac}) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : isMonge
-    ? `PV: ${hp} (1d8) · CA: ${acMonge} (sem armadura: 10 + Destreza + Sabedoria) · Sem conjuração.`
-    : isGuardiao
-    ? `PV: ${hp} (1d10) · CA: depende da armadura equipada (Couro Batido, se Opção A — CA 12 + Destreza) — não calculada automaticamente neste protótipo · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`
-    : `PV: ${hp} (1d8) · CA: ${ac} (Couro + Destreza) · CD de Magia: ${dc} · Ataque Mágico: ${fmt(atkMagic)}`;
+  return {
+    identidade: {
+      classe: data.classe, nivel: 1, antecedente: data.antecedente, especie: data.especie,
+      profBonus: prof
+    },
+    attrs, savingThrows, skills, passivePerception,
+    combate: { hp, hitDie: `1d${hitDie}`, ac, initiative, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
+    attacks, spellcasting, especieMagias, especieTracosExtras, humanoTalento,
+    classFeatureLines, talentoAntecedente,
+    proficiencias: { idiomas, ferramentas: tools, armas: weaponProfText, armaduras: armorProfText },
+    equipamento: { itens: mochilaItems(), poRestante: remaining },
+    especieConst, clsConst, bgConst, bg, cls
+  };
+}
 
-  const classFeatureBlock = isBarbaro ? `
-  <div class="summary-section"><h3>Fúria, Defesa sem Armadura e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
-  </div></div>` : isBardo ? `
-  <div class="summary-section"><h3>Inspiração de Bardo, Instrumentos, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Instrumentos: ${cls.instruments.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>` : isMago ? `
-  <div class="summary-section"><h3>Adepto de Ritual, Recuperação Arcana, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 3 da classe">${s} (espécie)</span>`).join('')}<br>
-    Livro de Magias: ${cls.spellbook.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
-    Preparadas: ${cls.prepared.map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>` : isPsionico ? `
-  <div class="summary-section"><h3>Poder Psiônico, Telecinese Sutil, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nos 2 da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>` : isPaladino ? `
-  <div class="summary-section"><h3>Magias, Maestria em Arma e Mãos Consagradas <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Magias Preparadas: ${cls.prepared.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
-    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
-  </div></div>` : isClerigo ? `
-  <div class="summary-section"><h3>Ordem Divina, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    <b>${cls.ordem}</b><br>
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>` : isGuerreiro ? `
-  <div class="summary-section"><h3>Estilo de Luta, Maestria em Arma e Recuperar Fôlego <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Estilo de Luta: <span class="pill-static">${cls.estilo}</span><br>
-    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
-  </div></div>` : isLadino ? `
-  <div class="summary-section"><h3>Ataque Furtivo, Especialista, Gíria do Ladrão e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Especialista: ${cls.especialista.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>
-    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
-  </div></div>` : isDruida ? `
-  <div class="summary-section"><h3>Idioma Druídico, Ordem Primal, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    <b>${cls.ordem}</b><br>
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')} <span class="pill-static" title="Concedida de graça pelo Idioma Druídico">Falar com Animais (grátis)</span>
-  </div></div>` : isFeiticeiro ? `
-  <div class="summary-section"><h3>Feitiçaria Inata, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Truques: ${cls.cantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta no total da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>` : isMonge ? `
-  <div class="summary-section"><h3>Artes Marciais e Defesa sem Armadura</h3>
-  <div class="content">Ataque Desarmado Adicional, Dado de Artes Marciais (1d6) e Ataques com Destreza, enquanto desarmado/com armas de Monge, sem armadura nem Escudo.</div></div>` : isGuardiao ? `
-  <div class="summary-section"><h3>Inimigo Favorito, Magias e Maestria em Arma <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    Magias Preparadas: ${cls.spells1.map(s=>`<span class="pill-static">${s}</span>`).join('')} <span class="pill-static" title="Concedida de graça pelo Inimigo Favorito">Marca do Predador (grátis)</span><br>
-    Maestria em Arma: ${cls.maestria.map(m=>`<span class="pill-static">${m} (${WEAPON_MASTERY[m].mastery})</span>`).join('')}
-  </div></div>` : `
-  <div class="summary-section"><h3>Vínculo de Pacto, Truques e Magias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">
-    <b>${cls.pactBoon}</b><br>
-    Truques: ${[...cls.cantrips, ...cls.tomoCantrips].map(s=>`<span class="pill-static">${s}</span>`).join('')}${speciesGrantedCantrips().map(s=>`<span class="pill-static" title="Concedido pela espécie, não conta nas 2 da classe">${s} (espécie)</span>`).join('')}<br>
-    Magias: ${[...cls.spells1, ...cls.tomoRituals.map(r=>r+' (ritual)')].map(s=>`<span class="pill-static">${s}</span>`).join('')}
-  </div></div>`;
+function setCharacterName(v){ data.characterName = v; persist(); }
+
+/* Linha de estatística com "bolinha" de proficiência (○ nenhuma, ●
+   proficiente, ◆ com Especialista/dobrada) + valor com sinal — usada
+   tanto pra Salvaguardas quanto Perícias, mesmo formato visual. */
+function renderStatRows(rows){
+  return `<div class="stat-grid">${rows.map(r=>`<div class="stat-row ${r.marked?'prof':''}"><span class="stat-name">${r.dot} ${r.label}</span><span class="stat-bonus">${fmt(r.bonus)}</span></div>`).join('')}</div>`;
+}
+
+/* Truque/magia sempre expandido (não é a lista de ESCOLHA — aqui é só
+   exibição da ficha final, sem toggle) — reaproveita renderSpellDetailCard
+   já usado no botão "ⓘ" das telas de escolha. */
+function renderSpellEntryList(entries){
+  if(!entries.length) return '<span style="color:var(--parchment-dim);">Nenhuma.</span>';
+  return entries.map(e=>`<div class="spell-pill-wrap expanded" style="display:block;width:100%;margin-bottom:8px;">
+    <div class="check-pill selected" style="cursor:default;">${e.nome}</div>
+    ${e.detalhe ? renderSpellDetailCard(e.detalhe) : '<div style="color:var(--parchment-dim);font-size:0.8rem;margin-top:4px;">Sem ficha detalhada cadastrada.</div>'}
+  </div>`).join('');
+}
+
+/* Texto puro (pra "Copiar Resumo") — mesma informação da tela, sem HTML,
+   bom pra colar em qualquer lugar (chat, bloco de notas, editor de texto
+   antes de preencher a ficha em PDF na mão). */
+function characterSheetAsText(sheet){
+  const L = [];
+  const push = (...s) => L.push(s.join(''));
+  push(`${data.characterName || '(sem nome)'} — ${sheet.identidade.classe} 1, ${sheet.identidade.especie}, Antecedente ${sheet.identidade.antecedente}`);
+  push(`Bônus de Proficiência: ${fmt(sheet.identidade.profBonus)}`);
+  push('');
+  push('ATRIBUTOS: ', sheet.attrs.map(a=>`${a.ability} ${a.score} (${fmt(a.mod)})`).join(' · '));
+  push('');
+  push('SALVAGUARDAS: ', sheet.savingThrows.map(s=>`${s.ability} ${fmt(s.bonus)}${s.proficient?'*':''}`).join(' · '));
+  push('');
+  push('PERÍCIAS: ', sheet.skills.map(s=>`${s.skill} ${fmt(s.bonus)}${s.expertise?'**':s.proficient?'*':''}`).join(' · '));
+  push(`Percepção Passiva: ${sheet.passivePerception}`);
+  push('');
+  push(`COMBATE: PV ${sheet.combate.hp} (${sheet.combate.hitDie}) · CA ${sheet.combate.ac.value} (${sheet.combate.ac.source}) · Iniciativa ${fmt(sheet.combate.initiative)} · Deslocamento ${sheet.combate.deslocamento}${sheet.combate.visaoNoEscuro ? ` · Visão no Escuro ${sheet.combate.visaoNoEscuro}` : ''}`);
+  if(sheet.attacks.length){
+    push('');
+    push('ATAQUES:');
+    sheet.attacks.forEach(a=>push(`  ${a.nome}: ${fmt(a.bonus)} pra acertar, ${a.dano}${a.proficient?'':' (sem proficiência)'}`));
+  }
+  if(sheet.spellcasting){
+    push('');
+    push(`CONJURAÇÃO (${sheet.spellcasting.classe}): Atributo ${sheet.spellcasting.habilidade} · CD ${sheet.spellcasting.cd} · Ataque Mágico ${fmt(sheet.spellcasting.ataque)}`);
+    if(sheet.spellcasting.cantrips.length) push('  Truques: ', sheet.spellcasting.cantrips.map(c=>c.nome).join(', '));
+    if(sheet.spellcasting.magias.length) push('  Magias: ', sheet.spellcasting.magias.map(c=>c.nome).join(', '));
+  }
+  if(sheet.especieMagias.length){
+    push('');
+    push('CONCEDIDO PELA ESPÉCIE: ', sheet.especieMagias.map(e=>e.nome).join(', '));
+  }
+  if(sheet.classFeatureLines.length){
+    push('');
+    push('CARACTERÍSTICAS DE CLASSE:');
+    sheet.classFeatureLines.forEach(l=>push(`  ${l}`));
+  }
+  push('');
+  const ta = sheet.talentoAntecedente;
+  push('TALENTO DO ANTECEDENTE:');
+  if(ta.tipo==='habilidoso') push(`  Habilidoso: ${ta.skills.join(', ')}`);
+  else if(ta.tipo==='iniciado') push(`  Iniciado em Magia (${ta.classe}): ${ta.entries.map(e=>e.nome).join(', ')}`);
+  else push(`  ${ta.texto}`);
+  push('');
+  push('TRAÇOS DE ESPÉCIE:');
+  [...(sheet.especieConst.tracosFixos||[]), ...sheet.especieTracosExtras].forEach(tr=>push(`  ${tr.nome}: ${tr.resumo.replace(/<br>/g,' ')}`));
+  if(sheet.humanoTalento) push(`  Versátil: ${sheet.humanoTalento.nome}`);
+  push('');
+  push('PROFICIÊNCIAS E IDIOMAS:');
+  push(`  Armas: ${sheet.proficiencias.armas}`);
+  push(`  Armaduras: ${sheet.proficiencias.armaduras}`);
+  push(`  Ferramentas: ${sheet.proficiencias.ferramentas.join(', ') || 'Nenhuma'}`);
+  push(`  Idiomas: ${sheet.proficiencias.idiomas.join(', ')}`);
+  push('');
+  push('EQUIPAMENTO:');
+  sheet.equipamento.itens.forEach(it=>push(`  ${it.label}${it.qty>1?` ×${it.qty}`:''}`));
+  push(`  Dinheiro restante: ${fmtGold(sheet.equipamento.poRestante)} PO`);
+  return L.join('\n');
+}
+
+let copyFeedback = false;
+function copySummaryText(){
+  const sheet = computeCharacterSheet();
+  const text = characterSheetAsText(sheet);
+  navigator.clipboard.writeText(text).then(()=>{
+    copyFeedback = true;
+    render();
+    setTimeout(()=>{ copyFeedback = false; render(); }, 2000);
+  }).catch(()=>{
+    alert('Não consegui copiar automaticamente — selecione o texto manualmente.');
+  });
+}
+
+function renderSummary(){
+  const sheet = computeCharacterSheet();
+  const { clsConst, bgConst, bg, cls, especieConst, classFeatureLines } = sheet;
+  const t = data.tiefling;
+
+  const ta = sheet.talentoAntecedente;
+  const talentoBlock = ta.tipo==='habilidoso'
+    ? `<div class="content">Habilidoso: ${ta.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div>`
+    : ta.tipo==='iniciado'
+    ? `<div class="content">Iniciado em Magia (${ta.classe})<br>${renderSpellEntryList(ta.entries)}</div>`
+    : `<div class="content">${ta.texto}</div>`;
 
   return `<h2>Ficha Concluída</h2>
-  <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto.</div>
+  <div class="intro">Revise abaixo. Clique em "Editar" pra voltar e mudar qualquer escolha — depois é só confirmar pra voltar aqui direto. Tudo já vem calculado (nível 1); traços de personalidade, aparência e história ficam de fora — são de interpretação livre, não mecânicos.</div>
 
   <div class="summary-section"><h3>Identidade <button class="edit-link" onclick="editSection(0)">Editar</button></h3>
-  <div class="content">${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente}</div></div>
-
-  <div class="summary-section"><h3>Idiomas <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
-  <div class="content"><span class="pill-static">Comum</span>${data.idiomas.comuns.map(s=>`<span class="pill-static">${s}</span>`).join('')}${data.classe==='Ladino' ? `<span class="pill-static" title="Concedida de graça pela classe Ladino">Gíria dos Ladrões</span>${data.idiomas.extra.map(s=>`<span class="pill-static">${s}</span>`).join('')}` : ''}</div></div>
+  <div class="content">
+    <input type="text" placeholder="Nome do personagem" value="${(data.characterName||'').replace(/"/g,'&quot;')}" oninput="setCharacterName(this.value)" style="margin-bottom:8px;">
+    ${data.classe} 1 · ${data.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''} · Antecedente ${data.antecedente} · Bônus de Proficiência ${fmt(sheet.identidade.profBonus)}
+  </div></div>
 
   <div class="summary-section"><h3>Atributos <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
-  <div class="content">${ABILITIES.map(a=>`<span class="pill-static">${a} ${finalScore(a)} (${fmt(mod(finalScore(a)))})</span>`).join('')}</div></div>
+  <div class="content">${sheet.attrs.map(a=>`<span class="pill-static">${a.ability} ${a.score} (${fmt(a.mod)})</span>`).join('')}</div></div>
 
-  <div class="summary-section"><h3>Combate</h3>
-  <div class="content">${combateContent}</div></div>
+  <div class="summary-section"><h3>Salvaguardas</h3>
+  <div class="content">${renderStatRows(sheet.savingThrows.map(s=>({label:s.ability, bonus:s.bonus, marked:s.proficient, dot:s.proficient?'●':'○'})))}</div></div>
 
   <div class="summary-section"><h3>Perícias <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
-  <div class="content">${cls.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}${bgConst.skills.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>
-
-  ${classFeatureBlock}
-
-  ${bgConst.feat.startsWith('Habilidoso') ? `
-  <div class="summary-section"><h3>Talento — Habilidoso <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
-  <div class="content">${bg.habilidoso.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : bgConst.iniciadoEmMagia ? `
-  <div class="summary-section"><h3>Talento — Iniciado em Magia (${bgConst.iniciadoEmMagia.classe}) <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
-  <div class="content">Truques: ${bg.iniciadoCantrips.map(s=>`<span class="pill-static">${s}</span>`).join('')}<br>Magia de 1º círculo: ${bg.iniciadoSpell1.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div></div>` : `
-  <div class="summary-section"><h3>Talento do Antecedente</h3>
-  <div class="content">${bgConst.feat}</div></div>`}
-
-  <div class="summary-section"><h3>Equipamento Inicial <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
-  <div class="content">
-    ${(cls.equipment==='A'?[...resolvedClassEquipmentList(clsConst.equipmentA), clsConst.equipmentA_gold+' PO']:cls.equipment==='B' && clsConst.equipmentB?[...resolvedClassEquipmentList(clsConst.equipmentB), clsConst.equipmentB_gold+' PO']:cls.equipment==='C'?[clsConst.equipmentC_gold+' PO']:[clsConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
-    ${(bg.equipment==='A'?[...bgEquipA, bgConst.equipmentA_gold+' PO']:[bgConst.equipmentB_gold+' PO']).map(s=>`<span class="pill-static">${s}</span>`).join('')}
+  <div class="content">${renderStatRows(sheet.skills.map(s=>({label:`${s.skill} (${SKILL_ABILITY[s.skill].slice(0,3)})`, bonus:s.bonus, marked:s.proficient, dot:s.expertise?'◆':s.proficient?'●':'○'})))}
+  <div style="margin-top:8px;font-size:0.78rem;color:var(--parchment-dim);">Percepção Passiva: <b style="color:var(--gold);">${sheet.passivePerception}</b></div>
   </div></div>
 
-  <div class="summary-section"><h3>Compras na Loja <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
+  <div class="summary-section"><h3>Combate</h3>
   <div class="content">
-    ${purchases.length ? purchases.map(([id,q])=>`<span class="pill-static">${findShopItem(id).n} ×${q}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhuma compra.</span>'}
-    <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(remaining)} PO</div>
+    <span class="pill-static">PV ${sheet.combate.hp}</span>
+    <span class="pill-static">CA ${sheet.combate.ac.value} (${sheet.combate.ac.source})</span>
+    <span class="pill-static">Iniciativa ${fmt(sheet.combate.initiative)}</span>
+    <span class="pill-static">Deslocamento ${sheet.combate.deslocamento}</span>
+    <span class="pill-static">Dado de Vida ${sheet.combate.hitDie}</span>
+    ${sheet.combate.visaoNoEscuro ? `<span class="pill-static">Visão no Escuro ${sheet.combate.visaoNoEscuro}</span>` : ''}
   </div></div>
+
+  ${sheet.attacks.length ? `
+  <div class="summary-section"><h3>Ataques</h3>
+  <div class="content">
+    <table class="shop-table"><thead><tr><th>Arma</th><th>Bônus</th><th>Dano</th></tr></thead><tbody>
+    ${sheet.attacks.map(a=>`<tr>
+      <td data-label="Arma">${a.nome}${a.proficient?'':' <span style="color:var(--parchment-dim);font-size:0.75rem;">(sem proficiência)</span>'}</td>
+      <td data-label="Bônus">${fmt(a.bonus)}</td>
+      <td data-label="Dano">${a.dano}</td>
+    </tr>`).join('')}
+    </tbody></table>
+  </div></div>` : ''}
+
+  ${sheet.spellcasting ? `
+  <div class="summary-section"><h3>Conjuração — ${sheet.spellcasting.classe} <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">
+    <div style="margin-bottom:10px;">
+      <span class="pill-static">Atributo: ${sheet.spellcasting.habilidade}</span>
+      <span class="pill-static">CD de Magia: ${sheet.spellcasting.cd}</span>
+      <span class="pill-static">Ataque Mágico: ${fmt(sheet.spellcasting.ataque)}</span>
+    </div>
+    ${sheet.spellcasting.cantrips.length ? `<div class="group-label">Truques</div>${renderSpellEntryList(sheet.spellcasting.cantrips)}` : ''}
+    ${sheet.spellcasting.magias.length ? `<div class="group-label">Magias Preparadas/Conhecidas</div>${renderSpellEntryList(sheet.spellcasting.magias)}` : ''}
+  </div></div>` : ''}
+
+  ${sheet.especieMagias.length ? `
+  <div class="summary-section"><h3>Concedido pela Espécie</h3>
+  <div class="content">${renderSpellEntryList(sheet.especieMagias)}</div></div>` : ''}
+
+  ${classFeatureLines.length ? `
+  <div class="summary-section"><h3>Características de Classe <button class="edit-link" onclick="editSection(1)">Editar</button></h3>
+  <div class="content">${classFeatureLines.map(l=>`<div style="margin-bottom:4px;">${l}</div>`).join('')}</div></div>` : ''}
+
+  <div class="summary-section"><h3>Talento do Antecedente <button class="edit-link" onclick="editSection(3)">Editar</button></h3>
+  ${talentoBlock}</div>
+
+  <div class="summary-section"><h3>Traços de Espécie <button class="edit-link" onclick="editSection(5)">Editar</button></h3>
+  <div class="content">${[...(especieConst.tracosFixos||[]), ...sheet.especieTracosExtras].map(tr=>`<div style="margin-bottom:8px;"><b style="color:var(--gold);">${tr.nome}</b><br>${tr.resumo}</div>`).join('')}
+  ${sheet.humanoTalento ? `<div style="margin-bottom:8px;"><b style="color:var(--gold);">Versátil: ${sheet.humanoTalento.nome}</b>${sheet.humanoTalento.detalhe ? renderFeatDetailCard(sheet.humanoTalento.detalhe) : ''}</div>` : ''}
+  </div></div>
+
+  <div class="summary-section"><h3>Proficiências e Idiomas <button class="edit-link" onclick="editSection(6)">Editar</button></h3>
+  <div class="content">
+    <div style="margin-bottom:4px;"><b>Armas:</b> ${sheet.proficiencias.armas}</div>
+    <div style="margin-bottom:4px;"><b>Armaduras:</b> ${sheet.proficiencias.armaduras}</div>
+    <div style="margin-bottom:4px;"><b>Ferramentas:</b> ${sheet.proficiencias.ferramentas.map(t=>`<span class="pill-static">${t}</span>`).join('') || 'Nenhuma'}</div>
+    <div><b>Idiomas:</b> ${sheet.proficiencias.idiomas.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div>
+  </div></div>
+
+  <div class="summary-section"><h3>Equipamento <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
+  <div class="content">
+    ${sheet.equipamento.itens.length ? sheet.equipamento.itens.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhum item.</span>'}
+    <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(sheet.equipamento.poRestante)} PO</div>
+  </div></div>
+
+  <div style="margin:16px 0;">
+    <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>
+  </div>
 
   <div class="nav">
     <button class="btn" onclick="back()">← Voltar</button>
@@ -3177,7 +3574,7 @@ function resetWizard(){
   Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
     bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
-  data = Object.assign({ especie:null, antecedente:null, classe:null,
+  data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null,
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],instruments:[],equipment:null},

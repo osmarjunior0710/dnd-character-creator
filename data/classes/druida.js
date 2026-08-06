@@ -2,6 +2,7 @@ const DRUIDA = {
   skills: ["Arcanismo","Lidar com Animais","Intuição","Medicina","Natureza","Percepção","Religião","Sobrevivência"],
   weaponProf: ["simples"],
   armorProf: ["leve","escudo"],
+  savingThrows: ["Inteligência","Sabedoria"],
   toolsFixed: "Kit de Herbalismo",
   equipmentA: ["Armadura de Couro", "Escudo", "Foice", "Foco Druídico (Cajado)", "Kit de Explorador de Masmorras", "Kit de Herbalismo"],
   equipmentA_gold: 9,

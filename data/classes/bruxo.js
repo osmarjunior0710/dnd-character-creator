@@ -11,7 +11,8 @@ const BRUXO = {
   equipmentA_gold: 15,
   equipmentB_gold: 100,
   weaponProf: ["simples"],
-  armorProf: ["leve"]
+  armorProf: ["leve"],
+  savingThrows: ["Sabedoria","Carisma"]
 };
 
 const ALL_CANTRIPS = ["Acudir os Moribundos","Amigos","Arremesso Telecinético","Arte Druídica","Badalar Fúnebre","Bolha Ácida","Bordão Místico","Chama Sagrada","Chicote de Espinhos","Criar Chamas","Elementalismo","Explosão Elemental","Fagulha Estelar","Golpe Certeiro","Ilusão Menor","Luz","Luzes Dançantes","Mensagem","Mãos Mágicas","Orientação","Palavra de Radiância","Prestidigitação Arcana","Proteção Contra Lâminas","Raio Místico","Raio de Fogo","Raio de Gelo","Rajada de Veneno","Reparar","Resistência","Talho Mental","Taumaturgia","Toque Chocante","Toque Necrótico","Trovão","Zombaria Perversa"];

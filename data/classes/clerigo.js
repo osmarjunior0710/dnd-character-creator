@@ -2,6 +2,7 @@ const CLERIGO = {
   skills: ["História","Intuição","Medicina","Persuasão","Religião"],
   weaponProf: ["simples"],
   armorProf: ["leve","media","escudo"],
+  savingThrows: ["Sabedoria","Carisma"],
   equipmentA: ["Cota de Malha Parcial", "Escudo", "Maça", "Símbolo Sagrado", "Kit de Sacerdote"],
   equipmentA_gold: 7,
   equipmentB_gold: 110,

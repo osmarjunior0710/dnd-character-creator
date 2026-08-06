@@ -3,6 +3,7 @@ const GUARDIAO = {
   skillsCount: 3,
   weaponProf: ["simples","marcial"],
   armorProf: ["leve","media","escudo"],
+  savingThrows: ["Força","Destreza"],
   equipmentA: ["Armadura de Couro Batido", "Cimitarra", "Espada Curta", "Arco Longo", "20 Flechas", "Aljava", "Foco Druídico (ramo de visco)", "Kit de Aventureiro"],
   equipmentA_gold: 7,
   equipmentB_gold: 150,

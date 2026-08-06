@@ -2,6 +2,7 @@ const FEITICEIRO = {
   skills: ["Arcanismo","Enganação","Intimidação","Intuição","Persuasão","Religião"],
   weaponProf: ["simples"],
   armorProf: [],
+  savingThrows: ["Constituição","Carisma"],
   equipmentA: ["Lança", "2 Adagas", "Foco Arcano (cristal)", "Kit de Explorador de Masmorras"],
   equipmentA_gold: 28,
   equipmentB_gold: 50,

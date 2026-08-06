@@ -2,6 +2,7 @@ const PALADINO = {
   skills: ["Atletismo","Intimidação","Intuição","Medicina","Persuasão","Religião"],
   weaponProf: ["simples","marcial"],
   armorProf: ["leve","media","pesada","escudo"],
+  savingThrows: ["Sabedoria","Carisma"],
   equipmentA: ["Cota de Malha", "Escudo", "Espada Longa", "6 Azagaias", "Símbolo Sagrado", "Kit de Sacerdote"],
   equipmentA_gold: 9,
   equipmentB_gold: 150,

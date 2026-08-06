@@ -12,6 +12,7 @@ const LADINO = {
   weaponProf: ["simples","marcial"],
   weaponProfFiltroMarcial: ["Acuidade","Leve"],
   armorProf: ["leve"],
+  savingThrows: ["Destreza","Inteligência"],
   toolsFixed: "Ferramentas de Ladrão",
   equipmentA: ["Armadura de Couro", "2 Adagas", "Espada Curta", "Arco Curto", "20 Flechas", "Aljava", "Ferramentas de Ladrão", "Kit de Assaltante"],
   equipmentA_gold: 8,

@@ -2,6 +2,7 @@ const BARBARO = {
   skills: ["Atletismo","Intimidação","Lidar com Animais","Natureza","Percepção","Sobrevivência"],
   weaponProf: ["simples","marcial"],
   armorProf: ["leve","media","escudo"],
+  savingThrows: ["Força","Constituição"],
   equipmentA: ["4 Machadinhas", "Machado Grande", "Kit de Aventureiro"],
   equipmentA_gold: 15,
   equipmentB_gold: 75,
