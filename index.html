@@ -3285,6 +3285,14 @@ function renderShop(){
   const clsConst = activeClassConst();
   const maxGold = computeMaxPossibleGold();
   const filtering = data.shop.filterByProf;
+  /* Preview do Mod. de Ataque nas categorias de arma — mesma fórmula de
+     computeAttacks()/computeCharacterSheet(), só que ANTES de comprar
+     (não depende de posse do item), pro jogador comparar armas na hora
+     de decidir a compra em vez de só descobrir no Resumo depois. */
+  const finalScore = a => (data.attrs[a]||0) + getBonusFor(a);
+  const atkStrMod = mod(finalScore('Força'));
+  const atkDexMod = mod(finalScore('Destreza'));
+  const atkProf = PROF_BONUS_BY_LEVEL[1];
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
   <div class="intro">Por padrão a Loja mostra TODAS as armas e armaduras, pra você conhecer as opções — ferramentas, focos, munição e equipamento de aventura valem pra qualquer um sempre. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
   <div style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:10px 0;" onclick="toggleShopProfFilter()">
@@ -3304,16 +3312,19 @@ function renderShop(){
     const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
     html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
     <summary>${catName} <span class="cat-count">(${visibleItems.length} ${visibleItems.length===1?'item':'itens'})</span></summary>
-    <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th><th>Custo</th><th>Qtd.</th></tr></thead><tbody>
+    <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th>${isWeaponCat?'<th>Mod. de Ataque</th>':''}<th>Custo</th><th>Qtd.</th></tr></thead><tbody>
     ${visibleItems.map(it=>{
       const qty = purchases[it.id]||0;
       const maxQty = maxAffordableQty(it.id) + qty; // limite considerando o que já foi gasto neste item
       const atCap = qty>=maxQty;
       const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px;">${it.cont}</div>` : '';
+      const atk = isWeaponCat ? weaponAttackBonus(clsConst, atkStrMod, atkDexMod, atkProf, it.n) : null;
+      const atkHtml = atk ? `<td data-label="Mod. de Ataque"><b style="color:var(--gold);">${fmt(atk.bonus)}</b>${atk.proficient?'':' <span style="color:var(--parchment-dim);font-size:0.75rem;">(sem proficiência)</span>'}</td>` : (isWeaponCat ? '<td data-label="Mod. de Ataque">—</td>' : '');
       return `<tr>
         <td data-label="Item">${it.n}${contHtml}</td>
         <td data-label="Dano/Efeito">${it.d}</td>
         <td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
+        ${atkHtml}
         <td data-label="Custo">${fmtGold(it.c)} PO</td>
         <td data-label="Qtd."><div class="qty-cell">
           <button class="btn small" data-fn="shopDec" data-pick="${it.id}">−</button>
@@ -3470,24 +3481,35 @@ function isProficientWithWeapon(clsConst, itemName){
   return itemMatchesWeaponProf(clsConst, itemName);
 }
 
+/* Bônus de ataque com UMA arma específica (por nome, bate com
+   WEAPON_MASTERY) — Acuidade usa o melhor entre Força/Destreza, senão
+   Força se Corpo a Corpo ou Destreza se À Distância. Extraído de
+   computeAttacks() pra ser reaproveitado também na Loja (preview do
+   Mod. de Ataque ANTES de comprar, ver renderShop()) — mesma fórmula,
+   só que sem exigir posse do item. Devolve null se o nome não bater com
+   nenhuma arma de WEAPON_MASTERY (itens não-arma da Loja). */
+function weaponAttackBonus(clsConst, strMod, dexMod, prof, itemName){
+  const wm = WEAPON_MASTERY[itemName];
+  if(!wm) return null;
+  const finesse = wm.propriedades.includes('Acuidade');
+  const abMod = finesse ? Math.max(strMod, dexMod) : (wm.tipo==='Corpo a Corpo' ? strMod : dexMod);
+  const proficient = isProficientWithWeapon(clsConst, itemName);
+  const bonus = abMod + (proficient ? prof : 0);
+  return {tipo: wm.tipo, abMod, bonus, proficient};
+}
+
 /* Uma linha de "Ataque" por arma realmente possuída (herdada ou
-   comprada) que bate com WEAPON_MASTERY — Acuidade usa o melhor entre
-   Força/Destreza, senão Força se Corpo a Corpo ou Destreza se À
-   Distância. Mostra TODAS as armas possuídas, marcando quando não há
-   proficiência (em vez de esconder — o jogador decide se usa mesmo assim,
-   com desvantagem/sem o bônus). */
+   comprada) que bate com WEAPON_MASTERY. Mostra TODAS as armas
+   possuídas, marcando quando não há proficiência (em vez de esconder —
+   o jogador decide se usa mesmo assim, com desvantagem/sem o bônus). */
 function computeAttacks(clsConst, strMod, dexMod, prof){
   const attacks = [];
   ownedItemIdSet().forEach(id=>{
     const item = findShopItem(id);
     if(!item) return;
-    const wm = WEAPON_MASTERY[item.n];
-    if(!wm) return;
-    const finesse = wm.propriedades.includes('Acuidade');
-    const abMod = finesse ? Math.max(strMod, dexMod) : (wm.tipo==='Corpo a Corpo' ? strMod : dexMod);
-    const proficient = isProficientWithWeapon(clsConst, item.n);
-    const atkBonus = abMod + (proficient ? prof : 0);
-    attacks.push({nome: item.n, tipo: wm.tipo, bonus: atkBonus, dano: `${item.d}${abMod!==0?' '+fmt(abMod):''}`, proficient});
+    const atk = weaponAttackBonus(clsConst, strMod, dexMod, prof, item.n);
+    if(!atk) return;
+    attacks.push({nome: item.n, tipo: atk.tipo, bonus: atk.bonus, dano: `${item.d}${atk.abMod!==0?' '+fmt(atk.abMod):''}`, proficient: atk.proficient});
   });
   return attacks.sort((a,b)=>b.bonus-a.bonus);
 }
