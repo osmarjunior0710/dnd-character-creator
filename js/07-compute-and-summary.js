@@ -12,18 +12,62 @@ function ownedItemIdSet(){
   return set;
 }
 
-/* Armadura de maior CA que o personagem possui (entre as que tem) +
-   se possui Escudo. Cobre tanto quem ganhou armadura fixa na Opção A
-   quanto quem escolheu só ouro e comprou na Loja. */
-function ownedArmorAndShield(){
-  let bestArmor = null;
-  let hasShield = false;
+/* Todas as armaduras que o personagem possui (id + regras de CA de
+   ARMOR_AC + nome de exibição) — usado tanto pra resolver qual está
+   "equipada" quanto pra desenhar os cards de Armadura/Escudo no
+   Resumo. */
+function ownedArmorList(){
+  const out = [];
   ownedItemIdSet().forEach(id=>{
-    if(id===SHIELD_ITEM_ID){ hasShield = true; return; }
     const armor = ARMOR_AC[id];
-    if(armor && (!bestArmor || armor.ca > bestArmor.ca)) bestArmor = {id, ...armor};
+    if(armor) out.push({id, ...armor, nome: findShopItem(id).n});
   });
-  return {armor: bestArmor, hasShield};
+  return out;
+}
+
+/* Qual armadura está "equipada" — usada tanto pro cálculo de CA quanto
+   pro card com o pill Equipar/Equipado no Resumo (renderSummary()).
+   Por padrão (data.equippedArmorId ainda não escolhido, ou apontando pra
+   uma armadura que o personagem não tem mais) calcula sozinho a de
+   maior CA FINAL pra ESSE personagem — não só maior "CA base" do item:
+   uma armadura Leve com Destreza sem teto pode dar CA final maior que
+   uma Média/Pesada com CA base maior, dependendo do Mod. de Destreza
+   (bug sutil que já existia aqui antes, corrigido de brinde). Se o
+   jogador clicar em "Equipar" noutra (pickEquippedArmor(), em
+   08-handlers.js), essa escolha fica salva e passa a valer até ele
+   vender/trocar de armadura. */
+function resolveEquippedArmorId(ownedArmors, dexMod){
+  if(!ownedArmors.length) return null;
+  if(data.equippedArmorId && ownedArmors.some(a=>a.id===data.equippedArmorId)) return data.equippedArmorId;
+  let bestId = null, bestCA = -Infinity;
+  ownedArmors.forEach(a=>{
+    const dexBonus = a.dexCap===null ? dexMod : a.dexCap===0 ? 0 : Math.min(dexMod, a.dexCap);
+    const finalCA = a.ca + dexBonus;
+    if(finalCA > bestCA){ bestCA = finalCA; bestId = a.id; }
+  });
+  return bestId;
+}
+
+/* Mesma ideia do Escudo — hoje só existe 1 item "Escudo" na Loja (ver
+   nota em data/armor-ac.js), então "equipar" não tem entre o quê
+   escolher de verdade, mas mantém o mesmo padrão de data.equippedShieldId/
+   pickEquippedShield() da Armadura por consistência (e caso um dia
+   apareça uma 2ª variante de escudo). */
+function resolveEquippedShieldId(){
+  if(!ownedItemIdSet().has(SHIELD_ITEM_ID)) return null;
+  return SHIELD_ITEM_ID;
+}
+
+/* Armadura EQUIPADA (não mais "a de maior CA" cega — respeita a escolha
+   do jogador, ver resolveEquippedArmorId() acima) + se tem Escudo
+   equipado. Cobre tanto quem ganhou armadura fixa na Opção A quanto
+   quem escolheu só ouro e comprou na Loja. */
+function ownedArmorAndShield(dexMod){
+  const armors = ownedArmorList();
+  const equippedId = resolveEquippedArmorId(armors, dexMod);
+  const armor = equippedId ? armors.find(a=>a.id===equippedId) : null;
+  const shieldId = resolveEquippedShieldId();
+  return {armor, hasShield: !!shieldId, shieldId};
 }
 
 /* CA de verdade — resolve a pendência antiga "CA não calculada
@@ -37,7 +81,7 @@ function ownedArmorAndShield(){
    escudo, igual qualquer outra classe. Bárbaro não tem essa exceção: pode
    usar escudo e manter a fórmula com Constituição. */
 function computeAC(classe, dexMod, conMod, wisMod){
-  const {armor, hasShield} = ownedArmorAndShield();
+  const {armor, hasShield} = ownedArmorAndShield(dexMod);
   let base, source;
   const breakdown = [];
   if(armor){
@@ -69,7 +113,7 @@ function computeAC(classe, dexMod, conMod, wisMod){
     source += ' + Escudo';
     breakdown.push({label:'Escudo (comprado na Loja)', value:2});
   }
-  return {value: base, source, breakdown};
+  return {value: base, source, breakdown, armorId: armor ? armor.id : null, shieldEquipped: hasShield};
 }
 
 /* Perícias proficientes (Set, nunca duplicado mesmo se 2+ fontes derem a
@@ -439,7 +483,7 @@ function computeCharacterSheet(){
     attacks, spellcasting, especieMagias, especieTracosExtras, humanoTalento,
     classFeatureLines, talentoAntecedente,
     proficiencias: { idiomas, ferramentas: tools, armas: weaponProfText, armaduras: armorProfText },
-    equipamento: { itens: mochilaItems(), poRestante: remaining },
+    equipamento: { itens: ownedEquipmentList(), poRestante: remaining },
     especieConst, clsConst, bgConst, bg, cls
   };
   sheet.duplicidades = detectDuplicidades(sheet);
@@ -643,6 +687,21 @@ function copySummaryText(){
   });
 }
 
+/* Card de Armadura/Escudo com pill "Equipar"/"Equipado" no Resumo —
+   mesmo padrão visual/interação de traitBox()+pick-btn já usado pra
+   Legado do Tiferino/Linhagem Élfica etc. (.option-block.selected fica
+   azul clarinho, o botão vira preenchido). Clicável mesmo quando já
+   equipado (reafirma a mesma escolha, no-op inofensivo) — mesmo
+   comportamento que os outros pick-btn de escolha única já têm. */
+function renderEquipCard(it, isEquipped, pickFn){
+  const item = it.id ? findShopItem(it.id) : null;
+  return `<div class="option-block ${isEquipped?'selected':''}">
+    <h3 style="color:var(--gold);margin-top:0;">${it.label}${it.qty>1?` ×${it.qty}`:''}</h3>
+    ${item && item.d ? `<p>${item.d}</p>` : ''}
+    <button class="pick-btn" data-pick="${it.id}" data-fn="${pickFn}">${isEquipped?'Equipado':'Equipar'}</button>
+  </div>`;
+}
+
 function renderSummary(){
   const sheet = computeCharacterSheet();
   const { clsConst, bgConst, bg, cls, especieConst, classFeatureLines } = sheet;
@@ -736,11 +795,31 @@ function renderSummary(){
     <div><b>Idiomas:</b> ${sheet.proficiencias.idiomas.map(s=>`<span class="pill-static">${s}</span>`).join('')}</div>
   </div></div>
 
+  ${(()=>{
+    /* Armadura(s)/Escudo(s) possuídos ganham um card com pill "Equipar"/
+       "Equipado" (pedido do usuário, pra ajudar a preencher a Ficha
+       Oficial em PDF certa: qual armadura vale pro cálculo de CA, e se
+       marca a caixinha de Escudo). O resto do equipamento continua como
+       lista simples de pills, igual antes. */
+    const armorItems = sheet.equipamento.itens.filter(it=>it.id && ARMOR_AC[it.id]);
+    const shieldItems = sheet.equipamento.itens.filter(it=>it.id===SHIELD_ITEM_ID);
+    const otherItems = sheet.equipamento.itens.filter(it=>!(it.id && ARMOR_AC[it.id]) && it.id!==SHIELD_ITEM_ID);
+    const equippedArmorId = sheet.combate.ac.armorId;
+    return `
+  ${armorItems.length ? `
+  <div class="summary-section"><h3>Armadura Equipada</h3>
+  <div class="content">${armorItems.map(it=>renderEquipCard(it, it.id===equippedArmorId, 'pickEquippedArmor')).join('')}</div></div>` : ''}
+
+  ${shieldItems.length ? `
+  <div class="summary-section"><h3>Escudo Equipado</h3>
+  <div class="content">${shieldItems.map(it=>renderEquipCard(it, sheet.combate.ac.shieldEquipped, 'pickEquippedShield')).join('')}</div></div>` : ''}
+
   <div class="summary-section"><h3>Equipamento <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
   <div class="content">
-    ${sheet.equipamento.itens.length ? sheet.equipamento.itens.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('') : '<span style="color:var(--parchment-dim);">Nenhum item.</span>'}
+    ${otherItems.length ? otherItems.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('') : (sheet.equipamento.itens.length ? '' : '<span style="color:var(--parchment-dim);">Nenhum item.</span>')}
     <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(sheet.equipamento.poRestante)} PO</div>
-  </div></div>
+  </div></div>`;
+  })()}
 
   <div class="no-print" style="margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;">
     <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>

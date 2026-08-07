@@ -1267,6 +1267,7 @@ const TOTAL_STEPS = 10;
 let data = {
   characterName: '',
   especie: null, antecedente: null, classe: null,
+  equippedArmorId: null, equippedShieldId: null,
   tiefling: { tamanho: null, legado: null, atributoLegado: null },
   pequenino: {},
   anao: {},

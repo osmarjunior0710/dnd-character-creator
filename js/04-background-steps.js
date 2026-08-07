@@ -98,13 +98,41 @@ function characterStartingItems(){
 
 /* Agrupa characterStartingItems() por item (soma quantidade se a mesma
    coisa vier de duas fontes) e resolve o nome de EXIBIÇÃO pro nome
-   canônico da Loja quando tem id (senão usa o texto original). */
+   canônico da Loja quando tem id (senão usa o texto original). Guarda o
+   "id" no resultado (antes era descartado) — precisa dele pra cruzar
+   com ARMOR_AC/SHIELD_ITEM_ID em ownedEquipmentList() logo abaixo. */
 function mochilaItems(){
   const grouped = {};
   characterStartingItems().forEach(({label, id, qty})=>{
     const key = id || ('flavor:'+label);
-    if(!grouped[key]) grouped[key] = {label: id ? findShopItem(id).n : label, qty:0};
+    if(!grouped[key]) grouped[key] = {label: id ? findShopItem(id).n : label, id: id||null, qty:0};
     grouped[key].qty += qty;
+  });
+  return Object.values(grouped);
+}
+
+/* Lista ÚNICA de tudo que o personagem possui — herdado da Classe/
+   Antecedente (mochilaItems()) + comprado na Loja (data.shop.purchases),
+   somando quantidade se o MESMO item vier dos dois (ex: 2 Adagas de
+   graça + 1 comprada = "Adaga ×3", uma linha só). Achado como pendência
+   ao ligar o equipar de Armadura/Escudo no Resumo: sheet.equipamento.itens
+   usava só mochilaItems(), então qualquer coisa comprada na Loja (a
+   forma mais comum de conseguir Armadura/Escudo pra quem pegou só ouro
+   na Opção B) nunca aparecia na seção "Equipamento" do Resumo nem no
+   "Copiar Resumo" — só no popup da Mochila, que já somava as duas
+   fontes separadamente. Mesmo padrão de "id" de mochilaItems() acima. */
+function ownedEquipmentList(){
+  const grouped = {};
+  mochilaItems().forEach(it=>{
+    const key = it.id || ('flavor:'+it.label);
+    grouped[key] = {label: it.label, id: it.id, qty: it.qty};
+  });
+  Object.entries(data.shop.purchases||{}).forEach(([id, qty])=>{
+    if(qty<=0) return;
+    const item = findShopItem(id);
+    if(!item) return;
+    if(!grouped[id]) grouped[id] = {label: item.n, id, qty: 0};
+    grouped[id].qty += qty;
   });
   return Object.values(grouped);
 }

@@ -16,8 +16,12 @@
 
    Fica em branco de propósito (sem campo correspondente nesta ficha, ou
    sem dado no app): Subclasse, EXP, Alinhamento, Aparência, História &
-   Personalidade. Escudo (dentro da caixa de CA) fica SEMPRE desmarcado —
-   pedido do usuário, quem estiver empunhando escudo marca na mão. */
+   Personalidade. Escudo (dentro da caixa de CA) marca sozinho conforme
+   o Escudo "equipado" no Resumo (sheet.combate.ac.shieldEquipped, ver
+   renderEquipCard()/pickEquippedShield() em js/07-compute-and-summary.js
+   e js/08-handlers.js) — antes ficava sempre desmarcado de propósito,
+   porque o app não tinha como saber se a pessoa realmente empunhava o
+   escudo que comprou; agora tem. */
 
 /* "9 metros" -> "9m" (campo de Velocidade é estreito na ficha; o texto por
    extenso não cabe). Não mexe no texto "9 metros" usado no resto do app,
@@ -133,7 +137,7 @@ async function exportCharacterPdf(){
 
     // Combate
     setText(F.combate.ca, sheet.combate.ac.value);
-    // Escudo: deixado sem marcar de propósito — a pessoa marca na mão.
+    setCheck(F.combate.escudo, !!sheet.combate.ac.shieldEquipped);
     setText(F.combate.pvAtual, sheet.combate.hp);
     setText(F.combate.pvMax, sheet.combate.hp);
     setText(F.combate.dadoVidaTotal, sheet.combate.hitDie);
