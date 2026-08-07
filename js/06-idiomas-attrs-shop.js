@@ -153,24 +153,38 @@ function renderShop(){
 
   Object.entries(SHOP).forEach(([catName, cat])=>{
     const isWeaponCat = cat.filterProf==='simples' || cat.filterProf==='marcial';
+    /* Armas/Armaduras/Escudos (filterProf não-null) sempre têm "d" (dado
+       de dano, ou "CA X + Destreza") E "p" (propriedades) preenchidos —
+       vale a pena mostrar as duas colunas separadas. Ferramentas/
+       Instrumentos/Focos/Munição/Equipamento de Aventura (filterProf
+       null) NUNCA têm "d" preenchido no banco de dados (ver comentário
+       no topo de data/shop-items.js) — o efeito de verdade desses itens
+       (quando existe, ex: "2d6 dano Ácido ao arremessar") mora em "p".
+       Mostrar "Dano/Efeito" sempre vazio + "Propriedades" só às vezes
+       preenchido virava 2 colunas fantasma pra maioria dos itens (achado
+       real de usuário, com screenshot) — agora esses tipos de item
+       mostram 1 coluna só ("Efeito"), com o texto que existir. */
+    const hasDanoEfeito = ['simples','marcial','leve','media','pesada','escudo'].includes(cat.filterProf);
     if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
     const visibleItems = cat.items.filter(it => it.c <= maxGold && (!filtering || !isWeaponCat || itemMatchesWeaponProf(clsConst, it.n)));
     if(visibleItems.length===0) return;
     const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
     html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
     <summary>${catName} <span class="cat-count">(${visibleItems.length} ${visibleItems.length===1?'item':'itens'})</span></summary>
-    <table class="shop-table"><thead><tr><th>Item</th><th>Dano/Efeito</th><th>Propriedades</th>${isWeaponCat?'<th>Mod. de Ataque</th>':''}<th>Custo</th><th>Qtd.</th></tr></thead><tbody>
+    <table class="shop-table"><thead><tr><th>Item</th>${hasDanoEfeito?'<th>Dano/Efeito</th><th>Propriedades</th>':'<th>Efeito</th>'}${isWeaponCat?'<th>Mod. de Ataque</th>':''}<th>Custo</th><th>Qtd.</th></tr></thead><tbody>
     ${visibleItems.map(it=>{
       const qty = purchases[it.id]||0;
       const maxQty = maxAffordableQty(it.id) + qty; // limite considerando o que já foi gasto neste item
       const atCap = qty>=maxQty;
-      const contHtml = it.cont ? `<div style="font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px;">${it.cont}</div>` : '';
+      const contHtml = it.cont ? `<div class="shop-item-cont">${it.cont}</div>` : '';
       const atk = isWeaponCat ? weaponAttackBonus(clsConst, atkStrMod, atkDexMod, atkProf, it.n) : null;
       const atkHtml = atk ? `<td data-label="Mod. de Ataque"><b style="color:var(--gold);">${fmt(atk.bonus)}</b>${atk.proficient?'':' <span style="color:var(--parchment-dim);font-size:0.75rem;">(sem proficiência)</span>'}</td>` : (isWeaponCat ? '<td data-label="Mod. de Ataque">—</td>' : '');
+      const efeitoHtml = hasDanoEfeito
+        ? `<td data-label="Dano/Efeito">${it.d}</td><td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`
+        : `<td data-label="Efeito" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`;
       return `<tr>
         <td data-label="Item">${it.n}${contHtml}</td>
-        <td data-label="Dano/Efeito">${it.d}</td>
-        <td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>
+        ${efeitoHtml}
         ${atkHtml}
         <td data-label="Custo">${fmtGold(it.c)} PO</td>
         <td data-label="Qtd."><div class="qty-cell">
