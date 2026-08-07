@@ -617,6 +617,19 @@ function characterSheetAsText(sheet){
   return L.join('\n');
 }
 
+/* "Exportar PDF" — usa o diálogo de impressão nativo do navegador
+   (window.print() + CSS @media print em styles.css) em vez de gerar o
+   PDF em JS puro (jsPDF/html2pdf) — sem precisar de nenhuma biblioteca
+   externa nova, funciona offline, e todo navegador (incluindo mobile:
+   Chrome Android e Safari iOS têm "Salvar como PDF"/"Opções de
+   Impressão" nativos no diálogo de impressão) já sabe fazer isso bem.
+   O CSS de impressão esconde tudo que não faz sentido no papel (header,
+   barra de progresso, floaters, botões ⓘ/Editar/navegação) e deixa só
+   o conteúdo da ficha. */
+function exportPDF(){
+  window.print();
+}
+
 let copyFeedback = false;
 function copySummaryText(){
   const sheet = computeCharacterSheet();
@@ -729,8 +742,9 @@ function renderSummary(){
     <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(sheet.equipamento.poRestante)} PO</div>
   </div></div>
 
-  <div style="margin:16px 0;">
+  <div class="no-print" style="margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;">
     <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>
+    <button class="btn primary" onclick="exportPDF()">📄 Exportar PDF</button>
   </div>
 
   <div class="nav">
