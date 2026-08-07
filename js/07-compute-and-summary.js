@@ -206,11 +206,20 @@ function computeSpellcasting(cls, finalScore, prof){
       cantripNames = [...cls.cantrips];
       spellNames = [...cls.spells1];
   }
+  const cdBreakdown = [
+    {label:'Base', value:8, plain:true},
+    {label:'Bônus de Proficiência', value: prof},
+    {label:`Mod. de ${ability}`, value: abMod}
+  ];
+  const ataqueBreakdown = [
+    {label:'Bônus de Proficiência', value: prof},
+    {label:`Mod. de ${ability}`, value: abMod}
+  ];
   return {
     classe: data.classe,
     habilidade: ability,
-    cd: 8 + prof + abMod,
-    ataque: prof + abMod,
+    cd: 8 + prof + abMod, cdBreakdown,
+    ataque: prof + abMod, ataqueBreakdown,
     cantrips: [...new Set(cantripNames)].map(spellEntry),
     magias: [...new Set(spellNames)].map(spellEntry)
   };
@@ -508,6 +517,14 @@ function renderStatInfoPopup(sheet){
   } else if(tipo==='combate' && nome==='iniciativa'){
     title = 'Iniciativa';
     total = sheet.combate.initiative; breakdown = sheet.combate.initiativeBreakdown;
+  } else if(tipo==='conjuracao' && nome==='cd'){
+    if(!sheet.spellcasting) return '';
+    title = 'CD de Magia';
+    total = sheet.spellcasting.cd; totalPlain = true; breakdown = sheet.spellcasting.cdBreakdown;
+  } else if(tipo==='conjuracao' && nome==='ataque'){
+    if(!sheet.spellcasting) return '';
+    title = 'Ataque Mágico';
+    total = sheet.spellcasting.ataque; breakdown = sheet.spellcasting.ataqueBreakdown;
   } else return '';
   return `<div class="mochila-overlay" onclick="closeStatInfo()">
     <div class="mochila-popup stat-info-popup" onclick="event.stopPropagation()">
@@ -675,8 +692,8 @@ function renderSummary(){
   <div class="content">
     <div style="margin-bottom:10px;">
       <span class="pill-static">Atributo: ${sheet.spellcasting.habilidade}</span>
-      <span class="pill-static">CD de Magia: ${sheet.spellcasting.cd}</span>
-      <span class="pill-static">Ataque Mágico: ${fmt(sheet.spellcasting.ataque)}</span>
+      <span class="pill-static">CD de Magia: ${sheet.spellcasting.cd}<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('conjuracao:cd')" title="Ver de onde vem esse número">ⓘ</button></span>
+      <span class="pill-static">Ataque Mágico: ${fmt(sheet.spellcasting.ataque)}<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('conjuracao:ataque')" title="Ver de onde vem esse número">ⓘ</button></span>
     </div>
     ${sheet.spellcasting.cantrips.length ? `<div class="group-label">Truques</div>${renderSpellEntryList(sheet.spellcasting.cantrips)}` : ''}
     ${sheet.spellcasting.magias.length ? `<div class="group-label">Magias Preparadas/Conhecidas</div>${renderSpellEntryList(sheet.spellcasting.magias)}` : ''}
