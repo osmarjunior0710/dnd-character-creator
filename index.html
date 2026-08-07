@@ -1623,14 +1623,22 @@ function scrollToMissing(id){
 }
 
 function nav(canNext){
-  const summaryBtn = data.returnToSummary ? `<button class="btn primary" onclick="returnToSummaryNow()" style="margin-left:8px;">Voltar ao Resumo ✓</button>` : '';
-  return `<div class="nav"><div class="nav-inner">
-    <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
-    <div>
+  /* "Voltar ao Resumo" (só existe editando a partir do Resumo) tinha um
+     3º botão espremido do lado do "Avançar", empilhando/quebrando linha
+     de forma feia no celular (achado real de usuário, com print). Vira
+     uma linha própria, largura cheia, ACIMA da linha padrão Voltar/
+     Avançar — 2 linhas previsíveis em vez de 2 botões brigando pelo
+     mesmo espaço horizontal. positionNav() (perto de positionMochilaFloater())
+     mede a altura real da barra pra reservar espaço certo embaixo do
+     conteúdo, já que agora ela pode ter 1 ou 2 linhas. */
+  const summaryRow = data.returnToSummary ? `<div class="nav-inner nav-summary-row"><button class="btn primary" style="width:100%;" onclick="returnToSummaryNow()">Voltar ao Resumo ✓</button></div>` : '';
+  return `<div class="nav">
+    ${summaryRow}
+    <div class="nav-inner">
+      <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
       <button class="btn primary" id="nextBtn" onclick="next()">${step===TOTAL_STEPS-1?'Concluir':'Avançar →'}</button>
-      ${summaryBtn}
     </div>
-  </div></div>`;
+  </div>`;
 }
 function editSection(idx){ data.returnToSummary=true; goTo(idx); }
 function returnToSummaryNow(){
@@ -1881,7 +1889,20 @@ function render(){
   attachStepHandlers();
   positionMochilaFloater();
   positionRandomizarFloater();
+  positionNav();
 }
+
+/* Reserva embaixo do <body> exatamente a altura real da barra .nav —
+   ela pode ter 1 linha (Voltar/Avançar) ou 2 (+ "Voltar ao Resumo" em
+   cima, só durante edição vinda do Resumo), então um padding-bottom
+   fixo no CSS erra pra um dos dois casos. Mesma ideia de
+   positionMochilaFloater()/positionRandomizarFloater() pro header. */
+function positionNav(){
+  const nav = document.querySelector('.nav');
+  if(!nav) return;
+  document.body.style.paddingBottom = (nav.offsetHeight + 20) + 'px';
+}
+window.addEventListener('resize', positionNav);
 
 let expandedSpellInfo = null;
 
@@ -1918,15 +1939,29 @@ function renderFeatDetailCard(d){
 }
 
 /* Lista de escolha de truques/magias, com botão "ⓘ" que expande um card de detalhe
-   (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção. */
+   (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção.
+   `items` já vem filtrado pelo chamador (tira o que outra fonte já concede/escolheu —
+   ver chosenCantripsElsewhere()/speciesGrantedCantrips() etc.), mas esse filtro é
+   sobre o ESTADO ATUAL, que pode mudar DEPOIS de uma escolha já feita (ex: escolher
+   um truque no Passo 1 e só depois, no Passo 5, escolher uma espécie que passa a
+   conceder esse mesmo truque de graça). Achado real de usuário: se o nome
+   escolhido não está mais em `items`, a pill sumia da tela inteira, sem aviso, e a
+   contagem "X/N escolhidas" ficava presa (ocupando uma vaga invisível, sem dar pra
+   trocar por outra coisa). Agora QUALQUER nome de `selectedList` sempre aparece,
+   mesmo se caiu fora de `items` — marcado como "extra" (pill-orphan) pra deixar
+   claro que precisa de atenção, mas continua clicável pra desmarcar e liberar a
+   vaga. */
 function spellChoiceList(items, selectedList, maxTotal, toggleFn){
-  return `<div class="check-list" style="margin-bottom:6px;">${items.map(name=>{
+  const orphans = selectedList.filter(name=>!items.includes(name));
+  const allNames = [...items, ...orphans];
+  return `<div class="check-list" style="margin-bottom:6px;">${allNames.map(name=>{
     const sel = selectedList.includes(name);
     const disabled = !sel && selectedList.length>=maxTotal;
+    const isOrphan = orphans.includes(name);
     const detail = SPELL_DETAILS[name];
     const isExpanded = expandedSpellInfo===name;
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`}>${name}</span>
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${isOrphan?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleSpellInfo" title="Ver detalhes">ⓘ</button>`:''}
       ${isExpanded && detail ? renderSpellDetailCard(detail) : ''}
     </div>`;
@@ -1996,15 +2031,25 @@ function choiceGrid(list, enabledList, selected, onClickName){
 
 /* Renderiza uma lista de escolha (checkbox-pill) separada em mini-grupos com cabeçalho,
    pra quando o talento/recurso permite escolher entre categorias diferentes
-   (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem. */
+   (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem.
+   Mesma correção de spellChoiceList(): se uma perícia já escolhida caiu fora de
+   TODOS os grupos (porque outra fonte passou a concedê-la depois, filtrada via
+   skillsGrantedElsewhere() no chamador), não pode simplesmente sumir da tela —
+   isso escondia a escolha E prendia a vaga (contagem "X/N" sem dar pra trocar).
+   Aparece num grupo extra no fim, marcada, ainda clicável pra desmarcar. */
 function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
-  return groups.filter(g=>g.items.length>0).map(g=>`
+  const groupedNames = new Set();
+  groups.forEach(g=>g.items.forEach(item=>groupedNames.add(item)));
+  const orphans = selectedList.filter(item=>!groupedNames.has(item));
+  const allGroups = orphans.length ? [...groups, {label:'⚠️ Verifique — já vem de outra fonte', items:orphans, orphan:true}] : groups;
+  return allGroups.filter(g=>g.items.length>0).map(g=>`
     <div class="check-list" style="margin-bottom:10px; align-items:center;">
       <span class="group-label" style="margin:0 2px 0 0;">${g.label}:</span>
       ${g.items.map(item=>{
         const sel = selectedList.includes(item);
         const disabled = !sel && selectedList.length>=maxTotal;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`}>${item}</div>`;
+        const isOrphan = !!g.orphan;
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora — considere trocar por outra"':''}>${item}</div>`;
       }).join('')}
     </div>`).join('');
 }
@@ -2485,7 +2530,15 @@ window.addEventListener('resize', positionMochilaFloater);
    — cobre bem menos, mantém alvo de toque acessível, e a explicação
    agora é só o title/aria-label (tooltip), não texto sempre visível. */
 function renderMochilaFloater(){
-  if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
+  /* Só aparece depois do equipamento inicial da CLASSE estar escolhido
+     (data[classKey].equipment) — antes disso a Mochila não tem nada de
+     verdade pra mostrar (achado real de usuário: aparecia já na 1ª tela,
+     antes até do jogador ver o Passo de Detalhes da Classe, onde o
+     dinheiro/itens são decididos). Checa o campo em `data`, não o
+     `step` atual — assim continua aparecendo certinho se o jogador usar
+     "Editar" no Resumo e voltar pro Passo 0 (step vira 0 de novo, mas o
+     equipamento já escolhido antes continua valendo). */
+  if(!data.classe || !activeClassData().equipment) return '';
   return `<div class="floater-fab mochila-floater" onclick="toggleMochilaOpen()" title="Mochila — ver itens" aria-label="Mochila — ver itens">🎒</div>
   ${mochilaOpen ? renderMochilaPopup() : ''}`;
 }
@@ -4233,17 +4286,18 @@ function pickLinhagemElfica(v){ data.elfo.linhagem=v; persist(); render(); }
 function pickLinhagemGnomica(v){ data.gnomo.linhagem=v; persist(); render(); }
 function pickAtributoLinhagemGnomica(v){ data.gnomo.atributoLinhagem=v; persist(); render(); }
 function pickAncestralidadeGigante(v){ data.golias.ancestralidade=v; persist(); render(); }
+/* Antes tinha uma limpeza automática aqui que apagava da lista da
+   classe/Tomo o truque que virou redundante ao trocar de legado — META
+   PENDÊNCIA RESOLVIDA (achado real de usuário: "troquei de legado, um
+   truque que eu tinha escolhido sumiu da tela e ficou faltando 1
+   escolha, sem aviso nenhum do porquê"). Tirado de propósito: agora o
+   truque continua escolhido (spellChoiceList() passa a mostrar seleções
+   que caíram fora do filtro, marcadas, em vez de escondê-las — ver nota
+   lá) e a caixa de Duplicidade do Resumo avisa se ficar mesmo
+   duplicado. O jogador decide se troca ou deixa (redundante, mas sem
+   erro de dados nem escolha sumindo sem explicação). */
 function pickLegado(v){
   data.tiefling.legado=v;
-  const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===v);
-  const grantedItem = opt && opt.nivel1.concede && opt.nivel1.concede[0];
-  const granted = grantedItem && grantedItem.nome;
-  if(granted){
-    // Remove o truque da lista da classe/Tomo se já tinha sido escolhido antes
-    // de mudar de legado — senão sobra uma escolha redundante sem efeito.
-    data.bruxo.cantrips = data.bruxo.cantrips.filter(c=>c!==granted);
-    data.bruxo.tomoCantrips = data.bruxo.tomoCantrips.filter(c=>c!==granted);
-  }
   persist(); render();
 }
 function pickAtributoLegado(v){ data.tiefling.atributoLegado=v; persist(); render(); }

@@ -49,6 +49,8 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 .check-pill{border:1px solid var(--line); border-radius:14px; padding:6px 14px; cursor:pointer; font-size:0.85rem; background:#f8f9fa; user-select:none;}
 .check-pill.selected{border-color:var(--wax); background:var(--wax); color:#ffffff;}
 .check-pill.disabled{opacity:0.45; cursor:not-allowed;}
+.check-pill.pill-orphan{border-color:var(--warn); background:var(--warn-bg); color:var(--warn);}
+.check-pill.pill-orphan.selected{background:var(--warn); border-color:var(--warn); color:#ffffff;}
 .counter{font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold-dim); margin:10px 0 14px;}
 .counter.ok{color:var(--green);}
 .group-label{
@@ -97,6 +99,7 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
   padding:10px 14px; padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
 }
 .nav .nav-inner{display:flex; justify-content:space-between; align-items:center; max-width:960px; margin:0 auto;}
+.nav .nav-summary-row{margin-bottom:8px;}
 .btn{font-family:'Cinzel',serif; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; padding:10px 22px; border-radius:4px; cursor:pointer; border:1px solid var(--line); background:#ffffff; color:var(--gold-dim);}
 .btn.primary{background:var(--wax); border-color:var(--wax); color:#ffffff;}
 .btn.primary:disabled{background:var(--disabled); border-color:var(--disabled); color:#9aa0a6; cursor:not-allowed;}
@@ -151,7 +154,6 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .shop-category:not([open]) summary::after{transform:rotate(-90deg);}
 .shop-category summary .cat-count{font-family:'Spectral',serif; font-size:0.72rem; color:var(--parchment-dim); font-weight:normal; margin-left:8px;}
 .shop-category .shop-table{margin:0; padding:0 14px 10px;}
-.shop-category .shop-table thead{display:table-header-group;}
 .floater-fab{
   /* Ícone só, sem rótulo permanente (achado de revisão: a versão com
      texto/subtítulo cobria conteúdo real ao rolar listas longas). "top"
