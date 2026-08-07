@@ -114,8 +114,8 @@ function renderHumanoDetail(){
   <h3>Traços Natos</h3>
   ${HUMANO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-5-pericia">Hábil — escolha 1 perícia</h3>
-  <div class="intro" style="margin-bottom:8px;">Perícias já escolhidas pela classe ou pelo antecedente não aparecem aqui.</div>
-  ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('humano').includes(s))), h.pericia, 'pickHumanoPericia')}
+  <div class="intro" style="margin-bottom:8px;">Perícias marcadas com ⚠️ já vêm da classe ou do antecedente — ainda dá pra escolher, mas aí vira duplicidade (veja o aviso no Resumo).</div>
+  ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS), h.pericia, 'pickHumanoPericia', skillsGrantedElsewhere('humano'))}
   <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
   <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente e não aparece aqui.</div>
   ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento')}
@@ -170,8 +170,8 @@ function renderElfoDetail(){
   <h3>Traços Natos</h3>
   ${ELFO.tracosFixos.map(tr=>traitBox(tr.nome, tr.resumo, tr.concede)).join('')}
   <h3 id="grp-5-pericia">${ELFO.sentidosAgucados.nome} — escolha 1 perícia</h3>
-  <div class="intro" style="margin-bottom:8px;">Perícias já escolhidas pela classe ou pelo antecedente não aparecem aqui.</div>
-  ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes.filter(s=>!skillsGrantedElsewhere('elfo').includes(s))), e.pericia, 'pickElfoPericia')}
+  <div class="intro" style="margin-bottom:8px;">Perícias marcadas com ⚠️ já vêm da classe ou do antecedente — ainda dá pra escolher, mas aí vira duplicidade (veja o aviso no Resumo).</div>
+  ${groupedSinglePick(skillGroupsByAbility(ELFO.sentidosAgucados.opcoes), e.pericia, 'pickElfoPericia', skillsGrantedElsewhere('elfo'))}
   <h3 id="grp-5-linhagem">${ELFO.subespecie.nome}</h3>
   ${ELFO.subespecie.opcoes.map(opt=>`
     <div class="option-block ${e.linhagem===opt.nome?'selected':''}">
@@ -311,12 +311,27 @@ function languageGroupsByCategory(pool){
 }
 
 /* Igual ao groupedChoiceList, mas de escolha ÚNICA (radio, não checkbox) —
-   usado quando só se pode marcar 1 item no total, como o Hábil do Humano. */
-function groupedSinglePick(groups, selected, pickFn){
+   usado quando só se pode marcar 1 item no total, como o Hábil do Humano.
+
+   `elsewhere` (opcional): lista de itens já concedidos por outra fonte
+   (ex: skillsGrantedElsewhere('elfo')). Não tira mais nada da lista —
+   antes filtrávamos esses itens no chamador, o que podia esvaziar o
+   grupo inteiro e travar o wizard numa escolha obrigatória sem nenhuma
+   opção sobrando (ex: Elfo com Intuição+Percepção+Sobrevivência já
+   escolhidas antes de chegar no Sentidos Aguçados). Agora eles continuam
+   aparecendo e continuam clicáveis, só marcados com o mesmo tratamento
+   ⚠️/mostarda (.pill-orphan) usado pelas listas de magia — a checagem de
+   Duplicidade do Resumo (detectDuplicidades/skillsGrantedBySource) já
+   pega qualquer duplicata real que resultar disso. */
+function groupedSinglePick(groups, selected, pickFn, elsewhere){
+  const elsewhereSet = new Set(elsewhere || []);
   return groups.filter(g=>g.items.length>0).map(g=>`
     <div class="check-list" style="margin-bottom:10px; align-items:center;">
       <span class="group-label" style="margin:0 2px 0 0;">${g.label}:</span>
-      ${g.items.map(item=>`<div class="check-pill ${selected===item?'selected':''}" data-pick="${item}" data-fn="${pickFn}">${item}</div>`).join('')}
+      ${g.items.map(item=>{
+        const isElsewhere = elsewhereSet.has(item);
+        return `<div class="check-pill ${selected===item?'selected':''} ${isElsewhere?'pill-orphan':''}" data-pick="${item}" data-fn="${pickFn}" ${isElsewhere?'title="Já vem de outra fonte (classe ou antecedente) — dá pra escolher mesmo assim, mas provavelmente vira duplicidade (veja o aviso no Resumo)"':''}>${item}${isElsewhere?' ⚠️':''}</div>`;
+      }).join('')}
     </div>`).join('');
 }
 
