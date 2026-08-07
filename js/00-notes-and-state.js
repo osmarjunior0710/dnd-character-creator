@@ -1314,6 +1314,16 @@ let data = {
   freeAbilityRule: false
 };
 
+/* Versão do app mostrada na última linha do header (junto do indicador
+   de Salvo/Salvando) — formato v<ano><mês><dia><hora 24h><minuto> do
+   momento do último push. Sem build step neste repo (GitHub Pages serve
+   os arquivos direto), então é atualizada NA MÃO a cada push que muda
+   comportamento visível — não é o horário em que o navegador do jogador
+   carregou a página, é "qual versão do código você está rodando", útil
+   pra saber se um relato de bug já inclui um fix recente (cache do
+   GitHub Pages/navegador pode segurar uma versão velha por um tempo). */
+const APP_VERSION = 'v202608072224';
+
 function mod(score){ return Math.floor((score-10)/2); }
 function fmt(n){ return (n>=0?'+':'')+n; }
 function fmtGold(n){ return (Math.round(n*100)/100).toString().replace('.',','); }

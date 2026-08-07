@@ -16,7 +16,7 @@ body{
   padding:20px 14px calc(90px + env(safe-area-inset-bottom, 0px));
 }
 .wrap{max-width:960px;margin:0 auto;}
-header{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid var(--line); padding-bottom:12px; margin-bottom:18px;}
+header{display:flex; flex-direction:column; border-bottom:2px solid var(--line); padding-bottom:12px; margin-bottom:18px;}
 header h1{font-family:'Cinzel',serif; font-weight:900; font-size:1.5rem; letter-spacing:0.03em; color:var(--gold); margin:0;}
 header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--parchment-dim); font-size:0.95rem;}
 .progress{display:flex; gap:4px; margin-bottom:22px;}
@@ -114,7 +114,8 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 select, input{background:#ffffff; border:1px solid var(--line); border-radius:3px; color:var(--parchment); font-family:'Spectral',serif; font-size:0.9rem; padding:6px 8px; width:100%;}
 .attr-row .bonus-tag{font-size:0.78rem; color:var(--green); font-family:'Cinzel',serif;}
 .attr-row .final{font-family:'Cinzel',serif; color:var(--gold); font-weight:700;}
-.save-indicator{font-family:'Cormorant Garamond',serif; font-size:0.8rem; color:var(--gold-dim); display:flex; align-items:center; gap:6px;}
+.save-indicator{font-family:'Cormorant Garamond',serif; font-size:0.7rem; color:#9aa0a6; display:flex; align-items:center; gap:6px; margin-top:6px;}
+.save-sep{opacity:0.6;}
 .seal-dot{width:7px;height:7px;border-radius:50%;background:var(--wax); opacity:0.5;}
 .summary-section{margin-bottom:16px;}
 .summary-section h3{font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dim); border-bottom:1px solid var(--line); padding-bottom:4px; margin-bottom:8px; margin-top:0;}
