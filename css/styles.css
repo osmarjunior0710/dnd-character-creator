@@ -219,3 +219,31 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
   .shop-table td:first-child:before{content:none;}
   .shop-table .qty-cell{justify-content:flex-end;}
 }
+
+/* "Exportar PDF" (window.print() em exportPDF(), botão só existe no
+   Resumo) — usa o diálogo de impressão nativo do navegador em vez de
+   gerar o PDF em JS puro, então o trabalho aqui é só um bom CSS de
+   impressão: esconder tudo que é navegação/interação (não faz sentido
+   num papel — não dá pra clicar em nada) e deixar só o conteúdo da
+   ficha. .no-print é um utilitário genérico pra marcar qualquer bloco
+   específico que não deve ir pro papel, sem precisar de seletor nomeado
+   pra cada caso. */
+@media print{
+  .no-print, .save-indicator, .progress, .mochila-floater, .randomizar-floater,
+  .mochila-overlay, .mochila-popup, .changelog-overlay, .changelog-popup,
+  .nav, .edit-link, .info-btn-inline, .info-btn{
+    display:none !important;
+  }
+  body{ background:#ffffff; padding:0; }
+  .wrap{ max-width:none; }
+  .card{ box-shadow:none; border:none; padding:0; }
+  .card::before{ display:none; }
+  .summary-section, .option-block, .spell-detail{ page-break-inside:avoid; break-inside:avoid; }
+  h2, h3{ page-break-after:avoid; break-after:avoid; }
+  /* Mantém as cores da ficha (pills, faixas de atributo, truques
+     selecionados) em vez do navegador jogar tudo pra preto/branco —
+     comportamento padrão de impressão que ignora background-color a
+     menos que isso seja explicitamente pedido. */
+  *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page{ margin:1.5cm; }
+}
