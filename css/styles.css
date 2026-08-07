@@ -67,6 +67,9 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 .dup-warning-item{font-size:0.85rem; color:var(--parchment); margin-bottom:5px; line-height:1.5;}
 .dup-warning-item:last-child{margin-bottom:0;}
 .dup-warning-tipo{color:var(--parchment-dim); font-size:0.78rem;}
+.dup-source{white-space:nowrap;}
+.dup-edit-link{font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--gold); cursor:pointer; border:none; background:none; text-decoration:underline; text-underline-offset:2px; padding:0; margin-left:1px;}
+.dup-edit-link:hover{color:var(--wax-bright);}
 @keyframes pulseMissing{
   0%,100%{ box-shadow:0 0 0 0 rgba(217,48,37,0); }
   50%{ box-shadow:0 0 0 6px rgba(217,48,37,0.25); }
@@ -232,7 +235,7 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 @media print{
   .no-print, .save-indicator, .progress, .mochila-floater, .randomizar-floater,
   .mochila-overlay, .mochila-popup, .changelog-overlay, .changelog-popup,
-  .nav, .edit-link, .info-btn-inline, .info-btn{
+  .nav, .edit-link, .dup-edit-link, .info-btn-inline, .info-btn{
     display:none !important;
   }
   body{ background:#ffffff; padding:0; }

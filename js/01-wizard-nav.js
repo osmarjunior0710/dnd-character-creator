@@ -220,6 +220,16 @@ function nav(canNext){
   </div>`;
 }
 function editSection(idx){ data.returnToSummary=true; goTo(idx); }
+/* Igual editSection(), mas também rola até (e destaca) um campo específico
+   dentro do passo — usado pelo botão "Editar" de cada fonte no aviso de
+   Duplicidade do Resumo (ver renderDuplicidadesBox() em 07), pra levar o
+   jogador direto pra escolha que causou aquela duplicata específica em
+   vez de só abrir o passo inteiro. Reaproveita scrollToMissing() (mesma
+   animação de destaque já usada quando "Avançar" acha um campo faltando). */
+function editSectionAt(idx, groupId){
+  editSection(idx);
+  if(groupId) scrollToMissing(groupId);
+}
 function returnToSummaryNow(){
   const missing = findFirstMissingGroup();
   if(missing){ scrollToMissing(missing); return; }

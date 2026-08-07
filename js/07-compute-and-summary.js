@@ -357,17 +357,57 @@ const DUP_SOURCE_LABEL = {
   humanoTalento: 'Talento Versátil (Humano)'
 };
 
-function mapDuplicatesBySource(bySource){
+/* `targetFor(src, name)` (opcional): calcula pra onde o botão "Editar" de
+   cada fonte deve levar o jogador — devolve {step, groupId} (mesmos step/
+   groupId de editSection()/scrollToMissing()) ou null quando essa fonte é
+   um traço FIXO sem tela de escolha própria (aí não tem o que "editar":
+   só dá pra resolver trocando a origem inteira — classe/antecedente/
+   espécie — e nenhuma dessas é "um campo" pra apontar). Sem targetFor,
+   fontes ficam sem botão (usado por quem só precisa da lista de nomes,
+   sem link de edição). */
+function mapDuplicatesBySource(bySource, targetFor){
   const nameToSources = {};
   Object.keys(bySource).forEach(src=>{
     (bySource[src]||[]).forEach(name=>{
       if(!name) return;
-      if(!nameToSources[name]) nameToSources[name] = new Set();
-      nameToSources[name].add(DUP_SOURCE_LABEL[src] || src);
+      if(!nameToSources[name]) nameToSources[name] = [];
+      const label = DUP_SOURCE_LABEL[src] || src;
+      if(nameToSources[name].some(f=>f.label===label)) return;
+      const target = targetFor ? targetFor(src, name) : null;
+      nameToSources[name].push({ label, step: target ? target.step : null, groupId: target ? target.groupId : null });
     });
   });
-  return Object.keys(nameToSources).filter(name=>nameToSources[name].size>1)
-    .map(name=>({nome:name, fontes:[...nameToSources[name]]}));
+  return Object.keys(nameToSources).filter(name=>nameToSources[name].length>1)
+    .map(name=>({nome:name, fontes:nameToSources[name]}));
+}
+
+/* Dentro de "classe", qual grupo/tela específica guarda o nome escolhido —
+   cada classe conjuradora tem seus próprios campos (truque vs magia de 1º
+   círculo, mais os extras do Pacto do Tomo no Bruxo) e cada um vira uma
+   seção própria no passo 1 (ver ids grp-1-* em js/05-class-steps.js). */
+function classSpellGroupId(cls, name){
+  switch(data.classe){
+    case 'Bruxo':
+      if(cls.tomoCantrips.includes(name)) return 'grp-1-tomocantrips';
+      if(cls.tomoRituals.includes(name)) return 'grp-1-tomorituals';
+      if(cls.spells1.includes(name)) return 'grp-1-spells1';
+      return 'grp-1-cantrips';
+    case 'Mago':
+      return cls.cantrips.includes(name) ? 'grp-1-cantrips' : 'grp-1-spellbook';
+    case 'Paladino':
+      return 'grp-1-prepared';
+    default:
+      return (cls.cantrips||[]).includes(name) ? 'grp-1-cantrips' : 'grp-1-spells1';
+  }
+}
+
+/* Fonte "espécie" nas magias/truques: só 3 espécies concedem magia por uma
+   ESCOLHA (Tiferino via Legado, Elfo/Gnomo via Linhagem) — Aasimar concede
+   Luz de forma fixa, sem tela pra editar. */
+function especieSpellGroupId(){
+  if(data.especie==='Tiferino') return 'grp-5-legado';
+  if(data.especie==='Elfo' || data.especie==='Gnomo') return 'grp-5-linhagem';
+  return null;
 }
 
 /* Mesmo switch por classe de computeSpellcasting(), mas devolvendo TODOS
@@ -387,20 +427,48 @@ function classSpellNamesRaw(cls){
 }
 
 function detectDuplicidades(sheet){
-  const pericias = mapDuplicatesBySource(skillsGrantedBySource())
-    .map(d=>({...d, tipo:'Perícia'}));
+  const pericias = mapDuplicatesBySource(skillsGrantedBySource(), (src)=>{
+    switch(src){
+      case 'classe': return {step:1, groupId:'grp-1-skills'};
+      case 'habilidoso': return {step:3, groupId:'grp-3-habilidoso'};
+      case 'humano': case 'elfo': return {step:5, groupId:'grp-5-pericia'};
+      case 'antecedenteFixo': return {step:2, groupId:'grp-2-antecedente'};
+      default: return null;
+    }
+  }).map(d=>({...d, tipo:'Perícia'}));
   const ferramentas = mapDuplicatesBySource({
     classe: (sheet.clsConst.toolsFixed ? [sheet.clsConst.toolsFixed] : []).concat(data.classe==='Bardo' ? data.bardo.instruments : []).concat(data.classe==='Monge' && data.monge.toolChoice ? [data.monge.toolChoice] : []),
     antecedenteFixo: sheet.bgConst.ferramentaOpcoes ? (sheet.bg.ferramentaEscolhida ? [sheet.bg.ferramentaEscolhida] : []) : (sheet.bgConst.tool ? [sheet.bgConst.tool] : []),
     habilidoso: (sheet.bg.habilidoso||[]).filter(x=>!ALL_SKILLS.includes(x))
+  }, (src, name)=>{
+    switch(src){
+      case 'classe':
+        if(data.classe==='Bardo' && data.bardo.instruments.includes(name)) return {step:1, groupId:'grp-1-instruments'};
+        if(data.classe==='Monge' && data.monge.toolChoice===name) return {step:1, groupId:'grp-1-toolchoice'};
+        return null; // ferramenta fixa da classe (toolsFixed), sem tela de escolha
+      case 'antecedenteFixo':
+        return sheet.bgConst.ferramentaOpcoes ? {step:3, groupId:'grp-3-ferramenta'} : null;
+      case 'habilidoso': return {step:3, groupId:'grp-3-habilidoso'};
+      default: return null;
+    }
   }).map(d=>({...d, tipo:'Ferramenta'}));
   const magias = mapDuplicatesBySource({
     classe: classSpellNamesRaw(sheet.cls),
     antecedenteIniciado: [...(sheet.bg.iniciadoCantrips||[]), ...(sheet.bg.iniciadoSpell1||[])],
     especie: [...speciesGrantedCantrips(), ...speciesGrantedSpells()]
+  }, (src, name)=>{
+    switch(src){
+      case 'classe': return {step:1, groupId: classSpellGroupId(sheet.cls, name)};
+      case 'antecedenteIniciado': return {step:3, groupId: (sheet.bg.iniciadoCantrips||[]).includes(name) ? 'grp-3-iniciado-truques' : 'grp-3-iniciado-magia1'};
+      case 'especie': { const gid = especieSpellGroupId(); return gid ? {step:5, groupId:gid} : null; }
+      default: return null;
+    }
   }).map(d=>({...d, tipo:'Magia/Truque'}));
   const talentos = (data.especie==='Humano' && data.humano.talento && data.humano.talento===backgroundFeatBaseName())
-    ? [{nome:data.humano.talento, fontes:[DUP_SOURCE_LABEL.antecedenteFixo, DUP_SOURCE_LABEL.humanoTalento], tipo:'Talento'}]
+    ? [{nome:data.humano.talento, tipo:'Talento', fontes:[
+        {label:DUP_SOURCE_LABEL.antecedenteFixo, step:2, groupId:'grp-2-antecedente'},
+        {label:DUP_SOURCE_LABEL.humanoTalento, step:5, groupId:'grp-5-talento'}
+      ]}]
     : [];
   return [...pericias, ...ferramentas, ...magias, ...talentos];
 }
@@ -410,7 +478,7 @@ function renderDuplicidadesBox(dups){
   return `<div class="dup-warning">
     <div class="dup-warning-title">⚠️ Duplicidade ⚠️</div>
     <div class="dup-warning-intro">O que está abaixo foi adquirido em mais de um lugar — a repetição não soma benefício extra, considere trocar uma das escolhas.</div>
-    ${dups.map(d=>`<div class="dup-warning-item"><b>${d.nome}</b> <span class="dup-warning-tipo">(${d.tipo})</span> — adquirido em ${d.fontes.length} lugares: ${d.fontes.join(', ')}</div>`).join('')}
+    ${dups.map(d=>`<div class="dup-warning-item"><b>${d.nome}</b> <span class="dup-warning-tipo">(${d.tipo})</span> — adquirido em ${d.fontes.length} lugares: ${d.fontes.map(f=>`<span class="dup-source">${f.label}${f.groupId?` <button class="dup-edit-link" onclick="editSectionAt(${f.step},'${f.groupId}')">Editar</button>`:''}</span>`).join(', ')}</div>`).join('')}
   </div>`;
 }
 
