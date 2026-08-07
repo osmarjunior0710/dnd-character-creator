@@ -1623,14 +1623,22 @@ function scrollToMissing(id){
 }
 
 function nav(canNext){
-  const summaryBtn = data.returnToSummary ? `<button class="btn primary" onclick="returnToSummaryNow()" style="margin-left:8px;">Voltar ao Resumo ✓</button>` : '';
-  return `<div class="nav"><div class="nav-inner">
-    <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
-    <div>
+  /* "Voltar ao Resumo" (só existe editando a partir do Resumo) tinha um
+     3º botão espremido do lado do "Avançar", empilhando/quebrando linha
+     de forma feia no celular (achado real de usuário, com print). Vira
+     uma linha própria, largura cheia, ACIMA da linha padrão Voltar/
+     Avançar — 2 linhas previsíveis em vez de 2 botões brigando pelo
+     mesmo espaço horizontal. positionNav() (perto de positionMochilaFloater())
+     mede a altura real da barra pra reservar espaço certo embaixo do
+     conteúdo, já que agora ela pode ter 1 ou 2 linhas. */
+  const summaryRow = data.returnToSummary ? `<div class="nav-inner nav-summary-row"><button class="btn primary" style="width:100%;" onclick="returnToSummaryNow()">Voltar ao Resumo ✓</button></div>` : '';
+  return `<div class="nav">
+    ${summaryRow}
+    <div class="nav-inner">
+      <button class="btn" onclick="back()" ${step===0?'style="visibility:hidden"':''}>← Voltar</button>
       <button class="btn primary" id="nextBtn" onclick="next()">${step===TOTAL_STEPS-1?'Concluir':'Avançar →'}</button>
-      ${summaryBtn}
     </div>
-  </div></div>`;
+  </div>`;
 }
 function editSection(idx){ data.returnToSummary=true; goTo(idx); }
 function returnToSummaryNow(){
@@ -1881,7 +1889,20 @@ function render(){
   attachStepHandlers();
   positionMochilaFloater();
   positionRandomizarFloater();
+  positionNav();
 }
+
+/* Reserva embaixo do <body> exatamente a altura real da barra .nav —
+   ela pode ter 1 linha (Voltar/Avançar) ou 2 (+ "Voltar ao Resumo" em
+   cima, só durante edição vinda do Resumo), então um padding-bottom
+   fixo no CSS erra pra um dos dois casos. Mesma ideia de
+   positionMochilaFloater()/positionRandomizarFloater() pro header. */
+function positionNav(){
+  const nav = document.querySelector('.nav');
+  if(!nav) return;
+  document.body.style.paddingBottom = (nav.offsetHeight + 20) + 'px';
+}
+window.addEventListener('resize', positionNav);
 
 let expandedSpellInfo = null;
 
@@ -2509,7 +2530,15 @@ window.addEventListener('resize', positionMochilaFloater);
    — cobre bem menos, mantém alvo de toque acessível, e a explicação
    agora é só o title/aria-label (tooltip), não texto sempre visível. */
 function renderMochilaFloater(){
-  if(!data.classe && !data.antecedente) return ''; // nada pra mostrar ainda
+  /* Só aparece depois do equipamento inicial da CLASSE estar escolhido
+     (data[classKey].equipment) — antes disso a Mochila não tem nada de
+     verdade pra mostrar (achado real de usuário: aparecia já na 1ª tela,
+     antes até do jogador ver o Passo de Detalhes da Classe, onde o
+     dinheiro/itens são decididos). Checa o campo em `data`, não o
+     `step` atual — assim continua aparecendo certinho se o jogador usar
+     "Editar" no Resumo e voltar pro Passo 0 (step vira 0 de novo, mas o
+     equipamento já escolhido antes continua valendo). */
+  if(!data.classe || !activeClassData().equipment) return '';
   return `<div class="floater-fab mochila-floater" onclick="toggleMochilaOpen()" title="Mochila — ver itens" aria-label="Mochila — ver itens">🎒</div>
   ${mochilaOpen ? renderMochilaPopup() : ''}`;
 }
