@@ -78,5 +78,11 @@
 <script src="js/07-compute-and-summary.js"></script>
 <script src="js/08-handlers.js"></script>
 <script src="js/09-init.js"></script>
+<!-- Exportação da ficha oficial em PDF: carregado por último, porque
+     js/pdf-export.js usa computeCharacterSheet() e outros globais
+     definidos nos scripts acima. -->
+<script src="lib/pdf-lib.min.js"></script>
+<script src="data/pdf-sheet-fields.js"></script>
+<script src="js/pdf-export.js"></script>
 </body>
 </html>

@@ -745,6 +745,7 @@ function renderSummary(){
   <div class="no-print" style="margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;">
     <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>
     <button class="btn primary" onclick="exportPDF()">📄 Exportar PDF</button>
+    <button class="btn primary" id="exportOfficialPdfBtn" onclick="exportCharacterPdf()">📥 Baixar Ficha Oficial (PDF)</button>
   </div>
 
   <div class="nav">
