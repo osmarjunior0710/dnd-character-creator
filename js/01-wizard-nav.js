@@ -220,6 +220,16 @@ function nav(canNext){
   </div>`;
 }
 function editSection(idx){ data.returnToSummary=true; goTo(idx); }
+/* Igual editSection(), mas também rola até (e destaca) um campo específico
+   dentro do passo — usado pelo botão "Editar" de cada fonte no aviso de
+   Duplicidade do Resumo (ver renderDuplicidadesBox() em 07), pra levar o
+   jogador direto pra escolha que causou aquela duplicata específica em
+   vez de só abrir o passo inteiro. Reaproveita scrollToMissing() (mesma
+   animação de destaque já usada quando "Avançar" acha um campo faltando). */
+function editSectionAt(idx, groupId){
+  editSection(idx);
+  if(groupId) scrollToMissing(groupId);
+}
 function returnToSummaryNow(){
   const missing = findFirstMissingGroup();
   if(missing){ scrollToMissing(missing); return; }
@@ -408,7 +418,13 @@ function randomizeSpeciesDetail(){
   if(data.especie==='Humano'){
     const h = data.humano;
     h.tamanho = randPick(HUMANO.tamanho.opcoes);
-    h.pericia = randPick(ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('humano').includes(s)));
+    /* Prefere uma perícia que ainda não veio de outro lugar; se a classe
+       e o antecedente já cobriram TODAS as opções (esvaziando o pool),
+       cai pro pool completo em vez de sortear undefined e travar o
+       wizard — mesma lógica de "não deixa a escolha ficar impossível"
+       usada na UI (groupedSinglePick). */
+    const hPericiaPool = ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('humano').includes(s));
+    h.pericia = randPick(hPericiaPool.length ? hPericiaPool : ALL_SKILLS);
     const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem' && n!==backgroundFeatBaseName());
     const talentosSelvagens = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Talento Selvagem' && n!==backgroundFeatBaseName());
     h.talento = randPick([...talentosOrigem, ...talentosSelvagens]);
@@ -416,7 +432,11 @@ function randomizeSpeciesDetail(){
     data.draconato.heranca = randPick(DRACONATO.subespecie.opcoes.map(o=>o.nome));
   } else if(data.especie==='Elfo'){
     const e = data.elfo;
-    e.pericia = randPick(ELFO.sentidosAgucados.opcoes.filter(s=>!skillsGrantedElsewhere('elfo').includes(s)));
+    /* Mesmo fallback do Hábil do Humano acima — evita sortear undefined
+       (e travar o wizard) quando as 3 opções de Sentidos Aguçados já
+       vieram todas de classe/antecedente. */
+    const ePericiaPool = ELFO.sentidosAgucados.opcoes.filter(s=>!skillsGrantedElsewhere('elfo').includes(s));
+    e.pericia = randPick(ePericiaPool.length ? ePericiaPool : ELFO.sentidosAgucados.opcoes);
     e.linhagem = randPick(ELFO.subespecie.opcoes.map(o=>o.nome));
   } else if(data.especie==='Gnomo'){
     data.gnomo.linhagem = randPick(GNOMO.subespecie.opcoes.map(o=>o.nome));

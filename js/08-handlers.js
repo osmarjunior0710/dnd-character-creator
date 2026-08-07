@@ -27,6 +27,7 @@ function resetWizard(){
     bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
   data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null,
+    equippedArmorId:null, equippedShieldId:null,
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},
     bardo:{skills:[],cantrips:[],spells1:[],instruments:[],equipment:null},
@@ -402,6 +403,16 @@ function toggleHabilidoso(v){ const s=activeBgData().habilidoso; const i=s.index
 function toggleIniciadoCantrip(v){ const s=activeBgData().iniciadoCantrips; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<2)s.push(v); persist(); render(); }
 function toggleIniciadoSpell1(v){ const s=activeBgData().iniciadoSpell1; const i=s.indexOf(v); if(i>=0)s.splice(i,1); else if(s.length<1)s.push(v); persist(); render(); }
 function pickFerramentaEscolhida(v){ activeBgData().ferramentaEscolhida=v; persist(); render(); }
+
+/* "Equipar" Armadura/Escudo no Resumo (renderSummary(), cards com pill
+   Equipar/Equipado — mesmo padrão de pickLegado() pra Legado do
+   Tiferino). Só entra em `data` quando o jogador CLICA numa opção — o
+   padrão (melhor CA calculada) é decidido on-the-fly por
+   resolveEquippedArmorId()/resolveEquippedShieldId() (js/07-compute-
+   and-summary.js) sem precisar disso aqui, então essas duas funções só
+   existem pra guardar uma escolha EXPLÍCITA que sobrescreve o padrão. */
+function pickEquippedArmor(id){ data.equippedArmorId=id; persist(); render(); }
+function pickEquippedShield(id){ data.equippedShieldId=id; persist(); render(); }
 
 
 function setAttr(ability, value){

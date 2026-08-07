@@ -47,6 +47,7 @@ const url = process.argv[2] || 'http://localhost:8000/index.html';
                propósito (script clássico global, sem módulo pra
                reexportar isso pro Node). */
             data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null,
+              equippedArmorId:null, equippedShieldId:null,
               attrs:{Força:8,Destreza:8,Constituição:8,Inteligência:8,Sabedoria:8,Carisma:8},
               freeAbilityRule:true, idiomas:{comuns:[],extra:[]}, shop:{purchases:{},collapsedCats:{},filterByProf:false},
               tiefling:{}, aasimar:{}, humano:{}, elfo:{}, gnomo:{}, golias:{}, draconato:{}, pequenino:{},

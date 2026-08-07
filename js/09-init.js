@@ -6,6 +6,7 @@
    direto) — funções/consts declaradas aqui viram globais como sempre foram,
    só divididas em arquivos menores. */
 async function init(){
+  document.getElementById('appVersion').textContent = APP_VERSION;
   await restore();
   if(step===0){
     let seen = null;
