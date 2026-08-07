@@ -1,0 +1,11 @@
+{
+  "name": "dnd-character-creator",
+  "private": true,
+  "description": "Free and easy way to create a D&D 5.5 character — static site, no build step (GitHub Pages serves index.html/js/css/data directly). This package.json exists only to declare the dev dependency for tests/regression-sweep.js.",
+  "scripts": {
+    "test": "echo \"Sirva o repo estático primeiro (ex: python3 -m http.server 8000), depois rode: node tests/regression-sweep.js\" && exit 1"
+  },
+  "devDependencies": {
+    "playwright": "^1.40.0"
+  }
+}
