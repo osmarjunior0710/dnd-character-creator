@@ -213,16 +213,16 @@ function renderMochilaPopup(){
    visto, então só reaparece sozinho quando o item mais novo mudar. */
 const CHANGELOG_SEEN_KEY = 'char_wizard_changelog_seen';
 const CHANGELOG = [
+  { id:'2026-08-07-a', titulo:'Ficha Oficial em PDF', bullets:[
+    '📥 Baixe a ficha oficial do PHB 2024 já preenchida com seu personagem — continua editável, pra ajustar ou imprimir',
+    'CA agora é calculada de verdade em TODAS as classes (inclusive Paladino, Clérigo, Guerreiro, Druida e Guardião, que antes ficavam sem cálculo automático)'
+  ]},
   { id:'2026-08-06-c', titulo:'Resumo e Loja mais completos', bullets:[
     '⚠️ Aviso quando algo foi adquirido em dois lugares diferentes (perícia, ferramenta, magia...)',
     'Loja mostra o Mod. de Ataque de cada arma antes de comprar'
   ]},
   { id:'2026-08-06-b', titulo:'Botão Randomizar', bullets:[
     '🎲 Sorteia automaticamente as escolhas da tela atual'
-  ]},
-  { id:'2026-08-06-a', titulo:'Resumo mais claro', bullets:[
-    'Botão ⓘ mostra de onde vem cada número (Atributo/Salvaguarda/Perícia)',
-    'Corrige CA do Monge com Escudo e Iniciativa com o talento Alerta'
   ]}
 ];
 
