@@ -3554,22 +3554,37 @@ function ownedArmorAndShield(){
 function computeAC(classe, dexMod, conMod, wisMod){
   const {armor, hasShield} = ownedArmorAndShield();
   let base, source;
+  const breakdown = [];
   if(armor){
     const dexBonus = armor.dexCap===null ? dexMod : armor.dexCap===0 ? 0 : Math.min(dexMod, armor.dexCap);
     base = armor.ca + dexBonus;
     source = findShopItem(armor.id).n;
+    breakdown.push({label: source, value: armor.ca, plain:true});
+    breakdown.push({label: armor.dexCap===0 ? 'Mod. de Destreza (armadura pesada, não soma)' : armor.dexCap!==null ? `Mod. de Destreza (máx. +${armor.dexCap})` : 'Mod. de Destreza', value: dexBonus});
   } else if(classe==='Bárbaro'){
     base = 10 + dexMod + conMod;
     source = 'Defesa sem Armadura (Bárbaro)';
+    breakdown.push({label:'Base sem armadura', value:10, plain:true});
+    breakdown.push({label:'Mod. de Destreza', value: dexMod});
+    breakdown.push({label:'Mod. de Constituição', value: conMod});
   } else if(classe==='Monge' && !hasShield){
     base = 10 + dexMod + wisMod;
     source = 'Defesa sem Armadura (Monge)';
+    breakdown.push({label:'Base sem armadura', value:10, plain:true});
+    breakdown.push({label:'Mod. de Destreza', value: dexMod});
+    breakdown.push({label:'Mod. de Sabedoria', value: wisMod});
   } else {
     base = 10 + dexMod;
     source = 'Sem armadura';
+    breakdown.push({label:'Base sem armadura', value:10, plain:true});
+    breakdown.push({label:'Mod. de Destreza', value: dexMod});
   }
-  if(hasShield){ base += 2; source += ' + Escudo'; }
-  return {value: base, source};
+  if(hasShield){
+    base += 2;
+    source += ' + Escudo';
+    breakdown.push({label:'Escudo (comprado na Loja)', value:2});
+  }
+  return {value: base, source, breakdown};
 }
 
 /* Perícias proficientes (Set, nunca duplicado mesmo se 2+ fontes derem a
@@ -3885,9 +3900,15 @@ function computeCharacterSheet(){
 
   const hitDie = CLASS_HIT_DIE[data.classe];
   const hp = hitDie + modOf('Constituição');
+  const hpBreakdown = [
+    {label:`Dado de Vida (nível 1, valor máximo — d${hitDie})`, value: hitDie, plain:true},
+    {label:'Mod. de Constituição', value: modOf('Constituição')}
+  ];
   const ac = computeAC(data.classe, modOf('Destreza'), modOf('Constituição'), modOf('Sabedoria'));
   const initiativeAlerta = hasFeatByName('Alerta');
   const initiative = modOf('Destreza') + (initiativeAlerta ? prof : 0);
+  const initiativeBreakdown = [{label:'Mod. de Destreza', value: modOf('Destreza')}];
+  if(initiativeAlerta) initiativeBreakdown.push({label:'Bônus de Proficiência (talento Alerta)', value: prof});
   const attacks = computeAttacks(clsConst, modOf('Força'), modOf('Destreza'), prof);
   const spellcasting = computeSpellcasting(cls, finalScore, prof);
   const especieMagias = speciesGrantedSpellEntries();
@@ -3920,7 +3941,7 @@ function computeCharacterSheet(){
       profBonus: prof
     },
     attrs, savingThrows, skills, passivePerception,
-    combate: { hp, hitDie: `1d${hitDie}`, ac, initiative, initiativeAlerta, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
+    combate: { hp, hpBreakdown, hitDie: `1d${hitDie}`, ac, initiative, initiativeBreakdown, initiativeAlerta, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
     attacks, spellcasting, especieMagias, especieTracosExtras, humanoTalento,
     classFeatureLines, talentoAntecedente,
     proficiencias: { idiomas, ferramentas: tools, armas: weaponProfText, armaduras: armorProfText },
@@ -3993,6 +4014,15 @@ function renderStatInfoPopup(sheet){
     if(!s) return '';
     title = s.skill;
     total = s.bonus; breakdown = s.breakdown;
+  } else if(tipo==='combate' && nome==='pv'){
+    title = 'Pontos de Vida';
+    total = sheet.combate.hp; totalPlain = true; breakdown = sheet.combate.hpBreakdown;
+  } else if(tipo==='combate' && nome==='ca'){
+    title = 'Classe de Armadura';
+    total = sheet.combate.ac.value; totalPlain = true; breakdown = sheet.combate.ac.breakdown;
+  } else if(tipo==='combate' && nome==='iniciativa'){
+    title = 'Iniciativa';
+    total = sheet.combate.initiative; breakdown = sheet.combate.initiativeBreakdown;
   } else return '';
   return `<div class="mochila-overlay" onclick="closeStatInfo()">
     <div class="mochila-popup stat-info-popup" onclick="event.stopPropagation()">
@@ -4129,12 +4159,18 @@ function renderSummary(){
 
   <div class="summary-section"><h3>Combate</h3>
   <div class="content">
-    <span class="pill-static">PV ${sheet.combate.hp}</span>
-    <span class="pill-static">CA ${sheet.combate.ac.value} (${sheet.combate.ac.source})</span>
-    <span class="pill-static">Iniciativa ${fmt(sheet.combate.initiative)}${sheet.combate.initiativeAlerta ? ' (com Alerta)' : ''}</span>
-    <span class="pill-static">Deslocamento ${sheet.combate.deslocamento}</span>
-    <span class="pill-static">Dado de Vida ${sheet.combate.hitDie}</span>
-    ${sheet.combate.visaoNoEscuro ? `<span class="pill-static">Visão no Escuro ${sheet.combate.visaoNoEscuro}</span>` : ''}
+    <div style="margin-bottom:4px;">
+      <span class="pill-static">PV ${sheet.combate.hp}<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('combate:pv')" title="Ver de onde vem esse número">ⓘ</button></span>
+      <span class="pill-static">Dado de Vida ${sheet.combate.hitDie}</span>
+    </div>
+    <div style="margin-bottom:4px;">
+      <span class="pill-static">CA ${sheet.combate.ac.value} (${sheet.combate.ac.source})<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('combate:ca')" title="Ver de onde vem esse número">ⓘ</button></span>
+      <span class="pill-static">Iniciativa ${fmt(sheet.combate.initiative)}${sheet.combate.initiativeAlerta ? ' (com Alerta)' : ''}<button class="info-btn-inline" onclick="event.stopPropagation();openStatInfo('combate:iniciativa')" title="Ver de onde vem esse número">ⓘ</button></span>
+    </div>
+    <div>
+      <span class="pill-static">Deslocamento ${sheet.combate.deslocamento}</span>
+      ${sheet.combate.visaoNoEscuro ? `<span class="pill-static">Visão no Escuro ${sheet.combate.visaoNoEscuro}</span>` : ''}
+    </div>
   </div></div>
 
   ${sheet.attacks.length ? `
