@@ -437,17 +437,18 @@ function setAttr(ability, value){
 function maxAffordableQty(id){
   const item = findShopItem(id);
   if(!item) return 0;
-  if(item.c<=0) return 999; // item de custo 0, sem limite prático
+  const price = itemPrice(item);
+  if(price<=0) return 999; // item de custo 0 (mesmo com desconto), sem limite prático
   const purchases = data.shop.purchases||{};
   let othersCost = 0;
   for(const [otherId,q] of Object.entries(purchases)){
     if(otherId===id) continue;
     const it = findShopItem(otherId);
-    if(it) othersCost += it.c*q;
+    if(it) othersCost += itemPrice(it)*q;
   }
   const budget = startingGold() - othersCost;
   if(budget<=0) return 0;
-  return Math.floor((budget / item.c) + 1e-9); // epsilon evita erro de ponto flutuante
+  return Math.floor((budget / price) + 1e-9); // epsilon evita erro de ponto flutuante
 }
 
 function shopSetQty(id, qty){
