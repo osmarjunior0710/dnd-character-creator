@@ -79,8 +79,19 @@ function ownedArmorAndShield(dexMod){
    pro Monge, que perde a Defesa sem Armadura ao empunhar escudo (regra
    exige "sem armadura E sem escudo") e cai no padrão 10+Destreza+2 de
    escudo, igual qualquer outra classe. Bárbaro não tem essa exceção: pode
-   usar escudo e manter a fórmula com Constituição. */
-function computeAC(classe, dexMod, conMod, wisMod){
+   usar escudo e manter a fórmula com Constituição.
+
+   estiloDeLuta (opcional, só o Guerreiro tem isso no nível 1 — ver
+   GUERREIRO.estiloDeLuta em data/classes/guerreiro.js): dos 10 Estilos de
+   Luta, só o "Defensivo" muda a CA (+1 enquanto veste armadura Leve/
+   Média/Pesada — os outros 9 são só texto informativo, não mexem nesse
+   número). Não somava antes — achado ao montar um exemplo de ficha pro
+   plano de migração React, confirmado contra regras.md e o PDF. Só entra
+   dentro do ramo "armor" porque a regra exige estar USANDO armadura;
+   Bárbaro/Monge sem armadura não têm Estilo de Luta nesta versão do app
+   (é exclusivo do Guerreiro), então não precisa de exceção nos ramos
+   deles. */
+function computeAC(classe, dexMod, conMod, wisMod, estiloDeLuta){
   const {armor, hasShield} = ownedArmorAndShield(dexMod);
   let base, source;
   const breakdown = [];
@@ -90,6 +101,11 @@ function computeAC(classe, dexMod, conMod, wisMod){
     source = findShopItem(armor.id).n;
     breakdown.push({label: source, value: armor.ca, plain:true});
     breakdown.push({label: armor.dexCap===0 ? 'Mod. de Destreza (armadura pesada, não soma)' : armor.dexCap!==null ? `Mod. de Destreza (máx. +${armor.dexCap})` : 'Mod. de Destreza', value: dexBonus});
+    if(estiloDeLuta==='Defensivo'){
+      base += 1;
+      source += ' + Estilo de Luta (Defensivo)';
+      breakdown.push({label:'Estilo de Luta (Defensivo)', value:1});
+    }
   } else if(classe==='Bárbaro'){
     base = 10 + dexMod + conMod;
     source = 'Defesa sem Armadura (Bárbaro)';
@@ -510,7 +526,7 @@ function computeCharacterSheet(){
     {label:`Dado de Vida (nível 1, valor máximo — d${hitDie})`, value: hitDie, plain:true},
     {label:'Mod. de Constituição', value: modOf('Constituição')}
   ];
-  const ac = computeAC(data.classe, modOf('Destreza'), modOf('Constituição'), modOf('Sabedoria'));
+  const ac = computeAC(data.classe, modOf('Destreza'), modOf('Constituição'), modOf('Sabedoria'), data.classe==='Guerreiro' ? data.guerreiro.estilo : null);
   const initiativeAlerta = hasFeatByName('Alerta');
   const initiative = modOf('Destreza') + (initiativeAlerta ? prof : 0);
   const initiativeBreakdown = [{label:'Mod. de Destreza', value: modOf('Destreza')}];
