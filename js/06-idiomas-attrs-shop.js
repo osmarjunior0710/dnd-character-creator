@@ -87,11 +87,37 @@ function startingGold(){
   const bgGold = bg.equipment==='B' ? bgConst.equipmentB_gold : (bg.equipment==='A' ? bgConst.equipmentA_gold : 0);
   return clsGold + bgGold;
 }
+/* Talento Artifista (Origem — vem fixo do Antecedente Artesão, ou
+   escolhido no Versátil do Humano): "sempre que você compra um item não
+   mágico, recebe um desconto de 20% nele". A Loja só vende item mundano
+   (nenhum item mágico no SHOP hoje), então o desconto vale pra tudo.
+   hasFeatByName() é a mesma função já usada pro bônus de Iniciativa do
+   talento Alerta — cobre as duas fontes possíveis do talento sem
+   duplicar a lógica de "onde ele pode vir". */
+function shopDiscountFactor(){
+  return hasFeatByName('Artifista') ? 0.8 : 1;
+}
+/* Preço que o personagem PAGA de verdade por 1 unidade do item — já com
+   o desconto do Artifista aplicado, se houver. Todo lugar que soma custo
+   de compra (gasto total, limite de quantidade, exibição na Loja/
+   Carrinho/Resumo/PDF) usa esta função em vez de `item.c` direto, pra
+   nunca ter 2 números diferentes de "quanto custa" no app.
+   Limitação conhecida, aceita por ser um caso raro: o filtro que esconde
+   item mais caro que computeMaxPossibleGold() (ver renderShop()) continua
+   comparando contra o preço CHEIO, não o com desconto — computeMaxPossibleGold()
+   é um teto teórico entre TODAS as combinações de classe/antecedente, não
+   o orçamento deste personagem específico, então recalculá-lo por
+   desconto exigiria refazer essa conta pra cada combinação só por causa
+   de 1 talento. Na prática só afetaria alguém com Artesão + a combinação
+   de maior ouro possível tentando comprar um item bem perto do teto. */
+function itemPrice(item){
+  return item.c * shopDiscountFactor();
+}
 function spentGold(){
   let total = 0;
   for(const [id, qty] of Object.entries(data.shop.purchases||{})){
     const item = findShopItem(id);
-    if(item) total += item.c * qty;
+    if(item) total += itemPrice(item) * qty;
   }
   return total;
 }
@@ -132,6 +158,7 @@ function renderShop(){
   const clsConst = activeClassConst();
   const maxGold = computeMaxPossibleGold();
   const filtering = data.shop.filterByProf;
+  const discount = shopDiscountFactor(); // 0.8 com o talento Artifista, 1 sem
   /* Preview do Mod. de Ataque nas categorias de arma — mesma fórmula de
      computeAttacks()/computeCharacterSheet(), só que ANTES de comprar
      (não depende de posse do item), pro jogador comparar armas na hora
@@ -142,6 +169,7 @@ function renderShop(){
   const atkProf = PROF_BONUS_BY_LEVEL[1];
   let html = `<h2>Loja — Gaste seu Dinheiro Inicial</h2>
   <div class="intro">Por padrão a Loja mostra TODAS as armas e armaduras, pra você conhecer as opções — ferramentas, focos, munição e equipamento de aventura valem pra qualquer um sempre. Itens mais caros que ${fmtGold(maxGold)} PO (o máximo possível de ouro inicial, somando classe + antecedente) não aparecem, porque nunca dá pra comprá-los na criação do personagem.</div>
+  ${discount<1 ? `<div class="intro" style="color:var(--gold);">Talento Artifista: 20% de desconto em item não-mágico, já aplicado nos preços abaixo (preço cheio riscado ao lado).</div>` : ''}
   <div style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:10px 0;" onclick="toggleShopProfFilter()">
     <input type="checkbox" style="width:16px;height:16px;flex:none;margin:0;pointer-events:none;" ${filtering?'checked':''}>
     <span>Filtrar por proficiência (mostra só armas e armaduras que ${data.classe} usa bem)</span>
@@ -186,7 +214,7 @@ function renderShop(){
         <td data-label="Item">${it.n}${contHtml}</td>
         ${efeitoHtml}
         ${atkHtml}
-        <td data-label="Custo">${fmtGold(it.c)} PO</td>
+        <td data-label="Custo">${discount<1 ? `<s style="opacity:0.55;">${fmtGold(it.c)}</s> ${fmtGold(itemPrice(it))}` : fmtGold(it.c)} PO</td>
         <td data-label="Qtd."><div class="qty-cell">
           <button class="btn small" data-fn="shopDec" data-pick="${it.id}">−</button>
           <input type="number" min="0" max="${maxQty}" value="${qty}" data-fn="shopSet" data-item="${it.id}">
@@ -202,7 +230,7 @@ function renderShop(){
   if(cartEntries.length){
     html += `<h3>Carrinho</h3><div class="cart-list">${cartEntries.map(([id,q])=>{
       const item = findShopItem(id);
-      return `<div class="cart-item"><span>${item.n} ×${q}</span><span>${fmtGold(item.c*q)} PO</span></div>`;
+      return `<div class="cart-item"><span>${item.n} ×${q}</span><span>${fmtGold(itemPrice(item)*q)} PO</span></div>`;
     }).join('')}</div>`;
   }
 
