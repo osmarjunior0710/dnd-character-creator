@@ -45,9 +45,12 @@ rodando", pra ajudar a saber se um relato de bug já inclui um fix
 recente (cache do GitHub Pages/navegador pode segurar uma versão velha
 por um tempo). Sem build step neste repo, então é mantida na mão:
 
-- Toda vez que for **abrir uma PR nova**, atualize `APP_VERSION` pro
-  horário atual (`date -u +"v%Y%m%d%H%M"`) antes do commit que vai nela.
-- Se a mesma PR ainda estiver aberta e receber mais commits (ex.: fix
-  depois de review, ou mais um item da mesma entrega), **não** bump de
-  novo — a versão fica a do primeiro commit da PR até ela mesclar.
-- Só bump de novo na PR seguinte.
+- Regra simples (trocada por uma mais elaborada de "só na 1ª PR nova,
+  não de novo enquanto a mesma PR está aberta" — na prática gerou um
+  bump esquecido/errado, não valia a complicação): **toda vez que for
+  fazer um commit que muda o app**, atualize `APP_VERSION` pro horário
+  atual (`date -u +"v%Y%m%d%H%M"`) antes de commitar. Não precisa
+  rastrear se é a mesma PR, PR nova, ou só um push direto — é sempre
+  "a última vez que o código mudou", ponto.
+- Não precisa bump em commit que só mexe em documentação (`CLAUDE.md`,
+  `VISAO.md`, comentário) sem tocar em nada que o jogador vê/roda.
