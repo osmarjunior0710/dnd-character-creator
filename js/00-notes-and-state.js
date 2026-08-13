@@ -18,7 +18,7 @@
      03-species-steps.js         — Passo de Espécie (grade + 10 telas de detalhe)
      04-background-steps.js      — Passo de Antecedente + floaters globais (Mochila/Perícias e Talentos/Randomizar)
      05-class-steps.js           — Passo de Classe (grade + 13 telas de detalhe)
-     06-idiomas-attrs-shop.js    — Passos de Idiomas, Atributos e a Loja
+     06-idiomas-attrs-shop.js    — Passos de Idiomas, Atributos, Alinhamento e a Loja
      07-compute-and-summary.js   — cálculo do personagem (computeCharacterSheet) + Resumo
      08-handlers.js              — reset do wizard + TODOS os handlers "pick"/"toggle" de cada escolha
      09-init.js                  — restore() + 1ª renderização
@@ -825,6 +825,31 @@
      "Kit de Aventureiro", "Kit de Diplomata" etc. NÃO são ferramentas, são
      só pacotes de equipamento — não confundir na hora de montar talentos
      tipo Habilidoso pra outros antecedentes.
+   - ✅ NOVA ETAPA "ALINHAMENTO" INSERIDA (passo 8, entre Atributos e
+     Loja — pedido explícito do usuário, "última coisa antes de entrar
+     na loja"). TOTAL_STEPS virou 11 (era 10). Mesma renumeração de
+     sempre nessa altura da cadeia: Loja (step 8→9, editSection(8)→
+     editSection(9)) e Resumo (step 9→10, inclusive o goTo(9) dentro de
+     returnToSummaryNow() virou goTo(10)). renderRandomizarFloater()
+     (if(step>7)) virou if(step>8) — Alinhamento tem campo obrigatório
+     de verdade (data.alinhamento), então também ganha Randomizar,
+     diferente de Loja/Resumo que nunca tiveram.
+   - Dados: ALIGNMENTS (9 nomes) + ALIGNMENT_INFO (descrição curta de
+     cada um) em data/alignments.js — os 9 alinhamentos oficiais do
+     Cap. 4 (eixo Ordem × eixo Moral). renderAlinhamentoStep() (perto de
+     renderAttrs()/renderIdiomasStep() em 06-idiomas-attrs-shop.js)
+     reaproveita choiceGridWithInfo() (o mesmo componente já usado pro
+     grid de Antecedentes) em vez de criar um layout novo — só precisou
+     de infoMap com `descricao`, sem `fields` (não tem tabela de dados
+     extra por alinhamento, só o texto). Sem restrição de escolha (ex.
+     não bloqueia alinhamento Mau) — decisão consciente, o app não tem
+     Mestre pra aprovar nada, só o jogador escolhendo pra si mesmo.
+   - Aparece no Resumo (seção própria, "Alinhamento", com Editar ->
+     editSection(8)), no "Copiar Resumo" (characterSheetAsText()) e na
+     Ficha Oficial em PDF (F.identidade.alinhamento, já existia mapeado
+     em data/pdf-sheet-fields.js mas nunca era preenchido — o comentário
+     no topo de pdf-export.js que listava "Alinhamento" entre os campos
+     deixados em branco de propósito foi atualizado, não é mais verdade).
 
    PADRÕES A MANTER:
    - Nunca copiar parágrafo cru do livro — sempre parafrasear (mesma regra
@@ -1263,10 +1288,10 @@ function computeMaxPossibleGold(){
 }
 
 let step = 0;
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 11;
 let data = {
   characterName: '',
-  especie: null, antecedente: null, classe: null,
+  especie: null, antecedente: null, classe: null, alinhamento: null,
   equippedArmorId: null, equippedShieldId: null,
   tiefling: { tamanho: null, legado: null, atributoLegado: null },
   pequenino: {},
@@ -1322,7 +1347,7 @@ let data = {
    carregou a página, é "qual versão do código você está rodando", útil
    pra saber se um relato de bug já inclui um fix recente (cache do
    GitHub Pages/navegador pode segurar uma versão velha por um tempo). */
-const APP_VERSION = 'v202608131957';
+const APP_VERSION = 'v202608132102';
 
 function mod(score){ return Math.floor((score-10)/2); }
 function fmt(n){ return (n>=0?'+':'')+n; }
@@ -1401,6 +1426,11 @@ async function restore(){
       }
       if(data.returnToSummary===undefined) data.returnToSummary = false;
       if(data.freeAbilityRule===undefined) data.freeAbilityRule = false;
+      /* Save antigo (de antes do passo de Alinhamento existir) não tem
+         esse campo — sem isso, canAdvance() ficaria preso pra sempre no
+         passo 8 achando que falta escolher algo que a versão salva nem
+         sabia que existia. */
+      if(data.alinhamento===undefined) data.alinhamento = null;
     }
   }catch(e){}
 }

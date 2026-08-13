@@ -279,9 +279,11 @@ function choiceGridWithInfo(list, enabledList, selected, onClickName, infoMap){
       if(info.descricao){
         infoHtml += `<span class="note" style="display:block;font-style:italic;text-align:left;margin-top:6px;">${info.descricao}</span>`;
       }
-      infoHtml += `<span class="note" style="display:block;text-align:left;line-height:1.4;margin-top:6px;">
-        ${fields.map(([label,val])=>`<b>${label}:</b> ${val}`).join('<br>')}
-      </span>`;
+      if(fields.length){
+        infoHtml += `<span class="note" style="display:block;text-align:left;line-height:1.4;margin-top:6px;">
+          ${fields.map(([label,val])=>`<b>${label}:</b> ${val}`).join('<br>')}
+        </span>`;
+      }
     } else if(!enabled){
       infoHtml = '<span class="note">em breve</span>';
     }

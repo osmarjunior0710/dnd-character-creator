@@ -46,7 +46,7 @@ const url = process.argv[2] || 'http://localhost:8000/index.html';
                atualizar aqui também — sem import compartilhado de
                propósito (script clássico global, sem módulo pra
                reexportar isso pro Node). */
-            data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null,
+            data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null, alinhamento:null,
               equippedArmorId:null, equippedShieldId:null,
               attrs:{Força:8,Destreza:8,Constituição:8,Inteligência:8,Sabedoria:8,Carisma:8},
               freeAbilityRule:true, idiomas:{comuns:[],extra:[]}, shop:{purchases:{},collapsedCats:{},filterByProf:false},
@@ -84,6 +84,7 @@ const url = process.argv[2] || 'http://localhost:8000/index.html';
             data.classe = c;
             data.antecedente = bg;
             data.especie = sp;
+            data.alinhamento = 'Neutro';
             data.humano.tamanho = 'Médio'; data.aasimar.tamanho = 'Médio'; data.tiefling.tamanho = 'Médio';
             data.tiefling.legado = 'Infernal';
             data.draconato.heranca = DRACONATO.subespecie.opcoes[0].nome;

@@ -1,4 +1,4 @@
-/* 06-idiomas-attrs-shop.js — Passos de Idiomas, Atributos e a Loja (grade de itens, ouro inicial/gasto, filtro de proficiência).
+/* 06-idiomas-attrs-shop.js — Passos de Idiomas, Atributos, Alinhamento e a Loja (grade de itens, ouro inicial/gasto, filtro de proficiência).
    Extraído de index.html (linhas 3309-3522 originais) numa refatoração pra sair
    do arquivo monolítico único — ver ordem de carregamento no <head>/fim do
    <body> do index.html. Escopo global clássico (sem import/export ES module,
@@ -83,6 +83,24 @@ function renderAttrs(){
   }).join('')}
   ${nav(canAdvance())}`;
 }
+
+/* Passo — Alinhamento (Cap. 4 do PHB 2024): eixo Ordem × eixo Moral, 9
+   combinações. Sem restrição de escolha (ex: não bloqueia alinhamento
+   Mau) — decisão consciente: diferente de uma mesa de verdade, aqui não
+   tem Mestre pra aprovar nada, é só o jogador escolhendo pra si mesmo.
+   Reaproveita choiceGridWithInfo() (mesmo componente já usado pro grid
+   de Antecedentes) em vez de um layout novo — só precisa de `descricao`
+   no infoMap, sem `fields` (não tem tabela de dado extra por
+   alinhamento, só o texto). */
+function renderAlinhamentoStep(){
+  return `<h2>Passo — Alinhamento</h2>
+  <div class="intro">Como seu personagem enxerga certo e errado, e como ele se relaciona com regras e tradição. Não muda nenhum número da ficha — é só interpretação.</div>
+  <div id="grp-8-alinhamento">
+    ${choiceGridWithInfo(ALIGNMENTS, ALIGNMENTS, data.alinhamento, 'pickAlinhamento', ALIGNMENT_INFO)}
+  </div>
+  ${nav(canAdvance())}`;
+}
+function pickAlinhamento(v){ data.alinhamento = v; persist(); render(); }
 
 function startingGold(){
   const clsConst = activeClassConst();
