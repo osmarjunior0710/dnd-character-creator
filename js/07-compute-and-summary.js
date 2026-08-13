@@ -426,20 +426,58 @@ function especieSpellGroupId(){
   return null;
 }
 
-/* Mesmo switch por classe de computeSpellcasting(), mas devolvendo TODOS
-   os nomes escolhidos (sem o new Set() final) — pro Mago usa o Livro de
-   Magias inteiro (spellbook), não só o Preparado (prepared é só um
-   subconjunto do que já foi escolhido, então checar o livro cobre tudo). */
-function classSpellNamesRaw(cls){
+/* Truques (nível 0) que a CLASSE concede, separados das magias de fato
+   (1º círculo+) — cada classe guarda isso num campo diferente de
+   data.<classe> (nem toda classe tem truque: Paladino e Guardião não
+   têm nenhum campo de truque no modelo de dados). Split de
+   classSpellNamesRaw() (usada pra checagem de Duplicidade, que não
+   precisa separar truque de magia) pro floater de Truques e Magias, que
+   precisa. */
+function classGrantedTruques(cls){
   if(!CLASS_SPELL_ABILITY[data.classe]) return [];
   switch(data.classe){
-    case 'Bruxo': return [...cls.cantrips, ...cls.tomoCantrips, ...cls.spells1, ...cls.tomoRituals];
-    case 'Mago': return [...cls.cantrips, ...cls.spellbook];
+    case 'Bruxo': return [...cls.cantrips, ...cls.tomoCantrips];
+    case 'Paladino': case 'Guardião': return [];
+    default: return [...cls.cantrips];
+  }
+}
+/* Mesma ideia, mas magia de 1º círculo+ — pro Mago é o Livro de Magias
+   inteiro (spellbook), não só o Preparado (prepared é só um subconjunto
+   do que já foi escolhido, então checar o livro cobre tudo). Inclui as
+   concessões FIXAS da própria classe (Falar com Animais do Druida,
+   Marca do Predador do Guardião — sempre conjuradas por essas classes,
+   sem escolha, mas ainda contam como magia que o personagem tem). */
+function classGrantedMagias(cls){
+  if(!CLASS_SPELL_ABILITY[data.classe]) return [];
+  switch(data.classe){
+    case 'Bruxo': return [...cls.spells1, ...cls.tomoRituals];
+    case 'Mago': return [...cls.spellbook];
     case 'Paladino': return [...cls.prepared];
     case 'Guardião': return [...cls.spells1, 'Marca do Predador'];
-    case 'Druida': return [...cls.cantrips, ...cls.spells1, 'Falar com Animais'];
-    default: return [...cls.cantrips, ...cls.spells1];
+    case 'Druida': return [...cls.spells1, 'Falar com Animais'];
+    default: return [...cls.spells1];
   }
+}
+/* Mesmo switch de computeSpellcasting(), mas devolvendo TODOS os nomes
+   escolhidos (sem o new Set() final) — usada pela checagem de
+   Duplicidade, que não precisa separar truque de magia, só achar nome
+   repetido entre fontes. */
+function classSpellNamesRaw(cls){
+  return [...classGrantedTruques(cls), ...classGrantedMagias(cls)];
+}
+
+/* Truques e magias que o personagem tem, agrupados por FONTE (Classe /
+   Antecedente-Iniciado em Magia / Espécie) — usado pelo floater 🔮
+   Truques e Magias (mesmo espírito de skillsGrantedBySource() pra
+   perícias, em 08-handlers.js). */
+function spellsGrantedBySource(){
+  const cls = activeClassData();
+  const bg = activeBgData();
+  return {
+    classe: { truques: classGrantedTruques(cls), magias: classGrantedMagias(cls) },
+    antecedenteIniciado: { truques: bg.iniciadoCantrips || [], magias: bg.iniciadoSpell1 || [] },
+    especie: { truques: speciesGrantedCantrips(), magias: speciesGrantedSpells() }
+  };
 }
 
 function detectDuplicidades(sheet){

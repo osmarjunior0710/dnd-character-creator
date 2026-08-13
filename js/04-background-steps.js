@@ -165,6 +165,7 @@ function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
    da pilha. Chamada depois de todo render() e no resize da janela. */
 const RIGHT_FLOATERS = [
   {floater:'.pericias-floater', popup:'.pericias-popup'},
+  {floater:'.magias-floater', popup:'.magias-popup'},
   {floater:'.mochila-floater', popup:'.mochila-popup'}
 ];
 function positionRightFloaters(){
@@ -304,6 +305,64 @@ function renderPericiasTalentosPopup(){
         </div>`).join('')}
       <div class="group-label">Talentos</div>
       ${talentos.length===0 ? '<span style="color:var(--parchment-dim);">Nenhum ainda — escolha o Antecedente.</span>' : talentos.map(t=>`<span class="pill-static">${t}</span>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* Floater "Truques e Magias" (🔮) — mesmo padrão dos outros dois (👤/🎒),
+   empilhado no MEIO deles via RIGHT_FLOATERS. Popup com 2 seções
+   (Truques, Magias), cada uma agrupada por fonte (Classe / Antecedente-
+   Iniciado em Magia / Espécie), reaproveitando spellsGrantedBySource()
+   (perto de classSpellNamesRaw() em 07-compute-and-summary.js) — mesma
+   ideia de "não recalcular nada novo" já usada no floater de Perícias.
+   magiasOpen é estado de UI puro, mesmo padrão de mochilaOpen/
+   periciasTalentosOpen (não entra em `data`/persist()). */
+let magiasOpen = false;
+function toggleMagiasOpen(){ magiasOpen = !magiasOpen; render(); }
+
+function renderMagiasFloater(){
+  if(!data.classe) return ''; // antes da Classe escolhida não tem truque/magia de nenhuma fonte pra mostrar
+  return `<div class="floater-fab magias-floater" onclick="toggleMagiasOpen()" title="Truques e Magias — ver tudo que você já tem" aria-label="Truques e Magias — ver tudo que você já tem">🔮</div>
+  ${magiasOpen ? renderMagiasPopup() : ''}`;
+}
+
+/* Monta os grupos por fonte de UMA categoria (truques OU magias) — usada
+   2x dentro de renderMagiasPopup() abaixo, uma pra cada categoria, pra
+   não repetir a mesma lógica de "temAntecedente"/filter duas vezes. */
+function spellSourceGroups(bySource, categoria, temAntecedente){
+  return [
+    {label:'Classe', items: bySource.classe[categoria]},
+    {label:'Antecedente (Iniciado em Magia)', items: temAntecedente ? bySource.antecedenteIniciado[categoria] : []},
+    {label:'Espécie', items: bySource.especie[categoria]}
+  ].filter(g=>g.items.length>0);
+}
+
+function renderMagiasPopup(){
+  /* Mesmo cuidado do floater de Perícias e Talentos: activeBgData() cai
+     no fallback CHARLATAO antes de data.antecedente ser escolhido — as
+     partes vindas do Antecedente só entram se ele estiver de fato
+     preenchido, pra nunca mostrar magia que o jogador não escolheu. */
+  const temAntecedente = !!data.antecedente;
+  const bySource = spellsGrantedBySource();
+  const gruposTruques = spellSourceGroups(bySource, 'truques', temAntecedente);
+  const gruposMagias = spellSourceGroups(bySource, 'magias', temAntecedente);
+
+  const renderGrupos = grupos => grupos.map(g=>`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:0.72rem;color:var(--parchment-dim);margin-bottom:4px;">${g.label}</div>
+      ${g.items.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    </div>`).join('');
+
+  return `<div class="mochila-overlay" onclick="toggleMagiasOpen()">
+    <div class="mochila-popup magias-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>Truques e Magias</h3>
+        <button class="btn small" onclick="toggleMagiasOpen()">✕</button>
+      </div>
+      <div class="group-label" style="margin-top:0;">Truques</div>
+      ${gruposTruques.length===0 ? '<span style="color:var(--parchment-dim);">Nenhum ainda.</span>' : renderGrupos(gruposTruques)}
+      <div class="group-label">Magias</div>
+      ${gruposMagias.length===0 ? '<span style="color:var(--parchment-dim);">Nenhuma ainda.</span>' : renderGrupos(gruposMagias)}
     </div>
   </div>`;
 }
