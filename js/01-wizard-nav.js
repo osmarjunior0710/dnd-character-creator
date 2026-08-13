@@ -455,10 +455,9 @@ function randomizeSpeciesDetail(){
 
 function randomizeIdiomasStep(){
   const id = data.idiomas;
-  id.comuns = randPickN(COMMON_LANGUAGES, 2);
+  id.comuns = randPickN(choosableLanguages(), 2);
   if(data.classe==='Ladino'){
-    const pool = [...COMMON_LANGUAGES, ...RARE_LANGUAGES].filter(l => l!=='Gíria dos Ladrões' && !id.comuns.includes(l));
-    id.extra = randPickN(pool, 1);
+    id.extra = randPickN(choosableLanguages().filter(l => !id.comuns.includes(l)), 1);
   } else {
     id.extra = [];
   }
