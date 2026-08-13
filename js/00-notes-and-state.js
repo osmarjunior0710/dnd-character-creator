@@ -16,7 +16,7 @@
      01-wizard-nav.js            — render() dispatcher, navegação, validação, Randomizar
      02-render-helpers.js        — spellChoiceList/traitBox/choiceGrid e afins
      03-species-steps.js         — Passo de Espécie (grade + 10 telas de detalhe)
-     04-background-steps.js      — Passo de Antecedente + floaters globais (Mochila/Randomizar/Novidades)
+     04-background-steps.js      — Passo de Antecedente + floaters globais (Mochila/Perícias e Talentos/Randomizar)
      05-class-steps.js           — Passo de Classe (grade + 13 telas de detalhe)
      06-idiomas-attrs-shop.js    — Passos de Idiomas, Atributos e a Loja
      07-compute-and-summary.js   — cálculo do personagem (computeCharacterSheet) + Resumo
@@ -1322,7 +1322,7 @@ let data = {
    carregou a página, é "qual versão do código você está rodando", útil
    pra saber se um relato de bug já inclui um fix recente (cache do
    GitHub Pages/navegador pode segurar uma versão velha por um tempo). */
-const APP_VERSION = 'v202608072224';
+const APP_VERSION = 'v202608131903';
 
 function mod(score){ return Math.floor((score-10)/2); }
 function fmt(n){ return (n>=0?'+':'')+n; }

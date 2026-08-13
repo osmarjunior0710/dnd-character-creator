@@ -34,3 +34,20 @@ sessão, 64 commits à frente).
   push, ou PR aberto/mesclado) — nunca deixe uma mudança só local. Se
   ficar só local, a próxima sessão (em outro aparelho) não vai saber que
   aquilo existe.
+
+## Versão do app (header)
+
+`js/00-notes-and-state.js` tem uma constante `APP_VERSION`
+(`v<ano><mês><dia><hora 24h><minuto>`), mostrada na última linha do
+header ao lado do indicador de Salvo/Salvando. Não é o horário em que o
+navegador do jogador carregou a página — é "qual versão do código está
+rodando", pra ajudar a saber se um relato de bug já inclui um fix
+recente (cache do GitHub Pages/navegador pode segurar uma versão velha
+por um tempo). Sem build step neste repo, então é mantida na mão:
+
+- Toda vez que for **abrir uma PR nova**, atualize `APP_VERSION` pro
+  horário atual (`date -u +"v%Y%m%d%H%M"`) antes do commit que vai nela.
+- Se a mesma PR ainda estiver aberta e receber mais commits (ex.: fix
+  depois de review, ou mais um item da mesma entrega), **não** bump de
+  novo — a versão fica a do primeiro commit da PR até ela mesclar.
+- Só bump de novo na PR seguinte.

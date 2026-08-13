@@ -484,7 +484,7 @@ function render(){
   else if(step===7) html = renderAttrs();
   else if(step===8) html = renderShop();
   else if(step===9) html = renderSummary();
-  c.innerHTML = html + renderPericiasTalentosFloater() + renderMochilaFloater() + renderRandomizarFloater() + renderChangelogPopup();
+  c.innerHTML = html + renderPericiasTalentosFloater() + renderMochilaFloater() + renderRandomizarFloater();
   attachStepHandlers();
   positionRightFloaters();
   positionRandomizarFloater();

@@ -195,20 +195,6 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 }
 .mochila-popup-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
 .mochila-popup-header h3{font-family:'Cinzel',serif; font-size:0.9rem; color:var(--gold); margin:0;}
-.changelog-overlay{
-  position:fixed; inset:0; z-index:30; background:rgba(32,33,36,0.5);
-  display:flex; align-items:center; justify-content:center; padding:16px;
-}
-.changelog-popup{
-  background:var(--panel); border:1px solid var(--line); border-radius:6px;
-  box-shadow:0 4px 20px rgba(60,64,67,0.35);
-  padding:18px 20px; width:100%; max-width:420px; max-height:80vh; overflow-y:auto;
-}
-.changelog-entry{margin-bottom:14px;}
-.changelog-entry:last-child{margin-bottom:0;}
-.changelog-entry h4{font-family:'Cinzel',serif; font-size:0.8rem; color:var(--gold); margin:0 0 6px;}
-.changelog-entry ul{margin:0; padding-left:18px;}
-.changelog-entry li{font-size:0.85rem; line-height:1.5; margin-bottom:3px; color:var(--parchment);}
 @media (max-width:700px){
   .mochila-floater, .pericias-floater{right:10px;}
   .mochila-popup{right:10px; max-width:none;}
@@ -236,7 +222,7 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
    pra cada caso. */
 @media print{
   .no-print, .save-indicator, .progress, .mochila-floater, .pericias-floater, .randomizar-floater,
-  .mochila-overlay, .mochila-popup, .changelog-overlay, .changelog-popup,
+  .mochila-overlay, .mochila-popup,
   .nav, .edit-link, .dup-edit-link, .info-btn-inline, .info-btn{
     display:none !important;
   }

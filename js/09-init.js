@@ -8,11 +8,6 @@
 async function init(){
   document.getElementById('appVersion').textContent = APP_VERSION;
   await restore();
-  if(step===0){
-    let seen = null;
-    try{ seen = localStorage.getItem(CHANGELOG_SEEN_KEY); }catch(e){}
-    if(seen !== CHANGELOG[0].id) changelogOpen = true;
-  }
   render();
 }
 init();

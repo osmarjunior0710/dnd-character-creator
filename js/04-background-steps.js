@@ -1,4 +1,4 @@
-/* 04-background-steps.js — Passo de Antecedente: grade de escolha + tela de detalhe genérica, resolução de equipamento inicial, e os floaters globais (Mochila/Randomizar/Novidades) — ficam fisicamente entre antecedente e classe no arquivo original, mantido aqui pra não reordenar nada.
+/* 04-background-steps.js — Passo de Antecedente: grade de escolha + tela de detalhe genérica, resolução de equipamento inicial, e os floaters globais (Mochila/Perícias e Talentos/Randomizar) — ficam fisicamente entre antecedente e classe no arquivo original, mantido aqui pra não reordenar nada.
    Extraído de index.html (linhas 2388-2680 originais) numa refatoração pra sair
    do arquivo monolítico único — ver ordem de carregamento no <head>/fim do
    <body> do index.html. Escopo global clássico (sem import/export ES module,
@@ -304,55 +304,6 @@ function renderPericiasTalentosPopup(){
         </div>`).join('')}
       <div class="group-label">Talentos</div>
       ${talentos.length===0 ? '<span style="color:var(--parchment-dim);">Nenhum ainda — escolha o Antecedente.</span>' : talentos.map(t=>`<span class="pill-static">${t}</span>`).join('')}
-    </div>
-  </div>`;
-}
-
-/* Popup "Novidades" — resumo das últimas atualizações, mostrado uma vez
-   na 1ª tela (Passo 1) quando há update novo desde a última vez que o
-   jogador fechou o popup (guardado em localStorage numa chave própria,
-   separada da chave 'char_wizard_state' do persist() — é preferência do
-   navegador sobre o QUE JÁ VIU, não estado de ficha). Sempre só os 3
-   mais recentes: ao adicionar um
-   novo no topo, apaga o mais antigo do array em vez de deixar crescer.
-   changelogOpen decidido 1x em init() (ver final do arquivo) comparando
-   CHANGELOG[0].id salvo; fechar (✕ ou clique fora) grava esse id como
-   visto, então só reaparece sozinho quando o item mais novo mudar. */
-const CHANGELOG_SEEN_KEY = 'char_wizard_changelog_seen';
-const CHANGELOG = [
-  { id:'2026-08-07-b', titulo:'Equipar Armadura/Escudo e Duplicidade mais esperta', bullets:[
-    '🛡️ Escolha qual armadura/escudo "equipar" no Resumo — CA e Ficha Oficial em PDF acompanham a escolha automaticamente',
-    '⚠️ O aviso de Duplicidade agora tem um "Editar" em cada fonte, te levando direto pra escolha que causou aquela duplicata',
-    'Corrigida uma trava: escolhas de perícia única (Sentidos Aguçados do Elfo, Hábil do Humano) não ficam mais sem opção nenhuma se a classe/antecedente já cobriu tudo'
-  ]},
-  { id:'2026-08-07-a', titulo:'Ficha Oficial em PDF', bullets:[
-    '📥 Baixe a ficha oficial do PHB 2024 já preenchida com seu personagem — continua editável, pra ajustar ou imprimir',
-    'CA agora é calculada de verdade em TODAS as classes (inclusive Paladino, Clérigo, Guerreiro, Druida e Guardião, que antes ficavam sem cálculo automático)'
-  ]},
-  { id:'2026-08-06-c', titulo:'Resumo e Loja mais completos', bullets:[
-    '⚠️ Aviso quando algo foi adquirido em dois lugares diferentes (perícia, ferramenta, magia...)',
-    'Loja mostra o Mod. de Ataque de cada arma antes de comprar'
-  ]}
-];
-
-let changelogOpen = false;
-function closeChangelog(){
-  changelogOpen = false;
-  try{ localStorage.setItem(CHANGELOG_SEEN_KEY, CHANGELOG[0].id); }catch(e){}
-  render();
-}
-function renderChangelogPopup(){
-  if(!changelogOpen) return '';
-  return `<div class="changelog-overlay" onclick="closeChangelog()">
-    <div class="changelog-popup" onclick="event.stopPropagation()">
-      <div class="mochila-popup-header">
-        <h3>📣 Novidades</h3>
-        <button class="btn small" onclick="closeChangelog()">✕</button>
-      </div>
-      ${CHANGELOG.slice(0,3).map(entry=>`<div class="changelog-entry">
-        <h4>${entry.titulo}</h4>
-        <ul>${entry.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
-      </div>`).join('')}
     </div>
   </div>`;
 }
