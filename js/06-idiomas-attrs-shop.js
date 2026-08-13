@@ -5,10 +5,18 @@
    de propósito: sem build step nesse repo, GitHub Pages serve os arquivos
    direto) — funções/consts declaradas aqui viram globais como sempre foram,
    só divididas em arquivos menores. */
+/* Todo idioma que pode aparecer como ESCOLHA (comum + raro) — exceto
+   Gíria dos Ladrões, que nunca é uma escolha de verdade pra ninguém: é
+   automática pro Ladino (ver bloco isLadino abaixo) e não existe fora
+   disso, mesmo pra quem pega um idioma raro por acordo com o Mestre.
+   Centralizado aqui pra tela e Randomizar nunca divergirem. */
+function choosableLanguages(){
+  return [...COMMON_LANGUAGES, ...RARE_LANGUAGES].filter(l => l!=='Gíria dos Ladrões');
+}
+
 function renderIdiomasStep(){
   const id = data.idiomas;
   const isLadino = data.classe==='Ladino';
-  const comunsPool = COMMON_LANGUAGES;
   return `<h2>Passo — Idiomas</h2>
   <div class="intro">Todo personagem conhece Comum, além de mais idiomas escolhidos abaixo.</div>
 
@@ -17,8 +25,9 @@ function renderIdiomasStep(){
     <div class="check-pill selected">Comum</div>
   </div>
 
-  <h3 id="grp-6-comuns">Escolha 2 Idiomas Comuns</h3>
-  ${groupedChoiceList(languageGroupsByCategory(comunsPool), id.comuns, 2, 'toggleIdiomaComum')}
+  <h3 id="grp-6-comuns">Escolha 2 Idiomas</h3>
+  <div class="intro" style="margin-bottom:8px;color:var(--parchment-dim);">Idiomas raros (grupo "Raros" abaixo) normalmente exigem contato direto com aquele povo ou cultura — combine com o Mestre antes de escolher um, e faça sentido com a história do seu personagem.</div>
+  ${groupedChoiceList(languageGroupsByCategory(choosableLanguages()), id.comuns, 2, 'toggleIdiomaComum')}
   <div class="counter ${id.comuns.length===2?'ok':''}">${id.comuns.length}/2 escolhidos</div>
 
   ${isLadino ? `
@@ -28,11 +37,8 @@ function renderIdiomasStep(){
     <div class="check-pill selected">Gíria dos Ladrões</div>
   </div>
 
-  <h3 id="grp-6-extra">Escolha 1 Idioma Adicional (Comum ou Raro)</h3>
-  ${(()=>{
-    const pool = [...COMMON_LANGUAGES, ...RARE_LANGUAGES].filter(l => l!=='Gíria dos Ladrões' && !id.comuns.includes(l));
-    return groupedChoiceList(languageGroupsByCategory(pool), id.extra, 1, 'toggleIdiomaExtra');
-  })()}
+  <h3 id="grp-6-extra">Escolha 1 Idioma Adicional</h3>
+  ${groupedChoiceList(languageGroupsByCategory(choosableLanguages().filter(l => !id.comuns.includes(l))), id.extra, 1, 'toggleIdiomaExtra')}
   <div class="counter ${id.extra.length===1?'ok':''}">${id.extra.length}/1 escolhido</div>
   ` : ''}
   ${nav(canAdvance())}`;

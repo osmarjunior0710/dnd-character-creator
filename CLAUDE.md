@@ -34,3 +34,23 @@ sessão, 64 commits à frente).
   push, ou PR aberto/mesclado) — nunca deixe uma mudança só local. Se
   ficar só local, a próxima sessão (em outro aparelho) não vai saber que
   aquilo existe.
+
+## Versão do app (header)
+
+`js/00-notes-and-state.js` tem uma constante `APP_VERSION`
+(`v<ano><mês><dia><hora 24h><minuto>`), mostrada na última linha do
+header ao lado do indicador de Salvo/Salvando. Não é o horário em que o
+navegador do jogador carregou a página — é "qual versão do código está
+rodando", pra ajudar a saber se um relato de bug já inclui um fix
+recente (cache do GitHub Pages/navegador pode segurar uma versão velha
+por um tempo). Sem build step neste repo, então é mantida na mão:
+
+- Regra simples (trocada por uma mais elaborada de "só na 1ª PR nova,
+  não de novo enquanto a mesma PR está aberta" — na prática gerou um
+  bump esquecido/errado, não valia a complicação): **toda vez que for
+  fazer um commit que muda o app**, atualize `APP_VERSION` pro horário
+  atual (`date -u +"v%Y%m%d%H%M"`) antes de commitar. Não precisa
+  rastrear se é a mesma PR, PR nova, ou só um push direto — é sempre
+  "a última vez que o código mudou", ponto.
+- Não precisa bump em commit que só mexe em documentação (`CLAUDE.md`,
+  `VISAO.md`, comentário) sem tocar em nada que o jogador vê/roda.

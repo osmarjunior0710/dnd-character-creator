@@ -1,4 +1,4 @@
-/* 04-background-steps.js — Passo de Antecedente: grade de escolha + tela de detalhe genérica, resolução de equipamento inicial, e os floaters globais (Mochila/Randomizar/Novidades) — ficam fisicamente entre antecedente e classe no arquivo original, mantido aqui pra não reordenar nada.
+/* 04-background-steps.js — Passo de Antecedente: grade de escolha + tela de detalhe genérica, resolução de equipamento inicial, e os floaters globais (Mochila/Perícias e Talentos/Randomizar) — ficam fisicamente entre antecedente e classe no arquivo original, mantido aqui pra não reordenar nada.
    Extraído de index.html (linhas 2388-2680 originais) numa refatoração pra sair
    do arquivo monolítico único — ver ordem de carregamento no <head>/fim do
    <body> do index.html. Escopo global clássico (sem import/export ES module,
@@ -165,6 +165,7 @@ function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
    da pilha. Chamada depois de todo render() e no resize da janela. */
 const RIGHT_FLOATERS = [
   {floater:'.pericias-floater', popup:'.pericias-popup'},
+  {floater:'.magias-floater', popup:'.magias-popup'},
   {floater:'.mochila-floater', popup:'.mochila-popup'}
 ];
 function positionRightFloaters(){
@@ -308,51 +309,60 @@ function renderPericiasTalentosPopup(){
   </div>`;
 }
 
-/* Popup "Novidades" — resumo das últimas atualizações, mostrado uma vez
-   na 1ª tela (Passo 1) quando há update novo desde a última vez que o
-   jogador fechou o popup (guardado em localStorage numa chave própria,
-   separada da chave 'char_wizard_state' do persist() — é preferência do
-   navegador sobre o QUE JÁ VIU, não estado de ficha). Sempre só os 3
-   mais recentes: ao adicionar um
-   novo no topo, apaga o mais antigo do array em vez de deixar crescer.
-   changelogOpen decidido 1x em init() (ver final do arquivo) comparando
-   CHANGELOG[0].id salvo; fechar (✕ ou clique fora) grava esse id como
-   visto, então só reaparece sozinho quando o item mais novo mudar. */
-const CHANGELOG_SEEN_KEY = 'char_wizard_changelog_seen';
-const CHANGELOG = [
-  { id:'2026-08-07-b', titulo:'Equipar Armadura/Escudo e Duplicidade mais esperta', bullets:[
-    '🛡️ Escolha qual armadura/escudo "equipar" no Resumo — CA e Ficha Oficial em PDF acompanham a escolha automaticamente',
-    '⚠️ O aviso de Duplicidade agora tem um "Editar" em cada fonte, te levando direto pra escolha que causou aquela duplicata',
-    'Corrigida uma trava: escolhas de perícia única (Sentidos Aguçados do Elfo, Hábil do Humano) não ficam mais sem opção nenhuma se a classe/antecedente já cobriu tudo'
-  ]},
-  { id:'2026-08-07-a', titulo:'Ficha Oficial em PDF', bullets:[
-    '📥 Baixe a ficha oficial do PHB 2024 já preenchida com seu personagem — continua editável, pra ajustar ou imprimir',
-    'CA agora é calculada de verdade em TODAS as classes (inclusive Paladino, Clérigo, Guerreiro, Druida e Guardião, que antes ficavam sem cálculo automático)'
-  ]},
-  { id:'2026-08-06-c', titulo:'Resumo e Loja mais completos', bullets:[
-    '⚠️ Aviso quando algo foi adquirido em dois lugares diferentes (perícia, ferramenta, magia...)',
-    'Loja mostra o Mod. de Ataque de cada arma antes de comprar'
-  ]}
-];
+/* Floater "Truques e Magias" (🔮) — mesmo padrão dos outros dois (👤/🎒),
+   empilhado no MEIO deles via RIGHT_FLOATERS. Popup com 2 seções
+   (Truques, Magias), cada uma agrupada por fonte (Classe / Antecedente-
+   Iniciado em Magia / Espécie), reaproveitando spellsGrantedBySource()
+   (perto de classSpellNamesRaw() em 07-compute-and-summary.js) — mesma
+   ideia de "não recalcular nada novo" já usada no floater de Perícias.
+   magiasOpen é estado de UI puro, mesmo padrão de mochilaOpen/
+   periciasTalentosOpen (não entra em `data`/persist()). */
+let magiasOpen = false;
+function toggleMagiasOpen(){ magiasOpen = !magiasOpen; render(); }
 
-let changelogOpen = false;
-function closeChangelog(){
-  changelogOpen = false;
-  try{ localStorage.setItem(CHANGELOG_SEEN_KEY, CHANGELOG[0].id); }catch(e){}
-  render();
+function renderMagiasFloater(){
+  if(!data.classe) return ''; // antes da Classe escolhida não tem truque/magia de nenhuma fonte pra mostrar
+  return `<div class="floater-fab magias-floater" onclick="toggleMagiasOpen()" title="Truques e Magias — ver tudo que você já tem" aria-label="Truques e Magias — ver tudo que você já tem">🔮</div>
+  ${magiasOpen ? renderMagiasPopup() : ''}`;
 }
-function renderChangelogPopup(){
-  if(!changelogOpen) return '';
-  return `<div class="changelog-overlay" onclick="closeChangelog()">
-    <div class="changelog-popup" onclick="event.stopPropagation()">
+
+/* Monta os grupos por fonte de UMA categoria (truques OU magias) — usada
+   2x dentro de renderMagiasPopup() abaixo, uma pra cada categoria, pra
+   não repetir a mesma lógica de "temAntecedente"/filter duas vezes. */
+function spellSourceGroups(bySource, categoria, temAntecedente){
+  return [
+    {label:'Classe', items: bySource.classe[categoria]},
+    {label:'Antecedente (Iniciado em Magia)', items: temAntecedente ? bySource.antecedenteIniciado[categoria] : []},
+    {label:'Espécie', items: bySource.especie[categoria]}
+  ].filter(g=>g.items.length>0);
+}
+
+function renderMagiasPopup(){
+  /* Mesmo cuidado do floater de Perícias e Talentos: activeBgData() cai
+     no fallback CHARLATAO antes de data.antecedente ser escolhido — as
+     partes vindas do Antecedente só entram se ele estiver de fato
+     preenchido, pra nunca mostrar magia que o jogador não escolheu. */
+  const temAntecedente = !!data.antecedente;
+  const bySource = spellsGrantedBySource();
+  const gruposTruques = spellSourceGroups(bySource, 'truques', temAntecedente);
+  const gruposMagias = spellSourceGroups(bySource, 'magias', temAntecedente);
+
+  const renderGrupos = grupos => grupos.map(g=>`
+    <div style="margin-bottom:10px;">
+      <div style="font-size:0.72rem;color:var(--parchment-dim);margin-bottom:4px;">${g.label}</div>
+      ${g.items.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+    </div>`).join('');
+
+  return `<div class="mochila-overlay" onclick="toggleMagiasOpen()">
+    <div class="mochila-popup magias-popup" onclick="event.stopPropagation()">
       <div class="mochila-popup-header">
-        <h3>📣 Novidades</h3>
-        <button class="btn small" onclick="closeChangelog()">✕</button>
+        <h3>Truques e Magias</h3>
+        <button class="btn small" onclick="toggleMagiasOpen()">✕</button>
       </div>
-      ${CHANGELOG.slice(0,3).map(entry=>`<div class="changelog-entry">
-        <h4>${entry.titulo}</h4>
-        <ul>${entry.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
-      </div>`).join('')}
+      <div class="group-label" style="margin-top:0;">Truques</div>
+      ${gruposTruques.length===0 ? '<span style="color:var(--parchment-dim);">Nenhum ainda.</span>' : renderGrupos(gruposTruques)}
+      <div class="group-label">Magias</div>
+      ${gruposMagias.length===0 ? '<span style="color:var(--parchment-dim);">Nenhuma ainda.</span>' : renderGrupos(gruposMagias)}
     </div>
   </div>`;
 }
