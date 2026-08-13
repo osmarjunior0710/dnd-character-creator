@@ -1322,7 +1322,7 @@ let data = {
    carregou a página, é "qual versão do código você está rodando", útil
    pra saber se um relato de bug já inclui um fix recente (cache do
    GitHub Pages/navegador pode segurar uma versão velha por um tempo). */
-const APP_VERSION = 'v202608131920';
+const APP_VERSION = 'v202608131903';
 
 function mod(score){ return Math.floor((score-10)/2); }
 function fmt(n){ return (n>=0?'+':'')+n; }
