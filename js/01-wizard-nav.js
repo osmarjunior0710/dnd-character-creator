@@ -187,6 +187,7 @@ function findFirstMissingGroup(){
       const missingAbility = ABILITIES.find(a=>data.attrs[a]===undefined);
       return missingAbility ? 'grp-7-attr-'+missingAbility : null;
     }
+    case 8: return data.alinhamento ? null : 'grp-8-alinhamento';
     default: return null;
   }
 }
@@ -233,15 +234,15 @@ function editSectionAt(idx, groupId){
 function returnToSummaryNow(){
   const missing = findFirstMissingGroup();
   if(missing){ scrollToMissing(missing); return; }
-  data.returnToSummary=false; goTo(9);
+  data.returnToSummary=false; goTo(10);
 }
 
 /* Antes disso era um switch(step) de ~80 linhas reimplementando, campo por
    campo, exatamente a mesma validação de findFirstMissingGroup() (só que
    devolvendo bool em vez do id do grupo faltante) — toda classe/espécie
    nova precisava ser atualizada nas DUAS funções, em dois formatos
-   diferentes, e era fácil esquecer uma. Verificado caso a caso (steps 0-7)
-   que as duas eram logicamente equivalentes; steps 8 (Loja) e 9 (Resumo)
+   diferentes, e era fácil esquecer uma. Verificado caso a caso (steps 0-8)
+   que as duas eram logicamente equivalentes; steps 9 (Loja) e 10 (Resumo)
    não têm campo obrigatório nas duas (findFirstMissingGroup cai no
    default:null igual canAdvance caía em true). */
 function canAdvance(){
@@ -259,7 +260,7 @@ function canAdvance(){
    entre fontes, por exemplo). Sempre faz um reroll completo do passo
    (zera os campos daquele passo antes de sortear de novo), não só preenche
    o que estiver vazio — clicar de novo sorteia tudo de novo. Não aparece
-   na Loja (passo 8) nem no Resumo (passo 9): nenhum dos dois tem campo
+   na Loja (passo 9) nem no Resumo (passo 10): nenhum dos dois tem campo
    obrigatório (findFirstMissingGroup() sempre null ali), então não haveria
    o que randomizar. */
 function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
@@ -282,6 +283,7 @@ function randomizeCurrentStep(){
     case 5: randomizeSpeciesDetail(); break;
     case 6: randomizeIdiomasStep(); break;
     case 7: randomizeAttrsStep(); break;
+    case 8: data.alinhamento = randPick(ALIGNMENTS); break;
     default: return;
   }
   persist();
@@ -481,8 +483,9 @@ function render(){
   else if(step===5) html = (data.especie==='Pequenino') ? renderPequeninoDetail() : (data.especie==='Anão') ? renderAnaoDetail() : (data.especie==='Orc') ? renderOrcDetail() : (data.especie==='Humano') ? renderHumanoDetail() : (data.especie==='Draconato') ? renderDraconatoDetail() : (data.especie==='Elfo') ? renderElfoDetail() : (data.especie==='Gnomo') ? renderGnomoDetail() : (data.especie==='Golias') ? renderGoliasDetail() : (data.especie==='Aasimar') ? renderAasimarDetail() : renderTieflingDetail();
   else if(step===6) html = renderIdiomasStep();
   else if(step===7) html = renderAttrs();
-  else if(step===8) html = renderShop();
-  else if(step===9) html = renderSummary();
+  else if(step===8) html = renderAlinhamentoStep();
+  else if(step===9) html = renderShop();
+  else if(step===10) html = renderSummary();
   c.innerHTML = html + renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater();
   attachStepHandlers();
   positionRightFloaters();

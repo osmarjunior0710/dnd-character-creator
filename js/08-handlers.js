@@ -26,7 +26,7 @@ function resetWizard(){
   Object.values(BACKGROUND_DATA_KEY).forEach(key=>{
     bgDataInit[key] = { abilityPlan:null, equipment:null, habilidoso:[], ferramentaEscolhida:null, iniciadoCantrips:[], iniciadoSpell1:[] };
   });
-  data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null,
+  data = Object.assign({ characterName:'', especie:null, antecedente:null, classe:null, alinhamento:null,
     equippedArmorId:null, equippedShieldId:null,
     bruxo:{skills:[],pactBoon:null,cantrips:[],tomoCantrips:[],spells1:[],tomoRituals:[],equipment:null},
     barbaro:{skills:[],maestria:[],equipment:null},

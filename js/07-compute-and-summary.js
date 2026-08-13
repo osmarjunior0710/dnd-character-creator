@@ -598,7 +598,7 @@ function computeCharacterSheet(){
   const sheet = {
     identidade: {
       classe: data.classe, nivel: 1, antecedente: data.antecedente, especie: data.especie,
-      profBonus: prof
+      alinhamento: data.alinhamento, profBonus: prof
     },
     attrs, savingThrows, skills, passivePerception,
     combate: { hp, hpBreakdown, hitDie: `1d${hitDie}`, ac, initiative, initiativeBreakdown, initiativeAlerta, deslocamento: resolvedDeslocamento(), visaoNoEscuro: especieConst.visaoNoEscuro },
@@ -726,6 +726,7 @@ function characterSheetAsText(sheet){
   push(`Classe: ${sheet.identidade.classe} 1`);
   push(`Antecedente: ${sheet.identidade.antecedente}`);
   push(`Espécie: ${sheet.identidade.especie}${data.especie==='Tiferino' ? ` (${t.tamanho}, Legado ${t.legado})` : ''}${data.especie==='Aasimar' ? ` (${data.aasimar.tamanho})` : ''}`);
+  push(`Alinhamento: ${sheet.identidade.alinhamento}`);
   push(`Bônus de Proficiência: ${fmt(sheet.identidade.profBonus)}`);
   push('');
   push('ATRIBUTOS, SALVAGUARDAS E PERÍCIAS:');
@@ -848,6 +849,9 @@ function renderSummary(){
     <div><b>Bônus de Proficiência:</b> ${fmt(sheet.identidade.profBonus)}</div>
   </div></div>
 
+  <div class="summary-section"><h3>Alinhamento <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
+  <div class="content">${data.alinhamento}</div></div>
+
   <div class="summary-section"><h3>Atributos, Salvaguardas e Perícias <button class="edit-link" onclick="editSection(7)">Editar</button></h3>
   <div class="content">${renderAttributeGroups(sheet)}
   <div style="margin-top:4px;font-size:0.78rem;color:var(--parchment-dim);">Percepção Passiva: <b style="color:var(--gold);">${sheet.passivePerception}</b></div>
@@ -936,7 +940,7 @@ function renderSummary(){
   <div class="summary-section"><h3>Escudo Equipado</h3>
   <div class="content">${shieldItems.map(it=>renderEquipCard(it, sheet.combate.ac.shieldEquipped, 'pickEquippedShield')).join('')}</div></div>` : ''}
 
-  <div class="summary-section"><h3>Equipamento <button class="edit-link" onclick="editSection(8)">Editar</button></h3>
+  <div class="summary-section"><h3>Equipamento <button class="edit-link" onclick="editSection(9)">Editar</button></h3>
   <div class="content">
     ${otherItems.length ? otherItems.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('') : (sheet.equipamento.itens.length ? '' : '<span style="color:var(--parchment-dim);">Nenhum item.</span>')}
     <div style="margin-top:8px;font-family:'Cinzel',serif;color:var(--gold);">Dinheiro restante: ${fmtGold(sheet.equipamento.poRestante)} PO</div>

@@ -15,8 +15,10 @@
    neles. Não duplica nenhum cálculo que já exista lá.
 
    Fica em branco de propósito (sem campo correspondente nesta ficha, ou
-   sem dado no app): Subclasse, EXP, Alinhamento, Aparência, História &
-   Personalidade. Escudo (dentro da caixa de CA) marca sozinho conforme
+   sem dado no app): Subclasse, EXP, Aparência, História & Personalidade.
+   Alinhamento (F.identidade.alinhamento) preenchido desde que o passo 8
+   do wizard passou a coletar isso. Escudo (dentro da caixa de CA) marca
+   sozinho conforme
    o Escudo "equipado" no Resumo (sheet.combate.ac.shieldEquipped, ver
    renderEquipCard()/pickEquippedShield() em js/07-compute-and-summary.js
    e js/08-handlers.js) — antes ficava sempre desmarcado de propósito,
@@ -114,6 +116,7 @@ async function exportCharacterPdf(){
     setText(F.identidade.especie, data.especie);
     setText(F.identidade.classe, data.classe);
     setText(F.identidade.nivel, sheet.identidade.nivel);
+    setText(F.identidade.alinhamento, data.alinhamento);
 
     // Atributos
     sheet.attrs.forEach(a => {

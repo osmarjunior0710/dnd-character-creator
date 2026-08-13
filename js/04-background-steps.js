@@ -207,10 +207,11 @@ function renderMochilaFloater(){
 /* Botão "Randomizar" — mesma ideia/altura da Mochila, mas do lado
    esquerdo (mochila-floater.css é reaproveitado quase todo, só a
    posição/left muda — ver .randomizar-floater no CSS). Só aparece nos
-   passos 0-7 (os únicos com campo obrigatório de verdade, mesmo critério
-   de findFirstMissingGroup()/canAdvance()) — não aparece na Loja (8) nem
-   no Resumo (9), pedido explícito do usuário pra Loja, e o Resumo nunca
-   teve campo pra randomizar mesmo. */
+   passos 0-8 (os únicos com campo obrigatório de verdade, mesmo critério
+   de findFirstMissingGroup()/canAdvance() — Alinhamento, passo 8,
+   também entrou nessa lista) — não aparece na Loja (9) nem no Resumo
+   (10), pedido explícito do usuário pra Loja, e o Resumo nunca teve
+   campo pra randomizar mesmo. */
 function positionRandomizarFloater(){
   const header = document.querySelector('header');
   const floater = document.querySelector('.randomizar-floater');
@@ -220,7 +221,7 @@ function positionRandomizarFloater(){
 window.addEventListener('resize', positionRandomizarFloater);
 
 function renderRandomizarFloater(){
-  if(step>7) return '';
+  if(step>8) return '';
   return `<div class="floater-fab randomizar-floater" onclick="randomizeCurrentStep()" title="Randomizar — preenche esta tela" aria-label="Randomizar — preenche esta tela">🎲</div>`;
 }
 
