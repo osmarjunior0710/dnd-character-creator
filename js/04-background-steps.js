@@ -151,24 +151,36 @@ function ownedEquipmentList(){
 let mochilaOpen = false;
 function toggleMochilaOpen(){ mochilaOpen = !mochilaOpen; render(); }
 
-/* Posiciona o floater (e o popup, se estiver aberto) logo abaixo do
-   <header> de verdade, medindo a altura real dele em vez de cravar um
-   "top" fixo no CSS — o cabeçalho muda de altura conforme a largura da
-   tela (o título "Criador de Personagens" quebra em 1 ou 2 linhas
-   dependendo do aparelho), então um número fixo ficava certo numa
-   largura e em cima do título ou do resumo em outra (bug relatado pelo
-   usuário com print do celular). Chamada depois de todo render() e no
-   resize da janela (rotação de tela, redimensionar o browser). */
-function positionMochilaFloater(){
+/* Posiciona TODOS os floaters do lado DIREITO da tela, empilhados
+   verticalmente um abaixo do outro, na ordem de RIGHT_FLOATERS — logo
+   abaixo do <header> de verdade, medindo a altura real dele em vez de
+   cravar um "top" fixo no CSS (o cabeçalho muda de altura conforme a
+   largura da tela, já que o título quebra em 1 ou 2 linhas dependendo
+   do aparelho — bug relatado antes por usuário com print do celular).
+   Era só positionMochilaFloater() (1 floater só) até o de Perícias e
+   Talentos aparecer do lado direito também — generalizada aqui em vez
+   de escrever uma função de posição nova pra cada floater novo (o de
+   Magias, ainda por vir, só precisa entrar nesta lista). Cada popup (se
+   aberto) fica colado embaixo do SEU PRÓPRIO floater, não do primeiro
+   da pilha. Chamada depois de todo render() e no resize da janela. */
+const RIGHT_FLOATERS = [
+  {floater:'.pericias-floater', popup:'.pericias-popup'},
+  {floater:'.mochila-floater', popup:'.mochila-popup'}
+];
+function positionRightFloaters(){
   const header = document.querySelector('header');
-  const floater = document.querySelector('.mochila-floater');
-  if(!header || !floater) return;
-  const topBase = header.offsetTop + header.offsetHeight + 10;
-  floater.style.top = topBase + 'px';
-  const popup = document.querySelector('.mochila-popup');
-  if(popup) popup.style.top = (topBase + floater.offsetHeight + 8) + 'px';
+  if(!header) return;
+  let top = header.offsetTop + header.offsetHeight + 10;
+  RIGHT_FLOATERS.forEach(({floater, popup})=>{
+    const el = document.querySelector(floater);
+    if(!el) return;
+    el.style.top = top + 'px';
+    const popupEl = document.querySelector(popup);
+    if(popupEl) popupEl.style.top = (top + el.offsetHeight + 8) + 'px';
+    top += el.offsetHeight + 10;
+  });
 }
-window.addEventListener('resize', positionMochilaFloater);
+window.addEventListener('resize', positionRightFloaters);
 
 /* Ícone só (sem rótulo/subtítulo permanentes) — achado numa revisão
    geral: a versão anterior (pílula "🎒 Mochila" + "(clique pra abrir/
@@ -225,6 +237,73 @@ function renderMochilaPopup(){
       ${inherited.length ? `<div style="margin-bottom:10px;"><div class="group-label" style="margin-bottom:4px;">Herdado da Classe/Antecedente</div>${inherited.map(it=>`<span class="pill-static">${it.label}${it.qty>1?` ×${it.qty}`:''}</span>`).join('')}</div>` : ''}
       ${purchasedEntries.length ? `<div><div class="group-label" style="margin-bottom:4px;">Comprado na Loja</div>${purchasedEntries.map(it=>`<span class="pill-static">${it.label} ×${it.qty}</span>`).join('')}</div>` : ''}
       ${total===0 ? '<span style="color:var(--parchment-dim);">Nada ainda — escolha o equipamento inicial na Classe/Antecedente, ou compre algo na Loja.</span>' : ''}
+    </div>
+  </div>`;
+}
+
+/* Floater "Perícias e Talentos" (👤) — mesmo padrão da Mochila (ícone
+   sozinho, popup ao clicar, empilhado logo ACIMA dela via
+   RIGHT_FLOATERS), pedido do usuário pra conferir a qualquer momento do
+   wizard tudo que o personagem já tem, sem esperar chegar no Resumo.
+   Soma as MESMAS fontes que a checagem de Duplicidade já rastreia
+   (skillsGrantedBySource(), perto do fim de 08-handlers.js) — não
+   recalcula nada novo, só reaproveita e agrupa por fonte pra exibição.
+   periciasTalentosOpen é estado de UI puro, mesmo padrão de
+   mochilaOpen (não entra em `data`/persist()). */
+let periciasTalentosOpen = false;
+function togglePericiasTalentosOpen(){ periciasTalentosOpen = !periciasTalentosOpen; render(); }
+
+function renderPericiasTalentosFloater(){
+  if(!data.classe) return ''; // antes da Classe escolhida não tem nem perícia nem talento pra mostrar
+  return `<div class="floater-fab pericias-floater" onclick="togglePericiasTalentosOpen()" title="Perícias e Talentos — ver tudo que você já tem" aria-label="Perícias e Talentos — ver tudo que você já tem">👤</div>
+  ${periciasTalentosOpen ? renderPericiasTalentosPopup() : ''}`;
+}
+
+function renderPericiasTalentosPopup(){
+  /* activeBgConst()/skillsGrantedBySource() caem no fallback CHARLATAO
+     quando data.antecedente ainda é null (mesmo padrão usado no resto
+     do app pra nunca quebrar antes da escolha) — mas aqui, diferente de
+     um cálculo interno, isso apareceria NA TELA como se o jogador já
+     tivesse escolhido Charlatão sem ter escolhido nada ainda. Por isso,
+     ao contrário de skillsGrantedBySource() (reaproveitada como está),
+     as partes que vêm do Antecedente só entram se data.antecedente
+     estiver de fato preenchido. */
+  const temAntecedente = !!data.antecedente;
+  const bySource = skillsGrantedBySource();
+  const grupos = [
+    {label:'Classe', items: bySource.classe},
+    {label:'Antecedente', items: temAntecedente ? bySource.antecedenteFixo : []},
+    {label:'Espécie', items: [...bySource.humano, ...bySource.elfo]},
+    {label:'Talento Habilidoso', items: temAntecedente ? bySource.habilidoso : []}
+  ].filter(g=>g.items.length>0);
+  const totalPericias = grupos.reduce((n,g)=>n+g.items.length, 0);
+
+  /* Talento(s) de verdade (não a perícia que ele concede) — só existem 2
+     fontes possíveis no nível 1: o talento fixo do Antecedente (sempre
+     existe, qualquer que seja: Alerta, Habilidoso, Iniciado em Magia...)
+     e o Versátil do Humano (opcional, só se a espécie for Humano e já
+     tiver escolhido). Mesmas 2 fontes que hasFeatByName() já checa. */
+  const talentos = [];
+  if(temAntecedente){
+    const talentoAntecedente = backgroundFeatBaseName();
+    if(talentoAntecedente) talentos.push(talentoAntecedente);
+  }
+  if(data.especie==='Humano' && data.humano.talento) talentos.push(data.humano.talento);
+
+  return `<div class="mochila-overlay" onclick="togglePericiasTalentosOpen()">
+    <div class="mochila-popup pericias-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>Perícias e Talentos</h3>
+        <button class="btn small" onclick="togglePericiasTalentosOpen()">✕</button>
+      </div>
+      <div class="group-label" style="margin-top:0;">Perícias</div>
+      ${totalPericias===0 ? '<span style="color:var(--parchment-dim);">Nenhuma escolhida ainda.</span>' : grupos.map(g=>`
+        <div style="margin-bottom:10px;">
+          <div style="font-size:0.72rem;color:var(--parchment-dim);margin-bottom:4px;">${g.label}</div>
+          ${g.items.map(s=>`<span class="pill-static">${s}</span>`).join('')}
+        </div>`).join('')}
+      <div class="group-label">Talentos</div>
+      ${talentos.length===0 ? '<span style="color:var(--parchment-dim);">Nenhum ainda — escolha o Antecedente.</span>' : talentos.map(t=>`<span class="pill-static">${t}</span>`).join('')}
     </div>
   </div>`;
 }
