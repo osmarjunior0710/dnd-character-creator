@@ -484,9 +484,9 @@ function render(){
   else if(step===7) html = renderAttrs();
   else if(step===8) html = renderShop();
   else if(step===9) html = renderSummary();
-  c.innerHTML = html + renderMochilaFloater() + renderRandomizarFloater() + renderChangelogPopup();
+  c.innerHTML = html + renderPericiasTalentosFloater() + renderMochilaFloater() + renderRandomizarFloater() + renderChangelogPopup();
   attachStepHandlers();
-  positionMochilaFloater();
+  positionRightFloaters();
   positionRandomizarFloater();
   positionNav();
 }
@@ -495,7 +495,7 @@ function render(){
    ela pode ter 1 linha (Voltar/Avançar) ou 2 (+ "Voltar ao Resumo" em
    cima, só durante edição vinda do Resumo), então um padding-bottom
    fixo no CSS erra pra um dos dois casos. Mesma ideia de
-   positionMochilaFloater()/positionRandomizarFloater() pro header. */
+   positionRightFloaters()/positionRandomizarFloater() pro header. */
 function positionNav(){
   const nav = document.querySelector('.nav');
   if(!nav) return;
