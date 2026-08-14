@@ -16,7 +16,7 @@ const DRUIDA = {
   /* Idioma Druídico não tem escolha do jogador — sempre concedido, e
      sempre vem com Falar com Animais preparada de graça (não conta nas
      magias preparadas escolhidas acima). Só texto informativo. */
-  idiomaDruidico: "Você aprende o idioma Druídico (secreto dos Druidas) e sempre tem a magia Falar com Animais preparada (não conta contra o total de magias preparadas escolhidas acima).",
+  idiomaDruidico: "Você aprende o idioma Druídico (secreto dos Druidas) e sempre tem a magia Falar com Animais preparada (não conta contra o total de magias preparadas escolhidas acima). Pode usar o Druídico para deixar mensagens ocultas — outro Druida identifica a mensagem automaticamente; qualquer outra pessoa só percebe que existe uma com um teste de Inteligência (Investigação) CD 15, e mesmo assim não consegue decifrá-la sem magia.",
   /* Ordem Primal: escolha entre 2 papéis — mesma estrutura da Ordem
      Divina do Clérigo. Xamã concede +1 truque, então o cantripsCount
      efetivo é dinâmico (igual clerigoEffectiveCantripsCount()). */

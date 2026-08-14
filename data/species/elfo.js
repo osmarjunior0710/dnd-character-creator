@@ -16,7 +16,7 @@ const ELFO = {
     },
     {
       nome: "Transe",
-      resumo: "Você pode completar um Descanso Longo em 4 horas ao meditar, sem a necessidade de dormir.",
+      resumo: "Você pode completar um Descanso Longo em 4 horas ao meditar, sem a necessidade de dormir, mantendo a consciência, e magia não pode forçá-lo a dormir.",
       concede: []
     }
   ],
