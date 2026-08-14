@@ -784,6 +784,263 @@ function characterSheetAsText(sheet){
   return L.join('\n');
 }
 
+/* Campos de texto informativo fixo por classe (ex: Fúria do Bárbaro,
+   Ataque Furtivo do Ladino) que NÃO entram em classFeatureLines (esse
+   array só tem ESCOLHAS — maestria, estilo, ordem, pacto, especialista).
+   Usado só pela exportação MestreIA (characterSheetAsMestreIAMarkdown)
+   pra preencher "Características de Classe relevantes" com o texto
+   completo dessas características automáticas, não só o nome. */
+const CLASS_FEATURE_TEXT_FIELDS = {
+  'Bárbaro': [['Fúria','furia'], ['Defesa sem Armadura','defesaSemArmadura']],
+  'Bardo': [['Inspiração de Bardo','inspiracao']],
+  'Druida': [['Idioma Druídico','idiomaDruidico']],
+  'Feiticeiro': [['Feitiçaria Inata','feiticariaInata']],
+  'Guardião': [['Inimigo Favorito','inimigoFavorito']],
+  'Guerreiro': [['Recuperar Fôlego','recuperarFolego']],
+  'Ladino': [['Ataque Furtivo','ataqueFurtivo'], ['Gíria do Ladrão','giriaDoLadrao']],
+  'Mago': [['Adepto de Ritual','adeptoRitual'], ['Recuperação Arcana','recuperacaoArcana']],
+  'Monge': [['Artes Marciais','artesMarciais'], ['Defesa sem Armadura','defesaSemArmadura']],
+  'Paladino': [['Mãos Consagradas','maosConsagradas']],
+  'Psiônico': [['Poder Psiônico','poderPsionico'], ['Telecinese Sutil','telecineseSutil']]
+};
+
+/* Espaços de magia de 1º círculo no nível 1, por classe — conferido
+   contra a aba Progressão de Classe na revisão da planilha de
+   referência (passo 5/9 da revisão). Bruxo é à parte (Magia de Pacto: 1
+   espaço, sempre do círculo mostrado na tabela, não "1º círculo fixo"
+   como as outras). Só usado na exportação MestreIA — o app não gasta/
+   rastreia espaço de magia hoje (ficha estática de criação, sem uso em
+   jogo ainda). */
+const SPELL_SLOTS_LV1_TEXT = {
+  'Bardo': '2 espaços de 1º círculo', 'Clérigo': '2 espaços de 1º círculo',
+  'Druida': '2 espaços de 1º círculo', 'Feiticeiro': '2 espaços de 1º círculo',
+  'Guardião': '2 espaços de 1º círculo', 'Mago': '2 espaços de 1º círculo',
+  'Paladino': '2 espaços de 1º círculo', 'Bruxo': '1 espaço de Magia de Pacto (1º círculo)'
+};
+
+/* Características de classe com texto completo (não só nome) — junta as
+   ESCOLHAS já resumidas em classFeatureLines (mas com a descrição
+   completa de Ordem/Pacto/Estilo de Luta em vez de só o nome escolhido)
+   com os recursos AUTOMÁTICOS de CLASS_FEATURE_TEXT_FIELDS acima. */
+function classFeatureTextEntries(sheet){
+  const out = [];
+  const clsConst = sheet.clsConst, cls = sheet.cls;
+  if(cls.maestria && cls.maestria.length) out.push({nome:'Maestria em Arma', texto: cls.maestria.map(m=>`${m} (${WEAPON_MASTERY[m].mastery})`).join(', ')});
+  if(cls.estilo) out.push({nome:`Estilo de Luta: ${cls.estilo}`, texto: FEAT_DETAILS[cls.estilo] ? FEAT_DETAILS[cls.estilo].beneficios : ''});
+  if(cls.ordem){
+    const desc = (clsConst.ordemDivina && clsConst.ordemDivina[cls.ordem]) || (clsConst.ordemPrimal && clsConst.ordemPrimal[cls.ordem]) || '';
+    out.push({nome:`Ordem: ${cls.ordem}`, texto: desc});
+  }
+  if(cls.pactBoon) out.push({nome:`Vínculo de Pacto: ${cls.pactBoon}`, texto: (clsConst.pactBoons && clsConst.pactBoons[cls.pactBoon]) || ''});
+  if(cls.especialista && cls.especialista.length) out.push({nome:'Especialista (proficiência dobrada)', texto: cls.especialista.join(', ')});
+  (CLASS_FEATURE_TEXT_FIELDS[data.classe]||[]).forEach(([nome,field])=>{
+    if(clsConst[field]) out.push({nome, texto: clsConst[field].replace(/<br>/g,' ')});
+  });
+  return out;
+}
+
+/* Traços de espécie que ainda vão desbloquear em nível futuro (3 ou 5)
+   — pro bloco "Progressão Futura" do template da Seção 13.6 do guia de
+   Mestre IA. Aasimar/Tiferino/Elfo têm dado estruturado (nivel3/nivel5
+   em data/species/*.js); Draconato (Voo Dracônico) e Golias (Forma
+   Grande) não têm campo estruturado pra isso — o traço já vem escrito
+   como "a partir do nível X de personagem" dentro do próprio texto em
+   tracosFixos, então o 2º bloco abaixo pega isso genericamente por
+   busca de texto, sem precisar de caso especial por espécie. */
+function speciesFutureTraits(sheet){
+  const out = [];
+  if(data.especie==='Aasimar'){
+    out.push({nivel:3, texto:'Revelação Celestial — pode se transformar (Asas Celestiais, Manto Necrótico ou Transfiguração Radiante, escolhida a cada vez) como Ação Bônus, 1x por Descanso Longo.'});
+  }
+  if(data.especie==='Tiferino' && data.tiefling.legado){
+    const opt = TIEFLING.subespecie.opcoes.find(o=>o.nome===data.tiefling.legado);
+    if(opt){
+      if(opt.nivel3) out.push({nivel:3, texto:`Legado Ínfero (${opt.nome}): aprende ${opt.nivel3.concede.map(c=>c.nome).join(', ')}.`});
+      if(opt.nivel5) out.push({nivel:5, texto:`Legado Ínfero (${opt.nome}): aprende ${opt.nivel5.concede.map(c=>c.nome).join(', ')}.`});
+    }
+  }
+  if(data.especie==='Elfo' && data.elfo.linhagem){
+    const opt = ELFO.subespecie.opcoes.find(o=>o.nome===data.elfo.linhagem);
+    if(opt){
+      if(opt.nivel3) out.push({nivel:3, texto:`Linhagem Élfica (${opt.nome}): aprende ${opt.nivel3.concede.map(c=>c.nome).join(', ')}.`});
+      if(opt.nivel5) out.push({nivel:5, texto:`Linhagem Élfica (${opt.nome}): aprende ${opt.nivel5.concede.map(c=>c.nome).join(', ')}.`});
+    }
+  }
+  (sheet.especieConst.tracosFixos||[]).forEach(tr=>{
+    const m = tr.resumo.match(/n[íi]vel (\d+) de personagem/i);
+    if(m && (m[1]==='3' || m[1]==='5')) out.push({nivel: parseInt(m[1]), texto:`${tr.nome} — ainda bloqueado.`});
+  });
+  return out.sort((a,b)=>a.nivel-b.nivel);
+}
+
+/* Ficha em Markdown no formato EXATO da Seção 13.6 do guia "D&D 5e
+   (2024) — Guia de Regras para uma IA Mestre" (guiamestreia.md) — pra
+   anexar junto com esse guia numa conversa com uma IA mestrando a
+   campanha, sem ela ter que reformatar nada. Reaproveita o mesmo
+   `sheet` de computeCharacterSheet() (a mesma fonte de
+   characterSheetAsText()/PDF), só muda a formatação de saída.
+
+   Três blocos do template não têm de onde vir hoje — nome do JOGADOR
+   (só o nome do personagem é coletado), gancho de bugiganga (é conceito
+   de mesa/sessão, não de criação de ficha) e a história de fundo do
+   personagem (texto livre que ninguém digitou ainda) — todos marcados
+   com o placeholder combinado com o usuário, pra IA Mestre saber que
+   precisa perguntar ao jogador antes de considerar isso preenchido. */
+function characterSheetAsMestreIAMarkdown(sheet){
+  const PLACEHOLDER = '*(Placeholder — IA conferir com jogador para preencher)*';
+  const L = [];
+  const push = (...s) => L.push(s.join(''));
+
+  const especieVariante = (() => {
+    if(data.especie==='Tiferino' && data.tiefling.legado) return `Legado ${data.tiefling.legado}`;
+    if(data.especie==='Draconato' && data.draconato.heranca) return `Herança ${data.draconato.heranca}`;
+    if(data.especie==='Elfo' && data.elfo.linhagem) return data.elfo.linhagem;
+    if(data.especie==='Gnomo' && data.gnomo.linhagem) return data.gnomo.linhagem;
+    if(data.especie==='Golias' && data.golias.ancestralidade) return data.golias.ancestralidade;
+    return null;
+  })();
+  const especieLinha = `${sheet.identidade.especie}${especieVariante ? ` (${especieVariante})` : ''}`;
+  const classeExtra = (data.classe==='Bruxo' && data.bruxo.pactBoon) ? data.bruxo.pactBoon : '';
+  const classeLinha = `${sheet.identidade.classe} — Nível 1${classeExtra ? ' — '+classeExtra : ''}`;
+
+  push(`# Ficha de ${data.characterName || '(sem nome)'}`);
+  push('');
+  push('## Identificação');
+  push(`- **Jogador:** ${PLACEHOLDER}`);
+  push(`- **Classe:** ${classeLinha}`);
+  push(`- **Origem:** ${sheet.identidade.antecedente}`);
+  push(`- **Espécie:** ${especieLinha}`);
+  push(`- **Alinhamento:** ${sheet.identidade.alinhamento}`);
+  push(`- **Idiomas:** ${sheet.proficiencias.idiomas.join(', ')}`);
+  push('');
+  push('## Atributos');
+  push('');
+  push('| Atributo | Valor | Mod | Extra | Salvaguarda |');
+  push('|---|---|---|---|---|');
+  ABILITIES.forEach(ability=>{
+    const attr = sheet.attrs.find(a=>a.ability===ability);
+    const save = sheet.savingThrows.find(s=>s.ability===ability);
+    push(`| ${ability} | ${attr.score} | ${fmt(attr.mod)} | — | ${fmt(save.bonus)}${save.proficient?' (proficiente)':''} |`);
+  });
+  push('');
+  push(`**Bônus de Proficiência:** ${fmt(sheet.identidade.profBonus)}`);
+  push('');
+  push('## Perícias');
+  push('');
+  push('| Perícia | Atributo | Prof.? | Mod. Atributo | Bônus Prof. | Extra | **Total** |');
+  push('|---|---|---|---|---|---|---|');
+  sheet.skills.forEach(s=>{
+    push(`| ${s.skill} | ${s.ability} | ${s.expertise?'Especialista':s.proficient?'Sim':'Não'} | ${fmt(s.breakdown[0].value)} | ${fmt(s.breakdown[1].value)} | — | **${fmt(s.bonus)}** |`);
+  });
+  push('');
+  push(`**Percepção Passiva:** ${sheet.passivePerception}`);
+  push('');
+  push('## Combate');
+  push('');
+  push('| PV Máx. | CA | Iniciativa | Deslocamento | Dado de Vida |');
+  push('|---|---|---|---|---|');
+  push(`| ${sheet.combate.hp} | ${sheet.combate.ac.value} | ${fmt(sheet.combate.initiative)} | ${sheet.combate.deslocamento} | ${sheet.combate.hitDie} |`);
+  push('');
+  push('**Ataques** (armas E qualquer truque/magia ofensiva que role pra acertar ou cause dano — fica tudo aqui, porque na mesa isso é usado de graça a cada rodada):');
+  sheet.attacks.forEach(a=>push(`- **${a.nome}** — ${fmt(a.bonus)} para acertar, ${a.dano}${a.proficient?'':' (sem proficiência)'}`));
+  /* Heurística combinada com o usuário: truque/magia de classe cujo
+     "efeito" menciona "dano" conta como ofensiva e entra aqui também
+     (com CD e bônus de ataque mágico, já que a magia pode pedir um ou
+     outro dependendo do efeito) — não é 100% preciso pra todo caso, mas
+     cobre a maioria. Só olha magia de CLASSE (sheet.spellcasting) — não
+     inclui a de espécie porque o app não calcula CD/ataque separado pra
+     magia inata de espécie em lugar nenhum ainda. */
+  const classSpellEntries = sheet.spellcasting ? [...sheet.spellcasting.cantrips, ...sheet.spellcasting.magias] : [];
+  const offensiveSpells = classSpellEntries.filter(e=>e.detalhe && /\bdano\b/i.test(e.detalhe.efeito));
+  offensiveSpells.forEach(e=>push(`- **${e.nome}** (${e.detalhe.circulo}) — CD ${sheet.spellcasting.cd} ou ${fmt(sheet.spellcasting.ataque)} pra acertar (conforme a magia pedir salvaguarda ou ataque) — ${e.detalhe.efeito}`));
+  if(!sheet.attacks.length && !offensiveSpells.length) push('- Nenhum ataque ainda.');
+  push('');
+  push('## Truques e Magias (referência rápida — só o efeito principal, não o texto completo)');
+  push('');
+  const allSpellEntries = [...classSpellEntries, ...sheet.especieMagias];
+  const nonOffensiveSpells = allSpellEntries.filter(e=>!offensiveSpells.includes(e));
+  if(nonOffensiveSpells.length){
+    nonOffensiveSpells.forEach(e=>push(`- **${e.nome}** (${e.detalhe ? e.detalhe.circulo : '—'}) — ${e.detalhe ? e.detalhe.efeito : 'Sem ficha detalhada cadastrada.'}`));
+  } else {
+    push('*Nenhuma.*');
+  }
+  push('');
+  const invocacoes = [];
+  if(data.classe==='Bruxo' && data.bruxo.pactBoon) invocacoes.push({nome:data.bruxo.pactBoon, texto: BRUXO.pactBoons[data.bruxo.pactBoon]});
+  push('**Invocações Místicas / Habilidades passivas equivalentes** (não gastam magia — liste separado):');
+  if(invocacoes.length) invocacoes.forEach(i=>push(`- **${i.nome}** — ${i.texto}`));
+  else push('- Nenhuma.');
+  push('');
+  if(sheet.spellcasting){
+    push(`**Espaços de Magia:** ${SPELL_SLOTS_LV1_TEXT[data.classe] || '—'} · **CD para resistir à magia:** ${sheet.spellcasting.cd} · **Bônus de ataque mágico:** ${fmt(sheet.spellcasting.ataque)}`);
+  } else {
+    push('**Espaços de Magia:** — · **CD para resistir à magia:** — · **Bônus de ataque mágico:** —');
+  }
+  push('');
+  push('## Progressão Futura (traços de nível que ainda vão desbloquear)');
+  push('');
+  const futureTraits = speciesFutureTraits(sheet);
+  if(futureTraits.length){
+    futureTraits.forEach(t=>push(`- **Nível ${t.nivel} — ${sheet.identidade.especie}:** ${t.texto} *Ainda bloqueado — personagem está no nível 1.*`));
+  } else {
+    push('*Nenhum traço com gancho de nível futuro nesta espécie/classe.*');
+  }
+  push('');
+  push('## Talentos e Características');
+  push('');
+  const ta = sheet.talentoAntecedente;
+  const taTexto = ta.tipo==='habilidoso' ? `Habilidoso — proficiência em: ${ta.skills.join(', ')}`
+    : ta.tipo==='iniciado' ? `Iniciado em Magia (${ta.classe}) — ${ta.entries.map(e=>e.nome).join(', ')}`
+    : ta.texto;
+  push(`- **Talento de Origem:** ${taTexto}`);
+  const classFeatures = classFeatureTextEntries(sheet);
+  push(`- **Características de Classe relevantes:**${classFeatures.length ? '' : ' Nenhuma além das automáticas.'}`);
+  classFeatures.forEach(f=>push(`  - **${f.nome}** — ${f.texto}`));
+  const tracos = [...(sheet.especieConst.tracosFixos||[]), ...sheet.especieTracosExtras];
+  push(`- **Traços de Espécie:**`);
+  tracos.forEach(tr=>push(`  - **${tr.nome}** — ${tr.resumo.replace(/<br>/g,' ')}`));
+  if(sheet.humanoTalento) push(`  - **Versátil (talento extra):** ${sheet.humanoTalento.nome}`);
+  push('');
+  push('## Equipamento e Dinheiro');
+  push('');
+  sheet.equipamento.itens.forEach(it=>push(`- ${it.label}${it.qty>1?` ×${it.qty}`:''}`));
+  push(`- **Bugiganga / Gancho de história:** ${PLACEHOLDER}`);
+  push(`- **Dinheiro:** ${fmtGold(sheet.equipamento.poRestante)} PO`);
+  push('');
+  push('## Progresso da Campanha');
+  push('');
+  push('- **Nível atual:** 1 — **XP:** 0');
+  push('- **Sessões:**');
+  push('  - *(nenhuma ainda — personagem recém-criado)*');
+  push('');
+  push('## História');
+  push('');
+  push('### Background do Jogador');
+  push(PLACEHOLDER);
+  push('');
+  push('### Campanha (Conhecimentos da Campanha)');
+  push('- *(nenhuma ainda — personagem recém-criado)*');
+  return L.join('\n');
+}
+
+/* Baixa a ficha formatada pro guia de IA Mestre
+   (characterSheetAsMestreIAMarkdown) como arquivo .md — mesmo padrão de
+   Blob+<a download> já usado em exportCharacterPdf() (js/pdf-export.js),
+   só que com texto em vez de PDF. */
+function exportMestreIA(){
+  const sheet = computeCharacterSheet();
+  const text = characterSheetAsMestreIAMarkdown(sheet);
+  const blob = new Blob([text], {type:'text/markdown;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Ficha de ${data.characterName || data.classe || 'Personagem'}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 10000);
+}
+
 /* "Exportar PDF" — usa o diálogo de impressão nativo do navegador
    (window.print() + CSS @media print em styles.css) em vez de gerar o
    PDF em JS puro (jsPDF/html2pdf) — sem precisar de nenhuma biblioteca
@@ -951,6 +1208,7 @@ function renderSummary(){
     <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>
     <button class="btn primary" onclick="exportPDF()">📄 Exportar PDF</button>
     <button class="btn primary" id="exportOfficialPdfBtn" onclick="exportCharacterPdf()">📥 Baixar Ficha Oficial (PDF)</button>
+    <button class="btn primary" onclick="exportMestreIA()">🧙 Exportar para MestreIA</button>
   </div>
 
   <div class="nav">
