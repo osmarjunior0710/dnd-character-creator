@@ -3,14 +3,14 @@
    classe com o recurso "Maestria em Arma" (Bárbaro, Paladino, Guardião,
    Guerreiro, Ladino no nível 1; outras podem ganhar depois). */
 const MASTERY_PROPERTIES = {
-  "Afligir": "Se atingir a criatura e causar dano, você tem Vantagem no seu próximo ataque contra ela até o final do seu próximo turno.",
-  "Ágil": "O ataque adicional da propriedade Leve pode ser feito como parte da ação Atacar, em vez de precisar de uma Ação Bônus (1x por turno).",
-  "Derrubar": "Se atingir, pode forçar uma salvaguarda de Constituição (CD 8 + seu bônus de proficiência + mod. de atributo usado); falha = criatura fica Caída.",
-  "Drenar": "Se atingir e causar dano, a criatura fica com Desvantagem no próximo ataque dela até o início do seu próximo turno.",
-  "Empurrar": "Se atingir uma criatura Grande ou menor, pode empurrá-la até 3 metros para longe de você.",
-  "Garantido": "Se a jogada de ataque errar, ainda causa dano igual ao seu mod. de atributo (mesmo tipo da arma).",
-  "Lentidão": "Se atingir e causar dano, reduz o Deslocamento do alvo em 3 metros até o início do seu próximo turno (não acumula além de 3m mesmo com múltiplos acertos).",
-  "Trespassar": "Se atingir corpo a corpo, pode fazer um segundo ataque com a mesma arma contra outra criatura próxima ao alvo, sem somar seu mod. de atributo ao dano extra (1x por turno)."
+  "Afligir": "Se você atingir uma criatura com esta arma e causar dano a ela, você tem Vantagem em sua próxima jogada de ataque contra essa criatura antes do final do seu próximo turno.",
+  "Ágil": "Ao realizar o ataque adicional da propriedade Leve, você pode fazê-lo como parte da ação Atacar, em vez de uma Ação Bônus. Esse ataque adicional só pode ser realizado uma vez por turno.",
+  "Derrubar": "Se você atingir uma criatura com esta arma, você pode forçar a criatura a realizar uma salvaguarda de Constituição (CD 8 mais o modificador de atributo usado para realizar a jogada de ataque e seu Bônus de Proficiência). Se falhar, a criatura tem a condição Caído.",
+  "Drenar": "Se você atingir uma criatura com esta arma, essa criatura tem Desvantagem na próxima jogada de ataque dela antes do início do seu próximo turno.",
+  "Empurrar": "Se atingir uma criatura com esta arma, você pode empurrá-la até 3 metros para longe de você se a criatura for Grande ou menor.",
+  "Garantido": "Se sua jogada de ataque com esta arma errar uma criatura, você pode causar dano a essa criatura igual ao modificador de atributo que utilizou para realizar a jogada de ataque. Este dano é do mesmo tipo causado pela arma, e só pode ser aumentado se o modificador de atributo for incrementado.",
+  "Lentidão": "Se você atingir uma criatura com esta arma e causar dano a ela, você pode reduzir o Deslocamento da criatura atingida em 3 metros até o início do seu próximo turno. Se a criatura for atingida mais de uma vez por armas que tenham essa propriedade, a redução de Deslocamento não excede 3 metros.",
+  "Trespassar": "Se atingir uma criatura com uma jogada de ataque corpo a corpo usando esta arma, você pode realizar uma jogada de ataque corpo a corpo com a mesma arma contra uma segunda criatura a até 1,5 metro da primeira que também esteja ao seu alcance. Se acertar, a segunda criatura sofre o dano da arma, mas você não adiciona seu modificador de atributo a esse dano, a menos que esse modificador seja negativo. Você pode realizar esse ataque adicional apenas uma vez por turno."
 };
 
 /* Nome da arma -> {categoria: "Simples"|"Marcial", tipo: "Corpo a Corpo"|"À Distância", mastery, propriedades}.
