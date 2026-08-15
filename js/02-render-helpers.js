@@ -37,6 +37,21 @@ function renderFeatDetailCard(d){
   </div>`;
 }
 
+/* 🪙 depois do nome da magia/truque na pill, quando o componente Material
+   dela tem custo em PO (ex: "M (uma pérola no valor de 100 ou mais PO)") —
+   pedido do usuário pra bater o olho e já saber que vai precisar comprar/
+   ter esse componente, sem abrir o card de detalhe (ⓘ) pra ler
+   "componentes" toda vez. Detecção por "PO" no texto de componentes (só
+   aparece ali quando é custo de material; "V"/"S"/"M" sozinhos nunca têm
+   "PO" no meio) — mais simples e confiável que tentar achar todo padrão de
+   preço por extenso. Usada nas 3 telas que mostram pill de magia: escolha
+   (spellChoiceList), concedida de graça (grantedItemList) e Resumo
+   (renderSpellEntryList, 07-compute-and-summary.js). */
+function spellCostMarker(name){
+  const d = SPELL_DETAILS[name];
+  return (d && /\bPO\b/.test(d.componentes)) ? ' <span title="Componente Material com custo em PO">🪙</span>' : '';
+}
+
 /* Lista de escolha de truques/magias, com botão "ⓘ" que expande um card de detalhe
    (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção.
    `items` já vem filtrado pelo chamador (tira o que outra fonte já concede/escolheu —
@@ -60,7 +75,7 @@ function spellChoiceList(items, selectedList, maxTotal, toggleFn){
     const detail = SPELL_DETAILS[name];
     const isExpanded = expandedSpellInfo===name;
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${isOrphan?' ⚠️':''}</span>
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${spellCostMarker(name)}${isOrphan?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleSpellInfo" title="Ver detalhes">ⓘ</button>`:''}
       ${isExpanded && detail ? renderSpellDetailCard(detail) : ''}
     </div>`;
@@ -84,7 +99,7 @@ function grantedItemList(items){
     const isExpanded = expandedTraitInfo===it.nome;
     const spellDetail = SPELL_DETAILS[it.nome];
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill selected">${it.nome}</span>
+      <span class="check-pill selected">${it.nome}${spellCostMarker(it.nome)}</span>
       ${spellDetail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${it.nome}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>`:''}
       ${isExpanded && spellDetail ? renderSpellDetailCard(spellDetail) : ''}
     </div>`;
