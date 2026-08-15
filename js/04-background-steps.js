@@ -121,18 +121,33 @@ function mochilaItems(){
    na Opção B) nunca aparecia na seção "Equipamento" do Resumo nem no
    "Copiar Resumo" — só no popup da Mochila, que já somava as duas
    fontes separadamente. Mesmo padrão de "id" de mochilaItems() acima. */
+/* Soma um item ao grupo (mesclando quantidade se já existir) — extraído
+   pra reusar tanto pro item "normal" quanto pro conteúdo "aberto" de um
+   Kit (ver KIT_CONTENTS, data/shop-items.js). */
+function addOwnedItem(grouped, id, label, qty){
+  const key = id || ('flavor:'+label);
+  if(!grouped[key]) grouped[key] = {label, id, qty: 0};
+  grouped[key].qty += qty;
+}
+
 function ownedEquipmentList(){
   const grouped = {};
   mochilaItems().forEach(it=>{
-    const key = it.id || ('flavor:'+it.label);
-    grouped[key] = {label: it.label, id: it.id, qty: it.qty};
+    if(it.id && KIT_CONTENTS[it.id]){
+      KIT_CONTENTS[it.id].forEach(c=>addOwnedItem(grouped, c.id, findShopItem(c.id).n, c.qty * it.qty));
+    } else {
+      addOwnedItem(grouped, it.id, it.label, it.qty);
+    }
   });
   Object.entries(data.shop.purchases||{}).forEach(([id, qty])=>{
     if(qty<=0) return;
     const item = findShopItem(id);
     if(!item) return;
-    if(!grouped[id]) grouped[id] = {label: item.n, id, qty: 0};
-    grouped[id].qty += qty;
+    if(KIT_CONTENTS[id]){
+      KIT_CONTENTS[id].forEach(c=>addOwnedItem(grouped, c.id, findShopItem(c.id).n, c.qty * qty));
+    } else {
+      addOwnedItem(grouped, id, item.n, qty);
+    }
   });
   return Object.values(grouped);
 }

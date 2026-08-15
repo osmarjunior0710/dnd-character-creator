@@ -1041,6 +1041,69 @@ function exportMestreIA(){
   setTimeout(()=>URL.revokeObjectURL(url), 10000);
 }
 
+/* Navega pra tela de instruções "Exportar para MestreIA" (step 11) —
+   NÃO é uma página HTML separada, é mais uma "tela" do wizard, igual
+   Resumo/Loja/etc., só que fora da progressão linear (só se chega
+   aqui clicando no botão do Resumo, nunca via next()/back() normal).
+   O "Voltar" desta tela volta direto pro Resumo (goTo(10)), não
+   decrementa step cegamente. */
+function goToMestreIAExport(){ step = 11; persist(); render(); }
+
+/* Prompt fixo pra colar no Claude junto com os arquivos — texto
+   escrito pelo usuário, mantido literal (não é o app tentando "narrar"
+   o que a IA deve fazer, é o comando dele pra ela). Uma const separada
+   do HTML pra poder reusar no textarea E no botão "Copiar", sem
+   duplicar o texto em dois lugares. */
+const MESTREIA_PROMPT = `Claude, você vai atuar como um mestre de campanha, comece lendo o Guia Mestre IA pois ele vai te explicar tudo que precisa saber para essa campanha.
+Use a ficha de personagem já criada em anexo caso haja uma, se não existir, vamos criar um novo personagem.`;
+
+let copyPromptFeedback = false;
+function copyMestreIAPrompt(){
+  navigator.clipboard.writeText(MESTREIA_PROMPT).then(()=>{
+    copyPromptFeedback = true;
+    render();
+    setTimeout(()=>{ copyPromptFeedback = false; render(); }, 2000);
+  }).catch(()=>{
+    alert('Não consegui copiar automaticamente — selecione o texto manualmente.');
+  });
+}
+
+/* Tela "Exportar para MestreIA" — passo a passo pra levar o
+   personagem pra uma mesa jogada com IA (Claude ou outra), usando a
+   config de Mestre IA do jogador (guia de regras + planilhas de
+   referência) por fora deste site.
+
+   DECISÃO (combinada com o usuário): o app só gera e baixa a FICHA
+   (dado do próprio personagem, sem problema de licença). Os outros
+   arquivos da config (guia, regras de criação, planilhas) NÃO ficam
+   hospedados neste repositório nem neste site — são extraídos de uma
+   tradução paga de terceiros do Livro do Jogador, e este é um site
+   público. Por isso o Passo 2 só pede pra anexar esses arquivos junto
+   (texto solto, sem lista/link) — o Passo 1 é só a ficha, que é a
+   única coisa que este app realmente produz. Ver discussão no PR
+   sobre "Exportar para MestreIA". */
+function renderMestreIAExport(){
+  return `<h2>Exportar para MestreIA</h2>
+  <p class="intro">Leve esse personagem pra uma mesa jogada com IA — dois passos, sem precisar reformatar nada.</p>
+
+  <div class="summary-section"><h3>Passo 1 — Baixe a ficha</h3>
+  <div class="content">
+    <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:0 0 10px;">Baixe a ficha deste personagem, já formatada no padrão que o Guia de Mestre IA espera:</p>
+    <button class="btn primary" onclick="exportMestreIA()">📥 Baixar Ficha (Markdown)</button>
+  </div></div>
+
+  <div class="summary-section"><h3>Passo 2 — Cole no Claude</h3>
+  <div class="content">
+    <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:0 0 10px;">Abra uma conversa nova no Claude, anexe a ficha que você baixou junto com os outros arquivos da sua config de Mestre IA, e cole este prompt:</p>
+    <textarea readonly rows="4" style="width:100%;font-family:'Spectral',serif;font-size:0.85rem;line-height:1.5;resize:vertical;box-sizing:border-box;">${MESTREIA_PROMPT}</textarea>
+    <button class="btn primary" style="margin-top:10px;" onclick="copyMestreIAPrompt()">${copyPromptFeedback ? 'Copiado! ✓' : '📋 Copiar Prompt'}</button>
+  </div></div>
+
+  <div class="nav">
+    <button class="btn" onclick="goTo(10)">← Voltar ao Resumo</button>
+  </div>`;
+}
+
 /* "Exportar PDF" — usa o diálogo de impressão nativo do navegador
    (window.print() + CSS @media print em styles.css) em vez de gerar o
    PDF em JS puro (jsPDF/html2pdf) — sem precisar de nenhuma biblioteca
@@ -1208,7 +1271,7 @@ function renderSummary(){
     <button class="btn primary" onclick="copySummaryText()">${copyFeedback ? 'Copiado! ✓' : '📋 Copiar Resumo'}</button>
     <button class="btn primary" onclick="exportPDF()">📄 Exportar PDF</button>
     <button class="btn primary" id="exportOfficialPdfBtn" onclick="exportCharacterPdf()">📥 Baixar Ficha Oficial (PDF)</button>
-    <button class="btn primary" onclick="exportMestreIA()">🧙 Exportar para MestreIA</button>
+    <button class="btn primary" onclick="goToMestreIAExport()">🧙 Exportar para MestreIA</button>
   </div>
 
   <div class="nav">
