@@ -1078,29 +1078,23 @@ function copyMestreIAPrompt(){
    arquivos da config (guia, regras de criação, planilhas) NÃO ficam
    hospedados neste repositório nem neste site — são extraídos de uma
    tradução paga de terceiros do Livro do Jogador, e este é um site
-   público. Por isso o Passo 1 só lembra o jogador de separar os
-   arquivos que ele já tem, em vez de oferecer um link de download
-   pra eles. Ver discussão no PR sobre "Exportar para MestreIA". */
+   público. Por isso o Passo 2 só pede pra anexar esses arquivos junto
+   (texto solto, sem lista/link) — o Passo 1 é só a ficha, que é a
+   única coisa que este app realmente produz. Ver discussão no PR
+   sobre "Exportar para MestreIA". */
 function renderMestreIAExport(){
   return `<h2>Exportar para MestreIA</h2>
   <p class="intro">Leve esse personagem pra uma mesa jogada com IA — dois passos, sem precisar reformatar nada.</p>
 
-  <div class="summary-section"><h3>Passo 1 — Baixe os arquivos</h3>
+  <div class="summary-section"><h3>Passo 1 — Baixe a ficha</h3>
   <div class="content">
     <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:0 0 10px;">Baixe a ficha deste personagem, já formatada no padrão que o Guia de Mestre IA espera:</p>
     <button class="btn primary" onclick="exportMestreIA()">📥 Baixar Ficha (Markdown)</button>
-    <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:16px 0 6px;">Separe também os arquivos da sua config de Mestre IA (os mesmos que você já usa — não fazem parte deste site, então não têm link de download aqui):</p>
-    <ul style="font-size:0.85rem;color:var(--parchment-dim);line-height:1.8;margin:0;padding-left:20px;">
-      <li>Guia de Mestre IA (regras + comportamento da IA)</li>
-      <li>Regras de Criação e Consulta (arquivo companheiro do guia)</li>
-      <li>Planilha de referência do Livro do Jogador</li>
-      <li>Planilha de referência do Guia do Mestre</li>
-    </ul>
   </div></div>
 
   <div class="summary-section"><h3>Passo 2 — Cole no Claude</h3>
   <div class="content">
-    <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:0 0 10px;">Abra uma conversa nova no Claude, anexe os 5 arquivos (a ficha que você baixou + os 4 do Passo 1) e cole este prompt:</p>
+    <p style="font-size:0.85rem;color:var(--parchment);line-height:1.6;margin:0 0 10px;">Abra uma conversa nova no Claude, anexe a ficha que você baixou junto com os outros arquivos da sua config de Mestre IA, e cole este prompt:</p>
     <textarea readonly rows="4" style="width:100%;font-family:'Spectral',serif;font-size:0.85rem;line-height:1.5;resize:vertical;box-sizing:border-box;">${MESTREIA_PROMPT}</textarea>
     <button class="btn primary" style="margin-top:10px;" onclick="copyMestreIAPrompt()">${copyPromptFeedback ? 'Copiado! ✓' : '📋 Copiar Prompt'}</button>
   </div></div>
