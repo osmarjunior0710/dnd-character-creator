@@ -225,3 +225,56 @@ const SHOP = {
       {id:"veneno-basico",n:"Veneno Básico", d:"", p:"1d4 dano Venenoso adicional em arma/munição revestida", c:100},
   ]}
 };
+
+/* Conteúdo de cada Kit (campo "cont" acima, texto livre) resolvido pra
+   {id, qty} de itens de verdade da Loja — mesmo espírito de
+   data/equipment-aliases.js, mas pro problema inverso: lá é "texto de
+   equipamento de classe/antecedente -> item da Loja"; aqui é "texto
+   dentro de UM item da Loja (o Kit) -> vários itens da Loja". Usado só
+   por ownedEquipmentList() (js/04-background-steps.js) pra "abrir" o
+   Kit no Resumo em vez de mostrar só o nome dele — pedido do usuário:
+   "Kit de Aventureiro" sozinho não dizia o que tinha dentro. Escrito
+   à mão (não parseado do texto de "cont" em tempo de execução) porque
+   o texto mistura formatos ("N potes de X", "N dias de Rações", "N
+   folhas de X", "N Velas", sem padrão único) — mais simples e seguro
+   conferir uma vez aqui do que escrever um parser genérico frágil.
+   Só os 7 kits com "cont" preenchido aparecem aqui; Kit de Curandeiro
+   e Kit de Escalada não têm conteúdo detalhado no livro, então não há
+   o que abrir. */
+const KIT_CONTENTS = {
+  "kit-de-artista": [
+    {id:"caixa-para-fogo", qty:1}, {id:"cantil", qty:1}, {id:"espelho-de-mao", qty:1},
+    {id:"roupas-fantasia", qty:3}, {id:"lanterna-foca-facho", qty:1}, {id:"mochila", qty:1},
+    {id:"oleo-frasco", qty:8}, {id:"racoes-1-dia", qty:9}, {id:"saco-de-dormir", qty:1}, {id:"sino", qty:1}
+  ],
+  "kit-de-assaltante": [
+    {id:"caixa-para-fogo", qty:1}, {id:"cantil", qty:1}, {id:"corda-15m", qty:1},
+    {id:"esferas-de-metal-saco", qty:1}, {id:"lanterna-coberta", qty:1}, {id:"mochila", qty:1},
+    {id:"oleo-frasco", qty:7}, {id:"pe-de-cabra", qty:1}, {id:"racoes-1-dia", qty:5},
+    {id:"sino", qty:1}, {id:"vela", qty:10}
+  ],
+  "kit-de-aventureiro": [
+    {id:"caixa-para-fogo", qty:1}, {id:"cantil", qty:1}, {id:"corda-15m", qty:1}, {id:"mochila", qty:1},
+    {id:"oleo-frasco", qty:2}, {id:"racoes-1-dia", qty:10}, {id:"saco-de-dormir", qty:1}, {id:"tocha", qty:10}
+  ],
+  "kit-de-diplomata": [
+    {id:"bau", qty:1}, {id:"caixa-para-fogo", qty:1}, {id:"caneta-tinteiro", qty:5},
+    {id:"estojo-mapapergaminho", qty:2}, {id:"lampada", qty:1}, {id:"oleo-frasco", qty:4},
+    {id:"perfume", qty:1}, {id:"papel-folha", qty:5}, {id:"pergaminho-folha-em-branco", qty:5},
+    {id:"roupas-finas", qty:1}, {id:"tinta", qty:1}
+  ],
+  "kit-de-erudito": [
+    {id:"caixa-para-fogo", qty:1}, {id:"caneta-tinteiro", qty:1}, {id:"lampada", qty:1},
+    {id:"livro", qty:1}, {id:"mochila", qty:1}, {id:"oleo-frasco", qty:10},
+    {id:"pergaminho-folha-em-branco", qty:10}, {id:"tinta", qty:1}
+  ],
+  "kit-de-explorador-de-masmorras": [
+    {id:"caixa-para-fogo", qty:1}, {id:"cantil", qty:1}, {id:"corda-15m", qty:1}, {id:"estrepes-saco", qty:1},
+    {id:"mochila", qty:1}, {id:"oleo-frasco", qty:2}, {id:"pe-de-cabra", qty:1},
+    {id:"racoes-1-dia", qty:10}, {id:"tocha", qty:10}
+  ],
+  "kit-de-sacerdote": [
+    {id:"agua-benta-frasco", qty:1}, {id:"caixa-para-fogo", qty:1}, {id:"cobertor", qty:1},
+    {id:"lampada", qty:1}, {id:"mochila", qty:1}, {id:"racoes-1-dia", qty:7}, {id:"tunica", qty:1}
+  ]
+};
