@@ -486,8 +486,7 @@ function render(){
   else if(step===8) html = renderAlinhamentoStep();
   else if(step===9) html = renderShop();
   else if(step===10) html = renderSummary();
-  else if(step===11) html = renderMestreIAExport();
-  c.innerHTML = html + (step<11 ? renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater() : '');
+  c.innerHTML = html + renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater();
   attachStepHandlers();
   positionRightFloaters();
   positionRandomizarFloater();
