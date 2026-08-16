@@ -5,12 +5,56 @@
    de propósito: sem build step nesse repo, GitHub Pages serve os arquivos
    direto) — funções/consts declaradas aqui viram globais como sempre foram,
    só divididas em arquivos menores. */
-function toggleSpellInfo(name){
-  expandedSpellInfo = (expandedSpellInfo===name) ? null : name;
+/* Popup de detalhe de magia/truque (ⓘ) — substitui o antigo card que
+   expandia inline junto da pill (era spellChoiceList/grantedItemList com
+   expandedSpellInfo, removido). Mesmo padrão visual/interação da Mochila/
+   Popup de Stat (overlay cobrindo a tela, clique fora fecha, "✕" fecha) —
+   só que com uma escolha a mais: uma pill "Desc. curta"/"Desc. longa"
+   dentro do popup pra trocar entre o resumo (SPELL_DETAILS[x].efeito, já
+   existia) e o texto oficial completo do livro (SPELL_DETAILS[x].
+   textoOficial, adicionado na revisão contra a planilha de referência —
+   até agora sem nenhum lugar na UI que o usasse). Sempre abre em "curta".
+   spellInfoPopup guarda só o NOME da magia (estado de UI puro, não entra
+   em data/persist() — mesmo padrão de mochilaOpen/statInfoOpen). */
+let spellInfoPopup = null;
+let spellInfoTab = 'curta';
+function openSpellInfoPopup(name){
+  spellInfoPopup = name;
+  spellInfoTab = 'curta';
   render();
 }
+function closeSpellInfoPopup(){
+  spellInfoPopup = null;
+  render();
+}
+function setSpellInfoTab(tab){
+  spellInfoTab = tab;
+  render();
+}
+function renderSpellInfoPopup(){
+  if(!spellInfoPopup) return '';
+  const d = SPELL_DETAILS[spellInfoPopup];
+  if(!d) return '';
+  const hasLonga = !!d.textoOficial;
+  return `<div class="mochila-overlay" onclick="closeSpellInfoPopup()">
+    <div class="mochila-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>${spellInfoPopup}</h3>
+        <button class="btn small" onclick="closeSpellInfoPopup()">✕</button>
+      </div>
+      <div class="check-list" style="margin-bottom:10px;">
+        <span class="check-pill ${spellInfoTab==='curta'?'selected':''}" onclick="setSpellInfoTab('curta')">Desc. curta</span>
+        <span class="check-pill ${spellInfoTab==='longa'?'selected':''} ${hasLonga?'':'disabled'}" ${hasLonga?`onclick="setSpellInfoTab('longa')"`:'title="Texto oficial completo não cadastrado pra esta magia"'}>Desc. longa</span>
+      </div>
+      ${renderSpellDetailCard(d, spellInfoTab==='longa' ? d.textoOficial : null)}
+    </div>
+  </div>`;
+}
 
-function renderSpellDetailCard(d){
+/* efeitoOverride (opcional) troca só o texto de efeito exibido — usada
+   pelo popup acima pra mostrar o texto oficial completo em vez do
+   resumo, sem duplicar o resto do card (stats + escalonamento). */
+function renderSpellDetailCard(d, efeitoOverride){
   return `<div class="spell-detail">
     <div class="stats">
       <span><b>Tempo:</b> ${d.tempo}</span>
@@ -18,7 +62,7 @@ function renderSpellDetailCard(d){
       <span><b>Componentes:</b> ${d.componentes}</span>
       <span><b>Duração:</b> ${d.duracao}</span>
     </div>
-    <div>${d.efeito}</div>
+    <div>${efeitoOverride || d.efeito}</div>
     ${d.escalonamento && d.escalonamento!=='—' ? `<div class="escala">${d.escalonamento}</div>` : ''}
   </div>`;
 }
@@ -73,11 +117,9 @@ function spellChoiceList(items, selectedList, maxTotal, toggleFn){
     const disabled = !sel && selectedList.length>=maxTotal;
     const isOrphan = orphans.includes(name);
     const detail = SPELL_DETAILS[name];
-    const isExpanded = expandedSpellInfo===name;
-    return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
+    return `<div class="spell-pill-wrap">
       <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${spellCostMarker(name)}${isOrphan?' ⚠️':''}</span>
-      ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleSpellInfo" title="Ver detalhes">ⓘ</button>`:''}
-      ${isExpanded && detail ? renderSpellDetailCard(detail) : ''}
+      ${detail?`<button class="info-btn ${spellInfoPopup===name?'active':''}" data-pick="${name}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
 }
@@ -96,12 +138,10 @@ function toggleTraitInfo(name){
 function grantedItemList(items){
   if(!items || items.length===0) return '';
   return `<div class="check-list" style="margin:8px 0 2px;">${items.map(it=>{
-    const isExpanded = expandedTraitInfo===it.nome;
     const spellDetail = SPELL_DETAILS[it.nome];
-    return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
+    return `<div class="spell-pill-wrap">
       <span class="check-pill selected">${it.nome}${spellCostMarker(it.nome)}</span>
-      ${spellDetail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${it.nome}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>`:''}
-      ${isExpanded && spellDetail ? renderSpellDetailCard(spellDetail) : ''}
+      ${spellDetail?`<button class="info-btn ${spellInfoPopup===it.nome?'active':''}" data-pick="${it.nome}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
 }
