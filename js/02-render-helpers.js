@@ -37,7 +37,7 @@ function renderSpellInfoPopup(){
   if(!d) return '';
   const hasLonga = !!d.textoOficial;
   return `<div class="mochila-overlay" onclick="closeSpellInfoPopup()">
-    <div class="mochila-popup" onclick="event.stopPropagation()">
+    <div class="mochila-popup spell-info-popup" onclick="event.stopPropagation()">
       <div class="mochila-popup-header">
         <h3>${spellInfoPopup}</h3>
         <button class="btn small" onclick="closeSpellInfoPopup()">✕</button>
