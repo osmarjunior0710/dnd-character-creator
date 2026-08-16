@@ -15,6 +15,13 @@ body{
   color:var(--parchment); font-family:'Spectral',serif;
   padding:20px 14px calc(90px + env(safe-area-inset-bottom, 0px));
 }
+/* Travar o scroll da página atrás enquanto qualquer popup (.mochila-overlay)
+   está aberto — classe ligada/desligada em render() (js/01-wizard-nav.js),
+   já que todo popup usa a mesma classe de overlay. overflow:hidden sozinho
+   já resolve a maioria dos navegadores; overscroll-behavior:contain no
+   popup (ver .mochila-popup) cobre o caso do touch-scroll "vazar" pro body
+   quando o dedo já bateu no fim do conteúdo do popup. */
+body.modal-open{overflow:hidden;}
 .wrap{max-width:960px;margin:0 auto;}
 header{display:flex; flex-direction:column; border-bottom:2px solid var(--line); padding-bottom:12px; margin-bottom:18px;}
 header h1{font-family:'Cinzel',serif; font-weight:900; font-size:1.5rem; letter-spacing:0.03em; color:var(--gold); margin:0;}
@@ -199,6 +206,7 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
   background:var(--panel); border:1px solid var(--line); border-radius:6px;
   box-shadow:0 4px 16px rgba(60,64,67,0.3);
   padding:16px 18px; width:calc(100% - 28px); max-width:360px; max-height:70vh; overflow-y:auto;
+  overscroll-behavior:contain;
 }
 .mochila-popup-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
 .mochila-popup-header h3{font-family:'Cinzel',serif; font-size:0.9rem; color:var(--gold); margin:0;}

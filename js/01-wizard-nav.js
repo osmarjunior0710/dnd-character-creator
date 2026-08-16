@@ -488,6 +488,7 @@ function render(){
   else if(step===10) html = renderSummary();
   else if(step===11) html = renderMestreIAExport();
   c.innerHTML = html + (step<11 ? renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater() : '') + renderSpellInfoPopup();
+  document.body.classList.toggle('modal-open', !!c.querySelector('.mochila-overlay'));
   attachStepHandlers();
   positionRightFloaters();
   positionRandomizarFloater();
