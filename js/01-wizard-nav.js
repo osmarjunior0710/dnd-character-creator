@@ -487,7 +487,7 @@ function render(){
   else if(step===9) html = renderShop();
   else if(step===10) html = renderSummary();
   else if(step===11) html = renderMestreIAExport();
-  c.innerHTML = html + (step<11 ? renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater() : '');
+  c.innerHTML = html + (step<11 ? renderPericiasTalentosFloater() + renderMagiasFloater() + renderMochilaFloater() + renderRandomizarFloater() : '') + renderSpellInfoPopup();
   attachStepHandlers();
   positionRightFloaters();
   positionRandomizarFloater();
@@ -505,6 +505,4 @@ function positionNav(){
   document.body.style.paddingBottom = (nav.offsetHeight + 20) + 'px';
 }
 window.addEventListener('resize', positionNav);
-
-let expandedSpellInfo = null;
 
