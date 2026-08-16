@@ -710,7 +710,7 @@ function renderStatInfoPopup(sheet){
 function renderSpellEntryList(entries){
   if(!entries.length) return '<span style="color:var(--parchment-dim);">Nenhuma.</span>';
   return entries.map(e=>`<div class="spell-pill-wrap expanded" style="display:block;width:100%;margin-bottom:8px;">
-    <div class="check-pill selected" style="cursor:default;">${e.nome}${spellCostMarker(e.nome)}</div>
+    <div class="check-pill selected" style="cursor:default;">${e.nome}${spellCombatIconMarker(e.nome)}${spellCostMarker(e.nome)}</div>
     ${e.detalhe ? renderSpellDetailCard(e.detalhe) : '<div style="color:var(--parchment-dim);font-size:0.8rem;margin-top:4px;">Sem ficha detalhada cadastrada.</div>'}
   </div>`).join('');
 }

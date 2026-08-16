@@ -227,17 +227,66 @@ function renderMochilaFloater(){
    também entrou nessa lista) — não aparece na Loja (9) nem no Resumo
    (10), pedido explícito do usuário pra Loja, e o Resumo nunca teve
    campo pra randomizar mesmo. */
+/* positionRandomizarFloater() empilha tudo do lado ESQUERDO de cima
+   pra baixo (mesma lógica de RIGHT_FLOATERS pro lado direito, só que
+   sem lista genérica porque só tem 2 floaters aqui: Randomizar e, logo
+   abaixo dele — ou sozinho no topo quando Randomizar não aparece
+   (passos 9-11) — o Glossário ❓, ver renderGlossarioFloater() abaixo). */
 function positionRandomizarFloater(){
   const header = document.querySelector('header');
-  const floater = document.querySelector('.randomizar-floater');
-  if(!header || !floater) return;
-  floater.style.top = (header.offsetTop + header.offsetHeight + 10) + 'px';
+  if(!header) return;
+  let top = header.offsetTop + header.offsetHeight + 10;
+  const randomizar = document.querySelector('.randomizar-floater');
+  if(randomizar){
+    randomizar.style.top = top + 'px';
+    top += randomizar.offsetHeight + 10;
+  }
+  const glossario = document.querySelector('.glossario-floater');
+  if(glossario){
+    glossario.style.top = top + 'px';
+    const popup = document.querySelector('.glossario-popup');
+    if(popup) popup.style.top = (top + glossario.offsetHeight + 8) + 'px';
+  }
 }
 window.addEventListener('resize', positionRandomizarFloater);
 
 function renderRandomizarFloater(){
   if(step>8) return '';
   return `<div class="floater-fab randomizar-floater" onclick="randomizeCurrentStep()" title="Randomizar — preenche esta tela" aria-label="Randomizar — preenche esta tela">🎲</div>`;
+}
+
+/* Glossário (❓) — legenda dos ícones que aparecem nas pills de magia
+   (🪙/⚔️/❤️‍🩹, ver spellCostMarker/spellCombatIconMarker em
+   02-render-helpers.js) e do ⚠️ de seleção duplicada (ver isOrphan em
+   spellChoiceList/featPickList). Sempre visível (passos 0-10, some só
+   no 11/MestreIA que não tem nada disso pra explicar) — diferente do
+   Randomizar, não depende de ter campo obrigatório na tela. Estado de
+   UI puro (glossarioOpen), mesmo padrão de mochilaOpen etc. */
+let glossarioOpen = false;
+function toggleGlossarioOpen(){ glossarioOpen = !glossarioOpen; render(); }
+
+const GLOSSARIO_ITEMS = [
+  {icone:'🪙', texto:'Componente com custo de PO'},
+  {icone:'⚔️', texto:'Causa dano de vida'},
+  {icone:'❤️‍🩹', texto:'Cura vida'},
+  {icone:'⚠️', texto:'Seleção duplicada'}
+];
+
+function renderGlossarioFloater(){
+  return `<div class="floater-fab glossario-floater" onclick="toggleGlossarioOpen()" title="Glossário — o que significam os ícones" aria-label="Glossário — o que significam os ícones">❓</div>
+  ${glossarioOpen ? renderGlossarioPopup() : ''}`;
+}
+
+function renderGlossarioPopup(){
+  return `<div class="mochila-overlay" onclick="toggleGlossarioOpen()">
+    <div class="mochila-popup glossario-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>Glossário</h3>
+        <button class="btn small" onclick="toggleGlossarioOpen()">✕</button>
+      </div>
+      ${GLOSSARIO_ITEMS.map(it=>`<div style="display:flex; align-items:center; gap:8px; padding:4px 0;"><span style="font-size:1.2rem;">${it.icone}</span><span>${it.texto}</span></div>`).join('')}
+    </div>
+  </div>`;
 }
 
 function renderMochilaPopup(){

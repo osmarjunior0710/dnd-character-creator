@@ -96,6 +96,55 @@ function spellCostMarker(name){
   return (d && /\bPO\b/.test(d.componentes)) ? ' <span title="Componente Material com custo em PO">🪙</span>' : '';
 }
 
+/* ⚔️/❤️‍🩹 — mesma ideia do 🪙 acima (heurística de texto, sem campo
+   estruturado "dano"/"cura" nos dados), varrendo efeito+textoOficial.
+   Dano: procura um dado explícito (NdM) seguido de "dano" perto (regra
+   simples que evita pegar menções soltas de "dano" sem valor associado,
+   tipo "resistência a dano" ou "anula dano de X"). Cura: dois padrões —
+   "recupera"/"restaura" perto de "Pontos de Vida"/"PV" (com checagem de
+   negação tipo "não pode recuperar", usado em Toque Necrótico pra negar
+   cura do ALVO), ou "cura" isolado, mas excluindo quando é referência a
+   nome próprio de outra magia/item ("Cura Completa", "Poção de Cura").
+   Não tenta distinguir dano/cura direto vs. efeito colateral/condicional
+   — dado o volume (146 magias com dano, 24 com cura na revisão manual
+   feita ao implementar isso), aceito como heurística "boa o suficiente",
+   não 100% precisa (ex: um buff que só aumenta o dano de ataques
+   futuros, como Aumentar/Reduzir, também é pego). */
+function spellDealsDamage(text){
+  return /\d+d\d+(\s*\+\s*\d+)?\s*(?:pontos? de )?dano\b/i.test(text);
+}
+function spellHeals(text){
+  const negBefore = /(não|sem)\s+\w*\s*$/i;
+  const re1 = /\b(recupera|restaura)(m|r)?\b/gi;
+  let m;
+  while((m = re1.exec(text))){
+    const before = text.slice(Math.max(0,m.index-20), m.index);
+    const after = text.slice(m.index, m.index+70);
+    if(negBefore.test(before)) continue;
+    const pvMatch = after.match(/pontos? de vida|pv\b/i);
+    if(pvMatch && !after.slice(0, pvMatch.index).includes('.')) return true;
+  }
+  const re2 = /\bcura(m|r)?\b/gi;
+  while((m = re2.exec(text))){
+    const before = text.slice(Math.max(0,m.index-20), m.index);
+    const after = text.slice(m.index+m[0].length, m.index+m[0].length+20);
+    if(negBefore.test(before)) continue;
+    if(/poção de\s*$/i.test(before)) continue;
+    if(/^\s*completa/i.test(after)) continue;
+    return true;
+  }
+  return false;
+}
+function spellCombatIconMarker(name){
+  const d = SPELL_DETAILS[name];
+  if(!d) return '';
+  const text = (d.efeito||'') + ' ' + (d.textoOficial||'');
+  let out = '';
+  if(spellDealsDamage(text)) out += ' <span title="Causa dano">⚔️</span>';
+  if(spellHeals(text)) out += ' <span title="Cura Pontos de Vida">❤️‍🩹</span>';
+  return out;
+}
+
 /* Lista de escolha de truques/magias, com botão "ⓘ" que expande um card de detalhe
    (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção.
    `items` já vem filtrado pelo chamador (tira o que outra fonte já concede/escolheu —
@@ -118,7 +167,7 @@ function spellChoiceList(items, selectedList, maxTotal, toggleFn){
     const isOrphan = orphans.includes(name);
     const detail = SPELL_DETAILS[name];
     return `<div class="spell-pill-wrap">
-      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${spellCostMarker(name)}${isOrphan?' ⚠️':''}</span>
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${spellCombatIconMarker(name)}${spellCostMarker(name)}${isOrphan?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${spellInfoPopup===name?'active':''}" data-pick="${name}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
@@ -140,7 +189,7 @@ function grantedItemList(items){
   return `<div class="check-list" style="margin:8px 0 2px;">${items.map(it=>{
     const spellDetail = SPELL_DETAILS[it.nome];
     return `<div class="spell-pill-wrap">
-      <span class="check-pill selected">${it.nome}${spellCostMarker(it.nome)}</span>
+      <span class="check-pill selected">${it.nome}${spellCombatIconMarker(it.nome)}${spellCostMarker(it.nome)}</span>
       ${spellDetail?`<button class="info-btn ${spellInfoPopup===it.nome?'active':''}" data-pick="${it.nome}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
