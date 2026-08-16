@@ -299,12 +299,23 @@ function hasFeatByName(name){
 /* Truques/magias de 1º círculo já ESCOLHIDOS (não concedidos de graça) por
    outra fonte — hoje as duas fontes que escolhem de uma lista de verdade
    são a própria Classe e o Iniciado em Magia do Antecedente (Acólito/Guia/
-   Sábio), cujas listas podem se sobrepor com a de outra classe. */
+   Sábio), cujas listas podem se sobrepor com a de outra classe. Bruxo tem
+   mais 2 campos de escolha (Truques/Magias Rituais do Pacto do Tomo,
+   tomoCantrips/tomoRituals — "de qualquer classe", então colidem com
+   QUALQUER lista) que ficaram de fora daqui até essa checagem (achado
+   real de usuário: escolher "Detectar Magia" via Pacto do Tomo e DEPOIS
+   via Sábio/Iniciado em Magia criava duplicata de verdade sem nenhum
+   aviso na tela do Antecedente — só aparecia ⚠️ ao voltar pra tela da
+   Classe, porque cd.cantrips/cd[field] sozinhos não cobriam os campos do
+   Tomo). cd.tomoCantrips/cd.tomoRituals só existem em data.bruxo — em
+   qualquer outra classe active ficam undefined, então o push simplesmente
+   não roda, sem precisar de um switch por classe aqui. */
 function chosenCantripsElsewhere(excludeSource){
   const out = [];
   if(excludeSource!=='classe'){
     const cd = activeClassData();
     if(cd && cd.cantrips) out.push(...cd.cantrips);
+    if(cd && cd.tomoCantrips) out.push(...cd.tomoCantrips);
   }
   if(excludeSource!=='iniciadoEmMagia'){
     out.push(...(activeBgData().iniciadoCantrips || []));
@@ -317,6 +328,7 @@ function chosenSpells1Elsewhere(excludeSource){
     const field = CLASS_SPELL1_FIELD[data.classe];
     const cd = activeClassData();
     if(field && cd && cd[field]) out.push(...cd[field]);
+    if(cd && cd.tomoRituals) out.push(...cd.tomoRituals);
   }
   if(excludeSource!=='iniciadoEmMagia'){
     out.push(...(activeBgData().iniciadoSpell1 || []));
