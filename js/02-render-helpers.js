@@ -150,24 +150,24 @@ function spellCombatIconMarker(name){
    `items` é sempre a lista MESTRA completa (const estática da classe, ou
    ALL_CANTRIPS/ALL_1ST_RITUAL) — nunca filtrada pelo chamador. `elsewhere`
    (opcional) é a lista de nomes que outra fonte já concede/escolheu (ver
-   chosenCantripsElsewhere()/speciesGrantedCantrips() etc.) — usada só pra
-   marcar ⚠️/pill-orphan quando o nome estiver SELECIONADO aqui E também em
-   `elsewhere` (duplicata de verdade). Item que está em `elsewhere` mas NÃO
-   selecionado continua aparecendo normal, clicável — nunca escondido (antes
-   uma versão prévia escondia da lista qualquer coisa já concedida/escolhida
-   em outro lugar; motivo de sair: escolher errado ficava invisível, sem
-   aviso, e trocar de espécie/antecedente depois podia fazer uma escolha já
-   feita "sumir" da tela com a vaga presa, sem dar pra trocar — melhor
-   sempre mostrar tudo e avisar). */
+   chosenCantripsElsewhere()/speciesGrantedCantrips() etc.) — marca ⚠️/
+   pill-orphan em QUALQUER nome que esteja em `elsewhere`, escolhido aqui ou
+   não: "preview" (borda tracejada, ver .check-pill.pill-orphan no CSS) antes
+   de clicar, avisando que escolher vira duplicata; "confirmado" (preenchido)
+   depois de clicado. Nunca desabilita nem esconde a opção — antes uma versão
+   prévia escondia da lista qualquer coisa já concedida/escolhida em outro
+   lugar; motivo de sair: escolher errado ficava invisível, sem aviso, e
+   trocar de espécie/antecedente depois podia fazer uma escolha já feita
+   "sumir" da tela com a vaga presa, sem dar pra trocar. */
 function spellChoiceList(items, selectedList, maxTotal, toggleFn, elsewhere){
   const elsewhereSet = new Set(elsewhere || []);
   return `<div class="check-list" style="margin-bottom:6px;">${items.map(name=>{
     const sel = selectedList.includes(name);
     const disabled = !sel && selectedList.length>=maxTotal;
-    const isDup = sel && elsewhereSet.has(name);
+    const isDup = elsewhereSet.has(name);
     const detail = SPELL_DETAILS[name];
     return `<div class="spell-pill-wrap">
-      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte — considere trocar por outra"':''}>${name}${spellCombatIconMarker(name)}${spellCostMarker(name)}${isDup?' ⚠️':''}</span>
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte — escolher aqui não dá benefício extra"':''}>${name}${spellCombatIconMarker(name)}${spellCostMarker(name)}${isDup?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${spellInfoPopup===name?'active':''}" data-pick="${name}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
@@ -210,17 +210,17 @@ function traitBox(nome, resumo, concede){
    pro Versátil do Humano), com botão "ⓘ" que mostra a ficha do banco de
    talentos (categoria, pré-requisito, benefícios, página). `elsewhere`
    (opcional, mesmo espírito de spellChoiceList/groupedChoiceList): nomes já
-   concedidos por outra fonte — nunca tira da lista, só marca ⚠️/pill-orphan
-   se for o mesmo nome ESCOLHIDO aqui. */
+   concedidos por outra fonte — nunca tira da lista, marca ⚠️/pill-orphan em
+   QUALQUER nome de `elsewhere` (preview antes de clicar, confirmado depois). */
 function featPickList(names, selected, pickFn, elsewhere){
   const elsewhereSet = new Set(elsewhere || []);
   return `<div class="check-list" style="margin-bottom:6px;">${names.map(name=>{
     const sel = selected===name;
-    const isDup = sel && elsewhereSet.has(name);
+    const isDup = elsewhereSet.has(name);
     const isExpanded = expandedTraitInfo===name;
     const detail = FEAT_DETAILS[name];
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill ${sel?'selected':''} ${isDup?'pill-orphan':''}" data-pick="${name}" data-fn="${pickFn}" ${isDup?'title="Já vem de outra fonte agora — considere trocar por outro"':''}>${name}${isDup?' ⚠️':''}</span>
+      <span class="check-pill ${sel?'selected':''} ${isDup?'pill-orphan':''}" data-pick="${name}" data-fn="${pickFn}" ${isDup?'title="Já vem de outra fonte — escolher aqui não dá benefício extra"':''}>${name}${isDup?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>`:''}
       ${isExpanded && detail ? renderFeatDetailCard(detail) : ''}
     </div>`;
@@ -243,9 +243,9 @@ function choiceGrid(list, enabledList, selected, onClickName){
    é sempre a lista completa de opções (nunca filtrada pelo chamador pra tirar o
    que outra fonte já concede/escolheu — ver skillsGrantedElsewhere() etc.);
    `elsewhere` (opcional) é essa lista de nomes já concedidos/escolhidos alhures,
-   só usada pra marcar ⚠️/pill-orphan quando o item estiver SELECIONADO aqui E
-   também em `elsewhere` — mesmo espírito de spellChoiceList(), nunca esconde
-   opção, só avisa quando vira duplicata de verdade. */
+   marca ⚠️/pill-orphan em QUALQUER item de `elsewhere` (mesmo espírito de
+   spellChoiceList(): preview em borda tracejada antes de clicar, confirmado
+   preenchido depois — nunca esconde a opção). */
 function groupedChoiceList(groups, selectedList, maxTotal, toggleFn, elsewhere){
   const elsewhereSet = new Set(elsewhere || []);
   return groups.filter(g=>g.items.length>0).map(g=>`
@@ -254,8 +254,8 @@ function groupedChoiceList(groups, selectedList, maxTotal, toggleFn, elsewhere){
       ${g.items.map(item=>{
         const sel = selectedList.includes(item);
         const disabled = !sel && selectedList.length>=maxTotal;
-        const isDup = sel && elsewhereSet.has(item);
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte agora — considere trocar por outra"':''}>${item}${isDup?' ⚠️':''}</div>`;
+        const isDup = elsewhereSet.has(item);
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte — escolher aqui não dá benefício extra"':''}>${item}${isDup?' ⚠️':''}</div>`;
       }).join('')}
     </div>`).join('');
 }

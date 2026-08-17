@@ -56,8 +56,14 @@ header .sub{font-family:'Cormorant Garamond',serif; font-style:italic; color:var
 .check-pill{border:1px solid var(--line); border-radius:14px; padding:6px 14px; cursor:pointer; font-size:0.85rem; background:#f8f9fa; user-select:none;}
 .check-pill.selected{border-color:var(--wax); background:var(--wax); color:#ffffff;}
 .check-pill.disabled{opacity:0.45; cursor:not-allowed;}
-.check-pill.pill-orphan{border-color:var(--warn); background:var(--warn-bg); color:var(--warn);}
-.check-pill.pill-orphan.selected{background:var(--warn); border-color:var(--warn); color:#ffffff;}
+/* pill-orphan sozinho (sem .selected) = "preview": item ainda não
+   escolhido AQUI, mas já vem de outra fonte — borda tracejada avisa
+   antes do clique, sem precisar escolher pra descobrir que vira
+   duplicata. pill-orphan+selected = duplicata confirmada (escolhido
+   aqui E na outra fonte) — borda sólida, preenchido, mais "chamativo"
+   que o preview. */
+.check-pill.pill-orphan{border-color:var(--warn); border-style:dashed; background:var(--warn-bg); color:var(--warn);}
+.check-pill.pill-orphan.selected{background:var(--warn); border-color:var(--warn); border-style:solid; color:#ffffff;}
 .counter{font-family:'Cinzel',serif; font-size:0.75rem; color:var(--gold-dim); margin:10px 0 14px;}
 .counter.ok{color:var(--green);}
 .group-label{
