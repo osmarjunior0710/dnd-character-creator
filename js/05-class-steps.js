@@ -12,6 +12,20 @@ function renderClassStep(){
   ${nav(canAdvance())}`;
 }
 
+/* Bruxo/Pacto do Tomo tem 2 pares de lista que competem pelo MESMO nome
+   (Truques da Classe vs. Truques do Pacto do Tomo; Magias Preparadas de
+   1º Círculo vs. Magias Rituais do Pacto do Tomo — o Tomo pega "de
+   qualquer classe", então pode repetir algo que já está na lista normal
+   de Bruxo). A lista do Tomo já excluía `!b.cantrips.includes(c)`/
+   `!b.spells1.includes(r)` (não deixa escolher de novo o que já foi
+   escolhido na lista normal) — mas faltava o espelho: a lista normal não
+   excluía `!b.tomoCantrips.includes(c)`/`!b.tomoRituals.includes(s)`.
+   Achado real de usuário: escolher um truque/magia via Tomo e DEPOIS
+   escolher o MESMO na lista normal (nunca precisou passar por outra
+   fonte externa, é dentro do próprio Bruxo) ficava listado normal, sem
+   ⚠️, nas duas ao mesmo tempo — igual ao bug corrigido antes pro
+   Iniciado em Magia do Antecedente, só que dessa vez entre as 2 listas
+   do próprio Bruxo. */
 function renderBruxoDetail(){
   const b = data.bruxo;
   return `<h2>Bruxo — Detalhes da Classe</h2>
@@ -36,7 +50,7 @@ function renderBruxoDetail(){
 
   <h3 id="grp-1-cantrips">Truques da Classe (escolha 2, da lista de Bruxo)</h3>
   ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(BRUXO.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), b.cantrips, 2, 'toggleCantrip')}
+  ${spellChoiceList(BRUXO.cantrips.filter(c=>!b.tomoCantrips.includes(c) && !speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('classe').includes(c)), b.cantrips, 2, 'toggleCantrip')}
   <div class="counter ${b.cantrips.length===2?'ok':''}">${b.cantrips.length}/2 escolhidos</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
@@ -46,7 +60,7 @@ function renderBruxoDetail(){
   `:''}
 
   <h3 id="grp-1-spells1">Magias Preparadas de 1º Círculo (escolha 2, da lista de Bruxo)</h3>
-  ${spellChoiceList(BRUXO.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), b.spells1, 2, 'toggleSpell1')}
+  ${spellChoiceList(BRUXO.spells1.filter(s=>!b.tomoRituals.includes(s) && !speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('classe').includes(s)), b.spells1, 2, 'toggleSpell1')}
   <div class="counter ${b.spells1.length===2?'ok':''}">${b.spells1.length}/2 escolhidas</div>
 
   ${b.pactBoon==='Pacto do Tomo' ? `
