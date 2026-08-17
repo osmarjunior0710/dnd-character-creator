@@ -147,27 +147,27 @@ function spellCombatIconMarker(name){
 
 /* Lista de escolha de truques/magias, com botão "ⓘ" que expande um card de detalhe
    (tempo, alcance, componentes, duração, efeito, escalonamento) sem afetar a seleção.
-   `items` já vem filtrado pelo chamador (tira o que outra fonte já concede/escolheu —
-   ver chosenCantripsElsewhere()/speciesGrantedCantrips() etc.), mas esse filtro é
-   sobre o ESTADO ATUAL, que pode mudar DEPOIS de uma escolha já feita (ex: escolher
-   um truque no Passo 1 e só depois, no Passo 5, escolher uma espécie que passa a
-   conceder esse mesmo truque de graça). Achado real de usuário: se o nome
-   escolhido não está mais em `items`, a pill sumia da tela inteira, sem aviso, e a
-   contagem "X/N escolhidas" ficava presa (ocupando uma vaga invisível, sem dar pra
-   trocar por outra coisa). Agora QUALQUER nome de `selectedList` sempre aparece,
-   mesmo se caiu fora de `items` — marcado como "extra" (pill-orphan) pra deixar
-   claro que precisa de atenção, mas continua clicável pra desmarcar e liberar a
-   vaga. */
-function spellChoiceList(items, selectedList, maxTotal, toggleFn){
-  const orphans = selectedList.filter(name=>!items.includes(name));
-  const allNames = [...items, ...orphans];
-  return `<div class="check-list" style="margin-bottom:6px;">${allNames.map(name=>{
+   `items` é sempre a lista MESTRA completa (const estática da classe, ou
+   ALL_CANTRIPS/ALL_1ST_RITUAL) — nunca filtrada pelo chamador. `elsewhere`
+   (opcional) é a lista de nomes que outra fonte já concede/escolheu (ver
+   chosenCantripsElsewhere()/speciesGrantedCantrips() etc.) — usada só pra
+   marcar ⚠️/pill-orphan quando o nome estiver SELECIONADO aqui E também em
+   `elsewhere` (duplicata de verdade). Item que está em `elsewhere` mas NÃO
+   selecionado continua aparecendo normal, clicável — nunca escondido (antes
+   uma versão prévia escondia da lista qualquer coisa já concedida/escolhida
+   em outro lugar; motivo de sair: escolher errado ficava invisível, sem
+   aviso, e trocar de espécie/antecedente depois podia fazer uma escolha já
+   feita "sumir" da tela com a vaga presa, sem dar pra trocar — melhor
+   sempre mostrar tudo e avisar). */
+function spellChoiceList(items, selectedList, maxTotal, toggleFn, elsewhere){
+  const elsewhereSet = new Set(elsewhere || []);
+  return `<div class="check-list" style="margin-bottom:6px;">${items.map(name=>{
     const sel = selectedList.includes(name);
     const disabled = !sel && selectedList.length>=maxTotal;
-    const isOrphan = orphans.includes(name);
+    const isDup = sel && elsewhereSet.has(name);
     const detail = SPELL_DETAILS[name];
     return `<div class="spell-pill-wrap">
-      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora (ex: espécie) — considere trocar por outro"':''}>${name}${spellCombatIconMarker(name)}${spellCostMarker(name)}${isOrphan?' ⚠️':''}</span>
+      <span class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${name}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte — considere trocar por outra"':''}>${name}${spellCombatIconMarker(name)}${spellCostMarker(name)}${isDup?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${spellInfoPopup===name?'active':''}" data-pick="${name}" data-fn="openSpellInfoPopup" title="Ver detalhes">ⓘ</button>`:''}
     </div>`;
   }).join('')}</div>`;
@@ -208,14 +208,19 @@ function traitBox(nome, resumo, concede){
 
 /* Lista de escolha ÚNICA de talento, filtrada por categoria (ex: só "Origem"
    pro Versátil do Humano), com botão "ⓘ" que mostra a ficha do banco de
-   talentos (categoria, pré-requisito, benefícios, página). */
-function featPickList(names, selected, pickFn){
+   talentos (categoria, pré-requisito, benefícios, página). `elsewhere`
+   (opcional, mesmo espírito de spellChoiceList/groupedChoiceList): nomes já
+   concedidos por outra fonte — nunca tira da lista, só marca ⚠️/pill-orphan
+   se for o mesmo nome ESCOLHIDO aqui. */
+function featPickList(names, selected, pickFn, elsewhere){
+  const elsewhereSet = new Set(elsewhere || []);
   return `<div class="check-list" style="margin-bottom:6px;">${names.map(name=>{
     const sel = selected===name;
+    const isDup = sel && elsewhereSet.has(name);
     const isExpanded = expandedTraitInfo===name;
     const detail = FEAT_DETAILS[name];
     return `<div class="spell-pill-wrap ${isExpanded?'expanded':''}">
-      <span class="check-pill ${sel?'selected':''}" data-pick="${name}" data-fn="${pickFn}">${name}</span>
+      <span class="check-pill ${sel?'selected':''} ${isDup?'pill-orphan':''}" data-pick="${name}" data-fn="${pickFn}" ${isDup?'title="Já vem de outra fonte agora — considere trocar por outro"':''}>${name}${isDup?' ⚠️':''}</span>
       ${detail?`<button class="info-btn ${isExpanded?'active':''}" data-pick="${name}" data-fn="toggleTraitInfo" title="Ver detalhes">ⓘ</button>`:''}
       ${isExpanded && detail ? renderFeatDetailCard(detail) : ''}
     </div>`;
@@ -234,25 +239,23 @@ function choiceGrid(list, enabledList, selected, onClickName){
 
 /* Renderiza uma lista de escolha (checkbox-pill) separada em mini-grupos com cabeçalho,
    pra quando o talento/recurso permite escolher entre categorias diferentes
-   (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem.
-   Mesma correção de spellChoiceList(): se uma perícia já escolhida caiu fora de
-   TODOS os grupos (porque outra fonte passou a concedê-la depois, filtrada via
-   skillsGrantedElsewhere() no chamador), não pode simplesmente sumir da tela —
-   isso escondia a escolha E prendia a vaga (contagem "X/N" sem dar pra trocar).
-   Aparece num grupo extra no fim, marcada, ainda clicável pra desmarcar. */
-function groupedChoiceList(groups, selectedList, maxTotal, toggleFn){
-  const groupedNames = new Set();
-  groups.forEach(g=>g.items.forEach(item=>groupedNames.add(item)));
-  const orphans = selectedList.filter(item=>!groupedNames.has(item));
-  const allGroups = orphans.length ? [...groups, {label:'⚠️ Verifique — já vem de outra fonte', items:orphans, orphan:true}] : groups;
-  return allGroups.filter(g=>g.items.length>0).map(g=>`
+   (ex: Atributos / Perícias / Ferramentas). Grupos vazios não aparecem. `groups`
+   é sempre a lista completa de opções (nunca filtrada pelo chamador pra tirar o
+   que outra fonte já concede/escolheu — ver skillsGrantedElsewhere() etc.);
+   `elsewhere` (opcional) é essa lista de nomes já concedidos/escolhidos alhures,
+   só usada pra marcar ⚠️/pill-orphan quando o item estiver SELECIONADO aqui E
+   também em `elsewhere` — mesmo espírito de spellChoiceList(), nunca esconde
+   opção, só avisa quando vira duplicata de verdade. */
+function groupedChoiceList(groups, selectedList, maxTotal, toggleFn, elsewhere){
+  const elsewhereSet = new Set(elsewhere || []);
+  return groups.filter(g=>g.items.length>0).map(g=>`
     <div class="check-list" style="margin-bottom:10px; align-items:center;">
       <span class="group-label" style="margin:0 2px 0 0;">${g.label}:</span>
       ${g.items.map(item=>{
         const sel = selectedList.includes(item);
         const disabled = !sel && selectedList.length>=maxTotal;
-        const isOrphan = !!g.orphan;
-        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isOrphan?'pill-orphan':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`} ${isOrphan?'title="Já vem de outra fonte agora — considere trocar por outra"':''}>${item}</div>`;
+        const isDup = sel && elsewhereSet.has(item);
+        return `<div class="check-pill ${sel?'selected':''} ${disabled?'disabled':''} ${isDup?'pill-orphan':''}" ${disabled?'':`data-pick="${item}" data-fn="${toggleFn}"`} ${isDup?'title="Já vem de outra fonte agora — considere trocar por outra"':''}>${item}${isDup?' ⚠️':''}</div>`;
       }).join('')}
     </div>`).join('');
 }

@@ -452,22 +452,22 @@ function renderSimpleBackgroundDetail(bgConst){
 
   ${bgConst.iniciadoEmMagia ? `
   <h3 id="grp-3-iniciado-truques">Iniciado em Magia — 2 truques de ${bgConst.iniciadoEmMagia.classe}</h3>
-  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) não aparecem aqui.</div>` : ''}
-  ${spellChoiceList(bgConst.iniciadoEmMagia.cantrips.filter(c=>!speciesGrantedCantrips().includes(c) && !chosenCantripsElsewhere('iniciadoEmMagia').includes(c)), bg.iniciadoCantrips, 2, 'toggleIniciadoCantrip')}
+  ${speciesGrantedCantrips().length ? `<div class="intro" style="margin-bottom:8px;">Truques que você já conhece de graça pela espécie (${speciesGrantedCantrips().join(', ')}) continuam aparecendo aqui, marcados com ⚠️ se escolhidos de novo.</div>` : ''}
+  ${spellChoiceList(bgConst.iniciadoEmMagia.cantrips, bg.iniciadoCantrips, 2, 'toggleIniciadoCantrip', [...speciesGrantedCantrips(), ...chosenCantripsElsewhere('iniciadoEmMagia')])}
   <div class="counter ${bg.iniciadoCantrips.length===2?'ok':''}">${bg.iniciadoCantrips.length}/2 escolhidos</div>
 
   <h3 id="grp-3-iniciado-magia1">Iniciado em Magia — 1 magia de 1º círculo de ${bgConst.iniciadoEmMagia.classe}</h3>
   <div class="intro" style="margin-bottom:8px;">Essa magia fica sempre preparada e pode ser conjurada 1x grátis por Descanso Longo (ou com espaço de magia depois).</div>
-  ${spellChoiceList(bgConst.iniciadoEmMagia.spells1.filter(s=>!speciesGrantedSpells().includes(s) && !chosenSpells1Elsewhere('iniciadoEmMagia').includes(s)), bg.iniciadoSpell1, 1, 'toggleIniciadoSpell1')}
+  ${spellChoiceList(bgConst.iniciadoEmMagia.spells1, bg.iniciadoSpell1, 1, 'toggleIniciadoSpell1', [...speciesGrantedSpells(), ...chosenSpells1Elsewhere('iniciadoEmMagia')])}
   <div class="counter ${bg.iniciadoSpell1.length===1?'ok':''}">${bg.iniciadoSpell1.length}/1 escolhida</div>` : ''}
 
   ${isHabilidoso ? `
   <h3 id="grp-3-habilidoso">Talento Habilidoso — escolha 3 perícias ou ferramentas</h3>
-  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome}, e perícias já escolhidas pela classe ou espécie, não aparecem aqui.</div>
+  <div class="intro" style="margin-bottom:8px;">${bgConst.skills.join(' e ')} (perícias) e ${excludedTool} (ferramenta) já vêm do ${bgConst.nome}, e perícias já escolhidas pela classe ou espécie, continuam aparecendo aqui marcadas com ⚠️ se escolhidas de novo.</div>
   ${groupedChoiceList([
-    ...skillGroupsByAbility(ALL_SKILLS.filter(s=>!skillsGrantedElsewhere('habilidoso').includes(s))),
-    {label:'Ferramentas', items: ALL_TOOLS.filter(t=>t!==excludedTool)}
-  ], bg.habilidoso, 3, 'toggleHabilidoso')}
+    ...skillGroupsByAbility(ALL_SKILLS),
+    {label:'Ferramentas', items: ALL_TOOLS}
+  ], bg.habilidoso, 3, 'toggleHabilidoso', [...skillsGrantedElsewhere('habilidoso'), excludedTool])}
   <div class="counter ${bg.habilidoso.length===3?'ok':''}">${bg.habilidoso.length}/3 escolhidos</div>` : ''}
 
   <h3 id="grp-3-equipment">Equipamento Inicial</h3>

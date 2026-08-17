@@ -38,7 +38,7 @@ function renderIdiomasStep(){
   </div>
 
   <h3 id="grp-6-extra">Escolha 1 Idioma Adicional</h3>
-  ${groupedChoiceList(languageGroupsByCategory(choosableLanguages().filter(l => !id.comuns.includes(l))), id.extra, 1, 'toggleIdiomaExtra')}
+  ${groupedChoiceList(languageGroupsByCategory(choosableLanguages()), id.extra, 1, 'toggleIdiomaExtra', id.comuns)}
   <div class="counter ${id.extra.length===1?'ok':''}">${id.extra.length}/1 escolhido</div>
   ` : ''}
   ${nav(canAdvance())}`;

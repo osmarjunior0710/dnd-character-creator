@@ -97,8 +97,8 @@ function renderOrcDetail(){
 
 function renderHumanoDetail(){
   const h = data.humano;
-  const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem' && n!==backgroundFeatBaseName());
-  const talentosSelvagens = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Talento Selvagem' && n!==backgroundFeatBaseName());
+  const talentosOrigem = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Origem');
+  const talentosSelvagens = Object.keys(FEAT_DETAILS).filter(n=>FEAT_DETAILS[n].categoria==='Talento Selvagem');
   return `<h2>Humano</h2>
   <p class="species-flavor">${HUMANO.flavor}</p>
   <div class="species-facts">
@@ -117,10 +117,10 @@ function renderHumanoDetail(){
   <div class="intro" style="margin-bottom:8px;">Perícias marcadas com ⚠️ já vêm da classe ou do antecedente — ainda dá pra escolher, mas aí vira duplicidade (veja o aviso no Resumo).</div>
   ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS), h.pericia, 'pickHumanoPericia', skillsGrantedElsewhere('humano'))}
   <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
-  <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente e não aparece aqui.</div>
-  ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento')}
+  <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente — continua aparecendo aqui, marcado com ⚠️ se escolhido de novo.</div>
+  ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento', [backgroundFeatBaseName()])}
   <div class="intro" style="margin:10px 0 8px;">Talentos Selvagens (Unearthed Arcana 2025 — não é conteúdo oficial do PHB, ligado ao Psiônico): o Versátil também permite escolher um destes em vez de um talento de Origem.</div>
-  ${featPickList(talentosSelvagens, h.talento, 'pickHumanoTalento')}
+  ${featPickList(talentosSelvagens, h.talento, 'pickHumanoTalento', [backgroundFeatBaseName()])}
   ${nav(canAdvance())}`;
 }
 
