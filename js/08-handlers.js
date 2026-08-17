@@ -264,11 +264,23 @@ const CLASS_SPELL1_FIELD = { "Bruxo":"spells1", "Bardo":"spells1", "Mago":"spell
 
 /* Perícias já garantidas por QUALQUER fonte (classe, antecedente fixo,
    Habilidoso, Humano/Hábil, Elfo/Sentidos Aguçados), separadas por fonte —
-   quem chama exclui a própria fonte antes de filtrar a própria lista. */
+   quem chama exclui a própria fonte antes de filtrar a própria lista.
+   antecedenteFixo só entra se data.antecedente estiver de fato preenchido:
+   activeBgConst() cai no fallback CHARLATAO quando ainda é null (padrão
+   usado no app inteiro pra nunca quebrar antes da escolha), mas CHARLATAO.
+   skills não é "nada" — é uma lista de verdade (Enganação, Prestidigitação).
+   Sem essa guarda, um Bruxo (que também tem Enganação na sua própria lista)
+   já começava com Enganação marcada ⚠️ antes mesmo de chegar no passo de
+   Antecedente, achando que Charlatão já tinha sido escolhido (achado real
+   de usuário: ficha zerada, só Bruxo escolhido, Enganação já veio marcada).
+   classe não precisa da mesma guarda porque activeClassData() (diferente de
+   activeClassConst()) devolve o objeto de DADOS do jogador (data.bruxo etc,
+   não a lista de opções da classe) — o fallback pra 'bruxo' ainda aponta pra
+   um .skills vazio (nada escolhido), não pra uma lista fixa não-vazia. */
 function skillsGrantedBySource(){
   return {
     classe: (activeClassData().skills || []),
-    antecedenteFixo: (activeBgConst().skills || []),
+    antecedenteFixo: data.antecedente ? (activeBgConst().skills || []) : [],
     habilidoso: (activeBgData().habilidoso || []).filter(s=>ALL_SKILLS.includes(s)),
     humano: (data.especie==='Humano' && data.humano.pericia) ? [data.humano.pericia] : [],
     elfo: (data.especie==='Elfo' && data.elfo.pericia) ? [data.elfo.pericia] : []
@@ -283,8 +295,13 @@ function skillsGrantedElsewhere(excludeSource){
    "Nome — descrição", ou "Iniciado em Magia (Classe) — descrição" nos 3
    antecedentes de Iniciado em Magia) — usado pra excluir esse talento da
    lista do Versátil (Humano), que hoje já usa os mesmos 10 nomes da
-   categoria "Origem" do banco de talentos. */
+   categoria "Origem" do banco de talentos. Mesma guarda de
+   skillsGrantedBySource() acima: sem data.antecedente escolhido, o fallback
+   CHARLATAO faria "Habilidoso" (talento fixo dele, que também é um nome
+   válido na lista de Origem) aparecer marcado ⚠️ sem nenhum antecedente
+   ter sido escolhido de verdade. */
 function backgroundFeatBaseName(){
+  if(!data.antecedente) return '';
   return (activeBgConst().feat || '').split(' — ')[0].split(' (')[0].trim();
 }
 

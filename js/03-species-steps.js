@@ -117,7 +117,7 @@ function renderHumanoDetail(){
   <div class="intro" style="margin-bottom:8px;">Perícias marcadas com ⚠️ já vêm da classe ou do antecedente — ainda dá pra escolher, mas aí vira duplicidade (veja o aviso no Resumo).</div>
   ${groupedSinglePick(skillGroupsByAbility(ALL_SKILLS), h.pericia, 'pickHumanoPericia', skillsGrantedElsewhere('humano'))}
   <h3 id="grp-5-talento">Versátil — escolha 1 talento de Origem</h3>
-  <div class="intro" style="margin-bottom:8px;">O talento ${backgroundFeatBaseName()} já vem do antecedente — continua aparecendo aqui, marcado com ⚠️ se escolhido de novo.</div>
+  <div class="intro" style="margin-bottom:8px;">${backgroundFeatBaseName() ? `O talento ${backgroundFeatBaseName()} já vem do antecedente — continua aparecendo aqui, marcado com ⚠️ se escolhido de novo.` : 'Talentos marcados com ⚠️ já vêm de outra fonte — ainda dá pra escolher, mas vira duplicidade.'}</div>
   ${featPickList(talentosOrigem, h.talento, 'pickHumanoTalento', [backgroundFeatBaseName()])}
   <div class="intro" style="margin:10px 0 8px;">Talentos Selvagens (Unearthed Arcana 2025 — não é conteúdo oficial do PHB, ligado ao Psiônico): o Versátil também permite escolher um destes em vez de um talento de Origem.</div>
   ${featPickList(talentosSelvagens, h.talento, 'pickHumanoTalento', [backgroundFeatBaseName()])}
