@@ -212,21 +212,22 @@ function activeBgConst(){
    DEDUPLICAÇÃO DE ESCOLHAS ENTRE FONTES (Classe / Antecedente / Espécie)
    ==========================================================================
    Perícia, talento, truque e magia de 1º círculo podem vir de mais de uma
-   fonte ao mesmo tempo. Duas situações diferentes, tratadas diferente:
-   1. CONCESSÃO FIXA (a espécie ou a própria classe dá algo automático, sem
-      escolha do jogador — ex: o truque do Legado Ínfero do Tiferino, ou
-      Falar com Animais do Druida): é excluída das listas de ESCOLHA de
-      outras fontes (senão a pessoa "escolhe" de novo algo que já tem e não
-      ganha nada com isso), mas continua aparecendo normalmente no resumo
-      final, marcada como concessão automática — isso NÃO muda aqui.
-   2. ESCOLHA do jogador feita numa fonte (ex: perícia da classe, truque da
-      classe, talento Versátil do Humano): passa a ser excluída das listas
-      de escolha de TODAS as outras fontes assim que selecionada — sem
-      isso dava pra escolher a mesma coisa 2x (ex: Atletismo pela classe E
-      pelo antecedente E pela espécie), achando que ganhou 2 perícias
-      diferentes quando só ganhou 1 de verdade.
-   Cada função abaixo recebe a fonte que está sendo renderizada (pra não se
-   auto-excluir) e devolve tudo que as OUTRAS fontes já garantem. */
+   fonte ao mesmo tempo — seja uma CONCESSÃO FIXA (espécie ou classe dá
+   automático, sem escolha do jogador — ex: truque do Legado Ínfero do
+   Tiferino, Falar com Animais do Druida) ou uma ESCOLHA do jogador feita
+   noutra fonte (ex: perícia da classe, truque da classe, talento Versátil
+   do Humano). Nas duas situações o item NUNCA é escondido das listas de
+   escolha de outras fontes — versão anterior escondia (evitava "escolher"
+   de novo algo que já tem e não ganha nada com isso), mas trocar de
+   espécie/antecedente DEPOIS de já ter escolhido algo que virou redundante
+   fazia a escolha sumir da tela sem aviso, com a vaga presa. Agora toda
+   lista de escolha (spellChoiceList/groupedChoiceList/featPickList/
+   groupedSinglePick) recebe o resultado destas funções como `elsewhere` —
+   item continua aparecendo, clicável, e só ganha ⚠️/pill-orphan se for
+   ESCOLHIDO aqui E também estiver em `elsewhere` (duplicata de verdade,
+   sem benefício real). Cada função abaixo recebe a fonte que está sendo
+   renderizada (pra não se auto-excluir) e devolve tudo que as OUTRAS
+   fontes já garantem. */
 
 /* Truques/magias que a ESPÉCIE concede de graça no nível 1 (Tiferino: Legado
    Ínfero; Aasimar: Portador da Luz; Elfo: Linhagem Élfica; Gnomo: Linhagem
