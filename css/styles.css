@@ -169,6 +169,15 @@ select, input{background:#ffffff; border:1px solid var(--line); border-radius:3p
 .shop-item-cont{font-size:0.68rem; color:var(--parchment-dim); font-style:italic; margin-top:2px; font-weight:400;}
 .cart-list{font-size:0.85rem; margin-top:6px;}
 .cart-item{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px dashed var(--line);}
+/* Carrinho por categoria da Loja (ver renderShop()) — fica logo abaixo
+   do <details> da categoria, sempre visível (dentro ou fora do
+   accordion aberto), só quando há algo comprado ali. Caixa própria
+   (não "colada" no <details> acima) porque também pode aparecer SEM
+   nenhum <details> logo acima — categoria inteira escondida pelo
+   filtro de proficiência, mas com compra feita antes de ligar o
+   filtro; a confirmação da compra continua visível mesmo assim. */
+.cart-list-category{margin:-6px 0 12px; padding:8px 12px; background:#f8f9fa; border:1px solid var(--line); border-radius:5px;}
+.cart-list-title{font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:4px;}
 .shop-category{border:1px solid var(--line); border-radius:5px; margin-bottom:12px; overflow:hidden;}
 .shop-category summary{
   cursor:pointer; list-style:none; padding:10px 14px;

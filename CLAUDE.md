@@ -49,8 +49,10 @@ por um tempo). Sem build step neste repo, então é mantida na mão:
   não de novo enquanto a mesma PR está aberta" — na prática gerou um
   bump esquecido/errado, não valia a complicação): **toda vez que for
   fazer um commit que muda o app**, atualize `APP_VERSION` pro horário
-  atual (`date -u +"v%Y%m%d%H%M"`) antes de commitar. Não precisa
-  rastrear se é a mesma PR, PR nova, ou só um push direto — é sempre
-  "a última vez que o código mudou", ponto.
+  atual em horário de Brasília (`TZ='America/Sao_Paulo' date +"v%Y%m%d%H%M"`
+  — UTC-3, não UTC; a sessão de trabalho roda num servidor em UTC, mas o
+  usuário lê o horário como se fosse hora local dele no Brasil) antes de
+  commitar. Não precisa rastrear se é a mesma PR, PR nova, ou só um push
+  direto — é sempre "a última vez que o código mudou", ponto.
 - Não precisa bump em commit que só mexe em documentação (`CLAUDE.md`,
   `VISAO.md`, comentário) sem tocar em nada que o jogador vê/roda.
