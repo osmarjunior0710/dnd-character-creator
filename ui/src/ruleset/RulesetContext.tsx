@@ -114,6 +114,11 @@ export interface RulesetNivel1 {
   todasAsFerramentasDeArtesao: string[];
   todosOsTruques: string[]; // derivado de spell-details.json — Bruxo/Pacto do Tomo
   todasAsMagiasRituais1: string[]; // idem, 1º círculo + ritual
+  idiomasComuns: string[];
+  idiomasRaros: string[];
+  alinhamentos: string[];
+  infoDeAlinhamento: Record<string, { descricao: string }>;
+  arrayPadrao: number[];
 }
 
 interface EstadoRuleset {
@@ -132,6 +137,7 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
   const [
     classes, especies, antecedentes, todasAsFerramentas, todasAsPericias, atributoDaPericia, atributosDoJogo, featDetails,
     maestriaDeArmas, propriedadesDeMaestria, todosOsInstrumentos, todasAsFerramentasDeArtesao, spellDetails,
+    idiomasComuns, idiomasRaros, alinhamentos, infoDeAlinhamento, arrayPadrao,
   ] = await Promise.all([
     import("@dados/mecanicas-nivel1/class-const.json"),
     import("@dados/mecanicas-nivel1/species-const.json"),
@@ -146,6 +152,11 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     import("@dados/mecanicas-nivel1/all-instruments.json"),
     import("@dados/mecanicas-nivel1/all-artisan-tools.json"),
     import("@dados/mecanicas-nivel1/spell-details.json"),
+    import("@dados/mecanicas-nivel1/common-languages.json"),
+    import("@dados/mecanicas-nivel1/rare-languages.json"),
+    import("@dados/mecanicas-nivel1/alignments.json"),
+    import("@dados/mecanicas-nivel1/alignment-info.json"),
+    import("@dados/mecanicas-nivel1/standard-array.json"),
   ]);
   const feats = featDetails.default as Record<string, { categoria: string }>;
   // ALL_CANTRIPS/ALL_1ST_RITUAL do vanilla (só usados pelo Pacto do Tomo do
@@ -172,6 +183,11 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     todasAsFerramentasDeArtesao: todasAsFerramentasDeArtesao.default,
     todosOsTruques,
     todasAsMagiasRituais1,
+    idiomasComuns: idiomasComuns.default,
+    idiomasRaros: idiomasRaros.default,
+    alinhamentos: alinhamentos.default,
+    infoDeAlinhamento: infoDeAlinhamento.default,
+    arrayPadrao: arrayPadrao.default,
   };
 }
 

@@ -71,6 +71,15 @@ export function classeEscolhaVazia(): ClasseEscolha {
   };
 }
 
+export interface IdiomasEscolha {
+  comuns: string[]; // sempre 2, do pool comuns+raros (choosableLanguages())
+  extra: string[]; // só Ladino — 1 idioma além da Gíria dos Ladrões automática
+}
+
+function idiomasEscolhaVazia(): IdiomasEscolha {
+  return { comuns: [], extra: [] };
+}
+
 export interface WizardData {
   classe: string | null;
   classes: Record<string, ClasseEscolha>;
@@ -79,6 +88,9 @@ export interface WizardData {
   antecedentes: Record<string, AntecedenteEscolha>;
   especie: string | null;
   especies: Record<string, EspecieEscolha>;
+  idiomas: IdiomasEscolha;
+  attrs: Record<string, number>; // atributo -> valor bruto do Array Padrão (sem bônus de antecedente)
+  alinhamento: string | null;
 }
 
 function dadosIniciais(): WizardData {
@@ -86,7 +98,10 @@ function dadosIniciais(): WizardData {
   // no vanilla (js/00-notes-and-state.js linha 1339). Achado batendo este
   // valor contra o vanilla ao testar esta sub-entrega: eu tinha começado
   // com true por engano.
-  return { classe: null, classes: {}, antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {} };
+  return {
+    classe: null, classes: {}, antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {},
+    idiomas: idiomasEscolhaVazia(), attrs: {}, alinhamento: null,
+  };
 }
 
 interface WizardContextValor {
@@ -112,7 +127,14 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   // forma funcional do setState) evita o double-invoke, porque ele só
   // acontece quando se passa uma FUNÇÃO pro setState.
   function definir(atualizar: (rascunho: WizardData) => void) {
-    const rascunho: WizardData = { ...dados, classes: { ...dados.classes }, antecedentes: { ...dados.antecedentes }, especies: { ...dados.especies } };
+    const rascunho: WizardData = {
+      ...dados,
+      classes: { ...dados.classes },
+      antecedentes: { ...dados.antecedentes },
+      especies: { ...dados.especies },
+      idiomas: { comuns: [...dados.idiomas.comuns], extra: [...dados.idiomas.extra] },
+      attrs: { ...dados.attrs },
+    };
     atualizar(rascunho);
     setDados(rascunho);
   }

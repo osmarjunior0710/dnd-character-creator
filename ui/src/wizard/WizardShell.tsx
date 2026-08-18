@@ -8,14 +8,24 @@ import { AntecedenteGrid } from "./steps/AntecedenteGrid";
 import { AntecedenteDetalhe } from "./steps/AntecedenteDetalhe";
 import { EspecieGrid } from "./steps/EspecieGrid";
 import { EspecieDetalhe } from "./steps/EspecieDetalhe";
-import { antecedenteDetalheCompleto, especieDetalheCompleto, classeDetalheCompleto } from "./validacao";
+import { IdiomasStep } from "./steps/IdiomasStep";
+import { AtributosStep } from "./steps/AtributosStep";
+import { AlinhamentoStep } from "./steps/AlinhamentoStep";
+import { antecedenteDetalheCompleto, especieDetalheCompleto, classeDetalheCompleto, idiomasCompleto, atributosCompleto, alinhamentoCompleto } from "./validacao";
 import { useStrings } from "../i18n/context";
 
-// 6 passos por enquanto (Classe, Antecedente, Espécie, cada um grade+detalhe)
-// — ordem igual o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos,
-// Alinhamento, Loja, Resumo (Entrega 5d continua a partir daqui). A
-// numeração interna aqui é só desta sub-entrega.
-const PASSOS = ["classe-grade", "classe-detalhe", "antecedente-grade", "antecedente-detalhe", "especie-grade", "especie-detalhe"] as const;
+// Ordem igual o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos,
+// Alinhamento, Loja, Resumo — Loja e Resumo ficam pra Entrega 5e (a Loja é
+// uma tela grande por si só: carrinho, ouro, filtro de proficiência,
+// popups de item — vale sub-entrega própria, mesmo raciocínio de escopo
+// que separou Antecedente/Espécie na 5b). A numeração interna aqui é só
+// desta sub-entrega.
+const PASSOS = [
+  "classe-grade", "classe-detalhe",
+  "antecedente-grade", "antecedente-detalhe",
+  "especie-grade", "especie-detalhe",
+  "idiomas", "atributos", "alinhamento",
+] as const;
 
 function passoEstaCompleto(passo: (typeof PASSOS)[number], ctx: ReturnType<typeof useWizardEstado>): boolean {
   if (!ctx.ruleset) return false;
@@ -40,6 +50,9 @@ function passoEstaCompleto(passo: (typeof PASSOS)[number], ctx: ReturnType<typeo
     const escolha = ctx.dados.especies[ctx.dados.especie] || especieEscolhaVazia();
     return especieDetalheCompleto(ctx.dados.especie, especie, escolha);
   }
+  if (passo === "idiomas") return idiomasCompleto(ctx.dados.classe, ctx.dados.idiomas);
+  if (passo === "atributos") return atributosCompleto(ctx.ruleset.atributosDoJogo, ctx.dados.attrs);
+  if (passo === "alinhamento") return alinhamentoCompleto(ctx.dados.alinhamento);
   return true;
 }
 
@@ -71,6 +84,9 @@ function WizardConteudo() {
         {passo === "antecedente-detalhe" && <AntecedenteDetalhe />}
         {passo === "especie-grade" && <EspecieGrid />}
         {passo === "especie-detalhe" && <EspecieDetalhe />}
+        {passo === "idiomas" && <IdiomasStep />}
+        {passo === "atributos" && <AtributosStep />}
+        {passo === "alinhamento" && <AlinhamentoStep />}
       </div>
       <div className="nav-wizard">
         {passoIdx > 0 ? (

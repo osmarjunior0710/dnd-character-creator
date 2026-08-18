@@ -1,5 +1,5 @@
 import type { AntecedenteConst, EspecieConst, ClasseConst } from "../ruleset/RulesetContext";
-import type { AntecedenteEscolha, EspecieEscolha, ClasseEscolha } from "./WizardContext";
+import type { AntecedenteEscolha, EspecieEscolha, ClasseEscolha, IdiomasEscolha } from "./WizardContext";
 
 /** Equivalente ao trecho `case 3` de findFirstMissingGroup() (js/01-wizard-nav.js)
  * pro antecedente — mesma regra, só devolvendo bool em vez do id do grupo
@@ -154,4 +154,25 @@ export function classeDetalheCompleto(nome: string, classe: ClasseConst, escolha
       if (!e.equipment) return false;
       return true;
   }
+}
+
+/** Equivalente ao `case 6` de findFirstMissingGroup() pra Idiomas — Ladino
+ * precisa do idioma extra além dos 2 comuns, mais ninguém. */
+export function idiomasCompleto(classeNome: string | null, idiomas: IdiomasEscolha): boolean {
+  if (idiomas.comuns.length !== 2) return false;
+  if (classeNome === "Ladino" && idiomas.extra.length !== 1) return false;
+  return true;
+}
+
+/** Equivalente ao `case 7` — os 6 atributos precisam ter um valor do
+ * Array Padrão atribuído (não precisa checar duplicata: setAttr() do
+ * vanilla — replicado em AtributosStep.tsx — já rouba o valor de onde
+ * estava antes, nunca deixa duplicar). */
+export function atributosCompleto(atributosDoJogo: string[], attrs: Record<string, number>): boolean {
+  return atributosDoJogo.every((a) => attrs[a] !== undefined);
+}
+
+/** Equivalente ao `case 8`. */
+export function alinhamentoCompleto(alinhamento: string | null): boolean {
+  return alinhamento !== null;
 }
