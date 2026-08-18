@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { StringsProvider } from "./i18n/context";
 import { RulesetProvider } from "./ruleset/RulesetContext";
 import { SplashHome } from "./routes/SplashHome";
-import { Wizard } from "./routes/Wizard";
+import { WizardShell } from "./wizard/WizardShell";
 import { CarregarPersonagem } from "./routes/CarregarPersonagem";
 import { Ferramentas } from "./routes/Ferramentas";
 import { PersonagemLayout, AbaPersonagemPlaceholder } from "./routes/Personagem";
@@ -20,7 +20,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SplashHome />} />
-            <Route path="/novo" element={<Wizard />} />
+            <Route path="/novo" element={<WizardShell />} />
             <Route path="/carregar" element={<CarregarPersonagem />} />
             <Route path="/ferramentas" element={<Ferramentas />} />
             <Route path="/personagem/:id" element={<PersonagemLayout />}>

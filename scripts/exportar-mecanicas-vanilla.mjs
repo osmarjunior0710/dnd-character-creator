@@ -93,6 +93,7 @@ const partes = ARQUIVOS_DADO_EM_ORDEM.map((rel) => readFileSync(join(RAIZ, rel),
 const notasELinhas = readFileSync(join(RAIZ, "js", "00-notes-and-state.js"), "utf8").split("\n");
 const recorteMapas = notasELinhas.slice(1009, 1065).join("\n"); // linhas 1010-1065 (1-indexed)
 const recorteConsts = notasELinhas.slice(1113, 1119).join("\n"); // linhas 1114-1119
+const recorteAllTools = notasELinhas[1274]; // linha 1275: ALL_TOOLS (pool do talento Habilidoso)
 
 // 4 mapas pequenos e estáveis que hoje vivem em js/06-idiomas-attrs-shop.js
 // (arquivo de UI — não dá pra rodar ele inteiro numa sandbox sem DOM).
@@ -121,7 +122,7 @@ const NOMES_EXPORTADOS = [
   // Magias, talentos, perícias, idiomas, alinhamentos, ferramentas/instrumentos
   "SPELL_DETAILS", "FEAT_DETAILS", "ALL_SKILLS", "SKILL_ABILITY",
   "COMMON_LANGUAGES", "RARE_LANGUAGES", "ALIGNMENTS", "ALIGNMENT_INFO",
-  "ALL_INSTRUMENTS", "ALL_GAME_SETS", "ALL_ARTISAN_TOOLS", "KIT_CONTENTS",
+  "ALL_INSTRUMENTS", "ALL_GAME_SETS", "ALL_ARTISAN_TOOLS", "KIT_CONTENTS", "ALL_TOOLS",
   // Regras gerais de personagem
   "ABILITIES", "PROF_BONUS_BY_LEVEL", "STANDARD_ARRAY",
 ];
@@ -130,6 +131,7 @@ const scriptCompleto =
   partes.join("\n;\n") +
   "\n;\n" + recorteMapas +
   "\n;\n" + recorteConsts +
+  "\n;\n" + recorteAllTools +
   "\n;\n" + mapasDeJs06 +
   `\nglobalThis.__EXPORT__ = { ${NOMES_EXPORTADOS.join(", ")} };\n`;
 

@@ -199,3 +199,202 @@ code {
   color: var(--accent);
   font-weight: 600;
 }
+
+/* Entrega 5b — wizard: estilo funcional mínimo, não é passe de design. */
+.tela-wizard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 90px;
+  text-align: left;
+  gap: 16px;
+}
+
+.progresso-wizard {
+  display: flex;
+  gap: 4px;
+}
+
+.progresso-wizard .seg {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.progresso-wizard .seg.done,
+.progresso-wizard .seg.current {
+  background: var(--accent);
+}
+
+.conteudo-wizard h2 {
+  font-size: 28px;
+  text-align: left;
+  margin: 0 0 8px;
+}
+
+.conteudo-wizard h3 {
+  font-size: 18px;
+  margin: 20px 0 8px;
+}
+
+.conteudo-wizard .intro {
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.nav-wizard {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-h);
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-h);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.choice.selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.choice .note {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.check-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.check-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-h);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.check-pill.selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.check-pill:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.rotulo-pequeno {
+  font-size: 12px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.rotulo-grupo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-right: 4px;
+}
+
+.plano-2-1 {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.grupo-habilidoso {
+  width: 100%;
+}
+
+.regra-da-casa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.contador {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.nota-erro {
+  font-size: 13px;
+  color: #b3261e;
+}
+
+.opcao-equipamento {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.opcao-equipamento.selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.opcao-equipamento h4 {
+  margin: 0 0 4px;
+  color: var(--accent);
+}
