@@ -1,0 +1,66 @@
+[
+  {
+    "classe": "Bardo",
+    "quando": "Avança um nível",
+    "quantidade": "Uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo"
+  },
+  {
+    "classe": "Bruxo",
+    "quando": "Avança um nível",
+    "quantidade": "Uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo"
+  },
+  {
+    "classe": "Clérigo",
+    "quando": "Termina um Descanso Longo",
+    "quantidade": "Qualquer uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo"
+  },
+  {
+    "classe": "Druida",
+    "quando": "Termina um Descanso Longo",
+    "quantidade": "Qualquer uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida"
+  },
+  {
+    "classe": "Feiticeiro",
+    "quando": "Avança um nível",
+    "quantidade": "Uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro"
+  },
+  {
+    "classe": "Guardião",
+    "quando": "Termina um Descanso Longo",
+    "quantidade": "Uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao"
+  },
+  {
+    "classe": "Mago",
+    "quando": "Termina um Descanso Longo",
+    "quantidade": "Qualquer uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago"
+  },
+  {
+    "classe": "Paladino",
+    "quando": "Termina um Descanso Longo",
+    "quantidade": "Uma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino"
+  }
+]

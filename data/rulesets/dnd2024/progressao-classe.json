@@ -1,0 +1,2402 @@
+[
+  {
+    "classe": "Bárbaro",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Defesa sem Armadura, Fúria, Maestria em Arma",
+    "recursos": "Fúrias: 2 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-1"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Ataque Imprudente, Sentido de Perigo",
+    "recursos": "Fúrias: 2 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-2"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conhecimento Primordial, Subclasse Bárbaro",
+    "recursos": "Fúrias: 3 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-3"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Fúrias: 3 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-4"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ataque Extra, Movimento Rápido",
+    "recursos": "Fúrias: 3 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-5"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-6"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Bote Instintivo, Instintos Primitivos",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-7"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-8"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Golpe Brutal",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-9"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-10"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Fúria Implacável",
+    "recursos": "Fúrias: 4 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-11"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Fúrias: 5 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-12"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Golpe Brutal Fortalecido",
+    "recursos": "Fúrias: 5 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-13"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Fúrias: 5 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-14"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Fúria Persistente",
+    "recursos": "Fúrias: 5 | Bônus de Dano da Fúria: +3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-15"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Fúrias: 5 | Bônus de Dano da Fúria: +4 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-16"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Golpe Brutal Fortalecido",
+    "recursos": "Fúrias: 6 | Bônus de Dano da Fúria: +4 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-17"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Força Indomável",
+    "recursos": "Fúrias: 6 | Bônus de Dano da Fúria: +4 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-18"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Fúrias: 6 | Bônus de Dano da Fúria: +4 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-19"
+  },
+  {
+    "classe": "Bárbaro",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Campeão Primitivo",
+    "recursos": "Fúrias: 6 | Bônus de Dano da Fúria: +4 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro-nivel-20"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Inspiração de Bardo, Conjuração",
+    "recursos": "Dados de Inspiração: D6 | Truques: 2 | Magias Preparadas: 4 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-1"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Especialista, Pau pra Toda Obra",
+    "recursos": "Dados de Inspiração: D6 | Truques: 2 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-2"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Bardo",
+    "recursos": "Dados de Inspiração: D6 | Truques: 2 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-3"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Dados de Inspiração: D6 | Truques: 3 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-4"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Fonte de Inspiração",
+    "recursos": "Dados de Inspiração: D8 | Truques: 3 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-5"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Dados de Inspiração: D8 | Truques: 3 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-6"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Contra-Encantamento",
+    "recursos": "Dados de Inspiração: D8 | Truques: 3 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-7"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Dados de Inspiração: D8 | Truques: 3 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-8"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Especialização",
+    "recursos": "Dados de Inspiração: D8 | Truques: 3 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-9"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Segredos Mágicos",
+    "recursos": "Dados de Inspiração: D10 | Truques: 4 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-10"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Dados de Inspiração: D10 | Truques: 4 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-11"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Dados de Inspiração: D10 | Truques: 4 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-12"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Dados de Inspiração: D10 | Truques: 4 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-13"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Dados de Inspiração: D10 | Truques: 4 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-14"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-15"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-16"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 19 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-17"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Inspiração Superior",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 20 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-18"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 21 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-19"
+  },
+  {
+    "classe": "Bardo",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Palavras de Criação",
+    "recursos": "Dados de Inspiração: D12 | Truques: 4 | Magias Preparadas: 22 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 2 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo-nivel-20"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Invocações Místicas, Magia de Pacto",
+    "recursos": "Invocações Místicas: 1 | Truques: 2 | Magias Preparadas: 2 | Espaço de Magia (quantidade): 1 | Círculo do Espaço de Magia: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-1"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Astúcia Mágica",
+    "recursos": "Invocações Místicas: 3 | Truques: 2 | Magias Preparadas: 3 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-2"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Bruxo",
+    "recursos": "Invocações Místicas: 3 | Truques: 2 | Magias Preparadas: 4 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-3"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Invocações Místicas: 3 | Truques: 3 | Magias Preparadas: 5 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-4"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "—",
+    "recursos": "Invocações Místicas: 5 | Truques: 3 | Magias Preparadas: 6 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-5"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Invocações Místicas: 5 | Truques: 3 | Magias Preparadas: 7 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-6"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "—",
+    "recursos": "Invocações Místicas: 6 | Truques: 3 | Magias Preparadas: 8 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-7"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Invocações Místicas: 6 | Truques: 3 | Magias Preparadas: 9 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-8"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Contatar Patrono",
+    "recursos": "Invocações Místicas: 7 | Truques: 3 | Magias Preparadas: 10 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-9"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Invocações Místicas: 7 | Truques: 4 | Magias Preparadas: 10 | Espaço de Magia (quantidade): 2 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-10"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Arcana Mística (6º círculo)",
+    "recursos": "Invocações Místicas: 7 | Truques: 4 | Magias Preparadas: 11 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-11"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Invocações Místicas: 8 | Truques: 4 | Magias Preparadas: 11 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-12"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Arcana Mística (7º círculo)",
+    "recursos": "Invocações Místicas: 8 | Truques: 4 | Magias Preparadas: 12 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-13"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Invocações Místicas: 8 | Truques: 4 | Magias Preparadas: 12 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-14"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Arcana Mística (8º círculo)",
+    "recursos": "Invocações Místicas: 9 | Truques: 4 | Magias Preparadas: 13 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-15"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Invocações Místicas: 9 | Truques: 4 | Magias Preparadas: 13 | Espaço de Magia (quantidade): 3 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-16"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Arcana Mística (9º círculo)",
+    "recursos": "Invocações Místicas: 9 | Truques: 4 | Magias Preparadas: 14 | Espaço de Magia (quantidade): 4 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-17"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Invocações Místicas: 10 | Truques: 4 | Magias Preparadas: 14 | Espaço de Magia (quantidade): 4 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-18"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Invocações Místicas: 10 | Truques: 4 | Magias Preparadas: 15 | Espaço de Magia (quantidade): 4 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-19"
+  },
+  {
+    "classe": "Bruxo",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Mestre Místico",
+    "recursos": "Invocações Místicas: 10 | Truques: 4 | Magias Preparadas: 15 | Espaço de Magia (quantidade): 4 | Círculo do Espaço de Magia: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo-nivel-20"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conjuração, Ordem Divina",
+    "recursos": "Bônus de Canalizar Divindade: — | Truques: 3 | Magias Preparadas: 4 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-1"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Canalizar Divindade",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Truques: 3 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-2"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse Clérigo",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Truques: 3 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-3"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Truques: 4 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-4"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Fulminar Mortos-Vivos",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Truques: 4 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-5"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 4 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-6"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Golpes Abençoados",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 4 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-7"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 4 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-8"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 4 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-9"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Intervenção Divina",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-10"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-11"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-12"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-13"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Golpes Abençoados Aprimorado",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-14"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-15"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-16"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Truques: 5 | Magias Preparadas: 19 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-17"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 4 | Truques: 5 | Magias Preparadas: 20 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-18"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Canalizar Divindade: 4 | Truques: 5 | Magias Preparadas: 21 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-19"
+  },
+  {
+    "classe": "Clérigo",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Intervenção Divina Maior",
+    "recursos": "Bônus de Canalizar Divindade: 4 | Truques: 5 | Magias Preparadas: 22 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 2 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo-nivel-20"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conjuração, Idioma Druídico, Ordem Primal",
+    "recursos": "Bônus de Forma Selvagem: — | Truques: 2 | Magias Preparadas: 4 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-1"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Companheiro Selvagem, Forma Selvagem",
+    "recursos": "Bônus de Forma Selvagem: 2 | Truques: 2 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-2"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Druida",
+    "recursos": "Bônus de Forma Selvagem: 2 | Truques: 2 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-3"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Forma Selvagem: 2 | Truques: 3 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-4"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ressurgimento Selvagem",
+    "recursos": "Bônus de Forma Selvagem: 2 | Truques: 3 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-5"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 3 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-6"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Fúria Elemental",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 3 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-7"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 3 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-8"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 3 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-9"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-10"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-11"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-12"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-13"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-14"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Fúria Elemental Aprimorada",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-15"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Forma Selvagem: 3 | Truques: 4 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-16"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Forma Selvagem: 4 | Truques: 4 | Magias Preparadas: 19 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-17"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Magias Bestiais",
+    "recursos": "Bônus de Forma Selvagem: 4 | Truques: 4 | Magias Preparadas: 20 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-18"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Forma Selvagem: 4 | Truques: 4 | Magias Preparadas: 21 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-19"
+  },
+  {
+    "classe": "Druida",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Arquidruida",
+    "recursos": "Bônus de Forma Selvagem: 4 | Truques: 4 | Magias Preparadas: 22 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 2 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida-nivel-20"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conjuração, Feitiçaria Inata",
+    "recursos": "Pontos de Feitiçaria: — | Truques: 4 | Magias Preparadas: 2 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-1"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Fonte de Magia, Metamagia, Opções de Metamagia",
+    "recursos": "Pontos de Feitiçaria: 2 | Truques: 4 | Magias Preparadas: 4 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-2"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Feiticeiro",
+    "recursos": "Pontos de Feitiçaria: 3 | Truques: 4 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-3"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Pontos de Feitiçaria: 4 | Truques: 5 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-4"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Restauração Feiticeira",
+    "recursos": "Pontos de Feitiçaria: 5 | Truques: 5 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-5"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Pontos de Feitiçaria: 6 | Truques: 5 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-6"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Feitiçaria",
+    "recursos": "Pontos de Feitiçaria: Encarnada | Truques: 7 | Magias Preparadas: 5 | Espaços 1º: 11 | Espaços 2º: 4 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-7"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Pontos de Feitiçaria: 8 | Truques: 5 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-8"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Pontos de Feitiçaria: 9 | Truques: 5 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-9"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Metamagia",
+    "recursos": "Pontos de Feitiçaria: 10 | Truques: 6 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-10"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Pontos de Feitiçaria: 11 | Truques: 6 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-11"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Pontos de Feitiçaria: 12 | Truques: 6 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-12"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Pontos de Feitiçaria: 13 | Truques: 6 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-13"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Pontos de Feitiçaria: 14 | Truques: 6 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-14"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Pontos de Feitiçaria: 15 | Truques: 6 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-15"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Pontos de Feitiçaria: 16 | Truques: 6 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-16"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Metamagia",
+    "recursos": "Pontos de Feitiçaria: 17 | Truques: 6 | Magias Preparadas: 19 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-17"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Pontos de Feitiçaria: 18 | Truques: 6 | Magias Preparadas: 20 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-18"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Pontos de Feitiçaria: 19 | Truques: 6 | Magias Preparadas: 21 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-19"
+  },
+  {
+    "classe": "Feiticeiro",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Apoteose Arcana",
+    "recursos": "Pontos de Feitiçaria: 20 | Truques: 6 | Magias Preparadas: 22 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 2 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro-nivel-20"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conjuração, Inimigo Favorito, Maestria em Arma",
+    "recursos": "Bônus de Inimigo Favorito: 2 | Magias Preparadas: 2 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-1"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Estilo de Luta, Explorador Hábil",
+    "recursos": "Bônus de Inimigo Favorito: 2 | Magias Preparadas: 3 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-2"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Guardião",
+    "recursos": "Bônus de Inimigo Favorito: 2 | Magias Preparadas: 4 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-3"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Inimigo Favorito: 2 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-4"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ataque Extra",
+    "recursos": "Bônus de Inimigo Favorito: 3 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-5"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Errante",
+    "recursos": "Bônus de Inimigo Favorito: 3 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-6"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Inimigo Favorito: 3 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-7"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Inimigo Favorito: 3 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-8"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Especialista",
+    "recursos": "Bônus de Inimigo Favorito: 4 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-9"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Incansável",
+    "recursos": "Bônus de Inimigo Favorito: 4 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-10"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Inimigo Favorito: 4 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-11"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Inimigo Favorito: 4 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-12"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Predador Implacável",
+    "recursos": "Bônus de Inimigo Favorito: 5 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-13"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Véu da Natureza",
+    "recursos": "Bônus de Inimigo Favorito: 5 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-14"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Inimigo Favorito: 5 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-15"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Inimigo Favorito: 5 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-16"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Caçador Preciso",
+    "recursos": "Bônus de Inimigo Favorito: 6 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-17"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Sentidos Selvagens",
+    "recursos": "Bônus de Inimigo Favorito: 6 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-18"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Inimigo Favorito: 6 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-19"
+  },
+  {
+    "classe": "Guardião",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Matador de Inimigos Favoritos",
+    "recursos": "Bônus de Inimigo Favorito: 6 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao-nivel-20"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Estilo de Luta, Maestria em Arma, Recuperar Fôlego",
+    "recursos": "Bônus de Recuperar Fôlego: 2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-1"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Mente Tática, Surto de Ação",
+    "recursos": "Bônus de Recuperar Fôlego: 2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-2"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Guerreiro",
+    "recursos": "Bônus de Recuperar Fôlego: 2 | Maestria em Arma: 3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-3"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-4"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ajuste Tático, Ataque Extra",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-5"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-6"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-7"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-8"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Indomável, Mestre Tático",
+    "recursos": "Bônus de Recuperar Fôlego: 3 | Maestria em Arma: 4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-9"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-10"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Dois Ataques Extras",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-11"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-12"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Ataques Estudados, Indomável",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-13"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-14"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-15"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-16"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Indomável, Surto de Ação",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-17"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-18"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-19"
+  },
+  {
+    "classe": "Guerreiro",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Três Ataques Extras",
+    "recursos": "Bônus de Recuperar Fôlego: 4 | Maestria em Arma: 6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro-nivel-20"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Ataque Furtivo, Especialização, Gíria dos Ladrões, Maestria em Arma",
+    "recursos": "Bônus de Ataque Furtivo: 1d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-1"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Ação Ardilosa",
+    "recursos": "Bônus de Ataque Furtivo: 1d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-2"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Mira Firme, Subclasse Ladino",
+    "recursos": "Bônus de Ataque Furtivo: 2d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-3"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Ataque Furtivo: 2d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-4"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Esquiva Sobrenatural, Golpe Astuto",
+    "recursos": "Bônus de Ataque Furtivo: 3d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-5"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Especialista",
+    "recursos": "Bônus de Ataque Furtivo: 3d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-6"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Evasão, Talento Confiável",
+    "recursos": "Bônus de Ataque Furtivo: 4d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-7"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Ataque Furtivo: 4d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-8"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Ataque Furtivo: 5d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-9"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Ataque Furtivo: 5d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-10"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Golpe Astuto Aprimorado",
+    "recursos": "Bônus de Ataque Furtivo: 6d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-11"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Ataque Furtivo: 6d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-12"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Ataque Furtivo: 7d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-13"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Golpes Sujos",
+    "recursos": "Bônus de Ataque Furtivo: 7d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-14"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Mente Escorregadia",
+    "recursos": "Bônus de Ataque Furtivo: 8d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-15"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Ataque Furtivo: 8d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-16"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Ataque Furtivo: 9d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-17"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Elusivo",
+    "recursos": "Bônus de Ataque Furtivo: 9d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-18"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Ataque Furtivo: 10d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-19"
+  },
+  {
+    "classe": "Ladino",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Golpe de Sorte",
+    "recursos": "Bônus de Ataque Furtivo: 10d6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino-nivel-20"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Adepto de Ritual, Conjuração, Recuperação Arcana",
+    "recursos": "Truques: 3 | Magias Preparadas: 4 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-1"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Acadêmico",
+    "recursos": "Truques: 3 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-2"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Subclasse de Mago",
+    "recursos": "Truques: 3 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-3"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Truques: 4 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-4"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Memorizar Magia",
+    "recursos": "Truques: 4 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-5"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Truques: 4 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-6"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "—",
+    "recursos": "Truques: 4 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-7"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Truques: 4 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: — | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-8"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Truques: 4 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-9"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Truques: 5 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: — | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-10"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "—",
+    "recursos": "Truques: 5 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-11"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Truques: 5 | Magias Preparadas: 16 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: — | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-12"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Truques: 5 | Magias Preparadas: 17 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-13"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Truques: 5 | Magias Preparadas: 18 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: — | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-14"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Truques: 5 | Magias Preparadas: 19 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-15"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Truques: 5 | Magias Preparadas: 21 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-16"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Truques: 5 | Magias Preparadas: 22 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-17"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Maestria de Magias",
+    "recursos": "Truques: 5 | Magias Preparadas: 23 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 1 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-18"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Truques: 5 | Magias Preparadas: 24 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 1 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-19"
+  },
+  {
+    "classe": "Mago",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Assinatura Mágica",
+    "recursos": "Truques: 5 | Magias Preparadas: 25 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 3 | Espaços 6º: 2 | Espaços 7º: 2 | Espaços 8º: 1 | Espaços 9º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago-nivel-20"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Artes Marciais, Defesa sem Armadura",
+    "recursos": "Bônus de Artes Marciais: 1d6 | Pontos de Foco: — | Movimento sem Armadura: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-1"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Foco do Monge, Movimento sem Armadura, Metabolismo Incomum",
+    "recursos": "Bônus de Artes Marciais: 1d6 | Pontos de Foco: 2 | Movimento sem Armadura: +3 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-2"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Defletir Ataques, Subclasse de Monge",
+    "recursos": "Bônus de Artes Marciais: 1d6 | Pontos de Foco: 3 | Movimento sem Armadura: +3 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-3"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo, Queda Lenta",
+    "recursos": "Bônus de Artes Marciais: 1d6 | Pontos de Foco: 4 | Movimento sem Armadura: +3 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-4"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ataque Extra, Golpe Atordoante",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 5 | Movimento sem Armadura: +3 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-5"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ataques Potencializados, Característica de Subclasse",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 6 | Movimento sem Armadura: +4,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-6"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Evasão",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 7 | Movimento sem Armadura: +4,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-7"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 8 | Movimento sem Armadura: +4,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-8"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Movimento Acrobático",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 9 | Movimento sem Armadura: +4,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-9"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Autocura, Foco Aprimorado",
+    "recursos": "Bônus de Artes Marciais: 1d8 | Pontos de Foco: 10 | Movimento sem Armadura: +6 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-10"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Característica de subclasse",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 11 | Movimento sem Armadura: +6 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-11"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 12 | Movimento sem Armadura: +6 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-12"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Defletir Energia",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 13 | Movimento sem Armadura: +6 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-13"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Sobrevivente Disciplinado",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 14 | Movimento sem Armadura: +7,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-14"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Foco Perfeito",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 15 | Movimento sem Armadura: +7,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-15"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Artes Marciais: 1d10 | Pontos de Foco: 16 | Movimento sem Armadura: +7,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-16"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Artes Marciais: 1d12 | Pontos de Foco: 17 | Movimento sem Armadura: +7,5 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-17"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Defesa Superior",
+    "recursos": "Bônus de Artes Marciais: 1d12 | Pontos de Foco: 18 | Movimento sem Armadura: +9 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-18"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Artes Marciais: 1d12 | Pontos de Foco: 19 | Movimento sem Armadura: +9 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-19"
+  },
+  {
+    "classe": "Monge",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Corpo e Mente",
+    "recursos": "Bônus de Artes Marciais: 1d12 | Pontos de Foco: 20 | Movimento sem Armadura: +9 m",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge-nivel-20"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 1,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Conjuração, Maestria em Arma, Mãos Consagradas",
+    "recursos": "Bônus de Canalizar Divindade: — | Magias Preparadas: 2 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-1"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 2,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Destruição do Paladino, Estilo de Luta",
+    "recursos": "Bônus de Canalizar Divindade: — | Magias Preparadas: 3 | Espaços 1º: 2 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-2"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 3,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Canalizar Divindade, Subclasse de Paladino",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 4 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-3"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 4,
+    "bonusProficiencia": "+2",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 5 | Espaços 1º: 3 | Espaços 2º: — | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-4"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 5,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Ataque Extra, Montaria Fiel",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-5"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 6,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aura de Proteção",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 6 | Espaços 1º: 4 | Espaços 2º: 2 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-6"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 7,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-7"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 8,
+    "bonusProficiencia": "+3",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 7 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: — | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-8"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 9,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Repudiar Inimigos",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-9"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 10,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aura de Coragem",
+    "recursos": "Bônus de Canalizar Divindade: 2 | Magias Preparadas: 9 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 2 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-10"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 11,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Golpes Radiantes",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-11"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 12,
+    "bonusProficiencia": "+4",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 10 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: — | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-12"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 13,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-13"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 14,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Toque Restaurador",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 11 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 1 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-14"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 15,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-15"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 16,
+    "bonusProficiencia": "+5",
+    "caracteristicas": "Aumento no Valor de Atributo",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 12 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 2 | Espaços 5º: —",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-16"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 17,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "—",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-17"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 18,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Aura Expandida",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 14 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 1",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-18"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 19,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Dádiva Épica",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-19"
+  },
+  {
+    "classe": "Paladino",
+    "nivel": 20,
+    "bonusProficiencia": "+6",
+    "caracteristicas": "Característica de Subclasse",
+    "recursos": "Bônus de Canalizar Divindade: 3 | Magias Preparadas: 15 | Espaços 1º: 4 | Espaços 2º: 3 | Espaços 3º: 3 | Espaços 4º: 3 | Espaços 5º: 2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino-nivel-20"
+  }
+]

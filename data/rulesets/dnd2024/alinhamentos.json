@@ -1,0 +1,83 @@
+[
+  {
+    "nome": "Ordeiro e Bom",
+    "nomeEn": "Lawful Good",
+    "sigla": "OB",
+    "descricao": "Esforça-se para fazer a coisa certa conforme esperado pela sociedade; luta contra a injustiça e protege inocentes.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ob"
+  },
+  {
+    "nome": "Neutro e Bom",
+    "nomeEn": "Neutral Good",
+    "sigla": "NB",
+    "descricao": "Faz o melhor que pode, trabalhando dentro das regras mas sem se sentir obrigado por elas.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nb"
+  },
+  {
+    "nome": "Caótico e Bom",
+    "nomeEn": "Chaotic Good",
+    "sigla": "CB",
+    "descricao": "Age conforme a própria consciência, sem se importar com o que os outros esperam.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "cb"
+  },
+  {
+    "nome": "Ordeiro e Neutro",
+    "nomeEn": "Lawful Neutral",
+    "sigla": "ON",
+    "descricao": "Age de acordo com lei, tradição ou código pessoal; segue uma vida disciplinada.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "on"
+  },
+  {
+    "nome": "Neutro",
+    "nomeEn": "Neutral",
+    "sigla": "N",
+    "descricao": "Prefere evitar questões morais, não toma partido, faz o que parece melhor no momento.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "n"
+  },
+  {
+    "nome": "Caótico e Neutro",
+    "nomeEn": "Chaotic Neutral",
+    "sigla": "CN",
+    "descricao": "Segue seus impulsos, valorizando a liberdade pessoal acima de tudo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "cn"
+  },
+  {
+    "nome": "Ordeiro e Mau",
+    "nomeEn": "Lawful Evil",
+    "sigla": "OM",
+    "descricao": "Toma metodicamente o que quer dentro dos limites de um código de tradição, lealdade ou ordem.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "om"
+  },
+  {
+    "nome": "Neutro e Mau",
+    "nomeEn": "Neutral Evil",
+    "sigla": "NM",
+    "descricao": "Não se preocupa com o mal que causa enquanto persegue seus desejos.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nm"
+  },
+  {
+    "nome": "Caótico e Mau",
+    "nomeEn": "Chaotic Evil",
+    "sigla": "CM",
+    "descricao": "Age com violência arbitrária, impulsionado por ódio ou sede de sangue.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "cm"
+  }
+]

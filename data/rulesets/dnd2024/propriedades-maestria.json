@@ -1,0 +1,66 @@
+[
+  {
+    "nome": "Afligir",
+    "nomeEn": "Vex",
+    "efeito": "Se você atingir uma criatura com esta arma e causar dano a ela, você tem Vantagem em sua próxima jogada de ataque contra essa criatura antes do final do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "afligir"
+  },
+  {
+    "nome": "Derrubar",
+    "nomeEn": "Topple",
+    "efeito": "Se você atingir uma criatura com esta arma, você pode forçar a criatura a realizar uma salvaguarda de Constituição (CD 8 mais o modificador de atributo usado para realizar a jogada de ataque e seu Bônus de Proficiência). Se falhar, a criatura tem a condição Caído.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "derrubar"
+  },
+  {
+    "nome": "Drenar",
+    "nomeEn": "Sap",
+    "efeito": "Se você atingir uma criatura com esta arma, essa criatura tem Desvantagem na próxima jogada de ataque dela antes do início do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "drenar"
+  },
+  {
+    "nome": "Empurrar",
+    "nomeEn": "Push",
+    "efeito": "Se atingir uma criatura com esta arma, você pode empurrá-la até 3 metros para longe de você se a criatura for Grande ou menor.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "empurrar"
+  },
+  {
+    "nome": "Garantido",
+    "nomeEn": "Graze",
+    "efeito": "Se sua jogada de ataque com esta arma errar uma criatura, você pode causar dano a essa criatura igual ao modificador de atributo que utilizou para realizar a jogada de ataque. Este dano é do mesmo tipo causado pela arma, e só pode ser aumentado se o modificador de atributo for incrementado.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "garantido"
+  },
+  {
+    "nome": "Lentidão",
+    "nomeEn": "Slow",
+    "efeito": "Se você atingir uma criatura com esta arma e causar dano a ela, você pode reduzir o Deslocamento da criatura atingida em 3 metros até o início do seu próximo turno. Se a criatura for atingida mais de uma vez por armas que tenham essa propriedade, a redução de Deslocamento não excede 3 metros.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "lentidao"
+  },
+  {
+    "nome": "Trespassar",
+    "nomeEn": "Cleave",
+    "efeito": "Se atingir uma criatura com uma jogada de ataque corpo a corpo usando esta arma, você pode realizar uma jogada de ataque corpo a corpo com a mesma arma contra uma segunda criatura a até 1,5 metro da primeira que também esteja ao seu alcance. Se acertar, a segunda criatura sofre o dano da arma, mas você não adiciona seu modificador de atributo a esse dano, a menos que esse modificador seja negativo. Você pode realizar esse ataque adicional apenas uma vez por turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "trespassar"
+  },
+  {
+    "nome": "Ágil",
+    "nomeEn": "Nick",
+    "efeito": "Ao realizar o ataque adicional da propriedade Leve, você pode fazê-lo como parte da ação Atacar, em vez de uma Ação Bônus. Esse ataque adicional só pode ser realizado uma vez por turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "agil"
+  }
+]

@@ -1,0 +1,173 @@
+[
+  {
+    "nome": "Comum",
+    "nomeEn": "Common",
+    "tipo": "Comum",
+    "falantes": "Sigil (origem); falado por praticamente todos os povos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "comum"
+  },
+  {
+    "nome": "Língua de Sinais Comum",
+    "nomeEn": "Common Sign Language",
+    "tipo": "Comum",
+    "falantes": "Sigil",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "lingua-de-sinais-comum"
+  },
+  {
+    "nome": "Dracônico",
+    "nomeEn": "Draconic",
+    "tipo": "Comum",
+    "falantes": "Dragões",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "draconico"
+  },
+  {
+    "nome": "Anão",
+    "nomeEn": "Dwarvish",
+    "tipo": "Comum",
+    "falantes": "Anões",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "anao"
+  },
+  {
+    "nome": "Élfico",
+    "nomeEn": "Elvish",
+    "tipo": "Comum",
+    "falantes": "Elfos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "elfico"
+  },
+  {
+    "nome": "Gigante",
+    "nomeEn": "Giant",
+    "tipo": "Comum",
+    "falantes": "Gigantes",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "gigante"
+  },
+  {
+    "nome": "Gnômico",
+    "nomeEn": "Gnomish",
+    "tipo": "Comum",
+    "falantes": "Gnomos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "gnomico"
+  },
+  {
+    "nome": "Goblin",
+    "nomeEn": "Goblin",
+    "tipo": "Comum",
+    "falantes": "Goblinoides",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "goblin"
+  },
+  {
+    "nome": "Pequenino",
+    "nomeEn": "Halfling",
+    "tipo": "Comum",
+    "falantes": "Pequeninos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "pequenino"
+  },
+  {
+    "nome": "Orc",
+    "nomeEn": "Orc",
+    "tipo": "Comum",
+    "falantes": "Orcs",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "orc"
+  },
+  {
+    "nome": "Abissal",
+    "nomeEn": "Abyssal",
+    "tipo": "Raro",
+    "falantes": "Demônios do Abismo",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "abissal"
+  },
+  {
+    "nome": "Celestial",
+    "nomeEn": "Celestial",
+    "tipo": "Raro",
+    "falantes": "Celestiais",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "celestial"
+  },
+  {
+    "nome": "Dialeto Obscuro",
+    "nomeEn": "Deep Speech",
+    "tipo": "Raro",
+    "falantes": "Aberrações",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "dialeto-obscuro"
+  },
+  {
+    "nome": "Druídico",
+    "nomeEn": "Druidic",
+    "tipo": "Raro",
+    "falantes": "Círculos druídicos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druidico"
+  },
+  {
+    "nome": "Gíria dos Ladrões",
+    "nomeEn": "Thieves' Cant",
+    "tipo": "Raro",
+    "falantes": "Várias guildas criminosas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "giria-dos-ladroes"
+  },
+  {
+    "nome": "Infernal",
+    "nomeEn": "Infernal",
+    "tipo": "Raro",
+    "falantes": "Diabos dos Nove Infernos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "infernal"
+  },
+  {
+    "nome": "Primordial (Aquan/Auran/Ignan/Terran)",
+    "nomeEn": "Primordial",
+    "tipo": "Raro",
+    "falantes": "Elementais",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "primordial-aquan-auran-ignan-terran"
+  },
+  {
+    "nome": "Silvestre",
+    "nomeEn": "Sylvan",
+    "tipo": "Raro",
+    "falantes": "A Faéria",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "silvestre"
+  },
+  {
+    "nome": "Subcomum",
+    "nomeEn": "Undercommon",
+    "tipo": "Raro",
+    "falantes": "A Umbraeterna",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "subcomum"
+  }
+]

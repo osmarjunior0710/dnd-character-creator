@@ -1,0 +1,110 @@
+[
+  {
+    "titulo": "Classes de Dificuldade Padrão",
+    "colunas": [
+      "Dificuldade da Tarefa",
+      "CD",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Dificuldade da Tarefa": "Muito fácil",
+        "CD": 5,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Dificuldade da Tarefa": "Fácil",
+        "CD": 10,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Dificuldade da Tarefa": "Média",
+        "CD": 15,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Dificuldade da Tarefa": "Difícil",
+        "CD": 20,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Dificuldade da Tarefa": "Muito difícil",
+        "CD": 25,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Dificuldade da Tarefa": "Quase impossível",
+        "CD": 30,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  },
+  {
+    "titulo": "Ritmo de Viagem",
+    "colunas": [
+      "Ritmo",
+      "Distância por Minuto",
+      "Distância por Hora",
+      "Distância por Dia",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Ritmo": "Rápido",
+        "Distância por Minuto": "120 metros",
+        "Distância por Hora": "6 km",
+        "Distância por Dia": "45 km",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Ritmo": "Normal",
+        "Distância por Minuto": "90 metros",
+        "Distância por Hora": "4,5 km",
+        "Distância por Dia": "36 km",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Ritmo": "Lento",
+        "Distância por Minuto": "60 metros",
+        "Distância por Hora": "3 km",
+        "Distância por Dia": "27 km",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  },
+  {
+    "titulo": "Equipamento Inicial em Níveis Mais Altos",
+    "colunas": [
+      "Nível Inicial",
+      "Equipamento e Dinheiro",
+      "Itens Mágicos",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Nível Inicial": "2–4",
+        "Equipamento e Dinheiro": "Equipamento Inicial Normal",
+        "Itens Mágicos": "1 Comum",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Inicial": "5–10",
+        "Equipamento e Dinheiro": "500 PO mais 1d10 × 25 PO mais equipamento inicial normal",
+        "Itens Mágicos": "1 Comum, 1 Incomum",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Inicial": "11–16",
+        "Equipamento e Dinheiro": "5.000 PO mais 1d10 × 250 PO mais equipamento inicial normal",
+        "Itens Mágicos": "2 Comum, 3 Incomum, 1 Raro",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Inicial": "17–20",
+        "Equipamento e Dinheiro": "20.000 PO mais 1d10 × 250 PO mais equipamento inicial normal",
+        "Itens Mágicos": "2 Comum, 4 Incomum, 3 Raro, 1 Muito Raro",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  }
+]

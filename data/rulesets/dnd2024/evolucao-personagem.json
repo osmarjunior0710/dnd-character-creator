@@ -1,0 +1,162 @@
+[
+  {
+    "nivel": 1,
+    "xp": 0,
+    "bonusProficiencia": "+2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-1"
+  },
+  {
+    "nivel": 2,
+    "xp": 300,
+    "bonusProficiencia": "+2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-2"
+  },
+  {
+    "nivel": 3,
+    "xp": 900,
+    "bonusProficiencia": "+2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-3"
+  },
+  {
+    "nivel": 4,
+    "xp": 2700,
+    "bonusProficiencia": "+2",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-4"
+  },
+  {
+    "nivel": 5,
+    "xp": 6500,
+    "bonusProficiencia": "+3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-5"
+  },
+  {
+    "nivel": 6,
+    "xp": 14000,
+    "bonusProficiencia": "+3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-6"
+  },
+  {
+    "nivel": 7,
+    "xp": 23000,
+    "bonusProficiencia": "+3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-7"
+  },
+  {
+    "nivel": 8,
+    "xp": 34000,
+    "bonusProficiencia": "+3",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-8"
+  },
+  {
+    "nivel": 9,
+    "xp": 48000,
+    "bonusProficiencia": "+4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-9"
+  },
+  {
+    "nivel": 10,
+    "xp": 64000,
+    "bonusProficiencia": "+4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-10"
+  },
+  {
+    "nivel": 11,
+    "xp": 85000,
+    "bonusProficiencia": "+4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-11"
+  },
+  {
+    "nivel": 12,
+    "xp": 100000,
+    "bonusProficiencia": "+4",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-12"
+  },
+  {
+    "nivel": 13,
+    "xp": 120000,
+    "bonusProficiencia": "+5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-13"
+  },
+  {
+    "nivel": 14,
+    "xp": 140000,
+    "bonusProficiencia": "+5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-14"
+  },
+  {
+    "nivel": 15,
+    "xp": 165000,
+    "bonusProficiencia": "+5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-15"
+  },
+  {
+    "nivel": 16,
+    "xp": 195000,
+    "bonusProficiencia": "+5",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-16"
+  },
+  {
+    "nivel": 17,
+    "xp": 225000,
+    "bonusProficiencia": "+6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-17"
+  },
+  {
+    "nivel": 18,
+    "xp": 265000,
+    "bonusProficiencia": "+6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-18"
+  },
+  {
+    "nivel": 19,
+    "xp": 305000,
+    "bonusProficiencia": "+6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-19"
+  },
+  {
+    "nivel": 20,
+    "xp": 355000,
+    "bonusProficiencia": "+6",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "nivel-20"
+  }
+]

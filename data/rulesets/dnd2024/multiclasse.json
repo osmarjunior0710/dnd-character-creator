@@ -1,0 +1,420 @@
+[
+  {
+    "titulo": "Pré-requisitos (atributo mínimo necessário na classe nova e nas atuais)",
+    "colunas": [
+      "Classe",
+      "Pré-requisito",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Classe": "Bárbaro",
+        "Pré-requisito": "13 em Força",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Bardo",
+        "Pré-requisito": "13 em Carisma",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Bruxo",
+        "Pré-requisito": "13 em Carisma",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Clérigo",
+        "Pré-requisito": "13 em Sabedoria",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Druida",
+        "Pré-requisito": "13 em Sabedoria",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Feiticeiro",
+        "Pré-requisito": "13 em Carisma",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Guardião",
+        "Pré-requisito": "13 em Destreza e Sabedoria",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Guerreiro",
+        "Pré-requisito": "13 em Força ou Destreza",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Ladino",
+        "Pré-requisito": "13 em Destreza",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Mago",
+        "Pré-requisito": "13 em Inteligência",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Monge",
+        "Pré-requisito": "13 em Destreza e Sabedoria",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Paladino",
+        "Pré-requisito": "13 em Força e Carisma",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  },
+  {
+    "titulo": "Proficiências Obtidas ao Multiclassar (1º nível na classe nova)",
+    "colunas": [
+      "Classe",
+      "Proficiências Obtidas",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Classe": "Bárbaro",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência com armas Marciais e treinamento com Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Bardo",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência em uma perícia à sua escolha, proficiência com um Instrumento Musical à sua escolha e treinamento com armadura Leve.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Bruxo",
+        "Proficiências Obtidas": "Dado de Ponto de Vida e treinamento com armadura Leve.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Clérigo",
+        "Proficiências Obtidas": "Dado de Ponto de Vida e treinamento com armadura Leve, Média e Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Druida",
+        "Proficiências Obtidas": "Dado de Ponto de Vida e treinamento com armadura Leve e Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Feiticeiro",
+        "Proficiências Obtidas": "Apenas o Dado de Ponto de Vida.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Guardião",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência com armas Marciais, proficiência em uma perícia à sua escolha da lista de perícias de Guardião e treinamento com armaduras Leves, Médias e Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Guerreiro",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência com armas Marciais e treinamento com armaduras Leves e Médias e Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Ladino",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência em uma perícia à sua escolha da lista de perícias do Ladino, proficiência com Ferramentas de Ladrão e treinamento com armadura Leve.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Mago",
+        "Proficiências Obtidas": "Apenas o Dado de Ponto de Vida.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Monge",
+        "Proficiências Obtidas": "Apenas o Dado de Ponto de Vida.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Classe": "Paladino",
+        "Proficiências Obtidas": "Dado de Ponto de Vida, proficiência com armas Marciais e treinamento com armaduras Leves, Médias e Escudos.",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  },
+  {
+    "titulo": "Conjurador Multiclasse: Espaços de Magia por Círculo de Magia",
+    "colunas": [
+      "Nível Combinado",
+      "1º",
+      "2º",
+      "3º",
+      "4º",
+      "5º",
+      "6º",
+      "7º",
+      "8º",
+      "9º",
+      "Fonte"
+    ],
+    "linhas": [
+      {
+        "Nível Combinado": 1,
+        "1º": 2,
+        "2º": "—",
+        "3º": "—",
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 2,
+        "1º": 3,
+        "2º": "—",
+        "3º": "—",
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 3,
+        "1º": 4,
+        "2º": 2,
+        "3º": "—",
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 4,
+        "1º": 4,
+        "2º": 3,
+        "3º": "—",
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 5,
+        "1º": 4,
+        "2º": 3,
+        "3º": 2,
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 6,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": "—",
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 7,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 1,
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 8,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 2,
+        "5º": "—",
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 9,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 1,
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 10,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": "—",
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 11,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 12,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": "—",
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 13,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": 1,
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 14,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": 1,
+        "8º": "—",
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 15,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": 1,
+        "8º": 1,
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 16,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": 1,
+        "8º": 1,
+        "9º": "—",
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 17,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 2,
+        "6º": 1,
+        "7º": 1,
+        "8º": 1,
+        "9º": 1,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 18,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 3,
+        "6º": 1,
+        "7º": 1,
+        "8º": 1,
+        "9º": 1,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 19,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 3,
+        "6º": 2,
+        "7º": 1,
+        "8º": 1,
+        "9º": 1,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      },
+      {
+        "Nível Combinado": 20,
+        "1º": 4,
+        "2º": 3,
+        "3º": 3,
+        "4º": 3,
+        "5º": 3,
+        "6º": 2,
+        "7º": 2,
+        "8º": 1,
+        "9º": 1,
+        "Fonte": "Livro do Jogador (D&D 5e 2024)"
+      }
+    ]
+  }
+]

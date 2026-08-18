@@ -1,0 +1,173 @@
+[
+  {
+    "nome": "Camelo",
+    "capacidadeCarga": "225 kg",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "camelo"
+  },
+  {
+    "nome": "Cavalo de Carga",
+    "capacidadeCarga": "270 kg",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "cavalo-de-carga"
+  },
+  {
+    "nome": "Cavalo de Guerra",
+    "capacidadeCarga": "270 kg",
+    "custo": "400 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "cavalo-de-guerra"
+  },
+  {
+    "nome": "Cavalo de Montaria",
+    "capacidadeCarga": "240 kg",
+    "custo": "75 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "cavalo-de-montaria"
+  },
+  {
+    "nome": "Elefante",
+    "capacidadeCarga": "660 kg",
+    "custo": "200 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "elefante"
+  },
+  {
+    "nome": "Mastim",
+    "capacidadeCarga": "93 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "mastim"
+  },
+  {
+    "nome": "Mula",
+    "capacidadeCarga": "210 kg",
+    "custo": "8 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "mula"
+  },
+  {
+    "nome": "Pônei",
+    "capacidadeCarga": "112 kg",
+    "custo": "30 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Montarias",
+    "origem": "não-SRD",
+    "id": "ponei"
+  },
+  {
+    "nome": "Alimentação por dia",
+    "capacidadeCarga": "5 kg",
+    "custo": "5 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "alimentacao-por-dia"
+  },
+  {
+    "nome": "Biga",
+    "capacidadeCarga": "50 kg",
+    "custo": "250 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "biga"
+  },
+  {
+    "nome": "Carroça",
+    "capacidadeCarga": "100 kg",
+    "custo": "15 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "carroca"
+  },
+  {
+    "nome": "Carruagem",
+    "capacidadeCarga": "300 kg",
+    "custo": "100 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "carruagem"
+  },
+  {
+    "nome": "Estábulo por dia",
+    "capacidadeCarga": "—",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "estabulo-por-dia"
+  },
+  {
+    "nome": "Sela",
+    "capacidadeCarga": "—",
+    "custo": "—",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "sela"
+  },
+  {
+    "nome": "Exótica",
+    "capacidadeCarga": "20 kg",
+    "custo": "60 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "exotica"
+  },
+  {
+    "nome": "Militar",
+    "capacidadeCarga": "15 kg",
+    "custo": "20 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "militar"
+  },
+  {
+    "nome": "Viagem",
+    "capacidadeCarga": "12,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "viagem"
+  },
+  {
+    "nome": "Trenó",
+    "capacidadeCarga": "150 kg",
+    "custo": "20 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "treno"
+  },
+  {
+    "nome": "Vagão",
+    "capacidadeCarga": "200 kg",
+    "custo": "35 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento de Montaria e Veículos Terrestres",
+    "origem": "não-SRD",
+    "id": "vagao"
+  }
+]

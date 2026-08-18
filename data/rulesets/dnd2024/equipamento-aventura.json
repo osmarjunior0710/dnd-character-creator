@@ -1,0 +1,884 @@
+[
+  {
+    "nome": "Ácido",
+    "peso": "0,5 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "acido"
+  },
+  {
+    "nome": "Água Benta",
+    "peso": "0,5 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "agua-benta"
+  },
+  {
+    "nome": "Algibeira",
+    "peso": "0,5 kg",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "algibeira"
+  },
+  {
+    "nome": "Aljava",
+    "peso": "0,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "aljava"
+  },
+  {
+    "nome": "Antitoxina",
+    "peso": "—",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "antitoxina"
+  },
+  {
+    "nome": "Apito Sinalizador",
+    "peso": "—",
+    "custo": "5 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "apito-sinalizador"
+  },
+  {
+    "nome": "Aríete Portável",
+    "peso": "16,5 kg",
+    "custo": "4 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "ariete-portavel"
+  },
+  {
+    "nome": "Armadilha de Caça",
+    "peso": "12,5 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "armadilha-de-caca"
+  },
+  {
+    "nome": "Arpéu",
+    "peso": "2 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "arpeu"
+  },
+  {
+    "nome": "Balde",
+    "peso": "1 kg",
+    "custo": "5 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "balde"
+  },
+  {
+    "nome": "Baliza",
+    "peso": "3,5 kg",
+    "custo": "5 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "baliza"
+  },
+  {
+    "nome": "Barril",
+    "peso": "35 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "barril"
+  },
+  {
+    "nome": "Baú",
+    "peso": "12,5 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "bau"
+  },
+  {
+    "nome": "Bolsa de Componentes",
+    "peso": "1 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "bolsa-de-componentes"
+  },
+  {
+    "nome": "Cadeado",
+    "peso": "0,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "cadeado"
+  },
+  {
+    "nome": "Caixa para Fogo",
+    "peso": "0,5 kg",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "caixa-para-fogo"
+  },
+  {
+    "nome": "Caneta Tinteiro",
+    "peso": "—",
+    "custo": "2 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "caneta-tinteiro"
+  },
+  {
+    "nome": "Cantil (cheio)",
+    "peso": "2,5 kg",
+    "custo": "2 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "cantil-cheio"
+  },
+  {
+    "nome": "Cesta",
+    "peso": "1 kg",
+    "custo": "4 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "cesta"
+  },
+  {
+    "nome": "Cobertor",
+    "peso": "1,5 kg",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "cobertor"
+  },
+  {
+    "nome": "Corda",
+    "peso": "2,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "corda"
+  },
+  {
+    "nome": "Cordão",
+    "peso": "—",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "cordao"
+  },
+  {
+    "nome": "Corrente",
+    "peso": "5 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "corrente"
+  },
+  {
+    "nome": "Escada",
+    "peso": "12,5 kg",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "escada"
+  },
+  {
+    "nome": "Esferas de Metal",
+    "peso": "1 kg (saco)",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "esferas-de-metal"
+  },
+  {
+    "nome": "Espelho",
+    "peso": "250 g",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "espelho"
+  },
+  {
+    "nome": "Estacas de Ferro",
+    "peso": "2,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "estacas-de-ferro"
+  },
+  {
+    "nome": "Estojo, Mapa ou Pergaminho",
+    "peso": "0,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "estojo-mapa-ou-pergaminho"
+  },
+  {
+    "nome": "Estojo, Virote de Besta",
+    "peso": "0,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "estojo-virote-de-besta"
+  },
+  {
+    "nome": "Estrepes",
+    "peso": "1 kg (saco)",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "estrepes"
+  },
+  {
+    "nome": "Foco Arcano",
+    "peso": "Varia",
+    "custo": "Varia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "foco-arcano"
+  },
+  {
+    "nome": "Foco Druídico",
+    "peso": "Varia",
+    "custo": "Varia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "foco-druidico"
+  },
+  {
+    "nome": "Fogo Alquímico",
+    "peso": "0,5 kg",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "fogo-alquimico"
+  },
+  {
+    "nome": "Frasco",
+    "peso": "—",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "frasco"
+  },
+  {
+    "nome": "Garrafa de Vidro (1 litro)",
+    "peso": "1 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "garrafa-de-vidro-1-litro"
+  },
+  {
+    "nome": "Grilhões",
+    "peso": "3 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "grilhoes"
+  },
+  {
+    "nome": "Jarro (4 litros)",
+    "peso": "2 kg",
+    "custo": "2 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "jarro-4-litros"
+  },
+  {
+    "nome": "Kit de Artista",
+    "peso": "29 kg",
+    "custo": "40 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-artista"
+  },
+  {
+    "nome": "Kit de Assaltante",
+    "peso": "21 kg",
+    "custo": "16 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-assaltante"
+  },
+  {
+    "nome": "Kit de Aventureiro",
+    "peso": "27,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-aventureiro"
+  },
+  {
+    "nome": "Kit de Curandeiro",
+    "peso": "1,5 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-curandeiro"
+  },
+  {
+    "nome": "Kit de Diplomata",
+    "peso": "19,5 kg",
+    "custo": "39 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-diplomata"
+  },
+  {
+    "nome": "Kit de Erudito",
+    "peso": "11 kg",
+    "custo": "40 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-erudito"
+  },
+  {
+    "nome": "Kit de Escalada",
+    "peso": "6 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-escalada"
+  },
+  {
+    "nome": "Kit de Explorador de Masmorras",
+    "peso": "27,5 kg",
+    "custo": "12 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-explorador-de-masmorras"
+  },
+  {
+    "nome": "Kit de Sacerdote",
+    "peso": "14,5 kg",
+    "custo": "33 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "kit-de-sacerdote"
+  },
+  {
+    "nome": "Lâmpada",
+    "peso": "0,5 kg",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "lampada"
+  },
+  {
+    "nome": "Lanterna Coberta",
+    "peso": "1 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "lanterna-coberta"
+  },
+  {
+    "nome": "Lanterna Foca-facho",
+    "peso": "1 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "lanterna-foca-facho"
+  },
+  {
+    "nome": "Livro",
+    "peso": "2,5 kg",
+    "custo": "25 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "livro"
+  },
+  {
+    "nome": "Luneta",
+    "peso": "0,5 kg",
+    "custo": "1.000 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "luneta"
+  },
+  {
+    "nome": "Lupa",
+    "peso": "—",
+    "custo": "100 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "lupa"
+  },
+  {
+    "nome": "Mapa",
+    "peso": "—",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "mapa"
+  },
+  {
+    "nome": "Mochila",
+    "peso": "2,5 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "mochila"
+  },
+  {
+    "nome": "Munição",
+    "peso": "Varia",
+    "custo": "Varia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "municao"
+  },
+  {
+    "nome": "Óleo",
+    "peso": "0,5 kg",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "oleo"
+  },
+  {
+    "nome": "Pá",
+    "peso": "2,5 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pa"
+  },
+  {
+    "nome": "Papel",
+    "peso": "—",
+    "custo": "2 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "papel"
+  },
+  {
+    "nome": "Pé de Cabra",
+    "peso": "2,5 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pe-de-cabra"
+  },
+  {
+    "nome": "Perfume",
+    "peso": "—",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "perfume"
+  },
+  {
+    "nome": "Pergaminho",
+    "peso": "—",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pergaminho"
+  },
+  {
+    "nome": "Pergaminho Mágico (1º Círculo)",
+    "peso": "—",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pergaminho-magico-1-circulo"
+  },
+  {
+    "nome": "Pergaminho Mágico (Truque)",
+    "peso": "—",
+    "custo": "30 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pergaminho-magico-truque"
+  },
+  {
+    "nome": "Poção de Cura",
+    "peso": "250 g",
+    "custo": "50 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pocao-de-cura"
+  },
+  {
+    "nome": "Pote",
+    "peso": "0,5 kg",
+    "custo": "2 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pote"
+  },
+  {
+    "nome": "Pote, Ferro",
+    "peso": "5 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "pote-ferro"
+  },
+  {
+    "nome": "Rações",
+    "peso": "1 kg",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "racoes"
+  },
+  {
+    "nome": "Rede",
+    "peso": "1,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "rede"
+  },
+  {
+    "nome": "Roldana e Polias",
+    "peso": "2,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "roldana-e-polias"
+  },
+  {
+    "nome": "Roupas, Fantasia",
+    "peso": "2 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "roupas-fantasia"
+  },
+  {
+    "nome": "Roupas, Finas",
+    "peso": "3 kg",
+    "custo": "15 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "roupas-finas"
+  },
+  {
+    "nome": "Roupas, Viagem",
+    "peso": "2 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "roupas-viagem"
+  },
+  {
+    "nome": "Saca",
+    "peso": "250 g",
+    "custo": "1 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "saca"
+  },
+  {
+    "nome": "Saco de Dormir",
+    "peso": "3,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "saco-de-dormir"
+  },
+  {
+    "nome": "Símbolo Sagrado",
+    "peso": "Varia",
+    "custo": "Varia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "simbolo-sagrado"
+  },
+  {
+    "nome": "Sino",
+    "peso": "—",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "sino"
+  },
+  {
+    "nome": "Tenda",
+    "peso": "10 kg",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "tenda"
+  },
+  {
+    "nome": "Tinta",
+    "peso": "—",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "tinta"
+  },
+  {
+    "nome": "Tocha",
+    "peso": "0,5 kg",
+    "custo": "1 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "tocha"
+  },
+  {
+    "nome": "Vela",
+    "peso": "—",
+    "custo": "1 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "vela"
+  },
+  {
+    "nome": "Túnica",
+    "peso": "2 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "tunica"
+  },
+  {
+    "nome": "Veneno Básico",
+    "peso": "—",
+    "custo": "100 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Equipamento Geral",
+    "origem": "não-SRD",
+    "id": "veneno-basico"
+  },
+  {
+    "nome": "Cajado (também um Bastão)",
+    "peso": "2 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Arcano",
+    "origem": "não-SRD",
+    "id": "cajado-tambem-um-bastao"
+  },
+  {
+    "nome": "Cetro",
+    "peso": "1 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Arcano",
+    "origem": "não-SRD",
+    "id": "cetro"
+  },
+  {
+    "nome": "Cristal",
+    "peso": "0,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Arcano",
+    "origem": "não-SRD",
+    "id": "cristal"
+  },
+  {
+    "nome": "Orbe",
+    "peso": "1,5 kg",
+    "custo": "20 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Arcano",
+    "origem": "não-SRD",
+    "id": "orbe"
+  },
+  {
+    "nome": "Varinha",
+    "peso": "0,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Arcano",
+    "origem": "não-SRD",
+    "id": "varinha"
+  },
+  {
+    "nome": "Cajado de madeira (também um Bastão)",
+    "peso": "2 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Druídico",
+    "origem": "não-SRD",
+    "id": "cajado-de-madeira-tambem-um-bastao"
+  },
+  {
+    "nome": "Ramo de visco",
+    "peso": "—",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Druídico",
+    "origem": "não-SRD",
+    "id": "ramo-de-visco"
+  },
+  {
+    "nome": "Varinha de teixo",
+    "peso": "0,5 kg",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Foco Druídico",
+    "origem": "não-SRD",
+    "id": "varinha-de-teixo"
+  },
+  {
+    "nome": "Agulhas (50, Algibeira)",
+    "peso": "0,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Munição",
+    "origem": "não-SRD",
+    "id": "agulhas-50-algibeira"
+  },
+  {
+    "nome": "Balas, Arma de Fogo (10, Algibeira)",
+    "peso": "1 kg",
+    "custo": "3 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Munição",
+    "origem": "não-SRD",
+    "id": "balas-arma-de-fogo-10-algibeira"
+  },
+  {
+    "nome": "Balas, Funda (20, Algibeira)",
+    "peso": "750 g",
+    "custo": "4 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Munição",
+    "origem": "não-SRD",
+    "id": "balas-funda-20-algibeira"
+  },
+  {
+    "nome": "Flechas (20, Aljava)",
+    "peso": "0,5 kg",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Munição",
+    "origem": "não-SRD",
+    "id": "flechas-20-aljava"
+  },
+  {
+    "nome": "Virotes (20, Estojo)",
+    "peso": "750 g",
+    "custo": "1 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Munição",
+    "origem": "não-SRD",
+    "id": "virotes-20-estojo"
+  },
+  {
+    "nome": "Amuleto (usado ou segurado)",
+    "peso": "0,5 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Símbolo Sagrado",
+    "origem": "não-SRD",
+    "id": "amuleto-usado-ou-segurado"
+  },
+  {
+    "nome": "Emblema (exibido em tecido ou em um Escudo)",
+    "peso": "—",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Símbolo Sagrado",
+    "origem": "não-SRD",
+    "id": "emblema-exibido-em-tecido-ou-em-um-escudo"
+  },
+  {
+    "nome": "Relicário (segurado)",
+    "peso": "1 kg",
+    "custo": "5 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Símbolo Sagrado",
+    "origem": "não-SRD",
+    "id": "relicario-segurado"
+  }
+]

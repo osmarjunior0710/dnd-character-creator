@@ -1,0 +1,122 @@
+[
+  {
+    "nome": "Amedrontado",
+    "nomeEn": "Frightened",
+    "efeito": "Desvantagem em testes de atributo e jogadas de ataque enquanto a fonte do medo estiver na linha de visão; não pode se aproximar voluntariamente da fonte do medo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "amedrontado"
+  },
+  {
+    "nome": "Atordoado",
+    "nomeEn": "Stunned",
+    "efeito": "Incapacitado; falha automática em salvaguardas de Força e Destreza; jogadas de ataque contra você têm Vantagem.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "atordoado"
+  },
+  {
+    "nome": "Caído",
+    "nomeEn": "Prone",
+    "efeito": "Só pode rastejar ou gastar metade do Deslocamento para se levantar; Desvantagem em jogadas de ataque; ataques contra você têm Vantagem se o atacante estiver a até 1,5m, senão Desvantagem.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "caido"
+  },
+  {
+    "nome": "Cego",
+    "nomeEn": "Blinded",
+    "efeito": "Não consegue ver; falha automática em testes de atributo que dependam de visão; jogadas de ataque contra você têm Vantagem; suas jogadas de ataque têm Desvantagem.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "cego"
+  },
+  {
+    "nome": "Contido",
+    "nomeEn": "Grappled",
+    "efeito": "Deslocamento reduzido a 0 e não pode aumentar.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "contido"
+  },
+  {
+    "nome": "Enfeitiçado",
+    "nomeEn": "Charmed",
+    "efeito": "Não pode atacar quem o enfeitiçou nem alvejá-lo com ataques/efeitos mágicos; quem o enfeitiçou tem Vantagem em testes de atributo para interação social com você.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "enfeiticado"
+  },
+  {
+    "nome": "Envenenado",
+    "nomeEn": "Poisoned",
+    "efeito": "Desvantagem em jogadas de ataque e testes de atributo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "envenenado"
+  },
+  {
+    "nome": "Exaustão",
+    "nomeEn": "Exhaustion",
+    "efeito": "Condição cumulativa (níveis 1-6). Cada Teste de D20 tem o resultado reduzido em 2x o nível de Exaustão; nível 6 = morte; Descanso Longo remove 1 nível; Deslocamento reduzido em 1,5m por nível.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "exaustao"
+  },
+  {
+    "nome": "Imobilizado",
+    "nomeEn": "Restrained",
+    "efeito": "Deslocamento 0; Desvantagem em jogadas de ataque; ataques contra você têm Vantagem; Desvantagem em salvaguardas de Destreza.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "imobilizado"
+  },
+  {
+    "nome": "Incapacitado",
+    "nomeEn": "Incapacitated",
+    "efeito": "Não pode executar ação, Ação Bônus ou Reação; Concentração é interrompida; não pode falar; Desvantagem na Iniciativa.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "incapacitado"
+  },
+  {
+    "nome": "Inconsciente",
+    "nomeEn": "Unconscious",
+    "efeito": "Tem as condições Caído e Incapacitado e solta o que estiver segurando; Deslocamento 0; ataques contra você têm Vantagem; falha automática em salvaguardas de Força e Destreza; qualquer acerto a até 1,5m é Crítico automático.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "inconsciente"
+  },
+  {
+    "nome": "Invisível",
+    "nomeEn": "Invisible",
+    "efeito": "Oculto de efeitos que exigem visão do alvo; jogadas de ataque contra você têm Desvantagem, suas têm Vantagem; Vantagem na Iniciativa.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "invisivel"
+  },
+  {
+    "nome": "Paralisado",
+    "nomeEn": "Paralyzed",
+    "efeito": "Incapacitado; Deslocamento 0; falha automática em salvaguardas de Força e Destreza; ataques contra você têm Vantagem; qualquer acerto a até 1,5m é Crítico automático.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paralisado"
+  },
+  {
+    "nome": "Petrificado",
+    "nomeEn": "Petrified",
+    "efeito": "Transformado em substância inanimada sólida (junto com itens não-mágicos); Incapacitado; Deslocamento 0; Resistência a todo dano; Imunidade à condição Envenenado; falha automática em salvaguardas de Força e Destreza.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "petrificado"
+  },
+  {
+    "nome": "Surdo",
+    "nomeEn": "Deafened",
+    "efeito": "Não consegue ouvir; falha automática em testes de atributo que dependam de audição.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "surdo"
+  }
+]

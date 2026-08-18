@@ -1,0 +1,274 @@
+[
+  {
+    "nome": "Condução de carroça dentro de uma cidade",
+    "custo": "1 PC por km",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Viagem e Pedágios",
+    "origem": "não-SRD",
+    "id": "conducao-de-carroca-dentro-de-uma-cidade"
+  },
+  {
+    "nome": "Condução de carroça entre aldeias/cidades",
+    "custo": "2 PC por km",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Viagem e Pedágios",
+    "origem": "não-SRD",
+    "id": "conducao-de-carroca-entre-aldeias-cidades"
+  },
+  {
+    "nome": "Passagem de navio",
+    "custo": "6 PC por km",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Viagem e Pedágios",
+    "origem": "não-SRD",
+    "id": "passagem-de-navio"
+  },
+  {
+    "nome": "Pedágio (de estrada ou portão)",
+    "custo": "1 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Viagem e Pedágios",
+    "origem": "não-SRD",
+    "id": "pedagio-de-estrada-ou-portao"
+  },
+  {
+    "nome": "Alojamento por Dia",
+    "custo": "—",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "alojamento-por-dia"
+  },
+  {
+    "nome": "Desvalido",
+    "custo": "7 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "desvalido"
+  },
+  {
+    "nome": "Pobre",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "pobre"
+  },
+  {
+    "nome": "Modesto",
+    "custo": "5 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "modesto"
+  },
+  {
+    "nome": "Confortável",
+    "custo": "8 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "confortavel"
+  },
+  {
+    "nome": "Abastado",
+    "custo": "2 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "abastado"
+  },
+  {
+    "nome": "Aristocrático",
+    "custo": "4 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "aristocratico"
+  },
+  {
+    "nome": "Cerveja (caneca)",
+    "custo": "4 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "cerveja-caneca"
+  },
+  {
+    "nome": "Pão (fatia)",
+    "custo": "2 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "pao-fatia"
+  },
+  {
+    "nome": "Queijo (fatia)",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Alojamento por Dia",
+    "origem": "não-SRD",
+    "id": "queijo-fatia"
+  },
+  {
+    "nome": "Refeições",
+    "custo": "—",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "refeicoes"
+  },
+  {
+    "nome": "Desvalido",
+    "custo": "1 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "desvalido-2"
+  },
+  {
+    "nome": "Pobre",
+    "custo": "2 PC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "pobre-2"
+  },
+  {
+    "nome": "Modesto",
+    "custo": "1 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "modesto-2"
+  },
+  {
+    "nome": "Confortável",
+    "custo": "2 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "confortavel-2"
+  },
+  {
+    "nome": "Abastado",
+    "custo": "3 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "abastado-2"
+  },
+  {
+    "nome": "Aristocrático",
+    "custo": "6 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "aristocratico-2"
+  },
+  {
+    "nome": "Vinho (garrafa)",
+    "custo": "—",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "vinho-garrafa"
+  },
+  {
+    "nome": "Comum",
+    "custo": "2 PP",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "comum"
+  },
+  {
+    "nome": "Bom",
+    "custo": "10 PO",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Refeições por Dia",
+    "origem": "não-SRD",
+    "id": "bom"
+  },
+  {
+    "nome": "Mensageiro",
+    "custo": "2 PC por 1,5 quilômetro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Contratação de Mão de Obra",
+    "origem": "não-SRD",
+    "id": "mensageiro"
+  },
+  {
+    "nome": "Trabalhador não-qualificado",
+    "custo": "2 PP por dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Contratação de Mão de Obra",
+    "origem": "não-SRD",
+    "id": "trabalhador-nao-qualificado"
+  },
+  {
+    "nome": "Trabalhador qualificado",
+    "custo": "2 PO por dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Contratação de Mão de Obra",
+    "origem": "não-SRD",
+    "id": "trabalhador-qualificado"
+  },
+  {
+    "nome": "Miserável",
+    "custo": "Grátis",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "miseravel"
+  },
+  {
+    "nome": "Desvalido",
+    "custo": "1 PP por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "desvalido-3"
+  },
+  {
+    "nome": "Pobre",
+    "custo": "2 PP por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "pobre-3"
+  },
+  {
+    "nome": "Modesto",
+    "custo": "1 PO por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "modesto-3"
+  },
+  {
+    "nome": "Confortável",
+    "custo": "2 PO por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "confortavel-3"
+  },
+  {
+    "nome": "Abastado",
+    "custo": "4 PO por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "abastado-3"
+  },
+  {
+    "nome": "Aristocrático",
+    "custo": "10 PO por Dia",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Despesas de Estilo de Vida",
+    "origem": "não-SRD",
+    "id": "aristocratico-3"
+  }
+]

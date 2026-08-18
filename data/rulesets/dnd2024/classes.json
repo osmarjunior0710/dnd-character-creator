@@ -1,0 +1,110 @@
+[
+  {
+    "nome": "Bárbaro",
+    "atributoPrimario": "Força",
+    "dadoDeVida": "d12",
+    "salvaguardas": "Força e Constituição",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "barbaro"
+  },
+  {
+    "nome": "Bardo",
+    "atributoPrimario": "Carisma",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Destreza e Carisma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bardo"
+  },
+  {
+    "nome": "Bruxo",
+    "atributoPrimario": "Carisma",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Sabedoria e Carisma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "bruxo"
+  },
+  {
+    "nome": "Clérigo",
+    "atributoPrimario": "Sabedoria",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Sabedoria e Carisma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "clerigo"
+  },
+  {
+    "nome": "Druida",
+    "atributoPrimario": "Sabedoria",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Inteligência e Sabedoria",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "druida"
+  },
+  {
+    "nome": "Feiticeiro",
+    "atributoPrimario": "Carisma",
+    "dadoDeVida": "d6",
+    "salvaguardas": "Constituição e Carisma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "feiticeiro"
+  },
+  {
+    "nome": "Guardião",
+    "atributoPrimario": "Destreza e Sabedoria",
+    "dadoDeVida": "d10",
+    "salvaguardas": "Força e Destreza",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guardiao"
+  },
+  {
+    "nome": "Guerreiro",
+    "atributoPrimario": "Força ou Destreza",
+    "dadoDeVida": "d10",
+    "salvaguardas": "Força e Constituição",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "guerreiro"
+  },
+  {
+    "nome": "Ladino",
+    "atributoPrimario": "Destreza",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Destreza e Inteligência",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "ladino"
+  },
+  {
+    "nome": "Mago",
+    "atributoPrimario": "Inteligência",
+    "dadoDeVida": "d6",
+    "salvaguardas": "Inteligência e Sabedoria",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "mago"
+  },
+  {
+    "nome": "Monge",
+    "atributoPrimario": "Destreza e Sabedoria",
+    "dadoDeVida": "d8",
+    "salvaguardas": "Força e Destreza",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "monge"
+  },
+  {
+    "nome": "Paladino",
+    "atributoPrimario": "Força e Carisma",
+    "dadoDeVida": "d10",
+    "salvaguardas": "Sabedoria e Carisma",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "paladino"
+  }
+]

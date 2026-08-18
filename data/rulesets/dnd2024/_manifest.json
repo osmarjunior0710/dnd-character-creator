@@ -1,5 +1,5 @@
 {
-  "geradoEm": "2026-08-18T15:19:13.119Z",
+  "geradoEm": "2026-08-18T15:39:11.207Z",
   "fontes": {
     "phb": {
       "arquivo": "dnd5e-2024-referencia.xlsx",
@@ -45,7 +45,38 @@
         "Itens Mágicos Inteligentes",
         "Artefatos",
         "Outras Recompensas"
-      ]
+      ],
+      "status": "não importado nesta entrega (fora do escopo da Entrega 1)"
     }
+  },
+  "arquivosGerados": {
+    "pericias.json": 18,
+    "condicoes.json": 15,
+    "idiomas.json": 19,
+    "alinhamentos.json": 9,
+    "glossario.json": 151,
+    "evolucao-personagem.json": 20,
+    "antecedentes.json": 16,
+    "especies.json": 48,
+    "talentos.json": 75,
+    "armas.json": 38,
+    "armaduras.json": 13,
+    "equipamento-aventura.json": 98,
+    "ferramentas.json": 25,
+    "montarias-veiculos.json": 19,
+    "veiculos-aquaticos.json": 7,
+    "servicos.json": 34,
+    "bugigangas.json": 100,
+    "progressao-classe.json": 240,
+    "caracteristicas-classe.json": 174,
+    "subclasses.json": 288,
+    "opcoes-classe.json": 57,
+    "classes.json": 12,
+    "magias.json": 390,
+    "magias-preparadas-por-classe.json": 8,
+    "propriedades-maestria.json": 8,
+    "estatisticas-criaturas.json": 51,
+    "regras-rapidas.json": 13,
+    "multiclasse.json": 44
   }
 }

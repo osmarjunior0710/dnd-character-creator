@@ -1,0 +1,572 @@
+[
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Explosão Agonizante",
+    "descricao": "Pré-requisitos: Bruxo Nível 2 ou superior, um Truque de Bruxo que Cause Dano. Escolha um dos seus truques conhecidos de Bruxo que cause dano. Você pode adicionar seu modificador de Carisma às jogadas de dano dessa magia. Repetível. Você pode adquirir esta invocação mais de uma vez, escolhendo um truque elegível diferente a cada vez.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--explosao-agonizante"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Explosão Repulsiva",
+    "descricao": "Pré-requisitos: Bruxo Nível 2 ou superior, um Truque de Bruxo que Cause Dano com uma Jogada de Ataque. Escolha um dos seus truques conhecidos de Bruxo que exija uma jogada de ataque. Ao atingir uma criatura Grande ou menor com esse truque, você pode empurrá-la até 3 metros para longe de você. Repetível. Você pode adquirir esta invocação mais de uma vez, escolhendo um truque elegível diferente a cada vez.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--explosao-repulsiva"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Investimento do Mestre da Corrente",
+    "descricao": "Pré-requisitos: Bruxo Nível 5 ou superior, Pacto da Corrente. Ao conjurar Convocar Familiar, você infunde o familiar invocado com uma dose de seu poder místico, concedendo à criatura os seguintes benefícios. Aéreo ou Aquático. O familiar obtém um Deslocamento de Voo ou um Deslocamento de Natação (à sua escolha) de 12 metros. Ataque Rápido. Como uma Ação Bônus, você pode ordenar o familiar a executar a ação Atacar. CD para Evitar sua Magia. Se o familiar forçar uma criatura a realizar uma salvaguarda, ela usa a CD para evitar sua magia. Dano Necrótico ou Radiante. Sempre que o familiar causar dano Contundente, Cortante ou Perfurante, você pode substituir o dano por Necrótico ou Radiante. Resistência. Quando o familiar sofre dano, você pode executar uma Reação para conceder Resistência contra esse dano.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--investimento-do-mestre-da-corrente"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Lamento das Sepulturas",
+    "descricao": "Pré-requisito: Bruxo Nível 7 ou superior. Você pode conjurar Falar com Mortos sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--lamento-das-sepulturas"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Lâmina Devoradora",
+    "descricao": "Pré-requisito: Bruxo Nível 12 ou superior, Lâmina Sedenta O Ataque Extra da sua invocação Lâmina Sedenta concede dois ataques extras em vez de um.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--lamina-devoradora"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Lâmina Sedenta",
+    "descricao": "Pré-requisitos: Bruxo Nível 5 ou superior, Pacto da Lâmina. Você adquire a característica Ataque Extra apenas para sua arma de pacto e você pode atacar duas vezes com ela, em vez de uma, quando executar a ação Atacar no seu turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--lamina-sedenta"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Lança Mística",
+    "descricao": "Pré-requisitos: Bruxo Nível 2 ou superior, um Truque de Bruxo que Cause Dano. Escolha um dos seus truques conhecidos de Bruxo que cause dano e tenha um alcance de 3 metros ou mais. Ao conjurar essa magia, seu alcance aumenta em um número de metros igual a 9 vezes o seu nível de Bruxo. Repetível. Você pode adquirir esta invocação mais de uma vez, escolhendo um truque elegível diferente a cada vez.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--lanca-mistica"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Lições dos Grandes Antigos",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você recebeu conhecimento de uma entidade antiga do multiverso, permitindo que você obtenha um talento de Origem à sua escolha. Repetível. Você pode adquirir esta invocação mais de uma vez, escolhendo um talento de Origem diferente cada vez.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--licoes-dos-grandes-antigos"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Máscara das Muitas Faces",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você pode conjurar Disfarçar-se sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--mascara-das-muitas-faces"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Mente Mística",
+    "descricao": "Você tem Vantagem em salvaguardas de Constituição que realiza para manter a Concentração.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--mente-mistica"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Mestre das Infindáveis Formas",
+    "descricao": "Pré-requisito: Bruxo Nível 5 ou superior. Você pode conjurar Alterar-se sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--mestre-das-infindaveis-formas"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Olhar de Duas Mentes",
+    "descricao": "Pré-requisito: Bruxo Nível 5 ou superior. Como uma Ação Bônus, você pode tocar uma criatura voluntária e perceber através de seus sentidos até o final do seu próximo turno. Enquanto a criatura estiver no mesmo plano de existência que você, você pode executar uma Ação Bônus nos turnos subsequentes para manter essa conexão, estendendo a duração até o final do seu próximo turno. A conexão encerra se você não a mantiver deste modo. Ao perceber através dos sentidos da outra criatura, você se beneficia de quaisquer sentidos especiais possuídos por ela e pode conjurar magias como se estivesse em seu espaço ou no espaço da outra criatura se vocês dois estiverem a até 18 metros um do outro.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--olhar-de-duas-mentes"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Pacto da Corrente",
+    "descricao": "Você aprende a magia Convocar Familiar e pode conjurá-la como uma ação Usar Magia sem gastar um espaço de magia. Ao conjurar a magia, você escolhe uma das formas normais para o seu familiar ou uma das seguintes formas especiais: Cobra Peçonhenta, Diabrete, Esfinge Maravilhosa, Esqueleto, Pseudodragão, Quasit, Slaad Girino, Sprite (veja o apêndice B para o bloco de estatísticas do familiar). Além disso, ao executar ação Atacar, você pode renunciar a um de seus próprios ataques para permitir que seu familiar realize um ataque próprio como uma Reação dele.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--pacto-da-corrente"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Pacto da Lâmina",
+    "descricao": "Como uma Ação Bônus, você pode conjurar uma arma de pacto em sua mão — uma arma Corpo a Corpo Simples ou Marcial à sua escolha com a qual você se vincula — ou cria um vínculo com uma arma mágica que você toca; você não pode se vincular a uma arma mágica se outra pessoa estiver sintonizada ou outro Bruxo tiver vínculo com ela. Até que o vínculo encerre, você tem proficiência com a arma e pode usá-la como Foco de Conjuração. Ao atacar com a arma vinculada, você pode usar seu modificador de Carisma para as jogadas de ataque e dano em vez de usar Força ou Destreza; e você pode causar dano Necrótico, Psíquico ou Radiante ou o tipo de dano normal da arma. Seu vínculo com a arma encerra se você executar a Ação Bônus desta característica novamente, se a arma estiver a mais de 1,5 metro de você por 1 minuto ou mais, ou se você morrer. Uma arma conjurada desaparece quando o vínculo encerra.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--pacto-da-lamina"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Pacto do Tomo",
+    "descricao": "Ao costurar fios de sombra, você conjura um livro em sua mão ao final de um Descanso Curto ou Longo. Este Livro das Sombras (você determina a aparência dele) contém magia mística que só você pode acessar, concedendo-lhe os benefícios abaixo. O livro desaparece se você conjurar outro livro com essa característica ou se você morrer. Truques e Rituais. Quando o livro surgir, escolha três truques e duas magias de 1º círculo que tenham o marcador Ritual. As magias podem ser da lista de magias de qualquer classe e devem ser magias que você ainda não tem preparadas. Enquanto o livro estiver com você, você tem as magias escolhidas preparadas e elas funcionam como magias de Bruxo para você. Foco de Conjuração. Você pode usar o livro como um Foco de Conjuração.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--pacto-do-tomo"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Passo Ascendente",
+    "descricao": "Pré-requisito: Bruxo Nível 5 ou superior. Você pode conjurar Levitação em si sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--passo-ascendente"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Presente das Profundezas",
+    "descricao": "Pré-requisito: Bruxo Nível 5 ou superior. Você pode respirar debaixo d’água e obter um Deslocamento de Natação igual ao seu Deslocamento. Você também pode conjurar Respirar na Água uma vez sem gastar um espaço de magia e novamente sempre que completar um Descanso Longo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--presente-das-profundezas"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Presente dos Protetores",
+    "descricao": "Pré-requisitos: Bruxo Nível 9 ou superior, Pacto do Tomo. Uma nova página aparece em seu Livro das Sombras quando você o conjura. Com sua permissão, uma criatura pode executar uma ação para escrever o nome dela nesta página, que pode conter um número de nomes igual ao seu modificador de Carisma (mínimo de um nome). Quando qualquer criatura cujo nome está na página é reduzida a 0 Pontos de Vida, mas não morta imediatamente, a criatura magicamente tem 1 Ponto de Vida. Uma vez que essa magia é acionada, nenhuma criatura pode se beneficiar dela até que você complete um Descanso Longo. Como uma ação Usar Magia, você pode apagar um nome na página tocando nele.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--presente-dos-protetores"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Punição Mística",
+    "descricao": "Pré-requisitos: Bruxo Nível 5 ou superior, Pacto da Lâmina. Uma vez por turno, ao atingir uma criatura com sua arma de pacto, você pode gastar um espaço de Magia de Pacto para causar 1d8 pontos de dano Energético adicionais ao alvo, mais 1d8 por círculo do espaço de magia, e pode impor ao alvo a condição Caído se ele for Enorme ou menor.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--punicao-mistica"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Salto Sobrenatural",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você pode conjurar Salto em si sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--salto-sobrenatural"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Sorvedouro de Vida",
+    "descricao": "Pré-requisitos: Bruxo Nível 9 ou superior, Pacto da Lâmina. Uma vez por turno, ao atingir uma criatura com sua arma de pacto, você pode causar à criatura 1d6 pontos de dano Necrótico, Psíquico ou Radiante adicionais (à sua escolha) e você pode gastar um de seus Dados de Pontos de Vida para jogá-lo e recuperar um número de Pontos de Vida igual ao resultado mais seu modificador de Constituição (mínimo de 1 Ponto de Vida).",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--sorvedouro-de-vida"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Uno com as Sombras",
+    "descricao": "Pré-requisito: Bruxo Nível 5 ou superior. Enquanto estiver em uma área de Meia-luz ou Escuridão, você pode conjurar Invisibilidade em si sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--uno-com-as-sombras"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Vigor Ínfero",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você pode conjurar Vitalidade Vazia em si sem gastar um espaço de magia. Ao conjurar a magia com essa característica, você não joga o dado para os Pontos de Vida Temporários, pois recebe automaticamente o número máximo no dado.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--vigor-infero"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Visão da Bruxa",
+    "descricao": "Pré-requisito: Bruxo Nível 15 ou superior. Você tem Visão Verdadeira com um alcance de 9 metros.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--visao-da-bruxa"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Visão Diabólica",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você pode ver normalmente em Meia-luz e Escuridão — mágicas e não mágicas — a até 36 metros de você.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--visao-diabolica"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Visões de Reinos Distantes",
+    "descricao": "Pré-requisito: Bruxo Nível 9 ou superior. Você pode conjurar Olho Arcano sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--visoes-de-reinos-distantes"
+  },
+  {
+    "classe": "Bruxo",
+    "caracteristica": "Invocações Místicas",
+    "opcao": "Visões Nebulosas",
+    "descricao": "Pré-requisito: Bruxo Nível 2 ou superior. Você pode conjurar Imagem Silenciosa sem gastar um espaço de magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Bruxo / Invocações Místicas",
+    "origem": "não-SRD",
+    "id": "bruxo--visoes-nebulosas"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Acelerada",
+    "descricao": "Custo: 2 Pontos de Feitiçaria. Ao conjurar uma magia que tenha um tempo de conjuração de uma ação, você pode gastar 2 Pontos de Feitiçaria para alterar o tempo de conjuração para uma Ação Bônus para esta conjuração. Você não pode modificar uma magia deste modo se já conjurou uma magia de 1º círculo ou superior no turno atual, nem pode conjurar uma magia de 1º círculo ou superior neste turno após modificar uma magia deste modo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-acelerada"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Agravada",
+    "descricao": "Custo: 2 Pontos de Feitiçaria. Ao conjurar uma magia que força uma criatura a realizar uma salvaguarda, você pode gastar 2 Pontos de Feitiçaria para conceder a um alvo da magia Desvantagem em salvaguardas contra a magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-agravada"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Buscadora",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao realizar uma jogada de ataque com uma magia e errar, você pode gastar 1 Ponto de Feitiçaria para jogar novamente o d20 e deve usar o novo resultado. Você pode usar Magia Buscadora mesmo que já tenha usado uma opção diferente de Metamagia durante a conjuração da magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-buscadora"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Cautelosa",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia que força outras criaturas a realizar uma salvaguarda, você pode proteger algumas dessas criaturas da força total da magia. Para isso, gaste 1 Ponto de Feitiçaria e escolha um número dessas criaturas igual até seu modificador de Carisma (mínimo de uma criatura). Uma criatura escolhida é automaticamente bem-sucedida na salvaguarda contra a magia, e não sofre dano se normalmente sofreria metade do dano em caso de sucesso.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-cautelosa"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Distante",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia que tenha um alcance de pelo menos 1,5 metro, você pode gastar 1 Ponto de Feitiçaria para dobrar o alcance da magia. Ou quando você conjura uma magia que tem um alcance de Toque, você pode gastar 1 Ponto de Feitiçaria para que o alcance da magia seja 9 metros.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-distante"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Duplicada",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia, como Enfeitiçar Pessoa, que pode ser conjurada com um espaço de magia de círculo superior para atingir uma criatura adicional, você pode gastar 1 Ponto de Feitiçaria para aumentar o círculo efetivo da magia em 1.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-duplicada"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Persistente",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia que tenha uma duração de 1 minuto ou mais, você pode gastar 1 Ponto de Feitiçaria para dobrar sua duração para até o máximo de 24 horas. Se a magia afetada exigir Concentração, você tem Vantagem em qualquer salvaguarda que realizar para manter essa Concentração.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-persistente"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Potencializada",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao jogar dano para uma magia, você pode gastar 1 Ponto de Feitiçaria para jogar novamente um número de dados de dano igual a até seu modificador de Carisma (mínimo de um), e deve usar os novos resultados. Você pode usar Magia Potencializada mesmo que já tenha usado uma opção diferente de Metamagia durante a conjuração da magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-potencializada"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Sutil",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia, você pode gastar 1 Ponto de Feitiçaria para conjurá-la sem quaisquer componentes Verbais, Somáticos ou Materiais, exceto componentes Materiais consumidos pela magia ou que têm um custo detalhado na magia.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-sutil"
+  },
+  {
+    "classe": "Feiticeiro",
+    "caracteristica": "Metamagia",
+    "opcao": "Magia Transmutada",
+    "descricao": "Custo: 1 Ponto de Feitiçaria. Ao conjurar uma magia que cause um tipo de dano da lista a seguir, você pode gastar 1 Ponto de Feitiçaria para alterar esse tipo de dano para um dos outros tipos listados: Ácido, Elétrico, Gélido, Ígneo, Trovejante, Venenoso.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Feiticeiro / Metamagia",
+    "origem": "não-SRD",
+    "id": "feiticeiro--magia-transmutada"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Aparar",
+    "descricao": "Ao receber dano de outra criatura em uma jogada de ataque corpo a corpo, você pode executar uma Reação e gastar um Dado de Superioridade para reduzir o dano pelo número obtido no Dado de Superioridade mais seu modificador de Força ou Destreza (à sua escolha).",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--aparar"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque Ameaçador",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque, você pode gastar um Dado de Superioridade para tentar amedrontar o alvo. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque. O alvo deve ser bem-sucedido em uma salvaguarda de Sabedoria ou tem a condição Amedrontado até o final do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-ameacador"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque de Varredura",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque corpo a corpo usando uma arma ou um Ataque Desarmado, você pode gastar um Dado de Superioridade para tentar causar dano a outra criatura. Escolha outra criatura a até 1,5 metro do alvo original e ao seu alcance. Se a jogada de ataque original atingir a segunda criatura, ela sofre dano igual ao resultado do Dado de Superioridade. O dano é do mesmo tipo causado pelo ataque original.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-de-varredura"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque Estendido",
+    "descricao": "Como uma Ação Bônus, você pode gastar um Dado de Superioridade e executar a ação Correr. Se você se mover pelo menos 1,5 metro em linha reta imediatamente antes de realizar um ataque corpo a corpo como parte da ação Atacar neste turno, pode adicionar o resultado do Dado de Superioridade à jogada de dano do ataque.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-estendido"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque para Distrair",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque, você pode gastar um Dado de Superioridade para distrair o alvo. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque. A próxima jogada de ataque contra o alvo por um atacante diferente de você tem Vantagem se o ataque for realizado antes do início do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-para-distrair"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque Preciso",
+    "descricao": "Ao errar uma jogada de ataque, você pode gastar um Dado de Superioridade e adicionar resultado à jogada de ataque, fazendo potencialmente o ataque acertar.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-preciso"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Ataque Provocante",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque, você pode gastar um Dado de Superioridade para provocar o alvo a atacá-lo. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque. O alvo deve ser bem-sucedido em uma salvaguarda de Sabedoria ou tem Desvantagem em jogadas de ataque contra alvos diferentes de você até o final do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--ataque-provocante"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Avaliação Tática",
+    "descricao": "Ao realizar um teste de Inteligência (História ou Investigação) ou um teste de Sabedoria (Intuição), você pode gastar um Dado de Superioridade e adicionar o resultado ao teste de atributo.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--avaliacao-tatica"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Contra-ataque",
+    "descricao": "Quando uma criatura erra uma jogada de ataque corpo a corpo contra você, você pode executar uma Reação e gastar um Dado de Superioridade para realizar uma jogada de ataque corpo a corpo com uma arma ou um Ataque Desarmado contra a criatura. Se você acertar, adicione o resultado do Dado de Superioridade ao dano do ataque.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--contra-ataque"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Desarme",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque, você pode gastar um Dado de Superioridade para tentar desarmar o alvo. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque. O alvo deve ser bem-sucedido em uma salvaguarda de Força ou soltar um objeto à sua escolha que esteja segurando, com o objeto caindo no espaço dele.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--desarme"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Emboscada",
+    "descricao": "Ao realizar um teste de Destreza (Furtividade) ou jogar Iniciativa, você pode gastar um Dado de Superioridade e adicionar o resultado ao teste, a menos que tenha a condição Incapacitado.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--emboscada"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Encontrão",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque usando uma arma ou um Ataque Desarmado, você pode gastar um Dado de Superioridade para tentar fazer o alvo recuar. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque. Se o alvo for Grande ou menor, ele deve ser bem-sucedido em uma salvaguarda de Força ou é empurrado até 4,5 metros para longe de você.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--encontrao"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Finta",
+    "descricao": "Como uma Ação Bônus, você pode gastar um Dado de Superioridade para fintar, escolhendo uma criatura a até 1,5 metro de você como seu alvo. Você tem Vantagem em sua próxima jogada de ataque contra esse alvo neste turno. Se o ataque acertar, adicione o resultado do Dado de Superioridade à jogada de dano do ataque.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--finta"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Gato Por Lebre",
+    "descricao": "Ao estar a até 1,5 metro de uma criatura no seu turno, você pode gastar um Dado de Superioridade e trocar de lugar com essa criatura, desde que você gaste pelo menos 1,5 metro de movimento e a criatura seja voluntária e não tenha a condição Incapacitado. Este movimento não provoca Ataques de Oportunidade. Jogue o Dado de Superioridade. Até o início do seu próximo turno, você ou a outra criatura (à sua escolha) adquire um bônus de CA igual ao número do resultado.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--gato-por-lebre"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Golpe do Comandante",
+    "descricao": "Ao executar a ação Atacar no seu turno, você pode substituir um de seus ataques para instruir um de seus companheiros a atacar. Ao fazer isso, escolha uma criatura voluntária que possa vê-lo ou ouvi-lo e gaste um Dado de Superioridade. Essa criatura pode usar imediatamente a Reação dela para realizar um ataque com uma arma ou um Ataque Desarmado, adicionando o resultado do Dado de Superioridade à jogada de dano do ataque em caso de acerto.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--golpe-do-comandante"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Manobrar",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque, você pode gastar um Dado de Superioridade para manobrar um de seus companheiros para outra posição. Adicione o resultado do Dado de Superioridade à jogada de dano do ataque e escolha uma criatura voluntária que possa vê-lo ou ouvi-lo. Essa criatura pode usar a Reação dela para se mover até metade do Deslocamento sem provocar Ataques de Oportunidade do alvo de seu ataque.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--manobrar"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Movimentação Evasiva",
+    "descricao": "Como uma Ação Bônus, você pode gastar um Dado de Superioridade e executar a ação Desengajar. Você também joga o dado e adiciona o número obtido à sua CA até o início do seu próximo turno.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--movimentacao-evasiva"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Presença de Autoridade",
+    "descricao": "Ao realizar um teste de Carisma (Atuação, Intimidação ou Persuasão), você pode gastar um Dado de Superioridade e adicionar o resultado ao teste.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--presenca-de-autoridade"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Prostrar",
+    "descricao": "Ao atingir uma criatura com uma jogada de ataque usando uma arma ou um Ataque Desarmado, você pode gastar um Dado de Superioridade e adicionar o resultado à jogada de dano do ataque. Se o alvo for Grande ou menor, ele deve ser bem-sucedido em uma salvaguarda de Força ou tem a condição Caído.",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--prostrar"
+  },
+  {
+    "classe": "Guerreiro",
+    "caracteristica": "Superioridade em Combate (Mestre de Batalha)",
+    "opcao": "Recuperar Energia",
+    "descricao": "Como uma Ação Bônus, você pode gastar um Dado de Superioridade para encorajar a determinação de um companheiro. Escolha um aliado seu a até 9 metros de você que possa vê-lo ou ouvi-lo. Essa criatura adquire Pontos de Vida Temporários igual ao resultado do Dado de Superioridade mais metade do seu nível de Guerreiro (arredondado para baixo).",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "grupo": "Guerreiro / Superioridade em Combate (Mestre de Batalha)",
+    "origem": "não-SRD",
+    "id": "guerreiro--recuperar-energia"
+  }
+]

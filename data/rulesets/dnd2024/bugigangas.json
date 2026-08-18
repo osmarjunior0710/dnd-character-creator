@@ -1,0 +1,702 @@
+[
+  {
+    "d100": "01",
+    "nome": "Uma mão de goblin mumificada",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-01"
+  },
+  {
+    "d100": "02",
+    "nome": "Um cristal que brilha levemente ao luar",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-02"
+  },
+  {
+    "d100": "03",
+    "nome": "Uma moeda de ouro cunhada em uma terra desconhecida",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-03"
+  },
+  {
+    "d100": "04",
+    "nome": "Um diário escrito em um idioma que você não conhece",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-04"
+  },
+  {
+    "d100": "05",
+    "nome": "Um anel de latão que nunca mancha",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-05"
+  },
+  {
+    "d100": "06",
+    "nome": "Uma antiga peça de xadrez feita de vidro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-06"
+  },
+  {
+    "d100": "07",
+    "nome": "Um par de dados feitos de ossos de articulação, cada um com o símbolo de um crânio na face que normalmente mostraria seis pontos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-07"
+  },
+  {
+    "d100": "08",
+    "nome": "Um pequeno ídolo que representa uma criatura aterradora e lhe causa sonhos inquietantes quando você dorme perto dele",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-08"
+  },
+  {
+    "d100": "09",
+    "nome": "Uma mecha de cabelo de alguém",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-09"
+  },
+  {
+    "d100": "10",
+    "nome": "A escritura de um terreno em um reino desconhecido por você",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-10"
+  },
+  {
+    "d100": "11",
+    "nome": "Um bloco pesando 30 gramas produzido de material desconhecido",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-11"
+  },
+  {
+    "d100": "12",
+    "nome": "Uma pequena boneca de tecido espetada com agulhas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-12"
+  },
+  {
+    "d100": "13",
+    "nome": "Um dente de uma fera desconhecida",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-13"
+  },
+  {
+    "d100": "14",
+    "nome": "Uma escama enorme, talvez de um dragão",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-14"
+  },
+  {
+    "d100": "15",
+    "nome": "Uma pena verde brilhante",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-15"
+  },
+  {
+    "d100": "16",
+    "nome": "Uma antiga carta de adivinhação com imagens semelhantes a você",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-16"
+  },
+  {
+    "d100": "17",
+    "nome": "Um orbe de vidro cheio de fumaça se movimentando",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-17"
+  },
+  {
+    "d100": "18",
+    "nome": "Um ovo com uma casca vermelha e brilhante, pesando 500 gramas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-18"
+  },
+  {
+    "d100": "19",
+    "nome": "Um tubo que sopra bolhas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-19"
+  },
+  {
+    "d100": "20",
+    "nome": "Um frasco de vidro contendo um pouco de carne flutuando no fluido de decapagem",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-20"
+  },
+  {
+    "d100": "21",
+    "nome": "Uma caixa de música feita por gnomos que toca uma música que você lembra vagamente da sua infância",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-21"
+  },
+  {
+    "d100": "22",
+    "nome": "Uma estatueta de madeira de um pequenino orgulhoso",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-22"
+  },
+  {
+    "d100": "23",
+    "nome": "Um orbe de bronze com runas estranhas gravadas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-23"
+  },
+  {
+    "d100": "24",
+    "nome": "Um disco de pedra multicolorido",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-24"
+  },
+  {
+    "d100": "25",
+    "nome": "Um ícone de um corvo prateado",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-25"
+  },
+  {
+    "d100": "26",
+    "nome": "Uma bolsa contendo quarenta e sete dentes, um dos quais está podre",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-26"
+  },
+  {
+    "d100": "27",
+    "nome": "Uma lasca de obsidiana que, quando tocada, provoca sensação de calor",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-27"
+  },
+  {
+    "d100": "28",
+    "nome": "Uma garra de dragão amarrada em um cordão de couro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-28"
+  },
+  {
+    "d100": "29",
+    "nome": "Um par de meias velhas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-29"
+  },
+  {
+    "d100": "30",
+    "nome": "Um livro em branco cujas páginas se recusam ter tinta, giz, grafite ou qualquer outra marcação gravada",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-30"
+  },
+  {
+    "d100": "31",
+    "nome": "Um emblema de prata de uma estrela de cinco pontas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-31"
+  },
+  {
+    "d100": "32",
+    "nome": "Uma faca que pertencia a um parente",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-32"
+  },
+  {
+    "d100": "33",
+    "nome": "Um frasco de vidro cheio de pedaços de unhas",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-33"
+  },
+  {
+    "d100": "34",
+    "nome": "Um dispositivo de metal retangular com dois minúsculos copos de metal em uma extremidade que lança faíscas quando molhado",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-34"
+  },
+  {
+    "d100": "35",
+    "nome": "Uma luva branca, com adornos, projetada para um ser humano",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-35"
+  },
+  {
+    "d100": "36",
+    "nome": "Um colete com cem bolsos minúsculos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-36"
+  },
+  {
+    "d100": "37",
+    "nome": "Uma pedra sem peso",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-37"
+  },
+  {
+    "d100": "38",
+    "nome": "Um rascunho desenhado de um goblin",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-38"
+  },
+  {
+    "d100": "39",
+    "nome": "Um frasco de vidro vazio que cheira a perfume",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-39"
+  },
+  {
+    "d100": "40",
+    "nome": "Uma pedra preciosa que se parece com um pedaço de carvão quando examinada por alguém que não seja você",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-40"
+  },
+  {
+    "d100": "41",
+    "nome": "Um pedaço de pano de uma bandeira velha",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-41"
+  },
+  {
+    "d100": "42",
+    "nome": "Uma insígnia de patente de um legionário perdido",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-42"
+  },
+  {
+    "d100": "43",
+    "nome": "Um sino de prata sem badalo",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-43"
+  },
+  {
+    "d100": "44",
+    "nome": "Um canário mecânico dentro de uma lâmpada",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-44"
+  },
+  {
+    "d100": "45",
+    "nome": "Um baú em miniatura esculpido para parecer que tem vários pés na parte inferior",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-45"
+  },
+  {
+    "d100": "46",
+    "nome": "Um sprite morto dentro de uma garrafa de vidro transparente",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-46"
+  },
+  {
+    "d100": "47",
+    "nome": "Uma lata de metal que não tem abertura, mas soa como se estivesse cheia de líquido, areia, aranhas ou vidro quebrado (à sua escolha)",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-47"
+  },
+  {
+    "d100": "48",
+    "nome": "Um orbe de vidro cheio de água, no qual um peixinho dourado mecânico fica nadando",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-48"
+  },
+  {
+    "d100": "49",
+    "nome": "Uma colher de prata com um M gravado na pega",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-49"
+  },
+  {
+    "d100": "50",
+    "nome": "Um apito feito de madeira dourada",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-50"
+  },
+  {
+    "d100": "51",
+    "nome": "Um escaravelho morto do tamanho da sua mão",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-51"
+  },
+  {
+    "d100": "52",
+    "nome": "Dois soldados de brinquedo, um sem cabeça SKOOKFOELPUOC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-52"
+  },
+  {
+    "d100": "53",
+    "nome": "Uma pequena caixa cheia de botões de diferentes tamanhos",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-53"
+  },
+  {
+    "d100": "54",
+    "nome": "Uma vela que não pode ser acesa",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-54"
+  },
+  {
+    "d100": "55",
+    "nome": "Uma gaiola em miniatura sem porta",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-55"
+  },
+  {
+    "d100": "56",
+    "nome": "Uma chave antiga",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-56"
+  },
+  {
+    "d100": "57",
+    "nome": "Um mapa de tesouro indecifrável",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-57"
+  },
+  {
+    "d100": "58",
+    "nome": "Uma empunhadura de uma espada quebrada",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-58"
+  },
+  {
+    "d100": "59",
+    "nome": "Uma pata de coelho",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-59"
+  },
+  {
+    "d100": "60",
+    "nome": "Um olho de vidro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-60"
+  },
+  {
+    "d100": "61",
+    "nome": "Uma breve aparição de uma pessoa de aparência desagradável",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-61"
+  },
+  {
+    "d100": "62",
+    "nome": "Um crânio de prata do tamanho de uma moeda",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-62"
+  },
+  {
+    "d100": "63",
+    "nome": "Uma máscara de alabastro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-63"
+  },
+  {
+    "d100": "64",
+    "nome": "Um cone de incenso-preto, pegajoso, que fede",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-64"
+  },
+  {
+    "d100": "65",
+    "nome": "Um gorro de dormir que te dá sonhos agradáveis quando você o usa",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-65"
+  },
+  {
+    "d100": "66",
+    "nome": "Um único estrepe produzido de osso",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-66"
+  },
+  {
+    "d100": "67",
+    "nome": "Uma armação dourada de um monóculo sem a lente",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-67"
+  },
+  {
+    "d100": "68",
+    "nome": "Um cubo de 2,5 centímetros, cada lado com uma cor diferente",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-68"
+  },
+  {
+    "d100": "69",
+    "nome": "Uma maçaneta de cristal",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-69"
+  },
+  {
+    "d100": "70",
+    "nome": "Um pacote cheio de pó rosa",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-70"
+  },
+  {
+    "d100": "71",
+    "nome": "Um fragmento de uma bela canção, escrita como notas musicais em dois pedaços de pergaminho",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-71"
+  },
+  {
+    "d100": "72",
+    "nome": "Um brinco prateado em formato de lágrima produzido de uma lágrima verdadeira",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-72"
+  },
+  {
+    "d100": "73",
+    "nome": "Uma casca de ovo pintada com cenas de desgraça em detalhes perturbadores",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-73"
+  },
+  {
+    "d100": "74",
+    "nome": "Um leque que, quando desdobrado, mostra um gato dormindo",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-74"
+  },
+  {
+    "d100": "75",
+    "nome": "Um conjunto de tubos produzidos com osso",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-75"
+  },
+  {
+    "d100": "76",
+    "nome": "Um trevo-de-quatro-folhas pressionado dentro de um livro sobre boas maneiras e etiqueta",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-76"
+  },
+  {
+    "d100": "77",
+    "nome": "Uma folha de pergaminho sobre a qual é desenhada uma engenhoca mecânica",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-77"
+  },
+  {
+    "d100": "78",
+    "nome": "Uma bainha ornamentada que não cabe em nenhuma lâmina que você tenha encontrado",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-78"
+  },
+  {
+    "d100": "79",
+    "nome": "Um convite para uma festa onde aconteceu um assassinato",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-79"
+  },
+  {
+    "d100": "80",
+    "nome": "Um pentagrama de bronze com uma gravura da cabeça de um rato em seu centro",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-80"
+  },
+  {
+    "d100": "81",
+    "nome": "Um lenço roxo bordado com o nome de um arquimago",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-81"
+  },
+  {
+    "d100": "82",
+    "nome": "Metade de uma planta baixa de um templo, um castelo ou outra estrutura SKOOKFOELPUOC",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-82"
+  },
+  {
+    "d100": "83",
+    "nome": "Um pedaço de pano dobrado que, quando desdobrado, se transforma em um chapéu elegante",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-83"
+  },
+  {
+    "d100": "84",
+    "nome": "Um recibo de depósito em um banco em uma cidade distante",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-84"
+  },
+  {
+    "d100": "85",
+    "nome": "Um diário com sete páginas faltando",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-85"
+  },
+  {
+    "d100": "86",
+    "nome": "Uma caixa prateada de tabaco vazia com a inscrição “sonhos” na tampa",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-86"
+  },
+  {
+    "d100": "87",
+    "nome": "Um símbolo sagrado de ferro dedicado a um deus desconhecido",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-87"
+  },
+  {
+    "d100": "88",
+    "nome": "Um livro sobre a ascensão e queda de um herói lendário, com o último capítulo faltando",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-88"
+  },
+  {
+    "d100": "89",
+    "nome": "Um frasco com sangue de dragão",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-89"
+  },
+  {
+    "d100": "90",
+    "nome": "Uma flecha antiga de estilo élfico",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-90"
+  },
+  {
+    "d100": "91",
+    "nome": "Uma agulha que nunca entorta",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-91"
+  },
+  {
+    "d100": "92",
+    "nome": "Um broche ornamentado de estilo anão",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-92"
+  },
+  {
+    "d100": "93",
+    "nome": "Uma garrafa de vinho vazia com um rótulo bonito que diz: “Vinícola O Mago dos Vinhos e Vinhais, Engasga-gato do Dragão Vermelho, 331422-W”",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-93"
+  },
+  {
+    "d100": "94",
+    "nome": "Um mosaico com uma superfície em vidro multicolorido",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-94"
+  },
+  {
+    "d100": "95",
+    "nome": "Um rato petrificado",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-95"
+  },
+  {
+    "d100": "96",
+    "nome": "Uma bandeira pirata negra, adornada com uma caveira de dragão e ossos cruzados",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-96"
+  },
+  {
+    "d100": "97",
+    "nome": "Um minúsculo caranguejo ou aranha mecânicos que se move quando não está sendo observado",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-97"
+  },
+  {
+    "d100": "98",
+    "nome": "Um frasco de vidro contendo banha com uma etiqueta que diz: “Graxa de Grifo”",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-98"
+  },
+  {
+    "d100": "99",
+    "nome": "Uma caixa de madeira com um fundo de cerâmica que contém uma minhoca viva com uma cabeça em cada extremidade do corpo",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-99"
+  },
+  {
+    "d100": "00",
+    "nome": "Uma urna de metal contendo as cinzas de um herói",
+    "fonte": "Livro do Jogador (D&D 5e 2024)",
+    "origem": "não-SRD",
+    "id": "d100-00"
+  }
+]
