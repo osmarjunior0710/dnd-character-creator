@@ -1,0 +1,13 @@
+{
+  "atributoPorTipo": {
+    "Corpo a Corpo": "Força",
+    "À Distância": "Destreza"
+  },
+  "propriedadeMelhorAtributo": {
+    "propriedade": "Acuidade",
+    "atributos": [
+      "Força",
+      "Destreza"
+    ]
+  }
+}

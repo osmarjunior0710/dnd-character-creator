@@ -5,6 +5,14 @@
 // nunca um literal tipo "Bárbaro" ou "Ladino" aqui dentro (VISAO.md §4,
 // "regra de ouro"). Quem sabe que o Ladino tem Especialista é o adaptador
 // do ruleset (data/rulesets/dnd2024/), não o motor.
+//
+// Convenção usada em TODO core/motor/ (aqui e em ca.ts/ataques.ts/
+// conjuracao.ts): todo parâmetro chamado `modPorAtributo` já é o
+// MODIFICADOR pronto (ex.: -1 pra um atributo 8), nunca o valor bruto do
+// atributo (15, 8...) — só calcularAtributos() lida com valor bruto, e é
+// quem produz o `mod` que todo o resto consome. Não misturar as duas
+// convenções foi um bug real encontrado ao montar a comparação de todas as
+// 2080 combinações (Entrega 4d).
 
 export interface ItemDeBreakdown {
   label: string;
@@ -59,13 +67,13 @@ export interface SalvaguardaCalculada {
 
 export function calcularSalvaguardas(
   ordem: string[],
-  valorFinalPorAtributo: Record<string, number>,
+  modPorAtributo: Record<string, number>,
   atributosProficientes: string[],
   bonusProficiencia: number
 ): SalvaguardaCalculada[] {
   const proficientes = new Set(atributosProficientes);
   return ordem.map((atributo) => {
-    const abMod = mod(valorFinalPorAtributo[atributo] ?? 0);
+    const abMod = modPorAtributo[atributo] ?? 0;
     const proficiente = proficientes.has(atributo);
     const bonusProf = proficiente ? bonusProficiencia : 0;
     return {
@@ -100,7 +108,7 @@ export interface PericiaCalculada {
 export function calcularPericias(
   todasAsPericias: string[],
   atributoDaPericia: Record<string, string>,
-  valorFinalPorAtributo: Record<string, number>,
+  modPorAtributo: Record<string, number>,
   proficientes: Set<string>,
   comEspecialista: Set<string>,
   bonusProficiencia: number
@@ -110,7 +118,7 @@ export function calcularPericias(
     if (atributo === undefined) {
       throw new Error(`calcularPericias: nenhum atributo associado à perícia "${pericia}".`);
     }
-    const abMod = mod(valorFinalPorAtributo[atributo] ?? 0);
+    const abMod = modPorAtributo[atributo] ?? 0;
     const proficiente = proficientes.has(pericia);
     const especialista = comEspecialista.has(pericia);
     const bonusProf = especialista ? bonusProficiencia * 2 : proficiente ? bonusProficiencia : 0;

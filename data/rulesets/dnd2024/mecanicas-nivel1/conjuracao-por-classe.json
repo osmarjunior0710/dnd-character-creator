@@ -1,0 +1,85 @@
+{
+  "Bruxo": {
+    "camposTruques": [
+      "cantrips",
+      "tomoCantrips"
+    ],
+    "camposMagias": [
+      "spells1",
+      "tomoRituals"
+    ],
+    "extrasFixos": []
+  },
+  "Mago": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "prepared"
+    ],
+    "extrasFixos": []
+  },
+  "Paladino": {
+    "camposTruques": [],
+    "camposMagias": [
+      "prepared"
+    ],
+    "extrasFixos": []
+  },
+  "Guardião": {
+    "camposTruques": [],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": [
+      "Marca do Predador"
+    ]
+  },
+  "Druida": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": [
+      "Falar com Animais"
+    ]
+  },
+  "Bardo": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": []
+  },
+  "Psiônico": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": []
+  },
+  "Clérigo": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": []
+  },
+  "Feiticeiro": {
+    "camposTruques": [
+      "cantrips"
+    ],
+    "camposMagias": [
+      "spells1"
+    ],
+    "extrasFixos": []
+  }
+}

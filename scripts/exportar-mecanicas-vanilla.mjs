@@ -185,3 +185,34 @@ const escudoBonusCA = { label: "Escudo (comprado na Loja)", labelFonte: "Escudo"
 writeFileSync(join(OUT_DIR, "escudo-bonus-ca.json"), JSON.stringify(escudoBonusCA, null, 2) + "\n");
 
 console.log("OK — 3 arquivos derivados gerados (defesa-sem-armadura.json, estilo-de-luta-efeito-ca.json, escudo-bonus-ca.json)");
+
+// Regra de atributo de ataque com arma (Entrega 4d) — hoje é
+// `wm.tipo==='Corpo a Corpo' ? strMod : dexMod`, com Acuidade usando o
+// melhor de Força/Destreza (weaponAttackBonus() em js/07). Idêntica pra
+// TODAS as classes (não varia por classe, diferente da CA) — só existe uma
+// vez, não por classe.
+const regraAtributoDeArma = {
+  atributoPorTipo: { "Corpo a Corpo": "Força", "À Distância": "Destreza" },
+  propriedadeMelhorAtributo: { propriedade: "Acuidade", atributos: ["Força", "Destreza"] },
+};
+writeFileSync(join(OUT_DIR, "regra-atributo-arma.json"), JSON.stringify(regraAtributoDeArma, null, 2) + "\n");
+
+// Conjuração por classe (Entrega 4d) — o switch(data.classe) de
+// computeSpellcasting() (js/07), reescrito como dado: quais campos de
+// data.<classe> contam como truque/magia, mais qualquer concessão fixa da
+// própria classe (Falar com Animais do Druida, Marca do Predador do
+// Guardião — sempre conjuradas, sem escolha do jogador).
+const conjuracaoPorClasse = {
+  "Bruxo": { camposTruques: ["cantrips", "tomoCantrips"], camposMagias: ["spells1", "tomoRituals"], extrasFixos: [] },
+  "Mago": { camposTruques: ["cantrips"], camposMagias: ["prepared"], extrasFixos: [] },
+  "Paladino": { camposTruques: [], camposMagias: ["prepared"], extrasFixos: [] },
+  "Guardião": { camposTruques: [], camposMagias: ["spells1"], extrasFixos: ["Marca do Predador"] },
+  "Druida": { camposTruques: ["cantrips"], camposMagias: ["spells1"], extrasFixos: ["Falar com Animais"] },
+  "Bardo": { camposTruques: ["cantrips"], camposMagias: ["spells1"], extrasFixos: [] },
+  "Psiônico": { camposTruques: ["cantrips"], camposMagias: ["spells1"], extrasFixos: [] },
+  "Clérigo": { camposTruques: ["cantrips"], camposMagias: ["spells1"], extrasFixos: [] },
+  "Feiticeiro": { camposTruques: ["cantrips"], camposMagias: ["spells1"], extrasFixos: [] },
+};
+writeFileSync(join(OUT_DIR, "conjuracao-por-classe.json"), JSON.stringify(conjuracaoPorClasse, null, 2) + "\n");
+
+console.log("OK — 2 arquivos derivados gerados (regra-atributo-arma.json, conjuracao-por-classe.json)");

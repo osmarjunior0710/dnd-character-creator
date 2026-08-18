@@ -21,7 +21,6 @@ import {
   calcularSalvaguardas,
   calcularPericias,
   calcularPontosDeVidaNivel1,
-  mod,
 } from "../core/motor/atributos.ts";
 
 const ABILITIES = ["Força", "Destreza", "Constituição", "Inteligência", "Sabedoria", "Carisma"];
@@ -109,11 +108,11 @@ tudoOk &= await rodarCenario(
   () => {
     const bonusPorAtributo = { Força: 1, Constituição: 2 };
     const atributosCore = calcularAtributos(ABILITIES, { Força: 15, Destreza: 13, Constituição: 14, Inteligência: 10, Sabedoria: 12, Carisma: 8 }, bonusPorAtributo);
-    const valorFinalPorAtributo = Object.fromEntries(atributosCore.map((a) => [a.atributo, a.valor]));
-    const salvaguardasCore = calcularSalvaguardas(ABILITIES, valorFinalPorAtributo, CLASS_CONST["Bárbaro"].savingThrows, PROF_BONUS);
+    const modPorAtributo = Object.fromEntries(atributosCore.map((a) => [a.atributo, a.mod]));
+    const salvaguardasCore = calcularSalvaguardas(ABILITIES, modPorAtributo, CLASS_CONST["Bárbaro"].savingThrows, PROF_BONUS);
     const periciasProficientes = new Set(["Intimidação", "Sobrevivência", ...BACKGROUND_CONST["Soldado"].skills]);
-    const periciasCore = calcularPericias(ALL_SKILLS, SKILL_ABILITY, valorFinalPorAtributo, periciasProficientes, new Set(), PROF_BONUS);
-    const pvCore = calcularPontosDeVidaNivel1(CLASS_HIT_DIE["Bárbaro"], mod(valorFinalPorAtributo["Constituição"]));
+    const periciasCore = calcularPericias(ALL_SKILLS, SKILL_ABILITY, modPorAtributo, periciasProficientes, new Set(), PROF_BONUS);
+    const pvCore = calcularPontosDeVidaNivel1(CLASS_HIT_DIE["Bárbaro"], modPorAtributo["Constituição"]);
     return { atributosCore, salvaguardasCore, periciasCore, pvCore };
   }
 );
@@ -139,12 +138,12 @@ tudoOk &= await rodarCenario(
     const bonusPorAtributo = { Carisma: 2, Destreza: 1 };
     const baseAttrs = { Força: 8, Destreza: 15, Constituição: 13, Inteligência: 12, Sabedoria: 10, Carisma: 14 };
     const atributosCore = calcularAtributos(ABILITIES, baseAttrs, bonusPorAtributo);
-    const valorFinalPorAtributo = Object.fromEntries(atributosCore.map((a) => [a.atributo, a.valor]));
-    const salvaguardasCore = calcularSalvaguardas(ABILITIES, valorFinalPorAtributo, CLASS_CONST["Ladino"].savingThrows, PROF_BONUS);
+    const modPorAtributo = Object.fromEntries(atributosCore.map((a) => [a.atributo, a.mod]));
+    const salvaguardasCore = calcularSalvaguardas(ABILITIES, modPorAtributo, CLASS_CONST["Ladino"].savingThrows, PROF_BONUS);
     const periciasProficientes = new Set(["Furtividade", "Percepção", ...BACKGROUND_CONST["Charlatão"].skills]);
     const periciasEspecialista = new Set(["Furtividade", "Enganação"]);
-    const periciasCore = calcularPericias(ALL_SKILLS, SKILL_ABILITY, valorFinalPorAtributo, periciasProficientes, periciasEspecialista, PROF_BONUS);
-    const pvCore = calcularPontosDeVidaNivel1(CLASS_HIT_DIE["Ladino"], mod(valorFinalPorAtributo["Constituição"]));
+    const periciasCore = calcularPericias(ALL_SKILLS, SKILL_ABILITY, modPorAtributo, periciasProficientes, periciasEspecialista, PROF_BONUS);
+    const pvCore = calcularPontosDeVidaNivel1(CLASS_HIT_DIE["Ladino"], modPorAtributo["Constituição"]);
     return { atributosCore, salvaguardasCore, periciasCore, pvCore };
   }
 );
