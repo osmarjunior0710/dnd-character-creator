@@ -17,7 +17,18 @@
    quebrar compras salvas, e é o que data/equipment-aliases.js usa pra
    linkar o equipamento inicial de classe/antecedente aos itens reais da
    Loja (ver "mochila do jogador" em index.html). "n" continua sendo só
-   pra exibição — nunca usar pra identificar item em código novo. */
+   pra exibição — nunca usar pra identificar item em código novo.
+   "d" nas Ferramentas/Instrumentos Musicais: "Usar Objeto: ..." (o que a
+   ação Usar Objeto faz com aquele item, com a CD — ex: "Abrir uma
+   fechadura (CD 15)") e, quando existir, "Fabrica: ..." (lista de itens
+   que dá pra fabricar/consertar com aquela ferramenta) — texto da aba
+   "Ferramentas" da planilha de referência (fonte: Livro do Jogador D&D
+   5e 2024), não aparece na linha da tabela da Loja (fica comprida
+   demais pra maioria) — só no popup do botão ⓘ ao lado do nome do item
+   (ver renderShopItemInfoPopup() em 06-idiomas-attrs-shop.js). Pros
+   outros tipos de item sem proficiência (Focos, Símbolos, Munição,
+   Equipamento de Aventura) "d" continua vazio — o efeito deles, quando
+   existe, mora em "p" e aparece direto na tabela. */
 const SHOP = {
   "Armas Simples — Corpo a Corpo": { filterProf: "simples", items: [
       {id:"adaga",n:"Adaga", d:"1d4 Perfurante", p:"Acuidade, Arremesso, Leve", c:2},
@@ -87,42 +98,42 @@ const SHOP = {
       {id:"escudo",n:"Escudo", d:"+2 CA", p:"—", c:10},
   ]},
   "Ferramentas": { filterProf: null, items: [
-      {id:"ferramentas-de-carpinteiro",n:"Ferramentas de Carpinteiro", d:"", p:"Atributo: Força", c:8},
-      {id:"ferramentas-de-cartografo",n:"Ferramentas de Cartógrafo", d:"", p:"Atributo: Sabedoria", c:15},
-      {id:"ferramentas-de-coureiro",n:"Ferramentas de Coureiro", d:"", p:"Atributo: Destreza", c:5},
-      {id:"ferramentas-de-entalhador",n:"Ferramentas de Entalhador", d:"", p:"Atributo: Destreza", c:1},
-      {id:"ferramentas-de-ferreiro",n:"Ferramentas de Ferreiro", d:"", p:"Atributo: Força", c:20},
-      {id:"ferramentas-de-funileiro",n:"Ferramentas de Funileiro", d:"", p:"Atributo: Destreza", c:50},
-      {id:"ferramentas-de-joalheiro",n:"Ferramentas de Joalheiro", d:"", p:"Atributo: Inteligência", c:25},
-      {id:"ferramentas-de-ladrao",n:"Ferramentas de Ladrão", d:"", p:"Atributo: Destreza", c:25},
-      {id:"ferramentas-de-navegador",n:"Ferramentas de Navegador", d:"", p:"Atributo: Sabedoria", c:25},
-      {id:"ferramentas-de-oleiro",n:"Ferramentas de Oleiro", d:"", p:"Atributo: Inteligência", c:10},
-      {id:"ferramentas-de-pedreiro",n:"Ferramentas de Pedreiro", d:"", p:"Atributo: Força", c:10},
-      {id:"ferramentas-de-sapateiro",n:"Ferramentas de Sapateiro", d:"", p:"Atributo: Destreza", c:5},
-      {id:"ferramentas-de-tecelao",n:"Ferramentas de Tecelão", d:"", p:"Atributo: Destreza", c:1},
-      {id:"ferramentas-de-vidreiro",n:"Ferramentas de Vidreiro", d:"", p:"Atributo: Inteligência", c:30},
-      {id:"suprimentos-de-alquimista",n:"Suprimentos de Alquimista", d:"", p:"Atributo: Inteligência", c:50},
-      {id:"suprimentos-de-caligrafo",n:"Suprimentos de Calígrafo", d:"", p:"Atributo: Destreza", c:10},
-      {id:"suprimentos-de-cervejeiro",n:"Suprimentos de Cervejeiro", d:"", p:"Atributo: Inteligência", c:20},
-      {id:"suprimentos-de-pintor",n:"Suprimentos de Pintor", d:"", p:"Atributo: Sabedoria", c:10},
-      {id:"utensilios-de-cozinheiro",n:"Utensílios de Cozinheiro", d:"", p:"Atributo: Sabedoria", c:1},
-      {id:"kit-de-disfarce",n:"Kit de Disfarce", d:"", p:"Atributo: Carisma", c:25},
-      {id:"kit-de-falsificacao",n:"Kit de Falsificação", d:"", p:"Atributo: Destreza", c:15},
-      {id:"kit-de-herbalismo",n:"Kit de Herbalismo", d:"", p:"Atributo: Inteligência", c:5},
-      {id:"kit-de-jogos",n:"Kit de Jogos", d:"", p:"Atributo: Sabedoria · Variantes: Dados (1 PP), Xadrez-do-Dragão (1 PO), Baralho (5 PP), Três Dragões (1 PO)", c:1},
-      {id:"kit-de-veneno",n:"Kit de Veneno", d:"", p:"Atributo: Inteligência", c:50},
+      {id:"ferramentas-de-carpinteiro",n:"Ferramentas de Carpinteiro", d:"Usar Objeto: Selar ou abrir uma porta ou recipiente (CD 20). Fabrica: Aríete Portável, Baliza, Barril, Baú, Cajado, Clava, Clava Grande, Escada, Tocha.", p:"Atributo: Força", c:8},
+      {id:"ferramentas-de-cartografo",n:"Ferramentas de Cartógrafo", d:"Usar Objeto: Elaborar o mapa de uma pequena área (CD 15). Fabrica: Mapa.", p:"Atributo: Sabedoria", c:15},
+      {id:"ferramentas-de-coureiro",n:"Ferramentas de Coureiro", d:"Usar Objeto: Moldar a estética de um item de couro (CD 10). Fabrica: Algibeira, Aljava, Armadura de Couro, Armadura de Couro Batido, Cantil, Chicote, Estojo de Mapa ou Pergaminho, Estojo de Virotes de Besta, Funda, Gibão de Peles, Mochila, Pergaminho.", p:"Atributo: Destreza", c:5},
+      {id:"ferramentas-de-entalhador",n:"Ferramentas de Entalhador", d:"Usar Objeto: Entalhar um padrão em madeira (CD 10). Fabrica: Armas à Distância (exceto Funda, Mosquete e Pistola), Cajado, Caneta Tinteiro, Clava, Clava Grande, Dardos, Flechas, Foco Arcano, Foco Druídico, Virotes.", p:"Atributo: Destreza", c:1},
+      {id:"ferramentas-de-ferreiro",n:"Ferramentas de Ferreiro", d:"Usar Objeto: Forçar a abertura de uma porta ou recipiente (CD 20). Fabrica: qualquer arma Corpo a Corpo (exceto Cajado, Chicote, Clava, Clava Grande), armadura Média (exceto Gibão de Peles), armadura Pesada, Arpéu, Balas de Arma de Fogo, Balas de Funda, Balde, Corrente, Esferas de Metal, Estacas de Ferro, Estrepes, Pote de Ferro, Pé de Cabra.", p:"Atributo: Força", c:20},
+      {id:"ferramentas-de-funileiro",n:"Ferramentas de Funileiro", d:"Usar Objeto: Monte um item Minúsculo composto de sucata, que se desfaz em 1 minuto (CD 20). Fabrica: Apito Sinalizador, Armadilha de Caça, Cadeado, Caixa para Fogo, Espelho de Mão, Grilhões, Lanterna Coberta, Lanterna Foca-Facho, Pá, Pote, Sino.", p:"Atributo: Destreza", c:50},
+      {id:"ferramentas-de-joalheiro",n:"Ferramentas de Joalheiro", d:"Usar Objeto: Discernir o valor de uma gema (CD 15). Fabrica: Foco Arcano, Símbolo Sagrado.", p:"Atributo: Inteligência", c:25},
+      {id:"ferramentas-de-ladrao",n:"Ferramentas de Ladrão", d:"Usar Objeto: Abrir uma fechadura (CD 15) ou desarmar uma armadilha (CD 15).", p:"Atributo: Destreza", c:25},
+      {id:"ferramentas-de-navegador",n:"Ferramentas de Navegador", d:"Usar Objeto: Traçar uma rota (CD 10) ou determinar a posição observando as estrelas (CD 15).", p:"Atributo: Sabedoria", c:25},
+      {id:"ferramentas-de-oleiro",n:"Ferramentas de Oleiro", d:"Usar Objeto: Discernir como um objeto de cerâmica foi manuseado nas últimas 24 horas (CD 15). Fabrica: Jarro, Lâmpada.", p:"Atributo: Inteligência", c:10},
+      {id:"ferramentas-de-pedreiro",n:"Ferramentas de Pedreiro", d:"Usar Objeto: Cinzelar um símbolo ou buraco na pedra (CD 10). Fabrica: Roldana e Polias.", p:"Atributo: Força", c:10},
+      {id:"ferramentas-de-sapateiro",n:"Ferramentas de Sapateiro", d:"Usar Objeto: Modificar calçado para conceder Vantagem no próximo teste de Destreza (Acrobacia) do usuário (CD 10). Fabrica: Kit de Escalada.", p:"Atributo: Destreza", c:5},
+      {id:"ferramentas-de-tecelao",n:"Ferramentas de Tecelão", d:"Usar Objeto: Reparar um rasgo em uma roupa (CD 10) ou costurar um ornamento Minúsculo (CD 10). Fabrica: Armadura Acolchoada, Cesta, Cobertor, Saco de Dormir, Roupas Finas, Rede, Túnica, Corda, Saca, Cordão, Roupas de Viagem.", p:"Atributo: Destreza", c:1},
+      {id:"ferramentas-de-vidreiro",n:"Ferramentas de Vidreiro", d:"Usar Objeto: Discernir como um objeto de vidro foi manuseado nas últimas 24 horas (CD 15). Fabrica: Frasco, Jarro, Luneta, Lupa.", p:"Atributo: Inteligência", c:30},
+      {id:"suprimentos-de-alquimista",n:"Suprimentos de Alquimista", d:"Usar Objeto: Identificar uma substância (CD 15) ou iniciar um incêndio (CD 15). Fabrica: Ácido, Bolsa de Componentes, Fogo Alquímico, Óleo, Papel, Perfume.", p:"Atributo: Inteligência", c:50},
+      {id:"suprimentos-de-caligrafo",n:"Suprimentos de Calígrafo", d:"Usar Objeto: Escrever texto com uma caligrafia que protege contra falsificação (CD 15). Fabrica: Pergaminho Mágico, Tinta.", p:"Atributo: Destreza", c:10},
+      {id:"suprimentos-de-cervejeiro",n:"Suprimentos de Cervejeiro", d:"Usar Objeto: Detectar bebida envenenada (CD 15) ou identificar álcool (CD 10). Fabrica: Antitoxina.", p:"Atributo: Inteligência", c:20},
+      {id:"suprimentos-de-pintor",n:"Suprimentos de Pintor", d:"Usar Objeto: Fazer uma pintura reconhecível de algo que você viu (CD 10). Fabrica: Foco Druídico, Símbolo Sagrado.", p:"Atributo: Sabedoria", c:10},
+      {id:"utensilios-de-cozinheiro",n:"Utensílios de Cozinheiro", d:"Usar Objeto: Melhorar o sabor dos alimentos (CD 10) ou detectar alimentos estragados ou envenenados (CD 15). Fabrica: Rações.", p:"Atributo: Sabedoria", c:1},
+      {id:"kit-de-disfarce",n:"Kit de Disfarce", d:"Usar Objeto: Aplicar maquiagem (CD 10). Fabrica: Fantasia.", p:"Atributo: Carisma", c:25},
+      {id:"kit-de-falsificacao",n:"Kit de Falsificação", d:"Usar Objeto: Imitar 10 ou menos palavras escritas de outra pessoa (CD 15) ou duplicar um selo de cera (CD 20).", p:"Atributo: Destreza", c:15},
+      {id:"kit-de-herbalismo",n:"Kit de Herbalismo", d:"Usar Objeto: Identificar uma planta (CD 10). Fabrica: Antitoxina, Kit de Curandeiro, Poção de Cura, Vela.", p:"Atributo: Inteligência", c:5},
+      {id:"kit-de-jogos",n:"Kit de Jogos", d:"Usar Objeto: Discernir se alguém está trapaceando (CD 10) ou ganhar o jogo (CD 20).", p:"Atributo: Sabedoria · Variantes: Dados (1 PP), Xadrez-do-Dragão (1 PO), Baralho (5 PP), Três Dragões (1 PO)", c:1},
+      {id:"kit-de-veneno",n:"Kit de Veneno", d:"Usar Objeto: Detectar um objeto envenenado (CD 10). Fabrica: Veneno Básico.", p:"Atributo: Inteligência", c:50},
   ]},
   "Instrumentos Musicais": { filterProf: null, items: [
-      {id:"alaude",n:"Alaúde", d:"", p:"Instrumento Musical · Atributo: Carisma", c:35},
-      {id:"flauta",n:"Flauta", d:"", p:"Instrumento Musical · Atributo: Carisma", c:2},
-      {id:"flauta-de-pa",n:"Flauta de Pã", d:"", p:"Instrumento Musical · Atributo: Carisma", c:12},
-      {id:"gaita-de-foles",n:"Gaita de Foles", d:"", p:"Instrumento Musical · Atributo: Carisma", c:30},
-      {id:"lira",n:"Lira", d:"", p:"Instrumento Musical · Atributo: Carisma", c:30},
-      {id:"oboe",n:"Oboé", d:"", p:"Instrumento Musical · Atributo: Carisma", c:2},
-      {id:"tambor",n:"Tambor", d:"", p:"Instrumento Musical · Atributo: Carisma", c:6},
-      {id:"trombeta",n:"Trombeta", d:"", p:"Instrumento Musical · Atributo: Carisma", c:3},
-      {id:"violino",n:"Violino", d:"", p:"Instrumento Musical · Atributo: Carisma", c:30},
-      {id:"xilofone",n:"Xilofone", d:"", p:"Instrumento Musical · Atributo: Carisma", c:25},
+      {id:"alaude",n:"Alaúde", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:35},
+      {id:"flauta",n:"Flauta", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:2},
+      {id:"flauta-de-pa",n:"Flauta de Pã", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:12},
+      {id:"gaita-de-foles",n:"Gaita de Foles", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:30},
+      {id:"lira",n:"Lira", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:30},
+      {id:"oboe",n:"Oboé", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:2},
+      {id:"tambor",n:"Tambor", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:6},
+      {id:"trombeta",n:"Trombeta", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:3},
+      {id:"violino",n:"Violino", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:30},
+      {id:"xilofone",n:"Xilofone", d:"Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).", p:"Instrumento Musical · Atributo: Carisma", c:25},
   ]},
   "Focos e Símbolos": { filterProf: null, items: [
       {id:"foco-arcano-cajado",n:"Foco Arcano — Cajado", d:"", p:"—", c:5},
