@@ -15,6 +15,11 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "paths": {
+      "@core/*": ["../core/*"],
+      "@dados/*": ["../data/rulesets/dnd2024/*"]
+    },
+    "resolveJsonModule": true,
 
     /* Linting */
     "noUnusedLocals": true,
