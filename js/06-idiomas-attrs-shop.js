@@ -251,9 +251,30 @@ function renderShop(){
        usuário: card só dizia "tem um teste" sem explicar do que se
        trata). */
     const hasDanoEfeito = ['simples','marcial','leve','media','pesada','escudo'].includes(cat.filterProf);
-    if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
+    /* Carrinho por categoria (pedido do usuário, com screenshot: um
+       carrinho só no fim da Loja inteira ficava longe do que tinha sido
+       comprado, difícil conferir "o que eu já peguei de Armas Simples"
+       sem rolar até o final). Calculado ANTES do filtro de proficiência/
+       categoria vazia abaixo e anexado em TODOS os caminhos de saída
+       (inclusive quando a categoria inteira fica escondida) — se o
+       jogador já comprou algo Simples e depois liga o filtro de
+       proficiência escondendo Armas Simples (ND não bate), a confirmação
+       da compra não devia sumir junto, só a lista de opções pra comprar
+       mais. Fica sempre visível embaixo do <details> da categoria,
+       expandida ou colapsada — não faz sentido esconder "o que eu já
+       comprei" atrás de um accordion fechado. */
+    const catItemIds = new Set(cat.items.map(it=>it.id));
+    const catCartEntries = Object.entries(purchases).filter(([id,q])=>q>0 && catItemIds.has(id));
+    const catCartHtml = catCartEntries.length ? `<div class="cart-list cart-list-category">
+      <div class="cart-list-title">Comprado</div>
+      ${catCartEntries.map(([id,q])=>{
+        const item = findShopItem(id);
+        return `<div class="cart-item"><span>${item.n} ×${q}</span><span>${fmtGold(itemPrice(item)*q)} PO</span></div>`;
+      }).join('')}
+    </div>` : '';
+    if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)){ html += catCartHtml; return; }
     const visibleItems = cat.items.filter(it => it.c <= maxGold && (!filtering || !isWeaponCat || itemMatchesWeaponProf(clsConst, it.n)));
-    if(visibleItems.length===0) return;
+    if(visibleItems.length===0){ html += catCartHtml; return; }
     const isOpen = !data.shop.collapsedCats[catName]; // aberto por padrão, fechado só se o usuário já minimizou antes
     html += `<details class="shop-category" data-cat="${catName}" ontoggle="toggleShopCategory(this)" ${isOpen?'open':''}>
     <summary>${catName} <span class="cat-count">(${visibleItems.length} ${visibleItems.length===1?'item':'itens'})</span></summary>
@@ -282,16 +303,8 @@ function renderShop(){
       </tr>`;
     }).join('')}
     </tbody></table>
-    </details>`;
+    </details>${catCartHtml}`;
   });
-
-  const cartEntries = Object.entries(purchases).filter(([,q])=>q>0);
-  if(cartEntries.length){
-    html += `<h3>Carrinho</h3><div class="cart-list">${cartEntries.map(([id,q])=>{
-      const item = findShopItem(id);
-      return `<div class="cart-item"><span>${item.n} ×${q}</span><span>${fmtGold(itemPrice(item)*q)} PO</span></div>`;
-    }).join('')}</div>`;
-  }
 
   html += nav(canAdvance());
   return html;
