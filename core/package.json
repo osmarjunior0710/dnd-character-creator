@@ -1,0 +1,13 @@
+{
+  "name": "@dnd-character-creator/core",
+  "private": true,
+  "description": "Motor de ficha: schema versionado, estado, recursos, cálculos. Nunca contém constante específica de D&D (ver VISAO.md §4) — dados de regra vivem em data/rulesets/*, não aqui. Sem dependência de UI: consumido por ui/ (React) hoje, por qualquer outra UI futura sem mudar uma linha aqui.",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^5.7.0"
+  }
+}
