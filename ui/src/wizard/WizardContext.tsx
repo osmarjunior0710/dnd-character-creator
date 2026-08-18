@@ -24,10 +24,28 @@ export function antecedenteEscolhaVazia(): AntecedenteEscolha {
   return { abilityPlan: null, equipment: null, habilidoso: [], ferramentaEscolhida: null, iniciadoCantrips: [], iniciadoSpell1: [] };
 }
 
+export interface EspecieEscolha {
+  tamanho: string | null; // Tiferino, Humano, Aasimar (as outras espécies têm 1 opção só, sem escolha)
+  pericia: string | null; // Humano (Hábil), Elfo (Sentidos Aguçados)
+  talento: string | null; // Humano (Versátil)
+  heranca: string | null; // Draconato (Herança Dracônica)
+  linhagem: string | null; // Elfo, Gnomo
+  atributoLinhagem: string | null; // Gnomo
+  legado: string | null; // Tiferino
+  atributoLegado: string | null; // Tiferino
+  ancestralidade: string | null; // Golias
+}
+
+export function especieEscolhaVazia(): EspecieEscolha {
+  return { tamanho: null, pericia: null, talento: null, heranca: null, linhagem: null, atributoLinhagem: null, legado: null, atributoLegado: null, ancestralidade: null };
+}
+
 export interface WizardData {
   antecedente: string | null;
   freeAbilityRule: boolean;
   antecedentes: Record<string, AntecedenteEscolha>;
+  especie: string | null;
+  especies: Record<string, EspecieEscolha>;
 }
 
 function dadosIniciais(): WizardData {
@@ -35,7 +53,7 @@ function dadosIniciais(): WizardData {
   // no vanilla (js/00-notes-and-state.js linha 1339). Achado batendo este
   // valor contra o vanilla ao testar esta sub-entrega: eu tinha começado
   // com true por engano.
-  return { antecedente: null, freeAbilityRule: false, antecedentes: {} };
+  return { antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {} };
 }
 
 interface WizardContextValor {
@@ -61,7 +79,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   // forma funcional do setState) evita o double-invoke, porque ele só
   // acontece quando se passa uma FUNÇÃO pro setState.
   function definir(atualizar: (rascunho: WizardData) => void) {
-    const rascunho: WizardData = { ...dados, antecedentes: { ...dados.antecedentes } };
+    const rascunho: WizardData = { ...dados, antecedentes: { ...dados.antecedentes }, especies: { ...dados.especies } };
     atualizar(rascunho);
     setDados(rascunho);
   }
@@ -92,4 +110,22 @@ export function useAntecedenteAtivo(): [AntecedenteEscolha, (mutar: (a: Antecede
   }
 
   return [atual, mutarAntecedente];
+}
+
+/** Escolha da espécie ATIVA — mesmo padrão de useAntecedenteAtivo() acima. */
+export function useEspecieAtiva(): [EspecieEscolha, (mutar: (e: EspecieEscolha) => void) => void] {
+  const { dados, definir } = useWizard();
+  const nome = dados.especie;
+  const atual = (nome && dados.especies[nome]) || especieEscolhaVazia();
+
+  function mutarEspecie(mutar: (e: EspecieEscolha) => void) {
+    definir((rascunho) => {
+      if (!rascunho.especie) return;
+      const copia = { ...(rascunho.especies[rascunho.especie] || especieEscolhaVazia()) };
+      mutar(copia);
+      rascunho.especies[rascunho.especie] = copia;
+    });
+  }
+
+  return [atual, mutarEspecie];
 }
