@@ -1,0 +1,18 @@
+{
+  "Bárbaro": {
+    "nome": "Defesa sem Armadura (Bárbaro)",
+    "atributos": [
+      "Destreza",
+      "Constituição"
+    ],
+    "perdeComEscudo": false
+  },
+  "Monge": {
+    "nome": "Defesa sem Armadura (Monge)",
+    "atributos": [
+      "Destreza",
+      "Sabedoria"
+    ],
+    "perdeComEscudo": true
+  }
+}

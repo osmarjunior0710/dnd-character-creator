@@ -155,3 +155,33 @@ for (const nome of NOMES_EXPORTADOS) {
 }
 
 console.log(`OK — ${NOMES_EXPORTADOS.length} arquivos gerados em ${OUT_DIR}`);
+
+// ---------------------------------------------------------------------------
+// Dados DERIVADOS (Entrega 4c) — diferente de tudo acima, isto não é uma
+// cópia fiel de um const do vanilla. É a mesma regra que hoje só existe como
+// ramificação de código em computeAC() (js/07-compute-and-summary.js,
+// `if(classe==='Bárbaro')`/`if(classe==='Monge' && !hasShield)`/
+// `if(estiloDeLuta==='Defensivo')`), reescrita à mão como dado estruturado —
+// porque o motor genérico em core/ não pode ter esses nomes de classe/estilo
+// dentro dele (VISAO.md §4). Conferir sempre contra js/07-compute-and-summary.js
+// se a regra vanilla mudar.
+
+const defesaSemArmadura = {
+  "Bárbaro": { nome: "Defesa sem Armadura (Bárbaro)", atributos: ["Destreza", "Constituição"], perdeComEscudo: false },
+  "Monge": { nome: "Defesa sem Armadura (Monge)", atributos: ["Destreza", "Sabedoria"], perdeComEscudo: true },
+};
+writeFileSync(join(OUT_DIR, "defesa-sem-armadura.json"), JSON.stringify(defesaSemArmadura, null, 2) + "\n");
+
+// Dos 10 Estilos de Luta do Guerreiro (GUERREIRO.estiloDeLuta), só o
+// "Defensivo" muda a CA — os outros 9 são só texto informativo.
+const estiloDeLutaEfeitoCA = {
+  "Defensivo": { label: "Estilo de Luta (Defensivo)", valor: 1 },
+};
+writeFileSync(join(OUT_DIR, "estilo-de-luta-efeito-ca.json"), JSON.stringify(estiloDeLutaEfeitoCA, null, 2) + "\n");
+
+// O bônus de +2 CA do Escudo está hardcoded em computeAC() (`base += 2`),
+// não é um campo do próprio item na Loja — só existe 1 Escudo na Loja hoje.
+const escudoBonusCA = { label: "Escudo (comprado na Loja)", labelFonte: "Escudo", valor: 2 };
+writeFileSync(join(OUT_DIR, "escudo-bonus-ca.json"), JSON.stringify(escudoBonusCA, null, 2) + "\n");
+
+console.log("OK — 3 arquivos derivados gerados (defesa-sem-armadura.json, estilo-de-luta-efeito-ca.json, escudo-bonus-ca.json)");
