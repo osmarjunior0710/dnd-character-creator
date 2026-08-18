@@ -1,0 +1,29 @@
+{
+  "Ordeiro e Bom": {
+    "descricao": "Esforça-se para fazer a coisa certa conforme esperado pela sociedade; luta contra a injustiça e protege inocentes."
+  },
+  "Neutro e Bom": {
+    "descricao": "Faz o melhor que pode, trabalhando dentro das regras mas sem se sentir obrigado por elas."
+  },
+  "Caótico e Bom": {
+    "descricao": "Age conforme a própria consciência, sem se importar com o que os outros esperam."
+  },
+  "Ordeiro e Neutro": {
+    "descricao": "Age de acordo com lei, tradição ou código pessoal; segue uma vida disciplinada."
+  },
+  "Neutro": {
+    "descricao": "Prefere evitar questões morais, não toma partido, faz o que parece melhor no momento."
+  },
+  "Caótico e Neutro": {
+    "descricao": "Segue seus impulsos, valorizando a liberdade pessoal acima de tudo."
+  },
+  "Ordeiro e Mau": {
+    "descricao": "Toma metodicamente o que quer dentro dos limites de um código de tradição, lealdade ou ordem."
+  },
+  "Neutro e Mau": {
+    "descricao": "Não se preocupa com o mal que causa enquanto persegue seus desejos."
+  },
+  "Caótico e Mau": {
+    "descricao": "Age com violência arbitrária, impulsionado por ódio ou sede de sangue."
+  }
+}

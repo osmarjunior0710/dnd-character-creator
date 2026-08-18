@@ -1,0 +1,157 @@
+#!/usr/bin/env node
+// Copia (não reescreve) os dados de mecânica de nível 1 já curados à mão em
+// data/*.js do site vanilla para data/rulesets/dnd2024/mecanicas-nivel1/,
+// em JSON. Isso é a migração "praticamente intacta" que o VISAO.md §4 já
+// previa para esses arquivos — são dados de regra (classe, espécie,
+// antecedente, arma, armadura, item, magia, talento) que o motor em core/
+// (Entrega 4 da Fase 1) vai consumir, não a planilha de referência bruta da
+// Entrega 1 (que cobre o livro inteiro 1-20, mas em formato de texto corrido
+// — este script cobre exatamente o nível 1, no formato que o wizard atual
+// já usa pra calcular CA/PV/perícias/ataques/conjuração).
+//
+// Roda cada data/*.js (mais um recorte de puro-dado de
+// js/00-notes-and-state.js — só os mapas Classe/Espécie/Antecedente->const,
+// nunca as notas/funções) na ORDEM EXATA em que o index.html carrega hoje,
+// dentro de uma sandbox Node (vm), e serializa os objetos resultantes —
+// nada é digitado de novo à mão, então não há risco de erro de transcrição.
+//
+// Roda sozinho, sem argumento: node scripts/exportar-mecanicas-vanilla.mjs
+
+import vm from "node:vm";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const RAIZ = join(__dirname, "..");
+const OUT_DIR = join(RAIZ, "data", "rulesets", "dnd2024", "mecanicas-nivel1");
+mkdirSync(OUT_DIR, { recursive: true });
+
+// Mesma ordem de <script> do index.html (linhas 19-69) — só os arquivos de
+// DADO puro (const = objeto/array), nunca os js/*.js de UI/lógica.
+const ARQUIVOS_DADO_EM_ORDEM = [
+  "data/weapon-mastery.js",
+  "data/classes/bruxo.js",
+  "data/classes/barbaro.js",
+  "data/spells.js",
+  "data/feats.js",
+  "data/skills.js",
+  "data/classes/bardo.js",
+  "data/classes/mago.js",
+  "data/classes/paladino.js",
+  "data/classes/psionico.js",
+  "data/classes/clerigo.js",
+  "data/classes/guerreiro.js",
+  "data/classes/ladino.js",
+  "data/classes/druida.js",
+  "data/classes/feiticeiro.js",
+  "data/classes/monge.js",
+  "data/classes/guardiao.js",
+  "data/languages.js",
+  "data/alignments.js",
+  "data/instruments.js",
+  "data/game-sets.js",
+  "data/artisan-tools.js",
+  "data/shop-items.js",
+  "data/equipment-aliases.js",
+  "data/armor-ac.js",
+  "data/species/tiferino.js",
+  "data/species/pequenino.js",
+  "data/species/aasimar.js",
+  "data/species/anao.js",
+  "data/species/orc.js",
+  "data/species/humano.js",
+  "data/species/draconato.js",
+  "data/species/elfo.js",
+  "data/species/gnomo.js",
+  "data/species/golias.js",
+  "data/backgrounds/charlatao.js",
+  "data/backgrounds/nobre.js",
+  "data/backgrounds/andarilho.js",
+  "data/backgrounds/criminoso.js",
+  "data/backgrounds/eremita.js",
+  "data/backgrounds/fazendeiro.js",
+  "data/backgrounds/marinheiro.js",
+  "data/backgrounds/escriba.js",
+  "data/backgrounds/mercador.js",
+  "data/backgrounds/artesao.js",
+  "data/backgrounds/artista.js",
+  "data/backgrounds/guarda.js",
+  "data/backgrounds/soldado.js",
+  "data/backgrounds/acolito.js",
+  "data/backgrounds/guia.js",
+  "data/backgrounds/sabio.js",
+];
+
+const partes = ARQUIVOS_DADO_EM_ORDEM.map((rel) => readFileSync(join(RAIZ, rel), "utf8"));
+
+// Recorte de js/00-notes-and-state.js: só os mapas Classe/Espécie/
+// Antecedente -> const (linhas 1010-1065) e as consts de regra genérica
+// (linhas 1114-1119: ABILITIES, PROF_BONUS_BY_LEVEL, STANDARD_ARRAY) — por
+// intervalo de linha, nunca o arquivo inteiro (que tem ~1400 linhas de
+// notas/histórico e funções que assumem DOM/localStorage, sem uso aqui).
+const notasELinhas = readFileSync(join(RAIZ, "js", "00-notes-and-state.js"), "utf8").split("\n");
+const recorteMapas = notasELinhas.slice(1009, 1065).join("\n"); // linhas 1010-1065 (1-indexed)
+const recorteConsts = notasELinhas.slice(1113, 1119).join("\n"); // linhas 1114-1119
+
+// 4 mapas pequenos e estáveis que hoje vivem em js/06-idiomas-attrs-shop.js
+// (arquivo de UI — não dá pra rodar ele inteiro numa sandbox sem DOM).
+// Reproduzidos aqui por extenso, não recalculados: conferir com
+// `grep -n "WEAPON_PROF_LABEL\|ARMOR_PROF_LABEL\|CLASS_HIT_DIE\|CLASS_SPELL_ABILITY" js/06-idiomas-attrs-shop.js`
+// sempre que o vanilla mudar essas linhas.
+const mapasDeJs06 = `
+const WEAPON_PROF_LABEL = {"simples":"Armas Simples","marcial":"Armas Marciais"};
+const ARMOR_PROF_LABEL = {"leve":"Armadura Leve","media":"Armadura Média","pesada":"Armadura Pesada","escudo":"Escudos"};
+const CLASS_HIT_DIE = {"Bárbaro":12,"Guerreiro":10,"Paladino":10,"Guardião":10,"Bardo":8,"Bruxo":8,"Clérigo":8,"Druida":8,"Ladino":8,"Monge":8,"Psiônico":6,"Feiticeiro":6,"Mago":6};
+const CLASS_SPELL_ABILITY = {"Mago":"Inteligência","Psiônico":"Inteligência","Clérigo":"Sabedoria","Druida":"Sabedoria","Guardião":"Sabedoria","Bruxo":"Carisma","Bardo":"Carisma","Paladino":"Carisma","Feiticeiro":"Carisma"};
+`;
+
+const NOMES_EXPORTADOS = [
+  // Mecânica de arma/armadura/maestria
+  "WEAPON_MASTERY", "MASTERY_PROPERTIES", "ARMOR_AC", "SHIELD_ITEM_ID",
+  "WEAPON_PROF_LABEL", "ARMOR_PROF_LABEL",
+  // Classe (nível 1)
+  "CLASS_CONST", "CLASS_DATA_KEY", "CLASS_HIT_DIE", "CLASS_SPELL_ABILITY",
+  // Antecedente
+  "BACKGROUND_CONST", "BACKGROUND_DATA_KEY",
+  // Espécie
+  "SPECIES_CONST",
+  // Loja / equipamento
+  "SHOP", "EQUIPMENT_ALIASES",
+  // Magias, talentos, perícias, idiomas, alinhamentos, ferramentas/instrumentos
+  "SPELL_DETAILS", "FEAT_DETAILS", "ALL_SKILLS", "SKILL_ABILITY",
+  "COMMON_LANGUAGES", "RARE_LANGUAGES", "ALIGNMENTS", "ALIGNMENT_INFO",
+  "ALL_INSTRUMENTS", "ALL_GAME_SETS", "ALL_ARTISAN_TOOLS", "KIT_CONTENTS",
+  // Regras gerais de personagem
+  "ABILITIES", "PROF_BONUS_BY_LEVEL", "STANDARD_ARRAY",
+];
+
+const scriptCompleto =
+  partes.join("\n;\n") +
+  "\n;\n" + recorteMapas +
+  "\n;\n" + recorteConsts +
+  "\n;\n" + mapasDeJs06 +
+  `\nglobalThis.__EXPORT__ = { ${NOMES_EXPORTADOS.join(", ")} };\n`;
+
+const sandbox = {};
+vm.createContext(sandbox);
+try {
+  vm.runInContext(scriptCompleto, sandbox, { filename: "mecanicas-vanilla-concatenado.js" });
+} catch (e) {
+  console.error("Falha ao rodar os data/*.js concatenados numa sandbox:", e.message);
+  process.exit(1);
+}
+
+const exportado = sandbox.__EXPORT__;
+const faltando = NOMES_EXPORTADOS.filter((n) => exportado[n] === undefined);
+if (faltando.length) {
+  console.error("Consts esperadas mas não encontradas depois de rodar os arquivos:", faltando);
+  process.exit(1);
+}
+
+for (const nome of NOMES_EXPORTADOS) {
+  const arquivo = nome.toLowerCase().replace(/_/g, "-") + ".json";
+  writeFileSync(join(OUT_DIR, arquivo), JSON.stringify(exportado[nome], null, 2) + "\n");
+}
+
+console.log(`OK — ${NOMES_EXPORTADOS.length} arquivos gerados em ${OUT_DIR}`);

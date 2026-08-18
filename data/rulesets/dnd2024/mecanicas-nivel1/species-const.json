@@ -1,0 +1,676 @@
+{
+  "Tiferino": {
+    "nome": "Tiferino",
+    "flavor": "Tiferinos carregam em suas veias um legado ínfero — um vínculo de sangue com um diabo, demônio ou outra entidade dos Planos Inferiores, herdado ou nascido diretamente lá. Esse laço concede poder, mas não determina o caráter ou a moral de quem o carrega: cada tiferino escolhe abraçar ou lamentar essa herança. (Livro do Jogador, pág. 196-198)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio",
+        "Pequeno"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,20 a 2,10 metros",
+        "Pequeno": "cerca de 0,90 a 1,20 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "18 metros",
+    "tracosFixos": [
+      {
+        "nome": "Presença Sobrenatural",
+        "resumo": "Ao conjurar o truque abaixo com este traço, a magia usa o mesmo atributo de conjuração escolhido para o seu Legado Ínfero.",
+        "concede": [
+          {
+            "tipo": "truque",
+            "nome": "Taumaturgia"
+          }
+        ]
+      }
+    ],
+    "subespecie": {
+      "nome": "Legado Ínfero",
+      "escolhidaNaCriacao": true,
+      "opcoes": [
+        {
+          "nome": "Abissal",
+          "nivel1": {
+            "resumo": "Você tem Resistência a dano Venenoso.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Rajada de Veneno"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Raio Nauseante"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Paralisar Pessoa"
+              }
+            ]
+          }
+        },
+        {
+          "nome": "Ctônico",
+          "nivel1": {
+            "resumo": "Você tem Resistência a dano Necrótico.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Toque Necrótico"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Vitalidade Vazia"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Raio do Enfraquecimento"
+              }
+            ]
+          }
+        },
+        {
+          "nome": "Infernal",
+          "nivel1": {
+            "resumo": "Você tem Resistência a dano Ígneo.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Raio de Fogo"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Repreensão Diabólica"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Escuridão"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "Pequenino": {
+    "nome": "Pequenino",
+    "flavor": "Devotados a deuses que valorizam o lar, a família e a comunidade, os pequeninos costumam sonhar com uma vida tranquila — mas muitos sentem o chamado da aventura. Seu tamanho discreto, parecido com o de uma criança humana, os ajuda a passar despercebidos e a se espremer em espaços que outros povos não conseguem. (Livro do Jogador, pág. 195)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Pequeno"
+      ],
+      "alturas": {
+        "Pequeno": "cerca de 0,60 a 0,90 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": null,
+    "tracosFixos": [
+      {
+        "nome": "Corajoso",
+        "resumo": "Você tem Vantagem nas salvaguardas que realizar para evitar ou encerrar a condição Amedrontado.",
+        "concede": []
+      },
+      {
+        "nome": "Agilidade Pequenina",
+        "resumo": "Você pode se mover pelo espaço de qualquer criatura que seja um tamanho maior que você, mas não pode parar no mesmo espaço.",
+        "concede": []
+      },
+      {
+        "nome": "Sorte",
+        "resumo": "Ao tirar 1 no d20 de um Teste de d20, você pode jogar novamente o dado e deve usar a nova jogada.",
+        "concede": []
+      },
+      {
+        "nome": "Furtividade Natural",
+        "resumo": "Você pode executar a ação Esconder mesmo quando estiver encoberto apenas por uma criatura que seja pelo menos um tamanho maior que você.",
+        "concede": []
+      }
+    ],
+    "subespecie": null
+  },
+  "Aasimar": {
+    "nome": "Aasimar",
+    "flavor": "Mortais que carregam uma centelha dos Planos Superiores na alma — descendência angelical ou infusão de poder celestial. Vivem até 160 anos; sinais físicos sutis da herança (marcas metálicas, olhos brilhantes, leve halo) ficam mais evidentes quando revelam sua natureza. (Livro do Jogador, pág. 186)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio",
+        "Pequeno"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,20 a 2,10 metros",
+        "Pequeno": "cerca de 0,60 a 1,20 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "18 metros",
+    "tracosFixos": [
+      {
+        "nome": "Resistência Celestial",
+        "resumo": "Você tem Resistência a dano Necrótico e Radiante.",
+        "concede": []
+      },
+      {
+        "nome": "Mãos Curativas",
+        "resumo": "Você executa uma ação Usar Magia, toca uma criatura e joga um número de d4s igual ao seu Bônus de Proficiência. <br>A criatura restaura Pontos de Vida iguais ao total jogado. <br>Depois de usar esse traço, você não pode usá-lo novamente até completar um Descanso Longo.",
+        "concede": []
+      },
+      {
+        "nome": "Portador da Luz",
+        "resumo": "Carisma é seu atributo de conjuração para o truque abaixo.",
+        "concede": [
+          {
+            "tipo": "truque",
+            "nome": "Luz"
+          }
+        ]
+      }
+    ],
+    "revelacaoCelestial": {
+      "nome": "Revelação Celestial",
+      "nivelConcedido": 3,
+      "aviso": "A partir do nível 3, como uma Ação Bônus você pode se transformar usando uma das formas abaixo (escolhida a cada vez que se transforma, não fixada agora). A transformação dura 1 minuto, e uma vez por turno seus ataques ou magias causam dano adicional igual ao seu Bônus de Proficiência. Você só pode se transformar 1 vez por Descanso Longo.",
+      "opcoes": [
+        {
+          "nome": "Asas Celestiais",
+          "resumo": "Duas asas espectrais brotam nas suas costas. Enquanto durar, você tem Deslocamento de Voo igual ao seu Deslocamento normal.",
+          "concede": []
+        },
+        {
+          "nome": "Manto Necrótico",
+          "resumo": "Seus olhos se tornam poças de escuridão e asas que não voam brotam nas suas costas. Criaturas não-aliadas a até 3 metros devem ser bem-sucedidas numa salvaguarda de Carisma (CD 8 + seu modificador de Carisma + Bônus de Proficiência) ou ficam Amedrontadas até o final do seu próximo turno.",
+          "concede": []
+        },
+        {
+          "nome": "Transfiguração Radiante",
+          "resumo": "Luz abrasadora irradia de seus olhos e boca. Você emite Luz Plena num raio de 3 metros e Meia-luz por mais 3 metros; no fim de cada um dos seus turnos, criaturas a até 3 metros de você sofrem dano Radiante igual ao seu Bônus de Proficiência.",
+          "concede": []
+        }
+      ]
+    },
+    "subespecie": null
+  },
+  "Anão": {
+    "nome": "Anão",
+    "flavor": "Povo forjado por divindades da forja (como Moradin), com forte ligação a pedra, metal e vida subterrânea. Vivem cerca de 350 anos; tradição de resiliência e bravura em conflitos contra monstros das montanhas e do subsolo. (Livro do Jogador, pág. 187)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,20 a 1,50 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "36 metros",
+    "tracosFixos": [
+      {
+        "nome": "Resistência a Toxinas",
+        "resumo": "Você tem Resistência a dano Venenoso. Você também tem Vantagem nas salvaguardas que realizar para evitar ou encerrar a condição Envenenado.",
+        "concede": []
+      },
+      {
+        "nome": "Tenacidade Anã",
+        "resumo": "Seus Pontos de Vida máximos aumentam em 1, e novamente em 1 sempre que você atinge um nível de personagem.",
+        "concede": []
+      },
+      {
+        "nome": "Conhecimento de Pedras",
+        "resumo": "Como uma Ação Bônus, você adquire Sismiconsciência com um alcance de 18 metros por 10 minutos — precisa estar em, ou tocar, uma superfície de pedra (natural ou trabalhada) para usar. <br>Você pode usar essa Ação Bônus um número de vezes igual ao seu Bônus de Proficiência, recuperando todos os usos ao completar um Descanso Longo.",
+        "concede": []
+      }
+    ],
+    "subespecie": null
+  },
+  "Orc": {
+    "nome": "Orc",
+    "flavor": "Descendem espiritualmente de Gruumsh, herdando resistência, determinação e visão apurada no escuro. Fisicamente robustos; a relação com o legado de Gruumsh varia — alguns o abraçam, outros seguem caminho próprio. (Livro do Jogador, pág. 194)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,80 a 2,10 metros"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "36 metros",
+    "tracosFixos": [
+      {
+        "nome": "Pico de Adrenalina",
+        "resumo": "Você pode executar a ação Correr como uma Ação Bônus. <br>Ao fazer isso, você adquire um número de Pontos de Vida Temporários igual ao seu Bônus de Proficiência. <br>Você pode usar este traço um número de vezes igual ao seu Bônus de Proficiência, recuperando todos os usos ao completar um Descanso Curto ou Longo.",
+        "concede": []
+      },
+      {
+        "nome": "Vigor Implacável",
+        "resumo": "Ao ser reduzido a 0 Pontos de Vida, mas não morto imediatamente, você fica com 1 Ponto de Vida. <br>Depois de usar este traço, você não pode usá-lo novamente até completar um Descanso Longo.",
+        "concede": []
+      }
+    ],
+    "subespecie": null
+  },
+  "Humano": {
+    "nome": "Humano",
+    "flavor": "A espécie mais numerosa e variada do multiverso, presente em praticamente todo cenário conhecido. Ambiciosos e adaptáveis; sem traço sobrenatural marcante, mas versáteis em habilidades práticas. (Livro do Jogador, pág. 193)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio",
+        "Pequeno"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,20 a 2,10 metros",
+        "Pequeno": "cerca de 0,60 a 1,20 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": null,
+    "tracosFixos": [
+      {
+        "nome": "Eficiente",
+        "resumo": "Você adquire Inspiração Heroica sempre que completar um Descanso Longo.",
+        "concede": []
+      }
+    ],
+    "subespecie": null
+  },
+  "Draconato": {
+    "nome": "Draconato",
+    "flavor": "Descendem de ovos de dragões cromáticos ou metálicos, ligados por lenda a Bahamut e Tiamat. Parecem dragões bípedes sem asas — escamosos, com chifres e coloração que remetem ao seu ancestral dracônico. (Livro do Jogador, pág. 188)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,50 a 2,10 metros"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "18 metros",
+    "tracosFixos": [
+      {
+        "nome": "Ataque de Sopro",
+        "resumo": "Ao executar a ação Atacar, você pode substituir um dos seus ataques por uma emissão de energia num Cone de 4,5 metros ou numa Linha de 9x1,5 metros (escolha a forma a cada vez). <br>Cada criatura na área faz uma salvaguarda de Destreza (CD 8 + seu modificador de Constituição + Bônus de Proficiência); falha = 1d10 de dano do tipo da sua Herança Dracônica, sucesso = metade. <br>O dano aumenta para 2d10 no nível 5, 3d10 no nível 11 e 4d10 no nível 17. Usos = seu Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+        "concede": []
+      },
+      {
+        "nome": "Resistência a Dano",
+        "resumo": "Você tem Resistência ao tipo de dano determinado pela sua Herança Dracônica.",
+        "concede": []
+      },
+      {
+        "nome": "Voo Dracônico",
+        "resumo": "A partir do nível 5 de personagem, como uma Ação Bônus, você cria asas espectrais nas costas que duram 10 minutos ou até você as retrair (nenhuma ação necessária) ou ficar Incapacitado. Enquanto durar, você tem Deslocamento de Voo igual ao seu Deslocamento normal. <br>Depois de usar, não pode usar de novo até completar um Descanso Longo.",
+        "concede": []
+      }
+    ],
+    "subespecie": {
+      "nome": "Herança Dracônica",
+      "escolhidaNaCriacao": true,
+      "semEscalonamento": true,
+      "opcoes": [
+        {
+          "nome": "Azul",
+          "tipoDano": "Elétrico"
+        },
+        {
+          "nome": "Branco",
+          "tipoDano": "Gélido"
+        },
+        {
+          "nome": "Bronze",
+          "tipoDano": "Elétrico"
+        },
+        {
+          "nome": "Cobre",
+          "tipoDano": "Ácido"
+        },
+        {
+          "nome": "Latão",
+          "tipoDano": "Ígneo"
+        },
+        {
+          "nome": "Negro",
+          "tipoDano": "Ácido"
+        },
+        {
+          "nome": "Ouro",
+          "tipoDano": "Ígneo"
+        },
+        {
+          "nome": "Prata",
+          "tipoDano": "Gélido"
+        },
+        {
+          "nome": "Verde",
+          "tipoDano": "Venenoso"
+        },
+        {
+          "nome": "Vermelho",
+          "tipoDano": "Ígneo"
+        }
+      ]
+    }
+  },
+  "Elfo": {
+    "nome": "Elfo",
+    "flavor": "Criados por Corellon, perderam a habilidade ancestral de mudar de forma após um conflito mítico envolvendo Lolth. Vivem cerca de 750 anos, não dormem (entram em transe), e se dividem em variações moldadas pelo ambiente ao longo de séculos. (Livro do Jogador, pág. 189-190)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio"
+      ],
+      "alturas": {
+        "Médio": "cerca de 1,50 a 1,80 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "18 metros",
+    "tracosFixos": [
+      {
+        "nome": "Ancestralidade Feérica",
+        "resumo": "Você tem Vantagem nas salvaguardas que realizar para evitar ou encerrar a condição Enfeitiçado.",
+        "concede": []
+      },
+      {
+        "nome": "Transe",
+        "resumo": "Você pode completar um Descanso Longo em 4 horas ao meditar, sem a necessidade de dormir, mantendo a consciência, e magia não pode forçá-lo a dormir.",
+        "concede": []
+      }
+    ],
+    "sentidosAgucados": {
+      "nome": "Sentidos Aguçados",
+      "opcoes": [
+        "Intuição",
+        "Percepção",
+        "Sobrevivência"
+      ]
+    },
+    "subespecie": {
+      "nome": "Linhagem Élfica",
+      "escolhidaNaCriacao": true,
+      "opcoes": [
+        {
+          "nome": "Alto Elfo",
+          "nivel1": {
+            "resumo": "Você conhece o truque abaixo. Sempre que completar um Descanso Longo, pode substituí-lo por outro truque da lista de magias de Mago.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Prestidigitação Arcana"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Detectar Magia"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Passo Nebuloso"
+              }
+            ]
+          }
+        },
+        {
+          "nome": "Drow",
+          "nivel1": {
+            "resumo": "Sua Visão no Escuro aumenta para 36 metros. Você também conhece o truque abaixo.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Luzes Dançantes"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Fogo das Fadas"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Escuridão"
+              }
+            ]
+          }
+        },
+        {
+          "nome": "Elfo Silvestre",
+          "nivel1": {
+            "resumo": "Seu Deslocamento aumenta para 10,5 metros. Você também conhece o truque abaixo.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Arte Druídica"
+              }
+            ]
+          },
+          "nivel3": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Passos Largos"
+              }
+            ]
+          },
+          "nivel5": {
+            "resumo": "",
+            "concede": [
+              {
+                "tipo": "magia",
+                "nome": "Passo Sem Rastro"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "Gnomo": {
+    "nome": "Gnomo",
+    "flavor": "Povo mágico pequeno, ligado a deuses da invenção e das ilusões, com vida longa (~425 anos). Compensam a estatura com engenhosidade, vivendo em túneis e florestas; divididos entre gnomos das rochas e gnomos do bosque. (Livro do Jogador, pág. 191)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Pequeno"
+      ],
+      "alturas": {
+        "Pequeno": "cerca de 0,90 a 1,20 metro"
+      }
+    },
+    "deslocamento": "9 metros",
+    "visaoNoEscuro": "18 metros",
+    "tracosFixos": [
+      {
+        "nome": "Astúcia de Gnomo",
+        "resumo": "Você tem Vantagem em salvaguardas de Inteligência, Sabedoria e Carisma.",
+        "concede": []
+      }
+    ],
+    "subespecie": {
+      "nome": "Linhagem Gnômica",
+      "escolhidaNaCriacao": true,
+      "semEscalonamento": true,
+      "opcoes": [
+        {
+          "nome": "Gnomo das Rochas",
+          "nivel1": {
+            "resumo": "Você pode gastar 10 minutos conjurando Prestidigitação Arcana para fabricar um dispositivo mecânico minúsculo (CA 5, 1 PV) — um brinquedo, isqueiro mecânico ou caixa de música, por exemplo. <br>Ao fabricar, você escolhe um efeito de Prestidigitação Arcana; o dispositivo produz esse efeito sempre que alguém executa uma Ação Bônus pra ativá-lo com um toque. <br>Você pode ter até 3 desses dispositivos ao mesmo tempo; cada um se desfaz 8 horas depois de fabricado (ou quando desmontado com um toque).",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Prestidigitação Arcana"
+              },
+              {
+                "tipo": "truque",
+                "nome": "Reparar"
+              }
+            ]
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Gnomo do Bosque",
+          "nivel1": {
+            "resumo": "Você sempre tem a magia abaixo preparada. Pode conjurá-la sem gastar um espaço de magia um número de vezes igual ao seu Bônus de Proficiência, recuperando todos os usos ao completar um Descanso Longo — ou pode conjurá-la usando qualquer espaço de magia que tiver.",
+            "concede": [
+              {
+                "tipo": "truque",
+                "nome": "Ilusão Menor"
+              },
+              {
+                "tipo": "magia",
+                "nome": "Falar com Animais"
+              }
+            ]
+          },
+          "nivel3": null,
+          "nivel5": null
+        }
+      ]
+    }
+  },
+  "Golias": {
+    "nome": "Golias",
+    "flavor": "Descendentes distantes de gigantes, herdando dons sobrenaturais conforme a linhagem ancestral (gelo, fogo, pedra, nuvem, colina ou tempestade). Buscam superar seus próprios limites, sem os conflitos que historicamente dividiram os gigantes. (Livro do Jogador, pág. 192)",
+    "tipo": "Humanoide",
+    "tamanho": {
+      "opcoes": [
+        "Médio"
+      ],
+      "alturas": {
+        "Médio": "cerca de 2,10 a 2,40 metros"
+      }
+    },
+    "deslocamento": "10,5 metros",
+    "visaoNoEscuro": null,
+    "tracosFixos": [
+      {
+        "nome": "Forma Grande",
+        "resumo": "A partir do nível 5 de personagem, como uma Ação Bônus, você pode alterar seu tamanho para Grande (se estiver num espaço grande o suficiente).<br>A transformação dura 10 minutos ou até você a encerrar (nenhuma ação necessária).<br>Enquanto durar, você tem Vantagem em testes de Força e seu Deslocamento aumenta em 3 metros. Depois de usar, não pode usar de novo até completar um Descanso Longo.",
+        "concede": []
+      },
+      {
+        "nome": "Porte Poderoso",
+        "resumo": "Você tem Vantagem em qualquer teste de atributo que realizar para encerrar a condição Imobilizado. Você também conta como um tamanho maior ao determinar sua capacidade de carga.",
+        "concede": []
+      }
+    ],
+    "subespecie": {
+      "nome": "Ancestralidade Gigante",
+      "escolhidaNaCriacao": true,
+      "semEscalonamento": true,
+      "opcoes": [
+        {
+          "nome": "Arrepio do Gelo (Gigante do Gelo)",
+          "nivel1": {
+            "resumo": "Ao acertar um ataque, você também pode causar 1d6 de dano Gélido ao alvo e reduzir o Deslocamento dele em 3 metros até o início do seu próximo turno. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Queimadura de Fogo (Gigante de Fogo)",
+          "nivel1": {
+            "resumo": "Ao acertar um ataque e causar dano, você também pode causar 1d10 de dano Ígneo ao alvo. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Resistência da Pedra (Gigante da Pedra)",
+          "nivel1": {
+            "resumo": "Ao sofrer dano, você pode executar uma Reação para rolar 1d12, somar seu modificador de Constituição, e reduzir o dano sofrido nesse total. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Salto da Nuvem (Gigante das Nuvens)",
+          "nivel1": {
+            "resumo": "Como uma Ação Bônus, você se teleporta magicamente até 9 metros para um espaço desocupado que possa ver. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Tombo da Colina (Gigante da Colina)",
+          "nivel1": {
+            "resumo": "Ao acertar uma criatura Grande ou menor com um ataque e causar dano, você pode impor a condição Caído a esse alvo. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        },
+        {
+          "nome": "Trovão da Tempestade (Gigante da Tempestade)",
+          "nivel1": {
+            "resumo": "Ao sofrer dano de uma criatura a até 18 metros de você, pode executar uma Reação para causar 1d8 de dano Trovejante a essa criatura. <br>Usos = Bônus de Proficiência, recuperando todos ao completar um Descanso Longo.",
+            "concede": []
+          },
+          "nivel3": null,
+          "nivel5": null
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1327 @@
+{
+  "Armas Simples — Corpo a Corpo": {
+    "filterProf": "simples",
+    "items": [
+      {
+        "id": "adaga",
+        "n": "Adaga",
+        "d": "1d4 Perfurante",
+        "p": "Acuidade, Arremesso, Leve",
+        "c": 2
+      },
+      {
+        "id": "azagaia",
+        "n": "Azagaia",
+        "d": "1d6 Perfurante",
+        "p": "Arremesso",
+        "c": 0.5
+      },
+      {
+        "id": "cajado",
+        "n": "Cajado",
+        "d": "1d6 Contundente",
+        "p": "Versátil (1d8)",
+        "c": 0.2
+      },
+      {
+        "id": "clava",
+        "n": "Clava",
+        "d": "1d4 Contundente",
+        "p": "Leve",
+        "c": 0.1
+      },
+      {
+        "id": "clava-grande",
+        "n": "Clava Grande",
+        "d": "1d8 Contundente",
+        "p": "Duas Mãos",
+        "c": 0.2
+      },
+      {
+        "id": "foice",
+        "n": "Foice",
+        "d": "1d4 Cortante",
+        "p": "Leve",
+        "c": 1
+      },
+      {
+        "id": "lanca",
+        "n": "Lança",
+        "d": "1d6 Perfurante",
+        "p": "Arremesso, Versátil (1d8)",
+        "c": 1
+      },
+      {
+        "id": "maca",
+        "n": "Maça",
+        "d": "1d6 Contundente",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "machadinha",
+        "n": "Machadinha",
+        "d": "1d6 Cortante",
+        "p": "Arremesso, Leve",
+        "c": 5
+      },
+      {
+        "id": "martelo-leve",
+        "n": "Martelo Leve",
+        "d": "1d4 Contundente",
+        "p": "Arremesso, Leve",
+        "c": 2
+      }
+    ]
+  },
+  "Armas Simples — À Distância": {
+    "filterProf": "simples",
+    "items": [
+      {
+        "id": "arco-curto",
+        "n": "Arco Curto",
+        "d": "1d6 Perfurante",
+        "p": "Duas Mãos, Munição (24/96)",
+        "c": 25
+      },
+      {
+        "id": "besta-leve",
+        "n": "Besta Leve",
+        "d": "1d8 Perfurante",
+        "p": "Duas Mãos, Munição, Recarga",
+        "c": 25
+      },
+      {
+        "id": "dardo",
+        "n": "Dardo",
+        "d": "1d4 Perfurante",
+        "p": "Acuidade, Arremesso",
+        "c": 0.05
+      },
+      {
+        "id": "funda",
+        "n": "Funda",
+        "d": "1d4 Contundente",
+        "p": "Munição",
+        "c": 0.1
+      }
+    ]
+  },
+  "Armas Marciais — Corpo a Corpo": {
+    "filterProf": "marcial",
+    "items": [
+      {
+        "id": "alabarda",
+        "n": "Alabarda",
+        "d": "1d10 Cortante",
+        "p": "Duas Mãos, Extensão, Pesada",
+        "c": 20
+      },
+      {
+        "id": "chicote",
+        "n": "Chicote",
+        "d": "1d4 Cortante",
+        "p": "Acuidade, Extensão",
+        "c": 2
+      },
+      {
+        "id": "cimitarra",
+        "n": "Cimitarra",
+        "d": "1d6 Cortante",
+        "p": "Acuidade, Leve",
+        "c": 25
+      },
+      {
+        "id": "espada-curta",
+        "n": "Espada Curta",
+        "d": "1d6 Perfurante",
+        "p": "Acuidade, Leve",
+        "c": 10
+      },
+      {
+        "id": "espada-grande",
+        "n": "Espada Grande",
+        "d": "2d6 Cortante",
+        "p": "Duas Mãos, Pesada",
+        "c": 50
+      },
+      {
+        "id": "espada-longa",
+        "n": "Espada Longa",
+        "d": "1d8 Cortante",
+        "p": "Versátil (1d10)",
+        "c": 15
+      },
+      {
+        "id": "glaive",
+        "n": "Glaive",
+        "d": "1d10 Cortante",
+        "p": "Duas Mãos, Extensão, Pesada",
+        "c": 20
+      },
+      {
+        "id": "lanca-de-montaria",
+        "n": "Lança de Montaria",
+        "d": "1d10 Perfurante",
+        "p": "Duas Mãos (exceto montado), Extensão, Pesada",
+        "c": 10
+      },
+      {
+        "id": "lanca-longa",
+        "n": "Lança Longa",
+        "d": "1d10 Perfurante",
+        "p": "Duas Mãos, Extensão, Pesada",
+        "c": 5
+      },
+      {
+        "id": "maca-estrela",
+        "n": "Maça Estrela",
+        "d": "1d8 Perfurante",
+        "p": "—",
+        "c": 15
+      },
+      {
+        "id": "machado-de-batalha",
+        "n": "Machado de Batalha",
+        "d": "1d8 Cortante",
+        "p": "Versátil (1d10)",
+        "c": 10
+      },
+      {
+        "id": "machado-grande",
+        "n": "Machado Grande",
+        "d": "1d12 Cortante",
+        "p": "Duas Mãos, Pesada",
+        "c": 30
+      },
+      {
+        "id": "malho",
+        "n": "Malho",
+        "d": "2d6 Contundente",
+        "p": "Duas Mãos, Pesada",
+        "c": 10
+      },
+      {
+        "id": "mangual",
+        "n": "Mangual",
+        "d": "1d8 Contundente",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "martelo-de-guerra",
+        "n": "Martelo de Guerra",
+        "d": "1d8 Contundente",
+        "p": "Versátil (1d10)",
+        "c": 15
+      },
+      {
+        "id": "picareta-de-guerra",
+        "n": "Picareta de Guerra",
+        "d": "1d8 Perfurante",
+        "p": "Versátil (1d10)",
+        "c": 5
+      },
+      {
+        "id": "rapieira",
+        "n": "Rapieira",
+        "d": "1d8 Perfurante",
+        "p": "Acuidade",
+        "c": 25
+      },
+      {
+        "id": "tridente",
+        "n": "Tridente",
+        "d": "1d8 Perfurante",
+        "p": "Arremesso, Versátil (1d10)",
+        "c": 5
+      }
+    ]
+  },
+  "Armas Marciais — À Distância": {
+    "filterProf": "marcial",
+    "items": [
+      {
+        "id": "arco-longo",
+        "n": "Arco Longo",
+        "d": "1d8 Perfurante",
+        "p": "Duas Mãos, Munição (45/180), Pesada",
+        "c": 50
+      },
+      {
+        "id": "besta-de-mao",
+        "n": "Besta de Mão",
+        "d": "1d6 Perfurante",
+        "p": "Leve, Munição (9/36), Recarga",
+        "c": 75
+      },
+      {
+        "id": "besta-pesada",
+        "n": "Besta Pesada",
+        "d": "1d10 Perfurante",
+        "p": "Duas Mãos, Munição (30/120), Pesada, Recarga",
+        "c": 50
+      },
+      {
+        "id": "mosquete",
+        "n": "Mosquete",
+        "d": "1d12 Perfurante",
+        "p": "Duas Mãos, Munição (12/36), Recarga",
+        "c": 500
+      },
+      {
+        "id": "pistola",
+        "n": "Pistola",
+        "d": "1d10 Perfurante",
+        "p": "Munição (9/27), Recarga",
+        "c": 250
+      },
+      {
+        "id": "zarabatana",
+        "n": "Zarabatana",
+        "d": "1 Perfurante",
+        "p": "Munição (7,5/30), Recarga",
+        "c": 10
+      }
+    ]
+  },
+  "Armadura Leve": {
+    "filterProf": "leve",
+    "items": [
+      {
+        "id": "armadura-acolchoada",
+        "n": "Armadura Acolchoada",
+        "d": "CA 11 + Destreza",
+        "p": "Desvantagem em Furtividade",
+        "c": 5
+      },
+      {
+        "id": "armadura-de-couro",
+        "n": "Armadura de Couro",
+        "d": "CA 11 + Destreza",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "armadura-de-couro-batido",
+        "n": "Armadura de Couro Batido",
+        "d": "CA 12 + Destreza",
+        "p": "Desvantagem em Furtividade",
+        "c": 45
+      }
+    ]
+  },
+  "Armadura Média": {
+    "filterProf": "media",
+    "items": [
+      {
+        "id": "gibao-de-peles",
+        "n": "Gibão de Peles",
+        "d": "CA 12 + Destreza (máx. 2)",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "cota-de-malha-parcial",
+        "n": "Cota de Malha Parcial",
+        "d": "CA 13 + Destreza (máx. 2)",
+        "p": "—",
+        "c": 50
+      },
+      {
+        "id": "loriga-de-escamas",
+        "n": "Loriga de Escamas",
+        "d": "CA 14 + Destreza (máx. 2)",
+        "p": "Desvantagem em Furtividade",
+        "c": 50
+      },
+      {
+        "id": "couraca-peitoral",
+        "n": "Couraça Peitoral",
+        "d": "CA 14 + Destreza (máx. 2)",
+        "p": "—",
+        "c": 400
+      },
+      {
+        "id": "placas-parcial",
+        "n": "Placas Parcial",
+        "d": "CA 15 + Destreza (máx. 2)",
+        "p": "Desvantagem em Furtividade",
+        "c": 750
+      }
+    ]
+  },
+  "Armadura Pesada": {
+    "filterProf": "pesada",
+    "items": [
+      {
+        "id": "cota-de-aneis",
+        "n": "Cota de Anéis",
+        "d": "CA 14",
+        "p": "Desvantagem em Furtividade",
+        "c": 30
+      },
+      {
+        "id": "cota-de-malha",
+        "n": "Cota de Malha",
+        "d": "CA 16",
+        "p": "Requer Força 13, Desvantagem em Furtividade",
+        "c": 75
+      },
+      {
+        "id": "armadura-de-talas",
+        "n": "Armadura de Talas",
+        "d": "CA 17",
+        "p": "Requer Força 15, Desvantagem em Furtividade",
+        "c": 200
+      },
+      {
+        "id": "placas",
+        "n": "Placas",
+        "d": "CA 18",
+        "p": "Requer Força 15, Desvantagem em Furtividade",
+        "c": 1500
+      }
+    ]
+  },
+  "Escudos": {
+    "filterProf": "escudo",
+    "items": [
+      {
+        "id": "escudo",
+        "n": "Escudo",
+        "d": "+2 CA",
+        "p": "—",
+        "c": 10
+      }
+    ]
+  },
+  "Ferramentas": {
+    "filterProf": null,
+    "items": [
+      {
+        "id": "ferramentas-de-carpinteiro",
+        "n": "Ferramentas de Carpinteiro",
+        "d": "Usar Objeto: Selar ou abrir uma porta ou recipiente (CD 20). Fabrica: Aríete Portável, Baliza, Barril, Baú, Cajado, Clava, Clava Grande, Escada, Tocha.",
+        "p": "Atributo: Força",
+        "c": 8
+      },
+      {
+        "id": "ferramentas-de-cartografo",
+        "n": "Ferramentas de Cartógrafo",
+        "d": "Usar Objeto: Elaborar o mapa de uma pequena área (CD 15). Fabrica: Mapa.",
+        "p": "Atributo: Sabedoria",
+        "c": 15
+      },
+      {
+        "id": "ferramentas-de-coureiro",
+        "n": "Ferramentas de Coureiro",
+        "d": "Usar Objeto: Moldar a estética de um item de couro (CD 10). Fabrica: Algibeira, Aljava, Armadura de Couro, Armadura de Couro Batido, Cantil, Chicote, Estojo de Mapa ou Pergaminho, Estojo de Virotes de Besta, Funda, Gibão de Peles, Mochila, Pergaminho.",
+        "p": "Atributo: Destreza",
+        "c": 5
+      },
+      {
+        "id": "ferramentas-de-entalhador",
+        "n": "Ferramentas de Entalhador",
+        "d": "Usar Objeto: Entalhar um padrão em madeira (CD 10). Fabrica: Armas à Distância (exceto Funda, Mosquete e Pistola), Cajado, Caneta Tinteiro, Clava, Clava Grande, Dardos, Flechas, Foco Arcano, Foco Druídico, Virotes.",
+        "p": "Atributo: Destreza",
+        "c": 1
+      },
+      {
+        "id": "ferramentas-de-ferreiro",
+        "n": "Ferramentas de Ferreiro",
+        "d": "Usar Objeto: Forçar a abertura de uma porta ou recipiente (CD 20). Fabrica: qualquer arma Corpo a Corpo (exceto Cajado, Chicote, Clava, Clava Grande), armadura Média (exceto Gibão de Peles), armadura Pesada, Arpéu, Balas de Arma de Fogo, Balas de Funda, Balde, Corrente, Esferas de Metal, Estacas de Ferro, Estrepes, Pote de Ferro, Pé de Cabra.",
+        "p": "Atributo: Força",
+        "c": 20
+      },
+      {
+        "id": "ferramentas-de-funileiro",
+        "n": "Ferramentas de Funileiro",
+        "d": "Usar Objeto: Monte um item Minúsculo composto de sucata, que se desfaz em 1 minuto (CD 20). Fabrica: Apito Sinalizador, Armadilha de Caça, Cadeado, Caixa para Fogo, Espelho de Mão, Grilhões, Lanterna Coberta, Lanterna Foca-Facho, Pá, Pote, Sino.",
+        "p": "Atributo: Destreza",
+        "c": 50
+      },
+      {
+        "id": "ferramentas-de-joalheiro",
+        "n": "Ferramentas de Joalheiro",
+        "d": "Usar Objeto: Discernir o valor de uma gema (CD 15). Fabrica: Foco Arcano, Símbolo Sagrado.",
+        "p": "Atributo: Inteligência",
+        "c": 25
+      },
+      {
+        "id": "ferramentas-de-ladrao",
+        "n": "Ferramentas de Ladrão",
+        "d": "Usar Objeto: Abrir uma fechadura (CD 15) ou desarmar uma armadilha (CD 15).",
+        "p": "Atributo: Destreza",
+        "c": 25
+      },
+      {
+        "id": "ferramentas-de-navegador",
+        "n": "Ferramentas de Navegador",
+        "d": "Usar Objeto: Traçar uma rota (CD 10) ou determinar a posição observando as estrelas (CD 15).",
+        "p": "Atributo: Sabedoria",
+        "c": 25
+      },
+      {
+        "id": "ferramentas-de-oleiro",
+        "n": "Ferramentas de Oleiro",
+        "d": "Usar Objeto: Discernir como um objeto de cerâmica foi manuseado nas últimas 24 horas (CD 15). Fabrica: Jarro, Lâmpada.",
+        "p": "Atributo: Inteligência",
+        "c": 10
+      },
+      {
+        "id": "ferramentas-de-pedreiro",
+        "n": "Ferramentas de Pedreiro",
+        "d": "Usar Objeto: Cinzelar um símbolo ou buraco na pedra (CD 10). Fabrica: Roldana e Polias.",
+        "p": "Atributo: Força",
+        "c": 10
+      },
+      {
+        "id": "ferramentas-de-sapateiro",
+        "n": "Ferramentas de Sapateiro",
+        "d": "Usar Objeto: Modificar calçado para conceder Vantagem no próximo teste de Destreza (Acrobacia) do usuário (CD 10). Fabrica: Kit de Escalada.",
+        "p": "Atributo: Destreza",
+        "c": 5
+      },
+      {
+        "id": "ferramentas-de-tecelao",
+        "n": "Ferramentas de Tecelão",
+        "d": "Usar Objeto: Reparar um rasgo em uma roupa (CD 10) ou costurar um ornamento Minúsculo (CD 10). Fabrica: Armadura Acolchoada, Cesta, Cobertor, Saco de Dormir, Roupas Finas, Rede, Túnica, Corda, Saca, Cordão, Roupas de Viagem.",
+        "p": "Atributo: Destreza",
+        "c": 1
+      },
+      {
+        "id": "ferramentas-de-vidreiro",
+        "n": "Ferramentas de Vidreiro",
+        "d": "Usar Objeto: Discernir como um objeto de vidro foi manuseado nas últimas 24 horas (CD 15). Fabrica: Frasco, Jarro, Luneta, Lupa.",
+        "p": "Atributo: Inteligência",
+        "c": 30
+      },
+      {
+        "id": "suprimentos-de-alquimista",
+        "n": "Suprimentos de Alquimista",
+        "d": "Usar Objeto: Identificar uma substância (CD 15) ou iniciar um incêndio (CD 15). Fabrica: Ácido, Bolsa de Componentes, Fogo Alquímico, Óleo, Papel, Perfume.",
+        "p": "Atributo: Inteligência",
+        "c": 50
+      },
+      {
+        "id": "suprimentos-de-caligrafo",
+        "n": "Suprimentos de Calígrafo",
+        "d": "Usar Objeto: Escrever texto com uma caligrafia que protege contra falsificação (CD 15). Fabrica: Pergaminho Mágico, Tinta.",
+        "p": "Atributo: Destreza",
+        "c": 10
+      },
+      {
+        "id": "suprimentos-de-cervejeiro",
+        "n": "Suprimentos de Cervejeiro",
+        "d": "Usar Objeto: Detectar bebida envenenada (CD 15) ou identificar álcool (CD 10). Fabrica: Antitoxina.",
+        "p": "Atributo: Inteligência",
+        "c": 20
+      },
+      {
+        "id": "suprimentos-de-pintor",
+        "n": "Suprimentos de Pintor",
+        "d": "Usar Objeto: Fazer uma pintura reconhecível de algo que você viu (CD 10). Fabrica: Foco Druídico, Símbolo Sagrado.",
+        "p": "Atributo: Sabedoria",
+        "c": 10
+      },
+      {
+        "id": "utensilios-de-cozinheiro",
+        "n": "Utensílios de Cozinheiro",
+        "d": "Usar Objeto: Melhorar o sabor dos alimentos (CD 10) ou detectar alimentos estragados ou envenenados (CD 15). Fabrica: Rações.",
+        "p": "Atributo: Sabedoria",
+        "c": 1
+      },
+      {
+        "id": "kit-de-disfarce",
+        "n": "Kit de Disfarce",
+        "d": "Usar Objeto: Aplicar maquiagem (CD 10). Fabrica: Fantasia.",
+        "p": "Atributo: Carisma",
+        "c": 25
+      },
+      {
+        "id": "kit-de-falsificacao",
+        "n": "Kit de Falsificação",
+        "d": "Usar Objeto: Imitar 10 ou menos palavras escritas de outra pessoa (CD 15) ou duplicar um selo de cera (CD 20).",
+        "p": "Atributo: Destreza",
+        "c": 15
+      },
+      {
+        "id": "kit-de-herbalismo",
+        "n": "Kit de Herbalismo",
+        "d": "Usar Objeto: Identificar uma planta (CD 10). Fabrica: Antitoxina, Kit de Curandeiro, Poção de Cura, Vela.",
+        "p": "Atributo: Inteligência",
+        "c": 5
+      },
+      {
+        "id": "kit-de-jogos",
+        "n": "Kit de Jogos",
+        "d": "Usar Objeto: Discernir se alguém está trapaceando (CD 10) ou ganhar o jogo (CD 20).",
+        "p": "Atributo: Sabedoria · Variantes: Dados (1 PP), Xadrez-do-Dragão (1 PO), Baralho (5 PP), Três Dragões (1 PO)",
+        "c": 1
+      },
+      {
+        "id": "kit-de-veneno",
+        "n": "Kit de Veneno",
+        "d": "Usar Objeto: Detectar um objeto envenenado (CD 10). Fabrica: Veneno Básico.",
+        "p": "Atributo: Inteligência",
+        "c": 50
+      }
+    ]
+  },
+  "Instrumentos Musicais": {
+    "filterProf": null,
+    "items": [
+      {
+        "id": "alaude",
+        "n": "Alaúde",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 35
+      },
+      {
+        "id": "flauta",
+        "n": "Flauta",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 2
+      },
+      {
+        "id": "flauta-de-pa",
+        "n": "Flauta de Pã",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 12
+      },
+      {
+        "id": "gaita-de-foles",
+        "n": "Gaita de Foles",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 30
+      },
+      {
+        "id": "lira",
+        "n": "Lira",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 30
+      },
+      {
+        "id": "oboe",
+        "n": "Oboé",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 2
+      },
+      {
+        "id": "tambor",
+        "n": "Tambor",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 6
+      },
+      {
+        "id": "trombeta",
+        "n": "Trombeta",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 3
+      },
+      {
+        "id": "violino",
+        "n": "Violino",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 30
+      },
+      {
+        "id": "xilofone",
+        "n": "Xilofone",
+        "d": "Usar Objeto: Tocar uma música conhecida (CD 10) ou improvisar uma música (CD 15).",
+        "p": "Instrumento Musical · Atributo: Carisma",
+        "c": 25
+      }
+    ]
+  },
+  "Focos e Símbolos": {
+    "filterProf": null,
+    "items": [
+      {
+        "id": "foco-arcano-cajado",
+        "n": "Foco Arcano — Cajado",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "foco-arcano-cetro",
+        "n": "Foco Arcano — Cetro",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "foco-arcano-cristal",
+        "n": "Foco Arcano — Cristal",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "foco-arcano-orbe",
+        "n": "Foco Arcano — Orbe",
+        "d": "",
+        "p": "—",
+        "c": 20
+      },
+      {
+        "id": "foco-arcano-varinha",
+        "n": "Foco Arcano — Varinha",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "foco-druidico-cajado-de-madeira",
+        "n": "Foco Druídico — Cajado de Madeira",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "foco-druidico-ramo-de-visco",
+        "n": "Foco Druídico — Ramo de Visco",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "foco-druidico-varinha-de-teixo",
+        "n": "Foco Druídico — Varinha de Teixo",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "simbolo-sagrado-amuleto",
+        "n": "Símbolo Sagrado — Amuleto",
+        "d": "",
+        "p": "Usado ou segurado",
+        "c": 5
+      },
+      {
+        "id": "simbolo-sagrado-emblema",
+        "n": "Símbolo Sagrado — Emblema",
+        "d": "",
+        "p": "Exibido em tecido ou Escudo",
+        "c": 5
+      },
+      {
+        "id": "simbolo-sagrado-relicario",
+        "n": "Símbolo Sagrado — Relicário",
+        "d": "",
+        "p": "Segurado",
+        "c": 5
+      }
+    ]
+  },
+  "Munição": {
+    "filterProf": null,
+    "items": [
+      {
+        "id": "agulhas-50",
+        "n": "Agulhas (50)",
+        "d": "",
+        "p": "Para Zarabatana · guardadas em Algibeira",
+        "c": 1
+      },
+      {
+        "id": "balas-de-arma-de-fogo-10",
+        "n": "Balas de Arma de Fogo (10)",
+        "d": "",
+        "p": "Para Mosquete/Pistola · guardadas em Algibeira",
+        "c": 3
+      },
+      {
+        "id": "balas-de-funda-20",
+        "n": "Balas de Funda (20)",
+        "d": "",
+        "p": "Para Funda · guardadas em Algibeira",
+        "c": 0.04
+      },
+      {
+        "id": "flechas-20",
+        "n": "Flechas (20)",
+        "d": "",
+        "p": "Para Arco Curto/Longo · guardadas em Aljava",
+        "c": 1
+      },
+      {
+        "id": "virotes-20",
+        "n": "Virotes (20)",
+        "d": "",
+        "p": "Para Besta Leve/de Mão/Pesada · guardados em Estojo",
+        "c": 1
+      }
+    ]
+  },
+  "Equipamento de Aventura": {
+    "filterProf": null,
+    "items": [
+      {
+        "id": "acido-frasco",
+        "n": "Ácido (frasco)",
+        "d": "",
+        "p": "2d6 dano Ácido ao arremessar",
+        "c": 25
+      },
+      {
+        "id": "agua-benta-frasco",
+        "n": "Água Benta (frasco)",
+        "d": "",
+        "p": "2d8 Radiante vs Ínfero/Morto-vivo",
+        "c": 25
+      },
+      {
+        "id": "algibeira",
+        "n": "Algibeira",
+        "d": "",
+        "p": "Carrega até 3kg",
+        "c": 0.5
+      },
+      {
+        "id": "aljava",
+        "n": "Aljava",
+        "d": "",
+        "p": "Guarda até 20 flechas",
+        "c": 1
+      },
+      {
+        "id": "antitoxina",
+        "n": "Antitoxina",
+        "d": "",
+        "p": "Vantagem contra Envenenado, 1h",
+        "c": 50
+      },
+      {
+        "id": "apito-sinalizador",
+        "n": "Apito Sinalizador",
+        "d": "",
+        "p": "—",
+        "c": 0.05
+      },
+      {
+        "id": "ariete-portavel",
+        "n": "Aríete Portável",
+        "d": "",
+        "p": "—",
+        "c": 4
+      },
+      {
+        "id": "armadilha-de-caca",
+        "n": "Armadilha de Caça",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "arpeu",
+        "n": "Arpéu",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "balde",
+        "n": "Balde",
+        "d": "",
+        "p": "—",
+        "c": 0.05
+      },
+      {
+        "id": "baliza",
+        "n": "Baliza",
+        "d": "",
+        "p": "—",
+        "c": 0.05
+      },
+      {
+        "id": "barril",
+        "n": "Barril",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "bau",
+        "n": "Baú",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "bolsa-de-componentes",
+        "n": "Bolsa de Componentes",
+        "d": "",
+        "p": "Substitui componentes materiais sem custo",
+        "c": 25
+      },
+      {
+        "id": "cadeado",
+        "n": "Cadeado",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "caixa-para-fogo",
+        "n": "Caixa para Fogo",
+        "d": "",
+        "p": "—",
+        "c": 0.5
+      },
+      {
+        "id": "caneta-tinteiro",
+        "n": "Caneta Tinteiro",
+        "d": "",
+        "p": "—",
+        "c": 0.02
+      },
+      {
+        "id": "cantil",
+        "n": "Cantil",
+        "d": "",
+        "p": "2 litros",
+        "c": 0.2
+      },
+      {
+        "id": "cesta",
+        "n": "Cesta",
+        "d": "",
+        "p": "—",
+        "c": 0.4
+      },
+      {
+        "id": "cobertor",
+        "n": "Cobertor",
+        "d": "",
+        "p": "—",
+        "c": 0.5
+      },
+      {
+        "id": "corda-15m",
+        "n": "Corda (15m)",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "cordao",
+        "n": "Cordão",
+        "d": "",
+        "p": "—",
+        "c": 0.1
+      },
+      {
+        "id": "corrente",
+        "n": "Corrente",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "escada",
+        "n": "Escada",
+        "d": "",
+        "p": "—",
+        "c": 0.1
+      },
+      {
+        "id": "esferas-de-metal-saco",
+        "n": "Esferas de Metal (saco)",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "espelho-de-mao",
+        "n": "Espelho de Mão",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "estacas-de-ferro",
+        "n": "Estacas de Ferro",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "estojo-mapapergaminho",
+        "n": "Estojo (Mapa/Pergaminho)",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "estojo-virote-de-besta",
+        "n": "Estojo (Virote de Besta)",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "estrepes-saco",
+        "n": "Estrepes (saco)",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "fogo-alquimico-frasco",
+        "n": "Fogo Alquímico (frasco)",
+        "d": "",
+        "p": "1d4 dano Ígneo + combustão ao arremessar",
+        "c": 50
+      },
+      {
+        "id": "frasco",
+        "n": "Frasco",
+        "d": "",
+        "p": "150ml",
+        "c": 1
+      },
+      {
+        "id": "garrafa-de-vidro-1-litro",
+        "n": "Garrafa de Vidro (1 litro)",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "grilhoes",
+        "n": "Grilhões",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "jarro-4-litros",
+        "n": "Jarro (4 litros)",
+        "d": "",
+        "p": "—",
+        "c": 0.02
+      },
+      {
+        "id": "kit-de-artista",
+        "n": "Kit de Artista",
+        "d": "",
+        "p": "—",
+        "c": 40,
+        "cont": "Caixa para Fogo, Cantil, Espelho, 3 Fantasias, Lanterna Foca-Facho, Mochila, 8 potes de Óleo, 9 dias de Rações, Saco de Dormir, Sino"
+      },
+      {
+        "id": "kit-de-assaltante",
+        "n": "Kit de Assaltante",
+        "d": "",
+        "p": "—",
+        "c": 16,
+        "cont": "Caixa para Fogo, Cantil, Corda, Esferas de Metal, Lanterna Coberta, Mochila, 7 potes de Óleo, Pé de Cabra, 5 dias de Rações, Sino, 10 Velas"
+      },
+      {
+        "id": "kit-de-aventureiro",
+        "n": "Kit de Aventureiro",
+        "d": "",
+        "p": "—",
+        "c": 10,
+        "cont": "Caixa para Fogo, Cantil, Corda, Mochila, 2 potes de Óleo, 10 dias de Rações, Saco de Dormir, 10 Tochas"
+      },
+      {
+        "id": "kit-de-curandeiro",
+        "n": "Kit de Curandeiro",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "kit-de-diplomata",
+        "n": "Kit de Diplomata",
+        "d": "",
+        "p": "—",
+        "c": 39,
+        "cont": "Baú, Caixa para Fogo, 5 Canetas Tinteiro, 2 Estojos de Mapa/Pergaminho, Lâmpada, 4 potes de Óleo, Perfume, 5 folhas de Papel, 5 folhas de Pergaminho, Roupas Finas, Tinta"
+      },
+      {
+        "id": "kit-de-erudito",
+        "n": "Kit de Erudito",
+        "d": "",
+        "p": "—",
+        "c": 40,
+        "cont": "Caixa para Fogo, Caneta Tinteiro, Lâmpada, Livro, Mochila, 10 potes de Óleo, 10 folhas de Pergaminho, Tinta"
+      },
+      {
+        "id": "kit-de-escalada",
+        "n": "Kit de Escalada",
+        "d": "",
+        "p": "—",
+        "c": 25
+      },
+      {
+        "id": "kit-de-explorador-de-masmorras",
+        "n": "Kit de Explorador de Masmorras",
+        "d": "",
+        "p": "—",
+        "c": 12,
+        "cont": "Caixa para Fogo, Cantil, Corda, Estrepes, Mochila, 2 potes de Óleo, Pé de Cabra, 10 dias de Rações, 10 Tochas"
+      },
+      {
+        "id": "kit-de-sacerdote",
+        "n": "Kit de Sacerdote",
+        "d": "",
+        "p": "—",
+        "c": 33,
+        "cont": "Água Benta, Caixa para Fogo, Cobertor, Lâmpada, Mochila, 7 dias de Rações, Túnica"
+      },
+      {
+        "id": "lampada",
+        "n": "Lâmpada",
+        "d": "",
+        "p": "—",
+        "c": 0.5
+      },
+      {
+        "id": "lanterna-coberta",
+        "n": "Lanterna Coberta",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "lanterna-foca-facho",
+        "n": "Lanterna Foca-facho",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "livro",
+        "n": "Livro",
+        "d": "",
+        "p": "—",
+        "c": 25
+      },
+      {
+        "id": "luneta",
+        "n": "Luneta",
+        "d": "",
+        "p": "Amplia objetos ao dobro do tamanho",
+        "c": 1000
+      },
+      {
+        "id": "lupa",
+        "n": "Lupa",
+        "d": "",
+        "p": "Vantagem em testes de avaliação/inspeção detalhada",
+        "c": 100
+      },
+      {
+        "id": "mapa",
+        "n": "Mapa",
+        "d": "",
+        "p": "+5 em Sabedoria (Sobrevivência) pra achar caminho representado nele",
+        "c": 1
+      },
+      {
+        "id": "mochila",
+        "n": "Mochila",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "oleo-frasco",
+        "n": "Óleo (frasco)",
+        "d": "",
+        "p": "—",
+        "c": 0.1
+      },
+      {
+        "id": "pa",
+        "n": "Pá",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "papel-folha",
+        "n": "Papel (folha)",
+        "d": "",
+        "p": "—",
+        "c": 0.2
+      },
+      {
+        "id": "pe-de-cabra",
+        "n": "Pé de Cabra",
+        "d": "",
+        "p": "Vantagem em Atletismo pra forçar",
+        "c": 2
+      },
+      {
+        "id": "perfume",
+        "n": "Perfume",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "pergaminho-folha-em-branco",
+        "n": "Pergaminho (folha em branco)",
+        "d": "",
+        "p": "—",
+        "c": 0.1
+      },
+      {
+        "id": "pergaminho-magico-truque",
+        "n": "Pergaminho Mágico (Truque)",
+        "d": "",
+        "p": "Conjura um truque sem preparar",
+        "c": 30
+      },
+      {
+        "id": "pergaminho-magico-1-circulo",
+        "n": "Pergaminho Mágico (1º Círculo)",
+        "d": "",
+        "p": "Conjura uma magia de 1º círculo sem preparar",
+        "c": 50
+      },
+      {
+        "id": "pocao-de-cura",
+        "n": "Poção de Cura",
+        "d": "",
+        "p": "Cura 2d4+2 PV",
+        "c": 50
+      },
+      {
+        "id": "pote",
+        "n": "Pote",
+        "d": "",
+        "p": "—",
+        "c": 0.02
+      },
+      {
+        "id": "pote-de-ferro",
+        "n": "Pote de Ferro",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "racoes-1-dia",
+        "n": "Rações (1 dia)",
+        "d": "",
+        "p": "—",
+        "c": 0.5
+      },
+      {
+        "id": "rede",
+        "n": "Rede",
+        "d": "",
+        "p": "Condição Contido em criatura acertada (salv. Destreza)",
+        "c": 1
+      },
+      {
+        "id": "roldana-e-polias",
+        "n": "Roldana e Polias",
+        "d": "",
+        "p": "Içar até 4x o peso normal",
+        "c": 1
+      },
+      {
+        "id": "roupas-fantasia",
+        "n": "Roupas, Fantasia",
+        "d": "",
+        "p": "—",
+        "c": 5
+      },
+      {
+        "id": "roupas-finas",
+        "n": "Roupas Finas",
+        "d": "",
+        "p": "—",
+        "c": 15
+      },
+      {
+        "id": "roupas-de-viagem",
+        "n": "Roupas de Viagem",
+        "d": "",
+        "p": "—",
+        "c": 2
+      },
+      {
+        "id": "saca",
+        "n": "Saca",
+        "d": "",
+        "p": "—",
+        "c": 0.01
+      },
+      {
+        "id": "saco-de-dormir",
+        "n": "Saco de Dormir",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "sino",
+        "n": "Sino",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "tenda",
+        "n": "Tenda",
+        "d": "",
+        "p": "Acomoda 2 criaturas Pequenas/Médias",
+        "c": 2
+      },
+      {
+        "id": "tinta",
+        "n": "Tinta",
+        "d": "",
+        "p": "—",
+        "c": 10
+      },
+      {
+        "id": "tocha",
+        "n": "Tocha",
+        "d": "",
+        "p": "Luz Plena 6m, Meia-luz +6m, 1h · pode ser usada como arma Simples",
+        "c": 0.01
+      },
+      {
+        "id": "tunica",
+        "n": "Túnica",
+        "d": "",
+        "p": "—",
+        "c": 1
+      },
+      {
+        "id": "vela",
+        "n": "Vela",
+        "d": "",
+        "p": "—",
+        "c": 0.01
+      },
+      {
+        "id": "veneno-basico",
+        "n": "Veneno Básico",
+        "d": "",
+        "p": "1d4 dano Venenoso adicional em arma/munição revestida",
+        "c": 100
+      }
+    ]
+  }
+}

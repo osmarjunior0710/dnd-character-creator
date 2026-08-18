@@ -1,0 +1,74 @@
+{
+  "armadura-acolchoada": {
+    "ca": 11,
+    "dexCap": null,
+    "categoria": "Leve",
+    "reqForca": null
+  },
+  "armadura-de-couro": {
+    "ca": 11,
+    "dexCap": null,
+    "categoria": "Leve",
+    "reqForca": null
+  },
+  "armadura-de-couro-batido": {
+    "ca": 12,
+    "dexCap": null,
+    "categoria": "Leve",
+    "reqForca": null
+  },
+  "gibao-de-peles": {
+    "ca": 12,
+    "dexCap": 2,
+    "categoria": "Média",
+    "reqForca": null
+  },
+  "cota-de-malha-parcial": {
+    "ca": 13,
+    "dexCap": 2,
+    "categoria": "Média",
+    "reqForca": null
+  },
+  "loriga-de-escamas": {
+    "ca": 14,
+    "dexCap": 2,
+    "categoria": "Média",
+    "reqForca": null
+  },
+  "couraca-peitoral": {
+    "ca": 14,
+    "dexCap": 2,
+    "categoria": "Média",
+    "reqForca": null
+  },
+  "placas-parcial": {
+    "ca": 15,
+    "dexCap": 2,
+    "categoria": "Média",
+    "reqForca": null
+  },
+  "cota-de-aneis": {
+    "ca": 14,
+    "dexCap": 0,
+    "categoria": "Pesada",
+    "reqForca": null
+  },
+  "cota-de-malha": {
+    "ca": 16,
+    "dexCap": 0,
+    "categoria": "Pesada",
+    "reqForca": 13
+  },
+  "armadura-de-talas": {
+    "ca": 17,
+    "dexCap": 0,
+    "categoria": "Pesada",
+    "reqForca": 15
+  },
+  "placas": {
+    "ca": 18,
+    "dexCap": 0,
+    "categoria": "Pesada",
+    "reqForca": 15
+  }
+}

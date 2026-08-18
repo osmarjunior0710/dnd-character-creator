@@ -1,0 +1,795 @@
+{
+  "Bruxo": {
+    "skills": [
+      "Arcanismo",
+      "Enganação",
+      "História",
+      "Intimidação",
+      "Investigação",
+      "Natureza",
+      "Religião"
+    ],
+    "pactBoons": {
+      "Pacto do Tomo": "Ao final de um Descanso Curto ou Longo, você conjura um Livro das Sombras (aparência à sua escolha) na mão. Escolha 3 truques e 2 magias de 1º círculo com o marcador Ritual, de qualquer lista de classe (que você ainda não tenha preparadas). Enquanto tiver o livro, essas magias ficam sempre preparadas e funcionam como magias de Bruxo. O livro também serve como Foco de Conjuração.",
+      "Pacto da Lâmina": "Como Ação Bônus, conjura uma arma de pacto na mão (Corpo a Corpo Simples ou Marcial à escolha) ou vincula-se a uma arma mágica tocada. Tem proficiência com ela e pode usá-la como Foco de Conjuração. Ao atacar com ela, pode usar Carisma no ataque/dano em vez de Força/Destreza, e causar dano Necrótico, Psíquico ou Radiante em vez do tipo normal.",
+      "Pacto da Corrente": "Aprende Convocar Familiar e pode conjurá-la sem gastar espaço de magia. Pode escolher formas especiais de familiar (Cobra Peçonhenta, Diabrete, Esfinge Maravilhosa, Esqueleto, Pseudodragão, Quasit, Slaad Girino, Sprite). Ao executar a ação Atacar, pode abrir mão de um ataque seu para o familiar atacar como Reação dele."
+    },
+    "cantrips": [
+      "Amigos",
+      "Badalar Fúnebre",
+      "Golpe Certeiro",
+      "Ilusão Menor",
+      "Mãos Mágicas",
+      "Prestidigitação Arcana",
+      "Proteção Contra Lâminas",
+      "Raio Místico",
+      "Rajada de Veneno",
+      "Talho Mental",
+      "Toque Necrótico",
+      "Trovão"
+    ],
+    "spells1": [
+      "Armadura de Agathys",
+      "Braços de Hadar",
+      "Compreender Idiomas",
+      "Danação",
+      "Detectar Magia",
+      "Enfeitiçar Pessoa",
+      "Escrita Ilusória",
+      "Falar com Animais",
+      "Gargalhada Nefasta de Tasha",
+      "Perdição",
+      "Proteção Contra o Bem e o Mal",
+      "Raio de Bruxa",
+      "Repreensão Diabólica",
+      "Retirada Acelerada",
+      "Servo Invisível"
+    ],
+    "equipmentA": [
+      "Armadura de Couro",
+      "Foice",
+      "2 Adagas",
+      "Foco Arcano (orbe)",
+      "Livro (conhecimento oculto)",
+      "Kit de Erudito"
+    ],
+    "equipmentA_gold": 15,
+    "equipmentB_gold": 100,
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [
+      "leve"
+    ],
+    "savingThrows": [
+      "Sabedoria",
+      "Carisma"
+    ]
+  },
+  "Bárbaro": {
+    "skills": [
+      "Atletismo",
+      "Intimidação",
+      "Lidar com Animais",
+      "Natureza",
+      "Percepção",
+      "Sobrevivência"
+    ],
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "armorProf": [
+      "leve",
+      "media",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Força",
+      "Constituição"
+    ],
+    "equipmentA": [
+      "4 Machadinhas",
+      "Machado Grande",
+      "Kit de Aventureiro"
+    ],
+    "equipmentA_gold": 15,
+    "equipmentB_gold": 75,
+    "furia": "Ação Bônus, 2 usos por Descanso Longo/Curto (recupera 1 em Descanso Curto, todos em Longo). Enquanto ativa: Resistência a dano Contundente, Cortante e Perfurante; bônus de +2 no dano de ataques de Força; Vantagem em testes e salvaguardas de Força; não pode manter Concentração nem conjurar magias. Dura até o final do próximo turno — pode ser estendida (até 10 min. no total) ao atacar, forçar uma salvaguarda ou gastar outra Ação Bônus.",
+    "defesaSemArmadura": "Sem vestir armadura, sua Classe de Armadura é 10 + mod. Destreza + mod. Constituição. Pode usar Escudo normalmente.",
+    "maestriaCount": 2,
+    "maestriaTipoPermitido": "Corpo a Corpo"
+  },
+  "Bardo": {
+    "skillsAll": true,
+    "skillsCount": 3,
+    "toolsCount": 3,
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [
+      "leve"
+    ],
+    "savingThrows": [
+      "Destreza",
+      "Carisma"
+    ],
+    "equipmentA": [
+      "Armadura de Couro",
+      "2 Adagas",
+      "Instrumento Musical à escolha",
+      "Kit de Artista"
+    ],
+    "equipmentA_gold": 19,
+    "equipmentB_gold": 90,
+    "cantrips": [
+      "Amigos",
+      "Fagulha Estelar",
+      "Golpe Certeiro",
+      "Ilusão Menor",
+      "Luz",
+      "Luzes Dançantes",
+      "Mensagem",
+      "Mãos Mágicas",
+      "Prestidigitação Arcana",
+      "Proteção Contra Lâminas",
+      "Reparar",
+      "Trovão",
+      "Zombaria Perversa"
+    ],
+    "spells1": [
+      "Amizade Animal",
+      "Comando",
+      "Compreender Idiomas",
+      "Curar Ferimentos",
+      "Detectar Magia",
+      "Disfarçar-se",
+      "Enfeitiçar Pessoa",
+      "Escrita Ilusória",
+      "Falar com Animais",
+      "Fogo das Fadas",
+      "Gargalhada Nefasta de Tasha",
+      "Heroísmo",
+      "Identificar",
+      "Imagem Silenciosa",
+      "Leque Cromático",
+      "Onda Trovejante",
+      "Palavra Curativa",
+      "Passos Largos",
+      "Perdição",
+      "Queda Suave",
+      "Servo Invisível",
+      "Sono",
+      "Sussurros Dissonantes"
+    ],
+    "inspiracao": "Como Ação Bônus, você pode dar um dado de Inspiração de Bardo (d6) a uma criatura a até 18 metros que possa vê-lo ou ouvi-lo. Dentro da próxima hora, ela pode somar esse dado a um Teste de D20 que tenha falhado, podendo transformar a falha em sucesso. Usos = seu mod. de Carisma (mínimo 1), recupera todos ao completar um Descanso Longo."
+  },
+  "Mago": {
+    "skills": [
+      "Arcanismo",
+      "História",
+      "Intuição",
+      "Investigação",
+      "Medicina",
+      "Natureza",
+      "Religião"
+    ],
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [],
+    "savingThrows": [
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "equipmentA": [
+      "2 Adagas",
+      "Foco Arcano (Cajado)",
+      "Kit de Erudito",
+      "Livro de Magias",
+      "Túnica"
+    ],
+    "equipmentA_gold": 5,
+    "equipmentB_gold": 55,
+    "cantripsCount": 3,
+    "cantrips": [
+      "Amigos",
+      "Badalar Fúnebre",
+      "Bolha Ácida",
+      "Elementalismo",
+      "Golpe Certeiro",
+      "Ilusão Menor",
+      "Luz",
+      "Luzes Dançantes",
+      "Mensagem",
+      "Mãos Mágicas",
+      "Prestidigitação Arcana",
+      "Proteção Contra Lâminas",
+      "Raio de Fogo",
+      "Raio de Gelo",
+      "Rajada de Veneno",
+      "Reparar",
+      "Talho Mental",
+      "Toque Chocante",
+      "Toque Necrótico",
+      "Trovão"
+    ],
+    "spellbookCount": 6,
+    "preparedCount": 4,
+    "spells1": [
+      "Alarme",
+      "Armadura Arcana",
+      "Compreender Idiomas",
+      "Convocar Familiar",
+      "Detectar Magia",
+      "Disco Flutuante de Tenser",
+      "Disfarçar-se",
+      "Enfeitiçar Pessoa",
+      "Escrita Ilusória",
+      "Escudo Arcano",
+      "Faca de Gelo",
+      "Gargalhada Nefasta de Tasha",
+      "Graxa",
+      "Identificar",
+      "Imagem Silenciosa",
+      "Leque Cromático",
+      "Mãos Flamejantes",
+      "Mísseis Mágicos",
+      "Névoa Obscurecente",
+      "Onda Trovejante",
+      "Orbe Cromático",
+      "Passos Largos",
+      "Proteção Contra o Bem e o Mal",
+      "Queda Suave",
+      "Raio Nauseante",
+      "Raio de Bruxa",
+      "Retirada Acelerada",
+      "Salto",
+      "Servo Invisível",
+      "Sono",
+      "Vitalidade Vazia"
+    ],
+    "adeptoRitual": "Você pode conjurar como Ritual qualquer magia com o marcador Ritual que esteja no seu livro de magias, sem precisar tê-la preparada — só precisa ler o livro nesse momento.",
+    "recuperacaoArcana": "Ao completar um Descanso Curto (1x por Descanso Longo), você pode recuperar espaços de magia gastos, com círculo combinado de até metade do seu nível de Mago (arredondado pra cima), nenhum de 6º círculo ou superior."
+  },
+  "Paladino": {
+    "skills": [
+      "Atletismo",
+      "Intimidação",
+      "Intuição",
+      "Medicina",
+      "Persuasão",
+      "Religião"
+    ],
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "armorProf": [
+      "leve",
+      "media",
+      "pesada",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Sabedoria",
+      "Carisma"
+    ],
+    "equipmentA": [
+      "Cota de Malha",
+      "Escudo",
+      "Espada Longa",
+      "6 Azagaias",
+      "Símbolo Sagrado",
+      "Kit de Sacerdote"
+    ],
+    "equipmentA_gold": 9,
+    "equipmentB_gold": 150,
+    "preparedCount": 2,
+    "spells1": [
+      "Bênção",
+      "Comando",
+      "Curar Ferimentos",
+      "Destruição Cauterizante",
+      "Destruição Colérica",
+      "Destruição Divina",
+      "Destruição Estrondosa",
+      "Detectar Magia",
+      "Detectar Veneno e Doença",
+      "Detectar o Bem e o Mal",
+      "Duelo Compelido",
+      "Escudo da Fé",
+      "Favor Divino",
+      "Heroísmo",
+      "Proteção Contra o Bem e o Mal",
+      "Purificar Alimentos e Bebidas"
+    ],
+    "maestriaCount": 2,
+    "maestriaSemRestricaoDeTipo": true,
+    "maosConsagradas": "Você tem uma reserva de cura = 5x seu nível de Paladino (5 no nível 1). Como Ação Bônus, toca uma criatura (pode ser você mesmo) e restaura PV dela usando a reserva, até o total disponível. Também pode gastar 5 PV da reserva pra remover a condição Envenenado de uma criatura (sem curar PV nesse caso). A reserva enche de novo ao completar um Descanso Longo."
+  },
+  "Psiônico": {
+    "skills": [
+      "Arcanismo",
+      "Intuição",
+      "Intimidação",
+      "Investigação",
+      "Medicina",
+      "Percepção",
+      "Persuasão"
+    ],
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [],
+    "savingThrows": [
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "equipmentA": [
+      "Lança",
+      "2 Adagas",
+      "Besta Leve",
+      "20 Virotes",
+      "Estojo",
+      "Mochila de Explorador de Masmorras"
+    ],
+    "equipmentA_gold": 6,
+    "equipmentB_gold": 50,
+    "cantripsCount": 2,
+    "cantrips": [
+      "Amigos",
+      "Arremesso Telecinético",
+      "Golpe Certeiro",
+      "Ilusão Menor",
+      "Luz",
+      "Luzes Dançantes",
+      "Mãos Mágicas",
+      "Mensagem",
+      "Prestidigitação Arcana",
+      "Proteção Contra Lâminas",
+      "Reparar",
+      "Talho Mental"
+    ],
+    "preparedCount": 4,
+    "spells1": [
+      "Amizade Animal",
+      "Armadura Arcana",
+      "Comando",
+      "Compreender Idiomas",
+      "Detectar Magia",
+      "Disco Flutuante de Tenser",
+      "Enfeitiçar Pessoa",
+      "Escudo Arcano",
+      "Falar com Animais",
+      "Gargalhada Nefasta de Tasha",
+      "Identificar",
+      "Imagem Silenciosa",
+      "Onda Trovejante",
+      "Passos Largos",
+      "Queda Suave",
+      "Sifão Vital",
+      "Sono",
+      "Sussurros Dissonantes"
+    ],
+    "poderPsionico": "Você tem 4 Dados de Energia Psiônica (d6), recuperando 1 ao completar um Descanso Curto e todos ao completar um Descanso Longo. Alimentam dois recursos: Impulso Telecinético (Ação Bônus: empurra/puxa 1,5m uma criatura Grande ou menor a até 9m que falhe numa salvaguarda de Força; ou role um dado de Energia Psiônica e empurre/puxe 5x o valor rolado — o dado só é gasto se o alvo falhar) e Conexão Telepática (telepatia com alcance de 9m; Ação Bônus: gaste um dado de Energia Psiônica pra aumentar o alcance em 3x o valor rolado por 1 hora — a primeira vez após um Descanso Longo é grátis).",
+    "telecineseSutil": "Você conhece o truque Mão Mágica, pode conjurá-lo sem componentes somáticos e pode tornar a mão espectral invisível."
+  },
+  "Clérigo": {
+    "skills": [
+      "História",
+      "Intuição",
+      "Medicina",
+      "Persuasão",
+      "Religião"
+    ],
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [
+      "leve",
+      "media",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Sabedoria",
+      "Carisma"
+    ],
+    "equipmentA": [
+      "Cota de Malha Parcial",
+      "Escudo",
+      "Maça",
+      "Símbolo Sagrado",
+      "Kit de Sacerdote"
+    ],
+    "equipmentA_gold": 7,
+    "equipmentB_gold": 110,
+    "cantripsCount": 3,
+    "cantrips": [
+      "Acudir os Moribundos",
+      "Badalar Fúnebre",
+      "Chama Sagrada",
+      "Luz",
+      "Orientação",
+      "Palavra de Radiância",
+      "Reparar",
+      "Resistência",
+      "Taumaturgia"
+    ],
+    "preparedCount": 4,
+    "spells1": [
+      "Bênção",
+      "Comando",
+      "Criar ou Destruir Água",
+      "Curar Ferimentos",
+      "Detectar Magia",
+      "Detectar Veneno e Doença",
+      "Detectar o Bem e o Mal",
+      "Escudo da Fé",
+      "Infligir Ferimentos",
+      "Palavra Curativa",
+      "Perdição",
+      "Proteção Contra o Bem e o Mal",
+      "Purificar Alimentos e Bebidas",
+      "Raio Guia",
+      "Santuário"
+    ],
+    "ordemDivina": {
+      "Protetor": "Você ganha proficiência com Armas Marciais e treinamento com Armadura Pesada.",
+      "Taumaturgo": "Você aprende mais um truque de Clérigo à sua escolha (some ao total de truques). Além disso, adiciona seu mod. de Sabedoria (mínimo +1) a qualquer teste de Inteligência (Arcanismo) ou Inteligência (Religião) que fizer."
+    }
+  },
+  "Guerreiro": {
+    "skills": [
+      "Acrobacia",
+      "Atletismo",
+      "História",
+      "Intimidação",
+      "Intuição",
+      "Lidar com Animais",
+      "Percepção",
+      "Persuasão",
+      "Sobrevivência"
+    ],
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "armorProf": [
+      "leve",
+      "media",
+      "pesada",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Força",
+      "Constituição"
+    ],
+    "equipmentA": [
+      "Cota de Malha",
+      "Espada Grande",
+      "Mangual",
+      "8 Azagaias",
+      "Kit de Explorador de Masmorras"
+    ],
+    "equipmentA_gold": 4,
+    "equipmentB": [
+      "Armadura de Couro Batido",
+      "Cimitarra",
+      "Espada Curta",
+      "Arco Longo",
+      "20 Flechas",
+      "Aljava",
+      "Kit de Explorador de Masmorras"
+    ],
+    "equipmentB_gold": 11,
+    "equipmentC_gold": 155,
+    "estiloDeLuta": {
+      "Arquearia": "+2 nas jogadas de ataque com armas à distância.",
+      "Combate com Armas de Arremesso": "+2 no dano ao acertar ataque à distância com arma de Arremesso.",
+      "Combate com Armas Grandes": "Ao rolar dano com arma corpo a corpo de duas mãos (Duas Mãos ou Versátil empunhada com 2 mãos): trata 1s e 2s como 3.",
+      "Combate com Duas Armas": "Soma mod. de atributo no dano do ataque adicional de arma Leve, se ainda não somava.",
+      "Combate Desarmado": "Ataque Desarmado causa 1d6+Força Contundente (1d8 se sem arma/escudo em mãos). Início do turno: 1d4 Contundente extra a criatura Imobilizada por você.",
+      "Defensivo": "+1 CA enquanto usa armadura Leve, Média ou Pesada.",
+      "Duelismo": "Com 1 arma corpo a corpo numa mão e nenhuma outra arma: +2 no dano dessa arma.",
+      "Interceptação": "Reação: quando alguém à vista acerta outra criatura a 1,5m de você, reduz o dano em 1d10+Bônus de Proficiência. Precisa empunhar Escudo ou arma Simples/Marcial.",
+      "Luta às Cegas": "Visão às Cegas 3m.",
+      "Protetivo": "Reação: quando alguém à vista ataca alvo (não você) a 1,5m de você, interpõe Escudo (se empunhado) — Desvantagem no ataque desencadeador e em todos contra o alvo até seu próximo turno, enquanto você ficar a 1,5m dele."
+    },
+    "maestriaCount": 3,
+    "recuperarFolego": "Como uma Ação Bônus, você pode recuperar Pontos de Vida iguais a 1d10 + seu nível de Guerreiro. Você pode usar essa característica 2 vezes: recupera 1 uso ao completar um Descanso Curto e todos ao completar um Descanso Longo."
+  },
+  "Ladino": {
+    "skills": [
+      "Acrobacia",
+      "Atletismo",
+      "Enganação",
+      "Furtividade",
+      "Intimidação",
+      "Intuição",
+      "Investigação",
+      "Percepção",
+      "Persuasão",
+      "Prestidigitação"
+    ],
+    "skillsCount": 4,
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "weaponProfFiltroMarcial": [
+      "Acuidade",
+      "Leve"
+    ],
+    "armorProf": [
+      "leve"
+    ],
+    "savingThrows": [
+      "Destreza",
+      "Inteligência"
+    ],
+    "toolsFixed": "Ferramentas de Ladrão",
+    "equipmentA": [
+      "Armadura de Couro",
+      "2 Adagas",
+      "Espada Curta",
+      "Arco Curto",
+      "20 Flechas",
+      "Aljava",
+      "Ferramentas de Ladrão",
+      "Kit de Assaltante"
+    ],
+    "equipmentA_gold": 8,
+    "equipmentB_gold": 100,
+    "ataqueFurtivo": "Uma vez por turno, ao atingir uma criatura com uma jogada de ataque em que você tem Vantagem, usando uma arma com a propriedade Acuidade ou uma arma à Distância, você causa 1d6 de dano adicional do tipo de dano da arma. Você não precisa ter Vantagem se um aliado (sem a condição Incapacitado, e você sem Desvantagem no ataque) estiver a até 1,5 metro do alvo.",
+    "especialistaCount": 2,
+    "giriaDoLadrao": "Você conhece a Gíria dos Ladrões automaticamente, mais 1 idioma à sua escolha das tabelas de idiomas do capítulo 2 (escolhido no passo de Idiomas, mais adiante).",
+    "maestriaCount": 2
+  },
+  "Druida": {
+    "skills": [
+      "Arcanismo",
+      "Lidar com Animais",
+      "Intuição",
+      "Medicina",
+      "Natureza",
+      "Percepção",
+      "Religião",
+      "Sobrevivência"
+    ],
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [
+      "leve",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "toolsFixed": "Kit de Herbalismo",
+    "equipmentA": [
+      "Armadura de Couro",
+      "Escudo",
+      "Foice",
+      "Foco Druídico (Cajado)",
+      "Kit de Explorador de Masmorras",
+      "Kit de Herbalismo"
+    ],
+    "equipmentA_gold": 9,
+    "equipmentB_gold": 50,
+    "cantripsCount": 2,
+    "cantrips": [
+      "Acudir os Moribundos",
+      "Arte Druídica",
+      "Bordão Místico",
+      "Chicote de Espinhos",
+      "Criar Chamas",
+      "Elementalismo",
+      "Fagulha Estelar",
+      "Mensagem",
+      "Orientação",
+      "Rajada de Veneno",
+      "Reparar",
+      "Resistência",
+      "Trovão"
+    ],
+    "preparedCount": 4,
+    "spells1": [
+      "Amizade Animal",
+      "Bom Fruto",
+      "Criar ou Destruir Água",
+      "Curar Ferimentos",
+      "Detectar Magia",
+      "Detectar Veneno e Doença",
+      "Emaranhar",
+      "Enfeitiçar Pessoa",
+      "Faca de Gelo",
+      "Falar com Animais",
+      "Fogo das Fadas",
+      "Névoa Obscurecente",
+      "Onda Trovejante",
+      "Palavra Curativa",
+      "Passos Largos",
+      "Proteção Contra o Bem e o Mal",
+      "Purificar Alimentos e Bebidas",
+      "Salto"
+    ],
+    "idiomaDruidico": "Você aprende o idioma Druídico (secreto dos Druidas) e sempre tem a magia Falar com Animais preparada (não conta contra o total de magias preparadas escolhidas acima). Pode usar o Druídico para deixar mensagens ocultas — outro Druida identifica a mensagem automaticamente; qualquer outra pessoa só percebe que existe uma com um teste de Inteligência (Investigação) CD 15, e mesmo assim não consegue decifrá-la sem magia.",
+    "ordemPrimal": {
+      "Protetor": "Você ganha proficiência com Armas Marciais e treinamento com Armadura Média.",
+      "Xamã": "Você aprende mais um truque de Druida à sua escolha (some ao total de truques). Além disso, adiciona seu mod. de Sabedoria (mínimo +1) a qualquer teste de Inteligência (Arcanismo) ou Inteligência (Natureza) que fizer."
+    }
+  },
+  "Feiticeiro": {
+    "skills": [
+      "Arcanismo",
+      "Enganação",
+      "Intimidação",
+      "Intuição",
+      "Persuasão",
+      "Religião"
+    ],
+    "weaponProf": [
+      "simples"
+    ],
+    "armorProf": [],
+    "savingThrows": [
+      "Constituição",
+      "Carisma"
+    ],
+    "equipmentA": [
+      "Lança",
+      "2 Adagas",
+      "Foco Arcano (cristal)",
+      "Kit de Explorador de Masmorras"
+    ],
+    "equipmentA_gold": 28,
+    "equipmentB_gold": 50,
+    "cantripsCount": 4,
+    "cantrips": [
+      "Amigos",
+      "Bolha Ácida",
+      "Elementalismo",
+      "Explosão Elemental",
+      "Golpe Certeiro",
+      "Ilusão Menor",
+      "Luz",
+      "Luzes Dançantes",
+      "Mensagem",
+      "Mãos Mágicas",
+      "Prestidigitação Arcana",
+      "Proteção Contra Lâminas",
+      "Raio de Fogo",
+      "Raio de Gelo",
+      "Rajada de Veneno",
+      "Reparar",
+      "Talho Mental",
+      "Toque Chocante",
+      "Toque Necrótico",
+      "Trovão"
+    ],
+    "preparedCount": 2,
+    "spells1": [
+      "Armadura Arcana",
+      "Compreender Idiomas",
+      "Detectar Magia",
+      "Disfarçar-se",
+      "Enfeitiçar Pessoa",
+      "Escudo Arcano",
+      "Faca de Gelo",
+      "Graxa",
+      "Imagem Silenciosa",
+      "Leque Cromático",
+      "Mãos Flamejantes",
+      "Mísseis Mágicos",
+      "Névoa Obscurecente",
+      "Onda Trovejante",
+      "Orbe Cromático",
+      "Queda Suave",
+      "Raio Nauseante",
+      "Raio de Bruxa",
+      "Retirada Acelerada",
+      "Salto",
+      "Sono",
+      "Vitalidade Vazia"
+    ],
+    "feiticariaInata": "Como uma Ação Bônus, você pode liberar sua magia latente por 1 minuto. Enquanto ativa: a CD para evitar suas magias de Feiticeiro aumenta em 1, e você tem Vantagem nas jogadas de ataque das magias de Feiticeiro que conjurar. Você pode usar essa característica 2 vezes, recuperando todos os usos ao completar um Descanso Longo."
+  },
+  "Monge": {
+    "skills": [
+      "Acrobacia",
+      "Atletismo",
+      "Furtividade",
+      "História",
+      "Intuição",
+      "Religião"
+    ],
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "weaponProfMeleeOnly": true,
+    "weaponProfFiltroMarcial": [
+      "Leve"
+    ],
+    "armorProf": [],
+    "savingThrows": [
+      "Força",
+      "Destreza"
+    ],
+    "toolsNote": "Escolha 1 tipo (Ferramentas de Artesão OU Instrumento Musical) e depois 1 item específico dessa categoria.",
+    "toolCategories": [
+      "Ferramentas de Artesão",
+      "Instrumento Musical"
+    ],
+    "equipmentA": [
+      "Lança",
+      "5 Adagas",
+      "Ferramenta/Instrumento escolhido",
+      "Kit de Aventureiro"
+    ],
+    "equipmentA_gold": 11,
+    "equipmentB_gold": 50,
+    "artesMarciais": "Enquanto estiver desarmado ou empunhando só armas de Monge, sem vestir armadura nem empunhar Escudo, você ganha: Ataque Desarmado Adicional (Ação Bônus), Dado de Artes Marciais (pode rolar 1d6 no lugar do dano normal do Ataque Desarmado ou de arma de Monge) e Ataques com Destreza (pode usar Destreza em vez de Força nas jogadas de ataque e dano desses ataques).",
+    "defesaSemArmadura": "Sem vestir armadura nem empunhar Escudo, sua Classe de Armadura é 10 + mod. Destreza + mod. Sabedoria."
+  },
+  "Guardião": {
+    "skills": [
+      "Atletismo",
+      "Furtividade",
+      "Intuição",
+      "Investigação",
+      "Lidar com Animais",
+      "Natureza",
+      "Percepção",
+      "Sobrevivência"
+    ],
+    "skillsCount": 3,
+    "weaponProf": [
+      "simples",
+      "marcial"
+    ],
+    "armorProf": [
+      "leve",
+      "media",
+      "escudo"
+    ],
+    "savingThrows": [
+      "Força",
+      "Destreza"
+    ],
+    "equipmentA": [
+      "Armadura de Couro Batido",
+      "Cimitarra",
+      "Espada Curta",
+      "Arco Longo",
+      "20 Flechas",
+      "Aljava",
+      "Foco Druídico (ramo de visco)",
+      "Kit de Aventureiro"
+    ],
+    "equipmentA_gold": 7,
+    "equipmentB_gold": 150,
+    "preparedCount": 2,
+    "spells1": [
+      "Alarme",
+      "Amizade Animal",
+      "Bom Fruto",
+      "Curar Ferimentos",
+      "Detectar Magia",
+      "Detectar Veneno e Doença",
+      "Emaranhar",
+      "Falar com Animais",
+      "Golpe Constritor",
+      "Marca do Predador",
+      "Névoa Obscurecente",
+      "Passos Largos",
+      "Salto",
+      "Saraivada de Espinhos"
+    ],
+    "inimigoFavorito": "Você sempre tem a magia Marca do Predador preparada (não conta contra o total de magias preparadas escolhidas acima). Pode conjurá-la 2 vezes sem gastar espaço de magia, recuperando todos os usos ao completar um Descanso Longo.",
+    "maestriaCount": 2
+  }
+}

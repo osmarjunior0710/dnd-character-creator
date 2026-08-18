@@ -4,7 +4,8 @@
   "description": "Free and easy way to create a D&D 5.5 character — static site, no build step (GitHub Pages serves index.html/js/css/data directly). This package.json exists only to declare the dev dependency for tests/regression-sweep.js.",
   "scripts": {
     "test": "echo \"Sirva o repo estático primeiro (ex: python3 -m http.server 8000), depois rode: node tests/regression-sweep.js\" && exit 1",
-    "import:dados": "node scripts/import-referencia.mjs"
+    "import:dados": "node scripts/import-referencia.mjs",
+    "export:mecanicas": "node scripts/exportar-mecanicas-vanilla.mjs"
   },
   "devDependencies": {
     "playwright": "1.56.0",

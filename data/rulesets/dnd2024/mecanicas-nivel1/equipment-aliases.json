@@ -1,0 +1,119 @@
+{
+  "4 Machadinhas": {
+    "id": "machadinha",
+    "qty": 4
+  },
+  "2 Adagas": {
+    "id": "adaga",
+    "qty": 2
+  },
+  "5 Adagas": {
+    "id": "adaga",
+    "qty": 5
+  },
+  "8 Azagaias": {
+    "id": "azagaia",
+    "qty": 8
+  },
+  "6 Azagaias": {
+    "id": "azagaia",
+    "qty": 6
+  },
+  "20 Flechas": {
+    "id": "flechas-20",
+    "qty": 1
+  },
+  "20 Virotes": {
+    "id": "virotes-20",
+    "qty": 1
+  },
+  "2 Algibeiras": {
+    "id": "algibeira",
+    "qty": 2
+  },
+  "2 Fantasias": {
+    "id": "roupas-fantasia",
+    "qty": 2
+  },
+  "Fantasia": {
+    "id": "roupas-fantasia",
+    "qty": 1
+  },
+  "Foco Arcano (orbe)": {
+    "id": "foco-arcano-orbe",
+    "qty": 1
+  },
+  "Foco Arcano (cristal)": {
+    "id": "foco-arcano-cristal",
+    "qty": 1
+  },
+  "Foco Arcano (Cajado)": {
+    "id": "foco-arcano-cajado",
+    "qty": 1
+  },
+  "Foco Druídico (Cajado)": {
+    "id": "foco-druidico-cajado-de-madeira",
+    "qty": 1
+  },
+  "Foco Druídico (ramo de visco)": {
+    "id": "foco-druidico-ramo-de-visco",
+    "qty": 1
+  },
+  "Livro (conhecimento oculto)": {
+    "id": "livro",
+    "qty": 1
+  },
+  "Livro de Magias": {
+    "id": "livro",
+    "qty": 1
+  },
+  "Livro (orações)": {
+    "id": "livro",
+    "qty": 1
+  },
+  "Livro (filosofia)": {
+    "id": "livro",
+    "qty": 1
+  },
+  "Livro (história)": {
+    "id": "livro",
+    "qty": 1
+  },
+  "Pergaminho (10 folhas)": {
+    "id": "pergaminho-folha-em-branco",
+    "qty": 10
+  },
+  "Pergaminho (12 folhas)": {
+    "id": "pergaminho-folha-em-branco",
+    "qty": 12
+  },
+  "Pergaminho (8 folhas)": {
+    "id": "pergaminho-folha-em-branco",
+    "qty": 8
+  },
+  "Óleo (3 frascos)": {
+    "id": "oleo-frasco",
+    "qty": 3
+  },
+  "Balde de Ferro": {
+    "id": "balde",
+    "qty": 1
+  },
+  "Espelho": {
+    "id": "espelho-de-mao",
+    "qty": 1
+  },
+  "Corda": {
+    "id": "corda-15m",
+    "qty": 1
+  },
+  "Estojo": {
+    "id": "estojo-virote-de-besta",
+    "qty": 1
+  },
+  "Mochila de Explorador de Masmorras": {
+    "id": "mochila",
+    "qty": 1
+  },
+  "Símbolo Sagrado": null
+}

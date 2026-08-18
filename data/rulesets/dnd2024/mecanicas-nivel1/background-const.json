@@ -1,0 +1,547 @@
+{
+  "Charlatão": {
+    "nome": "Charlatão",
+    "suggestedAbilities": [
+      "Destreza",
+      "Constituição",
+      "Carisma"
+    ],
+    "feat": "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
+    "skills": [
+      "Enganação",
+      "Prestidigitação"
+    ],
+    "tool": "Kit de Falsificação",
+    "equipmentA": [
+      "Kit de Falsificação",
+      "Fantasia",
+      "Roupas Finas"
+    ],
+    "equipmentA_gold": 15,
+    "equipmentB_gold": 50
+  },
+  "Nobre": {
+    "nome": "Nobre",
+    "suggestedAbilities": [
+      "Força",
+      "Inteligência",
+      "Carisma"
+    ],
+    "feat": "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
+    "skills": [
+      "História",
+      "Persuasão"
+    ],
+    "ferramentaCategoria": "Kit de Jogos",
+    "ferramentaOpcoes": [
+      "Dados",
+      "Xadrez-do-Dragão",
+      "Baralho",
+      "Conjunto do Jogo dos Três Dragões"
+    ],
+    "equipmentA": [
+      "{ferramenta}",
+      "Perfume",
+      "Roupas Finas"
+    ],
+    "equipmentA_gold": 29,
+    "equipmentB_gold": 50
+  },
+  "Andarilho": {
+    "nome": "Andarilho",
+    "suggestedAbilities": [
+      "Destreza",
+      "Sabedoria",
+      "Carisma"
+    ],
+    "feat": "Sortudo — pontos de sorte iguais ao seu bônus de proficiência (recarregam em Descanso Longo); gaste 1 para dar Vantagem numa jogada sua, ou impor Desvantagem num ataque contra você",
+    "skills": [
+      "Furtividade",
+      "Intuição"
+    ],
+    "tool": "Ferramentas de Ladrão",
+    "equipmentA": [
+      "2 Adagas",
+      "Ferramentas de Ladrão",
+      "Kit de Jogos",
+      "2 Algibeiras",
+      "Roupas de Viagem",
+      "Saco de Dormir"
+    ],
+    "equipmentA_gold": 16,
+    "equipmentB_gold": 50
+  },
+  "Criminoso": {
+    "nome": "Criminoso",
+    "suggestedAbilities": [
+      "Destreza",
+      "Constituição",
+      "Inteligência"
+    ],
+    "feat": "Alerta — soma seu bônus de proficiência na Iniciativa; pode trocar sua Iniciativa pela de um aliado voluntário imediatamente após rolar",
+    "skills": [
+      "Furtividade",
+      "Prestidigitação"
+    ],
+    "tool": "Ferramentas de Ladrão",
+    "equipmentA": [
+      "2 Adagas",
+      "Ferramentas de Ladrão",
+      "2 Algibeiras",
+      "Pé de Cabra",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 16,
+    "equipmentB_gold": 50
+  },
+  "Eremita": {
+    "nome": "Eremita",
+    "suggestedAbilities": [
+      "Constituição",
+      "Sabedoria",
+      "Carisma"
+    ],
+    "feat": "Curandeiro — com o Kit de Curandeiro, trata alguém a 1,5 metro curando 1 Dado de Vida + seu bônus de proficiência; sempre pode rerolar 1 em dados de cura",
+    "skills": [
+      "Medicina",
+      "Religião"
+    ],
+    "tool": "Kit de Herbalismo",
+    "equipmentA": [
+      "Cajado",
+      "Kit de Herbalismo",
+      "Lâmpada",
+      "Livro (filosofia)",
+      "Óleo (3 frascos)",
+      "Roupas de Viagem",
+      "Saco de Dormir"
+    ],
+    "equipmentA_gold": 16,
+    "equipmentB_gold": 50
+  },
+  "Fazendeiro": {
+    "nome": "Fazendeiro",
+    "suggestedAbilities": [
+      "Força",
+      "Constituição",
+      "Sabedoria"
+    ],
+    "feat": "Vigoroso — PV máximo aumenta em 2x seu nível de personagem ao pegar o talento; +2 PV extra a cada nível seguinte",
+    "skills": [
+      "Lidar com Animais",
+      "Natureza"
+    ],
+    "tool": "Ferramentas de Carpinteiro",
+    "equipmentA": [
+      "Foice",
+      "Ferramentas de Carpinteiro",
+      "Kit de Curandeiro",
+      "Balde de Ferro",
+      "Pá"
+    ],
+    "equipmentA_gold": 30,
+    "equipmentB_gold": 50
+  },
+  "Marinheiro": {
+    "nome": "Marinheiro",
+    "suggestedAbilities": [
+      "Força",
+      "Destreza",
+      "Sabedoria"
+    ],
+    "feat": "Valentão de Taverna — Ataque Desarmado causa 1d4+Força de dano Contundente, com proficiência em armas improvisadas; 1x/turno pode empurrar o alvo ao acertar Desarmado",
+    "skills": [
+      "Acrobacia",
+      "Percepção"
+    ],
+    "tool": "Ferramentas de Navegador",
+    "equipmentA": [
+      "Adaga",
+      "Ferramentas de Navegador",
+      "Corda",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 20,
+    "equipmentB_gold": 50
+  },
+  "Escriba": {
+    "nome": "Escriba",
+    "suggestedAbilities": [
+      "Destreza",
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "feat": "Habilidoso — proficiência em 3 perícias ou ferramentas à escolha",
+    "skills": [
+      "Investigação",
+      "Percepção"
+    ],
+    "tool": "Suprimentos de Calígrafo",
+    "equipmentA": [
+      "Suprimentos de Calígrafo",
+      "Lâmpada",
+      "Óleo (3 frascos)",
+      "Pergaminho (12 folhas)",
+      "Roupas Finas"
+    ],
+    "equipmentA_gold": 23,
+    "equipmentB_gold": 50
+  },
+  "Mercador": {
+    "nome": "Mercador",
+    "suggestedAbilities": [
+      "Constituição",
+      "Inteligência",
+      "Carisma"
+    ],
+    "feat": "Sortudo — pontos de sorte iguais ao seu bônus de proficiência (recarregam em Descanso Longo); gaste 1 para dar Vantagem numa jogada sua, ou impor Desvantagem num ataque contra você",
+    "skills": [
+      "Lidar com Animais",
+      "Persuasão"
+    ],
+    "tool": "Ferramentas de Navegador",
+    "equipmentA": [
+      "Ferramentas de Navegador",
+      "2 Algibeiras",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 22,
+    "equipmentB_gold": 50
+  },
+  "Artesão": {
+    "nome": "Artesão",
+    "suggestedAbilities": [
+      "Força",
+      "Destreza",
+      "Inteligência"
+    ],
+    "feat": "Artifista — proficiência com 3 Ferramentas de Artesão à sua escolha; 20% de desconto em itens não-mágicos; ao completar Descanso Longo, fabrica um item de uma tabela de Fabricação Rápida (se tiver a ferramenta certa)",
+    "skills": [
+      "Investigação",
+      "Persuasão"
+    ],
+    "ferramentaCategoria": "Ferramentas de Artesão",
+    "ferramentaOpcoes": [
+      "Ferramentas de Carpinteiro",
+      "Ferramentas de Cartógrafo",
+      "Ferramentas de Coureiro",
+      "Ferramentas de Entalhador",
+      "Ferramentas de Ferreiro",
+      "Ferramentas de Funileiro",
+      "Ferramentas de Joalheiro",
+      "Ferramentas de Oleiro",
+      "Ferramentas de Pedreiro",
+      "Ferramentas de Sapateiro",
+      "Ferramentas de Tecelão",
+      "Ferramentas de Vidreiro",
+      "Suprimentos de Alquimista",
+      "Suprimentos de Calígrafo",
+      "Suprimentos de Cervejeiro",
+      "Suprimentos de Pintor",
+      "Utensílios de Cozinheiro"
+    ],
+    "equipmentA": [
+      "{ferramenta}",
+      "2 Algibeiras",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 32,
+    "equipmentB_gold": 50
+  },
+  "Artista": {
+    "nome": "Artista",
+    "suggestedAbilities": [
+      "Força",
+      "Destreza",
+      "Carisma"
+    ],
+    "feat": "Músico — proficiência com 3 Instrumentos Musicais à sua escolha; ao completar Descanso Curto ou Longo, toca música e dá Inspiração Heroica a um número de aliados igual ao seu bônus de proficiência",
+    "skills": [
+      "Acrobacia",
+      "Atuação"
+    ],
+    "ferramentaCategoria": "Instrumento Musical",
+    "ferramentaOpcoes": [
+      "Alaúde",
+      "Flauta",
+      "Flauta de Pã",
+      "Gaita de Foles",
+      "Lira",
+      "Oboé",
+      "Tambor",
+      "Trombeta",
+      "Violino",
+      "Xilofone"
+    ],
+    "equipmentA": [
+      "{ferramenta}",
+      "Espelho",
+      "2 Fantasias",
+      "Perfume",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 11,
+    "equipmentB_gold": 50
+  },
+  "Guarda": {
+    "nome": "Guarda",
+    "suggestedAbilities": [
+      "Força",
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "feat": "Alerta — soma seu bônus de proficiência na Iniciativa; pode trocar sua Iniciativa pela de um aliado voluntário imediatamente após rolar",
+    "skills": [
+      "Atletismo",
+      "Percepção"
+    ],
+    "ferramentaCategoria": "Kit de Jogos",
+    "ferramentaOpcoes": [
+      "Dados",
+      "Xadrez-do-Dragão",
+      "Baralho",
+      "Conjunto do Jogo dos Três Dragões"
+    ],
+    "equipmentA": [
+      "Lança",
+      "Besta Leve",
+      "20 Virotes",
+      "{ferramenta}",
+      "Aljava",
+      "Grilhões",
+      "Lanterna Coberta",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 12,
+    "equipmentB_gold": 50
+  },
+  "Soldado": {
+    "nome": "Soldado",
+    "suggestedAbilities": [
+      "Força",
+      "Destreza",
+      "Constituição"
+    ],
+    "feat": "Atacante Selvagem — 1x/turno, ao acertar com arma, role o dano da arma duas vezes e use qualquer um dos resultados",
+    "skills": [
+      "Atletismo",
+      "Intimidação"
+    ],
+    "ferramentaCategoria": "Kit de Jogos",
+    "ferramentaOpcoes": [
+      "Dados",
+      "Xadrez-do-Dragão",
+      "Baralho",
+      "Conjunto do Jogo dos Três Dragões"
+    ],
+    "equipmentA": [
+      "Lança",
+      "Arco Curto",
+      "20 Flechas",
+      "Kit de Curandeiro",
+      "{ferramenta}",
+      "Aljava",
+      "Roupas de Viagem"
+    ],
+    "equipmentA_gold": 14,
+    "equipmentB_gold": 50
+  },
+  "Acólito": {
+    "nome": "Acólito",
+    "suggestedAbilities": [
+      "Inteligência",
+      "Sabedoria",
+      "Carisma"
+    ],
+    "feat": "Iniciado em Magia (Clérigo) — aprende 2 truques e 1 magia de 1º círculo da lista de Clérigo; a magia de 1º círculo fica sempre preparada, conjurável 1x grátis por Descanso Longo (ou com espaço de magia depois)",
+    "skills": [
+      "Intuição",
+      "Religião"
+    ],
+    "tool": "Suprimentos de Calígrafo",
+    "iniciadoEmMagia": {
+      "classe": "Clérigo",
+      "cantrips": [
+        "Acudir os Moribundos",
+        "Badalar Fúnebre",
+        "Chama Sagrada",
+        "Luz",
+        "Orientação",
+        "Palavra de Radiância",
+        "Reparar",
+        "Resistência",
+        "Taumaturgia"
+      ],
+      "spells1": [
+        "Bênção",
+        "Comando",
+        "Criar ou Destruir Água",
+        "Curar Ferimentos",
+        "Detectar Magia",
+        "Detectar o Bem e o Mal",
+        "Detectar Veneno e Doença",
+        "Escudo da Fé",
+        "Infligir Ferimentos",
+        "Palavra Curativa",
+        "Perdição",
+        "Proteção Contra o Bem e o Mal",
+        "Purificar Alimentos e Bebidas",
+        "Raio Guia",
+        "Santuário"
+      ]
+    },
+    "equipmentA": [
+      "Suprimentos de Calígrafo",
+      "Livro (orações)",
+      "Símbolo Sagrado",
+      "Pergaminho (10 folhas)",
+      "Túnica"
+    ],
+    "equipmentA_gold": 8,
+    "equipmentB_gold": 50
+  },
+  "Guia": {
+    "nome": "Guia",
+    "suggestedAbilities": [
+      "Destreza",
+      "Constituição",
+      "Sabedoria"
+    ],
+    "feat": "Iniciado em Magia (Druida) — aprende 2 truques e 1 magia de 1º círculo da lista de Druida; a magia de 1º círculo fica sempre preparada, conjurável 1x grátis por Descanso Longo (ou com espaço de magia depois)",
+    "skills": [
+      "Furtividade",
+      "Sobrevivência"
+    ],
+    "tool": "Ferramentas de Cartógrafo",
+    "iniciadoEmMagia": {
+      "classe": "Druida",
+      "cantrips": [
+        "Acudir os Moribundos",
+        "Arte Druídica",
+        "Bordão Místico",
+        "Chicote de Espinhos",
+        "Criar Chamas",
+        "Elementalismo",
+        "Fagulha Estelar",
+        "Mensagem",
+        "Orientação",
+        "Rajada de Veneno",
+        "Reparar",
+        "Resistência",
+        "Trovão"
+      ],
+      "spells1": [
+        "Amizade Animal",
+        "Bom Fruto",
+        "Criar ou Destruir Água",
+        "Curar Ferimentos",
+        "Detectar Magia",
+        "Detectar Veneno e Doença",
+        "Emaranhar",
+        "Enfeitiçar Pessoa",
+        "Faca de Gelo",
+        "Falar com Animais",
+        "Fogo das Fadas",
+        "Névoa Obscurecente",
+        "Onda Trovejante",
+        "Palavra Curativa",
+        "Passos Largos",
+        "Proteção Contra o Bem e o Mal",
+        "Purificar Alimentos e Bebidas",
+        "Salto"
+      ]
+    },
+    "equipmentA": [
+      "Arco Curto",
+      "20 Flechas",
+      "Ferramentas de Cartógrafo",
+      "Aljava",
+      "Roupas de Viagem",
+      "Saco de Dormir",
+      "Tenda"
+    ],
+    "equipmentA_gold": 3,
+    "equipmentB_gold": 50
+  },
+  "Sábio": {
+    "nome": "Sábio",
+    "suggestedAbilities": [
+      "Constituição",
+      "Inteligência",
+      "Sabedoria"
+    ],
+    "feat": "Iniciado em Magia (Mago) — aprende 2 truques e 1 magia de 1º círculo da lista de Mago; a magia de 1º círculo fica sempre preparada, conjurável 1x grátis por Descanso Longo (ou com espaço de magia depois)",
+    "skills": [
+      "Arcanismo",
+      "História"
+    ],
+    "tool": "Suprimentos de Calígrafo",
+    "iniciadoEmMagia": {
+      "classe": "Mago",
+      "cantrips": [
+        "Amigos",
+        "Badalar Fúnebre",
+        "Bolha Ácida",
+        "Elementalismo",
+        "Golpe Certeiro",
+        "Ilusão Menor",
+        "Luz",
+        "Luzes Dançantes",
+        "Mãos Mágicas",
+        "Mensagem",
+        "Prestidigitação Arcana",
+        "Proteção Contra Lâminas",
+        "Raio de Fogo",
+        "Raio de Gelo",
+        "Rajada de Veneno",
+        "Reparar",
+        "Talho Mental",
+        "Toque Chocante",
+        "Toque Necrótico",
+        "Trovão"
+      ],
+      "spells1": [
+        "Alarme",
+        "Armadura Arcana",
+        "Compreender Idiomas",
+        "Convocar Familiar",
+        "Detectar Magia",
+        "Disco Flutuante de Tenser",
+        "Disfarçar-se",
+        "Enfeitiçar Pessoa",
+        "Escrita Ilusória",
+        "Escudo Arcano",
+        "Faca de Gelo",
+        "Gargalhada Nefasta de Tasha",
+        "Graxa",
+        "Identificar",
+        "Imagem Silenciosa",
+        "Leque Cromático",
+        "Mãos Flamejantes",
+        "Mísseis Mágicos",
+        "Névoa Obscurecente",
+        "Onda Trovejante",
+        "Orbe Cromático",
+        "Passos Largos",
+        "Proteção Contra o Bem e o Mal",
+        "Queda Suave",
+        "Raio de Bruxa",
+        "Raio Nauseante",
+        "Retirada Acelerada",
+        "Salto",
+        "Servo Invisível",
+        "Sono",
+        "Vitalidade Vazia"
+      ]
+    },
+    "equipmentA": [
+      "Cajado",
+      "Suprimentos de Calígrafo",
+      "Livro (história)",
+      "Pergaminho (8 folhas)",
+      "Túnica"
+    ],
+    "equipmentA_gold": 8,
+    "equipmentB_gold": 50
+  }
+}
