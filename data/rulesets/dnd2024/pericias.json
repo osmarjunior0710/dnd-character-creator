@@ -1,0 +1,128 @@
+[
+  {
+    "Perícia (PT)": "Acrobacia",
+    "Skill (EN)": "Acrobatics",
+    "Atributo": "Destreza",
+    "Exemplo de uso": "Manter-se em pé em situação complicada ou realizar acrobacia",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Arcanismo",
+    "Skill (EN)": "Arcana",
+    "Atributo": "Inteligência",
+    "Exemplo de uso": "Recordar conhecimentos sobre magias, itens mágicos e planos de existência",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Atletismo",
+    "Skill (EN)": "Athletics",
+    "Atributo": "Força",
+    "Exemplo de uso": "Pular mais longe do que o normal, manter-se à tona em águas agitadas, quebrar algo",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Atuação",
+    "Skill (EN)": "Performance",
+    "Atributo": "Carisma",
+    "Exemplo de uso": "Atuar, contar história, tocar música ou dançar",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Enganação",
+    "Skill (EN)": "Deception",
+    "Atributo": "Carisma",
+    "Exemplo de uso": "Contar mentira convincente ou usar disfarce de forma convincente",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Furtividade",
+    "Skill (EN)": "Stealth",
+    "Atributo": "Destreza",
+    "Exemplo de uso": "Evitar ser notado movendo-se silenciosamente e se escondendo",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "História",
+    "Skill (EN)": "History",
+    "Atributo": "Inteligência",
+    "Exemplo de uso": "Relembrar fatos sobre eventos históricos, pessoas, nações e culturas",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Intimidação",
+    "Skill (EN)": "Intimidation",
+    "Atributo": "Carisma",
+    "Exemplo de uso": "Atemorizar ou ameaçar alguém para que faça o que você quer",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Intuição",
+    "Skill (EN)": "Insight",
+    "Atributo": "Sabedoria",
+    "Exemplo de uso": "Perceber o humor e as intenções de uma pessoa",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Investigação",
+    "Skill (EN)": "Investigation",
+    "Atributo": "Inteligência",
+    "Exemplo de uso": "Encontrar informações obscuras em livros ou deduzir como algo funciona",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Lidar com Animais",
+    "Skill (EN)": "Animal Handling",
+    "Atributo": "Sabedoria",
+    "Exemplo de uso": "Acalmar ou treinar um animal, ou fazê-lo se comportar de certa maneira",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Medicina",
+    "Skill (EN)": "Medicine",
+    "Atributo": "Sabedoria",
+    "Exemplo de uso": "Diagnosticar doença ou determinar o que matou alguém recentemente",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Natureza",
+    "Skill (EN)": "Nature",
+    "Atributo": "Inteligência",
+    "Exemplo de uso": "Relembrar fatos sobre terreno, plantas, animais e clima",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Percepção",
+    "Skill (EN)": "Perception",
+    "Atributo": "Sabedoria",
+    "Exemplo de uso": "Usando combinação de sentidos, notar algo fácil de passar despercebido",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Persuasão",
+    "Skill (EN)": "Persuasion",
+    "Atributo": "Carisma",
+    "Exemplo de uso": "Convencer alguém de algo de forma honesta e graciosa",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Prestidigitação",
+    "Skill (EN)": "Sleight of Hand",
+    "Atributo": "Destreza",
+    "Exemplo de uso": "Furtar bolso, ocultar objeto portátil ou fazer truque com as mãos",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Religião",
+    "Skill (EN)": "Religion",
+    "Atributo": "Inteligência",
+    "Exemplo de uso": "Relembrar fatos sobre deuses, ritos religiosos e símbolos sagrados",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  },
+  {
+    "Perícia (PT)": "Sobrevivência",
+    "Skill (EN)": "Survival",
+    "Atributo": "Sabedoria",
+    "Exemplo de uso": "Seguir rastros, forragear, encontrar trilha ou evitar perigos naturais",
+    "Fonte": "Livro do Jogador (D&D 5e 2024)"
+  }
+]

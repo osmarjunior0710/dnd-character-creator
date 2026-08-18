@@ -1,1 +1,5 @@
 node_modules/
+
+# Planilhas de referência (conteúdo licenciado de terceiros) — nunca versionar
+# o arquivo bruto, só a saída gerada em data/rulesets/dnd2024/.
+*.xlsx

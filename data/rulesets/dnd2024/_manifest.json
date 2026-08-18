@@ -1,0 +1,51 @@
+{
+  "geradoEm": "2026-08-18T15:19:13.119Z",
+  "fontes": {
+    "phb": {
+      "arquivo": "dnd5e-2024-referencia.xlsx",
+      "abas": [
+        "Como Usar",
+        "Índice",
+        "Perícias",
+        "Condições",
+        "Idiomas",
+        "Alinhamentos",
+        "Antecedentes",
+        "Espécies",
+        "Talentos",
+        "Armas",
+        "Armaduras",
+        "Equipamento de Aventura",
+        "Ferramentas",
+        "Montarias e Veículos",
+        "Veículos Aquáticos",
+        "Serviços",
+        "Progressão de Classe",
+        "Magias",
+        "Magias Preparadas por Classe",
+        "Propriedades de Maestria",
+        "Características de Classe",
+        "Subclasses",
+        "Opções de Classe",
+        "Glossário de Regras",
+        "Estatísticas de Criaturas",
+        "Evolução do Personagem",
+        "Regras Rápidas",
+        "Multiclasse",
+        "Bugigangas"
+      ]
+    },
+    "guiaMestre": {
+      "arquivo": "dnd5e-2024-guia-mestre-referencia.xlsx",
+      "abas": [
+        "Como Usar",
+        "Índice",
+        "Tesouro por ND",
+        "Itens Mágicos",
+        "Itens Mágicos Inteligentes",
+        "Artefatos",
+        "Outras Recompensas"
+      ]
+    }
+  }
+}
