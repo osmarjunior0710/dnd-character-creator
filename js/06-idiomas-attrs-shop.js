@@ -176,6 +176,34 @@ function itemMatchesWeaponProf(clsConst, itemName){
 }
 function toggleShopProfFilter(){ data.shop.filterByProf = !data.shop.filterByProf; persist(); render(); }
 
+/* Popup de detalhe de item da Loja (ⓘ) — só existe pra item com "d"
+   preenchido e sem "Dano/Efeito" na própria tabela (Ferramentas/
+   Instrumentos, ver hasDanoEfeito em renderShop()), já que é onde o
+   texto de "d" (CD de Usar Objeto + o que a ferramenta fabrica) não
+   cabe na linha. Mesmo padrão visual/interação de sempre (mochila-
+   overlay/mochila-popup, clique fora fecha, guarda só o id — estado de
+   UI puro, não entra em data/persist()). */
+let shopItemInfoPopup = null;
+function openShopItemInfoPopup(id){ shopItemInfoPopup = id; render(); }
+function closeShopItemInfoPopup(){ shopItemInfoPopup = null; render(); }
+function renderShopItemInfoPopup(){
+  if(!shopItemInfoPopup) return '';
+  const it = findShopItem(shopItemInfoPopup);
+  if(!it || !it.d) return '';
+  return `<div class="mochila-overlay" onclick="closeShopItemInfoPopup()">
+    <div class="mochila-popup spell-info-popup" onclick="event.stopPropagation()">
+      <div class="mochila-popup-header">
+        <h3>${it.n}</h3>
+        <button class="btn small" onclick="closeShopItemInfoPopup()">✕</button>
+      </div>
+      <div class="spell-detail">
+        <div>${it.d}</div>
+        ${it.p && it.p!=='—' ? `<div class="stats" style="margin-top:8px;"><span>${it.p}</span></div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
 function renderShop(){
   const remaining = startingGold() - spentGold();
   const purchases = data.shop.purchases||{};
@@ -209,13 +237,19 @@ function renderShop(){
        de dano, ou "CA X + Destreza") E "p" (propriedades) preenchidos —
        vale a pena mostrar as duas colunas separadas. Ferramentas/
        Instrumentos/Focos/Munição/Equipamento de Aventura (filterProf
-       null) NUNCA têm "d" preenchido no banco de dados (ver comentário
-       no topo de data/shop-items.js) — o efeito de verdade desses itens
-       (quando existe, ex: "2d6 dano Ácido ao arremessar") mora em "p".
-       Mostrar "Dano/Efeito" sempre vazio + "Propriedades" só às vezes
-       preenchido virava 2 colunas fantasma pra maioria dos itens (achado
-       real de usuário, com screenshot) — agora esses tipos de item
-       mostram 1 coluna só ("Efeito"), com o texto que existir. */
+       null) geralmente não têm "d" preenchido (só Ferramentas/
+       Instrumentos têm, ver comentário no topo de data/shop-items.js) —
+       o efeito básico desses itens (quando existe, ex: "2d6 dano Ácido
+       ao arremessar") mora em "p". Mostrar "Dano/Efeito" sempre vazio +
+       "Propriedades" só às vezes preenchido virava 2 colunas fantasma
+       pra maioria dos itens (achado real de usuário, com screenshot) —
+       esses tipos de item mostram 1 coluna só ("Efeito"), com o texto
+       que existir; quando "d" também está preenchido (Ferramentas/
+       Instrumentos), o texto mais longo dele — CD de Usar Objeto e o
+       que a ferramenta fabrica — não cabe na linha da tabela, então vira
+       um botão ⓘ do lado do nome que abre um popup (achado real de
+       usuário: card só dizia "tem um teste" sem explicar do que se
+       trata). */
     const hasDanoEfeito = ['simples','marcial','leve','media','pesada','escudo'].includes(cat.filterProf);
     if(filtering && cat.filterProf && !clsConst.weaponProf.includes(cat.filterProf) && !clsConst.armorProf.includes(cat.filterProf)) return;
     const visibleItems = cat.items.filter(it => it.c <= maxGold && (!filtering || !isWeaponCat || itemMatchesWeaponProf(clsConst, it.n)));
@@ -234,8 +268,9 @@ function renderShop(){
       const efeitoHtml = hasDanoEfeito
         ? `<td data-label="Dano/Efeito">${it.d}</td><td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`
         : `<td data-label="Efeito" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`;
+      const infoBtn = (!hasDanoEfeito && it.d) ? ` <button class="info-btn ${shopItemInfoPopup===it.id?'active':''}" data-pick="${it.id}" data-fn="openShopItemInfoPopup" title="Ver detalhes">ⓘ</button>` : '';
       return `<tr>
-        <td data-label="Item">${it.n}${contHtml}</td>
+        <td data-label="Item">${it.n}${infoBtn}${contHtml}</td>
         ${efeitoHtml}
         ${atkHtml}
         <td data-label="Custo">${discount<1 ? `<s style="opacity:0.55;">${fmtGold(it.c)}</s> ${fmtGold(itemPrice(it))}` : fmtGold(it.c)} PO</td>
