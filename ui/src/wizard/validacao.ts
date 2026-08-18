@@ -1,5 +1,5 @@
-import type { AntecedenteConst, EspecieConst } from "../ruleset/RulesetContext";
-import type { AntecedenteEscolha, EspecieEscolha } from "./WizardContext";
+import type { AntecedenteConst, EspecieConst, ClasseConst } from "../ruleset/RulesetContext";
+import type { AntecedenteEscolha, EspecieEscolha, ClasseEscolha } from "./WizardContext";
 
 /** Equivalente ao trecho `case 3` de findFirstMissingGroup() (js/01-wizard-nav.js)
  * pro antecedente — mesma regra, só devolvendo bool em vez do id do grupo
@@ -43,5 +43,115 @@ export function especieDetalheCompleto(nome: string, especie: EspecieConst, esco
       return !!escolha.tamanho && !!escolha.legado && !!escolha.atributoLegado;
     default:
       return especie.tamanho.opcoes.length <= 1; // fallback conservador, nunca deveria bater
+  }
+}
+
+/* Taumaturgo (Clérigo) e Xamã (Druida) concedem +1 truque disponível pra
+ * escolher — mesmo cálculo de clerigoEffectiveCantripsCount()/
+ * druidaEffectiveCantripsCount() em js/05-class-steps.js. Os nomes das
+ * Ordens que concedem o bônus são fato de regra (não vêm estruturados em
+ * ordemDivina/ordemPrimal, só em texto solto), por isso hardcoded aqui —
+ * mesmo nível de "nome específico na camada de UI" já usado em
+ * especieDetalheCompleto() acima, nunca em core/. */
+export function clerigoCantripsEfetivo(classe: ClasseConst, escolha: ClasseEscolha): number {
+  return (classe.cantripsCount ?? 2) + (escolha.ordem === "Taumaturgo" ? 1 : 0);
+}
+export function druidaCantripsEfetivo(classe: ClasseConst, escolha: ClasseEscolha): number {
+  return (classe.cantripsCount ?? 2) + (escolha.ordem === "Xamã" ? 1 : 0);
+}
+
+/** Equivalente ao `case 1` de findFirstMissingGroup() pra classe — o bloco
+ * mais ramificado do vanilla (13 branches, um por classe). */
+export function classeDetalheCompleto(nome: string, classe: ClasseConst, escolha: ClasseEscolha): boolean {
+  const e = escolha;
+  switch (nome) {
+    case "Bárbaro":
+      return e.skills.length === 2 && e.maestria.length === (classe.maestriaCount ?? 0) && !!e.equipment;
+    case "Bardo":
+      return (
+        e.skills.length === (classe.skillsCount ?? 2) &&
+        e.instruments.length === (classe.toolsCount ?? 0) &&
+        e.cantrips.length === 2 &&
+        e.spells1.length === 4 &&
+        !!e.equipment
+      );
+    case "Mago":
+      return (
+        e.skills.length === 2 &&
+        e.cantrips.length === (classe.cantripsCount ?? 2) &&
+        e.spellbook.length === (classe.spellbookCount ?? 0) &&
+        e.prepared.length === (classe.preparedCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Paladino":
+      return (
+        e.skills.length === 2 &&
+        e.prepared.length === (classe.preparedCount ?? 0) &&
+        e.maestria.length === (classe.maestriaCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Psiônico":
+      return (
+        e.skills.length === 2 &&
+        e.cantrips.length === (classe.cantripsCount ?? 2) &&
+        e.spells1.length === (classe.preparedCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Clérigo":
+      return (
+        e.skills.length === 2 &&
+        !!e.ordem &&
+        e.cantrips.length === clerigoCantripsEfetivo(classe, e) &&
+        e.spells1.length === (classe.preparedCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Guerreiro":
+      return (
+        e.skills.length === 2 &&
+        !!e.estilo &&
+        e.maestria.length === (classe.maestriaCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Ladino":
+      return (
+        e.skills.length === (classe.skillsCount ?? 0) &&
+        e.especialista.length === (classe.especialistaCount ?? 0) &&
+        e.maestria.length === (classe.maestriaCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Druida":
+      return (
+        e.skills.length === 2 &&
+        !!e.ordem &&
+        e.cantrips.length === druidaCantripsEfetivo(classe, e) &&
+        e.spells1.length === (classe.preparedCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Feiticeiro":
+      return (
+        e.skills.length === 2 &&
+        e.cantrips.length === (classe.cantripsCount ?? 2) &&
+        e.spells1.length === (classe.preparedCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Monge":
+      return e.skills.length === 2 && !!e.toolCategory && !!e.toolChoice && !!e.equipment;
+    case "Guardião":
+      return (
+        e.skills.length === (classe.skillsCount ?? 0) &&
+        e.spells1.length === (classe.preparedCount ?? 0) &&
+        e.maestria.length === (classe.maestriaCount ?? 0) &&
+        !!e.equipment
+      );
+    case "Bruxo":
+    default:
+      if (e.skills.length !== 2) return false;
+      if (!e.pactBoon) return false;
+      if (e.cantrips.length !== 2) return false;
+      if (e.pactBoon === "Pacto do Tomo" && e.tomoCantrips.length !== 3) return false;
+      if (e.spells1.length !== 2) return false;
+      if (e.pactBoon === "Pacto do Tomo" && e.tomoRituals.length !== 2) return false;
+      if (!e.equipment) return false;
+      return true;
   }
 }

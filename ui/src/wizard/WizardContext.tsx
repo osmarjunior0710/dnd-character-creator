@@ -40,7 +40,40 @@ export function especieEscolhaVazia(): EspecieEscolha {
   return { tamanho: null, pericia: null, talento: null, heranca: null, linhagem: null, atributoLinhagem: null, legado: null, atributoLegado: null, ancestralidade: null };
 }
 
+/** Escolha de classe — superconjunto dos campos que QUALQUER uma das 13
+ * classes usa (nem toda classe usa todo campo; cada passo de detalhe só
+ * lê os campos que fazem sentido pra ela, igual o `data.bruxo`/`data.barbaro`/
+ * etc. do vanilla, só que unificados num tipo só em vez de 13 tipos). */
+export interface ClasseEscolha {
+  skills: string[];
+  maestria: string[];
+  especialista: string[];
+  pactBoon: string | null; // Bruxo
+  cantrips: string[];
+  tomoCantrips: string[]; // Bruxo/Pacto do Tomo
+  spells1: string[];
+  tomoRituals: string[]; // Bruxo/Pacto do Tomo
+  spellbook: string[]; // Mago
+  prepared: string[]; // Mago, Paladino
+  ordem: string | null; // Clérigo, Druida
+  estilo: string | null; // Guerreiro
+  toolCategory: string | null; // Monge
+  toolChoice: string | null; // Monge
+  instruments: string[]; // Bardo
+  equipment: "A" | "B" | "C" | null;
+}
+
+export function classeEscolhaVazia(): ClasseEscolha {
+  return {
+    skills: [], maestria: [], especialista: [], pactBoon: null, cantrips: [], tomoCantrips: [],
+    spells1: [], tomoRituals: [], spellbook: [], prepared: [], ordem: null, estilo: null,
+    toolCategory: null, toolChoice: null, instruments: [], equipment: null,
+  };
+}
+
 export interface WizardData {
+  classe: string | null;
+  classes: Record<string, ClasseEscolha>;
   antecedente: string | null;
   freeAbilityRule: boolean;
   antecedentes: Record<string, AntecedenteEscolha>;
@@ -53,7 +86,7 @@ function dadosIniciais(): WizardData {
   // no vanilla (js/00-notes-and-state.js linha 1339). Achado batendo este
   // valor contra o vanilla ao testar esta sub-entrega: eu tinha começado
   // com true por engano.
-  return { antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {} };
+  return { classe: null, classes: {}, antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {} };
 }
 
 interface WizardContextValor {
@@ -79,7 +112,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   // forma funcional do setState) evita o double-invoke, porque ele só
   // acontece quando se passa uma FUNÇÃO pro setState.
   function definir(atualizar: (rascunho: WizardData) => void) {
-    const rascunho: WizardData = { ...dados, antecedentes: { ...dados.antecedentes }, especies: { ...dados.especies } };
+    const rascunho: WizardData = { ...dados, classes: { ...dados.classes }, antecedentes: { ...dados.antecedentes }, especies: { ...dados.especies } };
     atualizar(rascunho);
     setDados(rascunho);
   }
@@ -128,4 +161,22 @@ export function useEspecieAtiva(): [EspecieEscolha, (mutar: (e: EspecieEscolha) 
   }
 
   return [atual, mutarEspecie];
+}
+
+/** Escolha da classe ATIVA — mesmo padrão de useAntecedenteAtivo()/useEspecieAtiva(). */
+export function useClasseAtiva(): [ClasseEscolha, (mutar: (c: ClasseEscolha) => void) => void] {
+  const { dados, definir } = useWizard();
+  const nome = dados.classe;
+  const atual = (nome && dados.classes[nome]) || classeEscolhaVazia();
+
+  function mutarClasse(mutar: (c: ClasseEscolha) => void) {
+    definir((rascunho) => {
+      if (!rascunho.classe) return;
+      const copia = { ...(rascunho.classes[rascunho.classe] || classeEscolhaVazia()) };
+      mutar(copia);
+      rascunho.classes[rascunho.classe] = copia;
+    });
+  }
+
+  return [atual, mutarClasse];
 }

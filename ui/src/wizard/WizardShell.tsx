@@ -1,22 +1,31 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { WizardProvider, useWizard, antecedenteEscolhaVazia, especieEscolhaVazia } from "./WizardContext";
+import { WizardProvider, useWizard, antecedenteEscolhaVazia, especieEscolhaVazia, classeEscolhaVazia } from "./WizardContext";
 import { useRuleset } from "../ruleset/RulesetContext";
+import { ClasseGrid } from "./steps/ClasseGrid";
+import { ClasseDetalhe } from "./steps/ClasseDetalhe";
 import { AntecedenteGrid } from "./steps/AntecedenteGrid";
 import { AntecedenteDetalhe } from "./steps/AntecedenteDetalhe";
 import { EspecieGrid } from "./steps/EspecieGrid";
 import { EspecieDetalhe } from "./steps/EspecieDetalhe";
-import { antecedenteDetalheCompleto, especieDetalheCompleto } from "./validacao";
+import { antecedenteDetalheCompleto, especieDetalheCompleto, classeDetalheCompleto } from "./validacao";
 import { useStrings } from "../i18n/context";
 
-// 4 passos por enquanto (Antecedente + Espécie, cada um grade+detalhe) —
-// a Entrega 5c adiciona Classe ANTES destes (ordem final do wizard, igual
-// o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos, Alinhamento,
-// Loja, Resumo). A numeração interna aqui é só desta sub-entrega.
-const PASSOS = ["antecedente-grade", "antecedente-detalhe", "especie-grade", "especie-detalhe"] as const;
+// 6 passos por enquanto (Classe, Antecedente, Espécie, cada um grade+detalhe)
+// — ordem igual o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos,
+// Alinhamento, Loja, Resumo (Entrega 5d continua a partir daqui). A
+// numeração interna aqui é só desta sub-entrega.
+const PASSOS = ["classe-grade", "classe-detalhe", "antecedente-grade", "antecedente-detalhe", "especie-grade", "especie-detalhe"] as const;
 
 function passoEstaCompleto(passo: (typeof PASSOS)[number], ctx: ReturnType<typeof useWizardEstado>): boolean {
   if (!ctx.ruleset) return false;
+  if (passo === "classe-grade") return ctx.dados.classe !== null;
+  if (passo === "classe-detalhe") {
+    if (!ctx.dados.classe) return false;
+    const classe = ctx.ruleset.classes[ctx.dados.classe];
+    const escolha = ctx.dados.classes[ctx.dados.classe] || classeEscolhaVazia();
+    return classeDetalheCompleto(ctx.dados.classe, classe, escolha);
+  }
   if (passo === "antecedente-grade") return ctx.dados.antecedente !== null;
   if (passo === "antecedente-detalhe") {
     if (!ctx.dados.antecedente) return false;
@@ -56,6 +65,8 @@ function WizardConteudo() {
         ))}
       </div>
       <div className="conteudo-wizard">
+        {passo === "classe-grade" && <ClasseGrid />}
+        {passo === "classe-detalhe" && <ClasseDetalhe />}
         {passo === "antecedente-grade" && <AntecedenteGrid />}
         {passo === "antecedente-detalhe" && <AntecedenteDetalhe />}
         {passo === "especie-grade" && <EspecieGrid />}
