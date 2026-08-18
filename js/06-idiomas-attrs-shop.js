@@ -269,7 +269,7 @@ function renderShop(){
         ? `<td data-label="Dano/Efeito">${it.d}</td><td data-label="Propriedades" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`
         : `<td data-label="Efeito" style="color:var(--parchment-dim);font-size:0.78rem;">${it.p}</td>`;
       const infoBtn = (!hasDanoEfeito && it.d) ? ` <button class="info-btn ${shopItemInfoPopup===it.id?'active':''}" data-pick="${it.id}" data-fn="openShopItemInfoPopup" title="Ver detalhes">ⓘ</button>` : '';
-      return `<tr>
+      return `<tr class="${qty>0?'shop-row-selected':''}">
         <td data-label="Item">${it.n}${infoBtn}${contHtml}</td>
         ${efeitoHtml}
         ${atkHtml}
