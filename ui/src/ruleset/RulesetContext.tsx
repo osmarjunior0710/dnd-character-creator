@@ -84,6 +84,7 @@ export interface ClasseConst {
   equipmentB?: string[]; // Guerreiro tem opção B com itens (não só ouro)
   equipmentB_gold: number;
   equipmentC_gold?: number; // Guerreiro
+  savingThrows: string[]; // 2 atributos proficientes em salvaguarda
   weaponProf: string[]; // categorias-chave ("simples"/"marcial") — usado no filtro de proficiência da Loja
   armorProf: string[]; // ("leve"/"media"/"pesada"/"escudo")
   weaponProfMeleeOnly?: boolean; // Monge: só Corpo a Corpo conta como proficiente
@@ -116,6 +117,60 @@ export interface LojaCategoria {
   items: LojaItem[];
 }
 
+/** Formato de um item em ARMOR_AC — regras de CA de uma armadura/escudo
+ * específica, indexadas pelo id da Loja. */
+export interface ArmaduraDeCA {
+  ca: number;
+  dexCap: number | null;
+  categoria: string;
+  reqForca: number | null;
+}
+
+/** Formato de UMA entrada em EQUIPMENT_ALIASES — texto livre de
+ * equipamento inicial (ex. "4 Machadinhas") mapeado pro id real da Loja
+ * + quantidade embutida no texto. `null` = texto conhecido, mas sem
+ * item real da Loja pra apontar (vira item de sabor na mochila). */
+export type AliasDeEquipamento = { id: string; qty: number } | null;
+
+/** Traço de Defesa sem Armadura (Bárbaro/Monge) — mesmo formato de
+ * DefesaSemArmadura em core/motor/ca.ts, só carregado como dado. */
+export interface DefesaSemArmaduraConst {
+  nome: string;
+  atributos: string[];
+  perdeComEscudo: boolean;
+}
+
+export interface BonusCondicionalDeCAConst {
+  label: string;
+  labelFonte?: string;
+  valor: number;
+}
+
+export interface RegraAtributoDeArmaConst {
+  atributoPorTipo: Record<string, string>;
+  propriedadeMelhorAtributo: { propriedade: string; atributos: string[] } | null;
+}
+
+export interface ConjuracaoPorClasseConst {
+  camposTruques: string[];
+  camposMagias: string[];
+  extrasFixos: string[];
+}
+
+/** Formato de UMA magia/truque em SPELL_DETAILS — só os campos que o
+ * Resumo (Entrega 5e) mostra na ficha final. */
+export interface DetalheDeMagia {
+  circulo: string;
+  escola: string;
+  concentracao: boolean;
+  ritual: boolean;
+  tempo: string;
+  alcance: string;
+  componentes: string;
+  duracao: string;
+  efeito: string;
+}
+
 export interface RulesetNivel1 {
   classes: Record<string, ClasseConst>;
   especies: Record<string, EspecieConst>;
@@ -126,6 +181,7 @@ export interface RulesetNivel1 {
   atributosDoJogo: string[];
   talentosOrigem: string[];
   talentosSelvagens: string[];
+  detalheDoTalento: Record<string, { categoria: string; beneficios: string }>;
   maestriaDeArmas: Record<string, ArmaMaestria>;
   propriedadesDeMaestria: Record<string, string>;
   todosOsInstrumentos: string[];
@@ -139,6 +195,21 @@ export interface RulesetNivel1 {
   arrayPadrao: number[];
   loja: Record<string, LojaCategoria>;
   bonusProficienciaNivel1: number;
+  armaduraCA: Record<string, ArmaduraDeCA>;
+  idDoEscudo: string;
+  aliasesDeEquipamento: Record<string, AliasDeEquipamento>;
+  conjuntosDeJogo: string[];
+  conteudoDeKits: Record<string, { id: string; qty: number }[]>;
+  dadoDeVidaPorClasse: Record<string, number>;
+  atributoDeConjuracaoPorClasse: Record<string, string>;
+  defesaSemArmadura: Record<string, DefesaSemArmaduraConst>;
+  efeitoDeEstiloDeLutaNaCA: Record<string, BonusCondicionalDeCAConst>;
+  bonusDeEscudoNaCA: BonusCondicionalDeCAConst;
+  regraDeAtributoDeArma: RegraAtributoDeArmaConst;
+  conjuracaoPorClasse: Record<string, ConjuracaoPorClasseConst>;
+  rotuloDeProficienciaDeArma: Record<string, string>;
+  rotuloDeProficienciaDeArmadura: Record<string, string>;
+  detalheDaMagia: Record<string, DetalheDeMagia>;
 }
 
 interface EstadoRuleset {
@@ -158,6 +229,9 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     classes, especies, antecedentes, todasAsFerramentas, todasAsPericias, atributoDaPericia, atributosDoJogo, featDetails,
     maestriaDeArmas, propriedadesDeMaestria, todosOsInstrumentos, todasAsFerramentasDeArtesao, spellDetails,
     idiomasComuns, idiomasRaros, alinhamentos, infoDeAlinhamento, arrayPadrao, loja, bonusProficiencia,
+    armaduraCA, idDoEscudo, aliasesDeEquipamento, conjuntosDeJogo, conteudoDeKits, dadoDeVidaPorClasse,
+    atributoDeConjuracaoPorClasse, defesaSemArmadura, efeitoDeEstiloDeLutaNaCA, bonusDeEscudoNaCA,
+    regraDeAtributoDeArma, conjuracaoPorClasse, rotuloDeProficienciaDeArma, rotuloDeProficienciaDeArmadura,
   ] = await Promise.all([
     import("@dados/mecanicas-nivel1/class-const.json"),
     import("@dados/mecanicas-nivel1/species-const.json"),
@@ -179,8 +253,22 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     import("@dados/mecanicas-nivel1/standard-array.json"),
     import("@dados/mecanicas-nivel1/shop.json"),
     import("@dados/mecanicas-nivel1/prof-bonus-by-level.json"),
+    import("@dados/mecanicas-nivel1/armor-ac.json"),
+    import("@dados/mecanicas-nivel1/shield-item-id.json"),
+    import("@dados/mecanicas-nivel1/equipment-aliases.json"),
+    import("@dados/mecanicas-nivel1/all-game-sets.json"),
+    import("@dados/mecanicas-nivel1/kit-contents.json"),
+    import("@dados/mecanicas-nivel1/class-hit-die.json"),
+    import("@dados/mecanicas-nivel1/class-spell-ability.json"),
+    import("@dados/mecanicas-nivel1/defesa-sem-armadura.json"),
+    import("@dados/mecanicas-nivel1/estilo-de-luta-efeito-ca.json"),
+    import("@dados/mecanicas-nivel1/escudo-bonus-ca.json"),
+    import("@dados/mecanicas-nivel1/regra-atributo-arma.json"),
+    import("@dados/mecanicas-nivel1/conjuracao-por-classe.json"),
+    import("@dados/mecanicas-nivel1/weapon-prof-label.json"),
+    import("@dados/mecanicas-nivel1/armor-prof-label.json"),
   ]);
-  const feats = featDetails.default as Record<string, { categoria: string }>;
+  const feats = featDetails.default as Record<string, { categoria: string; beneficios: string }>;
   // ALL_CANTRIPS/ALL_1ST_RITUAL do vanilla (só usados pelo Pacto do Tomo do
   // Bruxo) não foram exportados como consts próprias — derivados aqui, na
   // hora, a partir de spell-details.json, que já carrega círculo/ritual por
@@ -199,6 +287,7 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     atributosDoJogo: atributosDoJogo.default,
     talentosOrigem: Object.keys(feats).filter((n) => feats[n].categoria === "Origem"),
     talentosSelvagens: Object.keys(feats).filter((n) => feats[n].categoria === "Talento Selvagem"),
+    detalheDoTalento: feats,
     maestriaDeArmas: maestriaDeArmas.default as Record<string, ArmaMaestria>,
     propriedadesDeMaestria: propriedadesDeMaestria.default,
     todosOsInstrumentos: todosOsInstrumentos.default,
@@ -212,6 +301,21 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     arrayPadrao: arrayPadrao.default,
     loja: loja.default as Record<string, LojaCategoria>,
     bonusProficienciaNivel1: (bonusProficiencia.default as Record<string, number>)["1"],
+    armaduraCA: armaduraCA.default as Record<string, ArmaduraDeCA>,
+    idDoEscudo: idDoEscudo.default as string,
+    aliasesDeEquipamento: aliasesDeEquipamento.default as Record<string, AliasDeEquipamento>,
+    conjuntosDeJogo: conjuntosDeJogo.default,
+    conteudoDeKits: conteudoDeKits.default,
+    dadoDeVidaPorClasse: dadoDeVidaPorClasse.default,
+    atributoDeConjuracaoPorClasse: atributoDeConjuracaoPorClasse.default,
+    defesaSemArmadura: defesaSemArmadura.default as Record<string, DefesaSemArmaduraConst>,
+    efeitoDeEstiloDeLutaNaCA: efeitoDeEstiloDeLutaNaCA.default as Record<string, BonusCondicionalDeCAConst>,
+    bonusDeEscudoNaCA: bonusDeEscudoNaCA.default as BonusCondicionalDeCAConst,
+    regraDeAtributoDeArma: regraDeAtributoDeArma.default as RegraAtributoDeArmaConst,
+    conjuracaoPorClasse: conjuracaoPorClasse.default as Record<string, ConjuracaoPorClasseConst>,
+    rotuloDeProficienciaDeArma: rotuloDeProficienciaDeArma.default,
+    rotuloDeProficienciaDeArmadura: rotuloDeProficienciaDeArmadura.default,
+    detalheDaMagia: spells as unknown as Record<string, DetalheDeMagia>,
   };
 }
 

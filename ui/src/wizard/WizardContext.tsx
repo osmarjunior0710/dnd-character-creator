@@ -101,6 +101,7 @@ export interface WizardData {
   attrs: Record<string, number>; // atributo -> valor bruto do Array Padrão (sem bônus de antecedente)
   alinhamento: string | null;
   shop: ShopEscolha;
+  characterName: string;
 }
 
 function dadosIniciais(): WizardData {
@@ -110,7 +111,7 @@ function dadosIniciais(): WizardData {
   // com true por engano.
   return {
     classe: null, classes: {}, antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {},
-    idiomas: idiomasEscolhaVazia(), attrs: {}, alinhamento: null, shop: shopEscolhaVazia(),
+    idiomas: idiomasEscolhaVazia(), attrs: {}, alinhamento: null, shop: shopEscolhaVazia(), characterName: "",
   };
 }
 

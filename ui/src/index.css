@@ -469,3 +469,45 @@ code {
   font-size: 13px;
   padding: 2px 0;
 }
+
+/* Resumo (Entrega 5e) — estilo funcional mínimo, não é passe de design. */
+.tela-resumo label.rotulo-pequeno {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.tela-resumo label.rotulo-pequeno input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.attr-group {
+  margin-bottom: 14px;
+}
+
+.stat-grid {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-row.prof {
+  background: var(--accent-bg);
+}

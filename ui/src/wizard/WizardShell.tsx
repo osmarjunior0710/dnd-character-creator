@@ -12,19 +12,22 @@ import { IdiomasStep } from "./steps/IdiomasStep";
 import { AtributosStep } from "./steps/AtributosStep";
 import { AlinhamentoStep } from "./steps/AlinhamentoStep";
 import { LojaStep } from "./steps/LojaStep";
+import { ResumoStep } from "./steps/ResumoStep";
 import { antecedenteDetalheCompleto, especieDetalheCompleto, classeDetalheCompleto, idiomasCompleto, atributosCompleto, alinhamentoCompleto } from "./validacao";
 import { useStrings } from "../i18n/context";
 
 // Ordem igual o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos,
-// Alinhamento, Loja, Resumo — só falta o Resumo (com wiring de storage de
-// verdade), que fica pra Entrega 5e. A numeração interna aqui é só desta
-// sub-entrega. Loja nunca bloqueia "Avançar" — comprar é opcional, igual
-// o vanilla (findFirstMissingGroup() não tem case pra ela).
+// Alinhamento, Loja, Resumo — fecha a Entrega 5 (Fase 1) inteira. Loja
+// nunca bloqueia "Avançar" — comprar é opcional, igual o vanilla
+// (findFirstMissingGroup() não tem case pra ela). Resumo é o último
+// passo: não tem botão "Avançar" (a barra de nav esconde ele aqui) — o
+// próprio ResumoStep tem o botão "Salvar Personagem", que é quem sai do
+// wizard de verdade (navega pra /personagem/:id/perfil).
 const PASSOS = [
   "classe-grade", "classe-detalhe",
   "antecedente-grade", "antecedente-detalhe",
   "especie-grade", "especie-detalhe",
-  "idiomas", "atributos", "alinhamento", "loja",
+  "idiomas", "atributos", "alinhamento", "loja", "resumo",
 ] as const;
 
 function passoEstaCompleto(passo: (typeof PASSOS)[number], ctx: ReturnType<typeof useWizardEstado>): boolean {
@@ -88,6 +91,7 @@ function WizardConteudo() {
         {passo === "atributos" && <AtributosStep />}
         {passo === "alinhamento" && <AlinhamentoStep />}
         {passo === "loja" && <LojaStep />}
+        {passo === "resumo" && <ResumoStep />}
       </div>
       <div className="nav-wizard">
         {passoIdx > 0 ? (
@@ -99,14 +103,16 @@ function WizardConteudo() {
             {strings.comum.voltarParaHome}
           </Link>
         )}
-        <button
-          type="button"
-          className="btn primary"
-          disabled={!completo}
-          onClick={() => setPassoIdx((i) => Math.min(i + 1, PASSOS.length - 1))}
-        >
-          {strings.wizard.avancar}
-        </button>
+        {passo !== "resumo" && (
+          <button
+            type="button"
+            className="btn primary"
+            disabled={!completo}
+            onClick={() => setPassoIdx((i) => Math.min(i + 1, PASSOS.length - 1))}
+          >
+            {strings.wizard.avancar}
+          </button>
+        )}
       </div>
     </div>
   );
