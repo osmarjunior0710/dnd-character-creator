@@ -80,6 +80,15 @@ function idiomasEscolhaVazia(): IdiomasEscolha {
   return { comuns: [], extra: [] };
 }
 
+export interface ShopEscolha {
+  purchases: Record<string, number>; // id do item -> quantidade
+  filterByProf: boolean;
+}
+
+function shopEscolhaVazia(): ShopEscolha {
+  return { purchases: {}, filterByProf: false };
+}
+
 export interface WizardData {
   classe: string | null;
   classes: Record<string, ClasseEscolha>;
@@ -91,6 +100,7 @@ export interface WizardData {
   idiomas: IdiomasEscolha;
   attrs: Record<string, number>; // atributo -> valor bruto do Array Padrão (sem bônus de antecedente)
   alinhamento: string | null;
+  shop: ShopEscolha;
 }
 
 function dadosIniciais(): WizardData {
@@ -100,7 +110,7 @@ function dadosIniciais(): WizardData {
   // com true por engano.
   return {
     classe: null, classes: {}, antecedente: null, freeAbilityRule: false, antecedentes: {}, especie: null, especies: {},
-    idiomas: idiomasEscolhaVazia(), attrs: {}, alinhamento: null,
+    idiomas: idiomasEscolhaVazia(), attrs: {}, alinhamento: null, shop: shopEscolhaVazia(),
   };
 }
 
@@ -134,6 +144,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
       especies: { ...dados.especies },
       idiomas: { comuns: [...dados.idiomas.comuns], extra: [...dados.idiomas.extra] },
       attrs: { ...dados.attrs },
+      shop: { purchases: { ...dados.shop.purchases }, filterByProf: dados.shop.filterByProf },
     };
     atualizar(rascunho);
     setDados(rascunho);

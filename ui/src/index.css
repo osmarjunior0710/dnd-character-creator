@@ -279,6 +279,11 @@ code {
   cursor: not-allowed;
 }
 
+.btn.small {
+  padding: 2px 10px;
+  font-size: 14px;
+}
+
 .choice-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -397,4 +402,70 @@ code {
 .opcao-equipamento h4 {
   margin: 0 0 4px;
   color: var(--accent);
+}
+
+/* Loja (Entrega 5e) — estilo funcional mínimo, não é passe de design. */
+.wallet {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 10px 0 16px;
+}
+
+.shop-category {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.shop-category summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.shop-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.shop-table th,
+.shop-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.shop-row-selected {
+  background: var(--accent-bg);
+}
+
+.qty-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qty-cell input {
+  width: 44px;
+  text-align: center;
+}
+
+.cart-list {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 2px 0;
 }

@@ -11,20 +11,20 @@ import { EspecieDetalhe } from "./steps/EspecieDetalhe";
 import { IdiomasStep } from "./steps/IdiomasStep";
 import { AtributosStep } from "./steps/AtributosStep";
 import { AlinhamentoStep } from "./steps/AlinhamentoStep";
+import { LojaStep } from "./steps/LojaStep";
 import { antecedenteDetalheCompleto, especieDetalheCompleto, classeDetalheCompleto, idiomasCompleto, atributosCompleto, alinhamentoCompleto } from "./validacao";
 import { useStrings } from "../i18n/context";
 
 // Ordem igual o vanilla: Classe, Antecedente, Espécie, Idiomas, Atributos,
-// Alinhamento, Loja, Resumo — Loja e Resumo ficam pra Entrega 5e (a Loja é
-// uma tela grande por si só: carrinho, ouro, filtro de proficiência,
-// popups de item — vale sub-entrega própria, mesmo raciocínio de escopo
-// que separou Antecedente/Espécie na 5b). A numeração interna aqui é só
-// desta sub-entrega.
+// Alinhamento, Loja, Resumo — só falta o Resumo (com wiring de storage de
+// verdade), que fica pra Entrega 5e. A numeração interna aqui é só desta
+// sub-entrega. Loja nunca bloqueia "Avançar" — comprar é opcional, igual
+// o vanilla (findFirstMissingGroup() não tem case pra ela).
 const PASSOS = [
   "classe-grade", "classe-detalhe",
   "antecedente-grade", "antecedente-detalhe",
   "especie-grade", "especie-detalhe",
-  "idiomas", "atributos", "alinhamento",
+  "idiomas", "atributos", "alinhamento", "loja",
 ] as const;
 
 function passoEstaCompleto(passo: (typeof PASSOS)[number], ctx: ReturnType<typeof useWizardEstado>): boolean {
@@ -87,6 +87,7 @@ function WizardConteudo() {
         {passo === "idiomas" && <IdiomasStep />}
         {passo === "atributos" && <AtributosStep />}
         {passo === "alinhamento" && <AlinhamentoStep />}
+        {passo === "loja" && <LojaStep />}
       </div>
       <div className="nav-wizard">
         {passoIdx > 0 ? (

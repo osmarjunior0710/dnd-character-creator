@@ -1,21 +1,10 @@
 import { mod } from "@core/motor/atributos.ts";
 import { useRuleset } from "../../ruleset/RulesetContext";
-import { useWizard, type WizardData } from "../WizardContext";
+import { useWizard } from "../WizardContext";
+import { bonusDoAntecedente } from "../bonusAntecedente";
 
 function fmt(n: number): string {
   return (n >= 0 ? "+" : "") + n;
-}
-
-/** Bônus de atributo do antecedente (equivalente a getBonusFor() em
- * js/05-class-steps.js) — lido do abilityPlan do antecedente ATIVO, não
- * duplicado aqui: só projeta o que já está em AntecedenteEscolha. */
-function bonusDoAntecedente(dados: WizardData, ability: string): number {
-  const plano = dados.antecedente ? dados.antecedentes[dados.antecedente]?.abilityPlan : null;
-  if (!plano) return 0;
-  if (plano.tipo === "1-1-1") return plano.mais1Tres.includes(ability) ? 1 : 0;
-  if (plano.mais2 === ability) return 2;
-  if (plano.mais1 === ability) return 1;
-  return 0;
 }
 
 /** Passo de Atributos — equivalente a renderAttrs() (js/06-idiomas-attrs-shop.js).

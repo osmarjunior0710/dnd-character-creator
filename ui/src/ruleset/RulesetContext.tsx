@@ -84,6 +84,10 @@ export interface ClasseConst {
   equipmentB?: string[]; // Guerreiro tem opção B com itens (não só ouro)
   equipmentB_gold: number;
   equipmentC_gold?: number; // Guerreiro
+  weaponProf: string[]; // categorias-chave ("simples"/"marcial") — usado no filtro de proficiência da Loja
+  armorProf: string[]; // ("leve"/"media"/"pesada"/"escudo")
+  weaponProfMeleeOnly?: boolean; // Monge: só Corpo a Corpo conta como proficiente
+  weaponProfFiltroMarcial?: string[]; // Monge/Ladino: arma Marcial só conta se tiver uma dessas propriedades
   // Blocos de texto só informativos (sem escolha) — exibidos se presentes.
   furia?: string; defesaSemArmadura?: string; inspiracao?: string; adeptoRitual?: string;
   recuperacaoArcana?: string; maosConsagradas?: string; poderPsionico?: string; telecineseSutil?: string;
@@ -96,6 +100,20 @@ export interface ArmaMaestria {
   tipo: string;
   mastery: string;
   propriedades: string[];
+}
+
+export interface LojaItem {
+  id: string;
+  n: string;
+  d: string; // dano (armas) ou texto de Usar Objeto (ferramentas) — vazio em item sem nenhum dos dois
+  p: string; // propriedades (armas) ou efeito (resto)
+  c: number; // custo em PO
+  cont?: string; // conteúdo de kit, quando aplicável
+}
+
+export interface LojaCategoria {
+  filterProf: string | null; // "simples"/"marcial"/"leve"/"media"/"pesada"/"escudo", ou null (não é arma/armadura)
+  items: LojaItem[];
 }
 
 export interface RulesetNivel1 {
@@ -119,6 +137,8 @@ export interface RulesetNivel1 {
   alinhamentos: string[];
   infoDeAlinhamento: Record<string, { descricao: string }>;
   arrayPadrao: number[];
+  loja: Record<string, LojaCategoria>;
+  bonusProficienciaNivel1: number;
 }
 
 interface EstadoRuleset {
@@ -137,7 +157,7 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
   const [
     classes, especies, antecedentes, todasAsFerramentas, todasAsPericias, atributoDaPericia, atributosDoJogo, featDetails,
     maestriaDeArmas, propriedadesDeMaestria, todosOsInstrumentos, todasAsFerramentasDeArtesao, spellDetails,
-    idiomasComuns, idiomasRaros, alinhamentos, infoDeAlinhamento, arrayPadrao,
+    idiomasComuns, idiomasRaros, alinhamentos, infoDeAlinhamento, arrayPadrao, loja, bonusProficiencia,
   ] = await Promise.all([
     import("@dados/mecanicas-nivel1/class-const.json"),
     import("@dados/mecanicas-nivel1/species-const.json"),
@@ -157,6 +177,8 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     import("@dados/mecanicas-nivel1/alignments.json"),
     import("@dados/mecanicas-nivel1/alignment-info.json"),
     import("@dados/mecanicas-nivel1/standard-array.json"),
+    import("@dados/mecanicas-nivel1/shop.json"),
+    import("@dados/mecanicas-nivel1/prof-bonus-by-level.json"),
   ]);
   const feats = featDetails.default as Record<string, { categoria: string }>;
   // ALL_CANTRIPS/ALL_1ST_RITUAL do vanilla (só usados pelo Pacto do Tomo do
@@ -188,6 +210,8 @@ async function carregarRulesetNivel1(): Promise<RulesetNivel1> {
     alinhamentos: alinhamentos.default,
     infoDeAlinhamento: infoDeAlinhamento.default,
     arrayPadrao: arrayPadrao.default,
+    loja: loja.default as Record<string, LojaCategoria>,
+    bonusProficienciaNivel1: (bonusProficiencia.default as Record<string, number>)["1"],
   };
 }
 
